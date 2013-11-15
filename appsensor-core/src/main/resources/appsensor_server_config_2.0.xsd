@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema 
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+		targetNamespace="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd" 
+		xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd" 
+		xmlns:asconfig="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd" 
+		elementFormDefault="qualified" >
+
+	<xsd:complexType name="correlation-config">
+		<xsd:sequence>
+			<xsd:element name="correlated-client-set" type="asconfig:correlated-client-set" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="correlated-client-set">
+		<xsd:sequence>
+			<xsd:element name="client-application-name" type="xsd:string" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="class-attributed-empty-element">
+		<xsd:attribute name="class" type="xsd:string" use="required" />
+	</xsd:complexType>
+	
+	<xsd:complexType name="store-observers">
+		<xsd:sequence>
+			<xsd:element name="observer" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="detection-points">
+		<xsd:sequence>
+			<xsd:element name="detection-point" type="asconfig:detection-point" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="interval">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:positiveInteger">
+				<xsd:attribute name="unit" type="asconfig:time-unit" use="required" />
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="detection-point">
+		<xsd:sequence>
+			<xsd:element name="id" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="threshold" type="asconfig:threshold" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="responses" type="asconfig:responses" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="threshold">
+		<xsd:sequence>
+			<xsd:element name="count" type="xsd:positiveInteger" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="interval" type="asconfig:interval" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="responses">
+		<xsd:sequence>
+			<xsd:element name="response" type="asconfig:response" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="response">
+		<xsd:sequence>
+			<xsd:element name="action" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="interval" type="asconfig:interval" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:simpleType name="time-unit">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="seconds" />
+			<xsd:enumeration value="minutes" />
+			<xsd:enumeration value="hours" />
+			<xsd:enumeration value="days" />
+		</xsd:restriction>
+	</xsd:simpleType>
+			
+	<xsd:element name="appsensor-server-config">
+	  <xsd:complexType>
+	    <xsd:sequence>
+	    	<xsd:element name="correlation-config" type="asconfig:correlation-config" minOccurs="0" maxOccurs="1" />
+	    	
+			<xsd:element name="event-analyzer" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="attack-analyzer" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="response-analyzer" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    	
+	    	<xsd:element name="event-store" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="attack-store" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="response-store" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    	
+	    	<xsd:element name="logger" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    
+	       	<xsd:element name="response-handler" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    	
+	    	<xsd:element name="event-store-observers" type="asconfig:store-observers" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="attack-store-observers" type="asconfig:store-observers" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="response-store-observers" type="asconfig:store-observers" minOccurs="1" maxOccurs="1" />
+
+	    	<xsd:element name="detection-points" type="asconfig:detection-points" minOccurs="1" maxOccurs="1" />
+	    </xsd:sequence>
+	  </xsd:complexType>
+	</xsd:element>
+
+</xsd:schema>
