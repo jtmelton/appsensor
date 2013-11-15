@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appsensor-server-config xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd">
+	
+	<correlation-config>
+		<correlated-client-set>
+			<client-application-name>server1</client-application-name>
+			<client-application-name>server3</client-application-name>
+		</correlated-client-set>
+		<correlated-client-set>
+			<client-application-name>server2</client-application-name>
+			<client-application-name>server4</client-application-name>
+		</correlated-client-set>
+		<correlated-client-set>
+			<client-application-name>server1</client-application-name>
+			<client-application-name>server5</client-application-name>
+		</correlated-client-set>
+	</correlation-config>
+
+	<event-analyzer class="org.owasp.appsensor.analysis.impl.ReferenceEventAnalysisEngine" />
+	<attack-analyzer class="org.owasp.appsensor.analysis.impl.ReferenceAttackAnalysisEngine" />
+	<response-analyzer class="org.owasp.appsensor.analysis.impl.ReferenceResponseAnalysisEngine" />
+	
+	<event-store class="org.owasp.appsensor.event.impl.InMemoryEventStore" />
+	<attack-store class="org.owasp.appsensor.attack.impl.InMemoryAttackStore" />
+	<response-store class="org.owasp.appsensor.response.impl.InMemoryResponseStore" />
+	
+	<logger class="org.owasp.appsensor.logging.impl.Slf4jLogger" />
+	
+	<response-handler class="org.owasp.appsensor.response.impl.ReferenceResponseHandler"/>
+	
+	<event-store-observers>
+		<observer class="org.owasp.appsensor.analysis.impl.ReferenceEventAnalysisEngine" />
+		<observer class="org.owasp.appsensor.reporting.impl.ReferenceReportingEngine" />
+	</event-store-observers>
+	
+	<attack-store-observers>
+		<observer class="org.owasp.appsensor.analysis.impl.ReferenceAttackAnalysisEngine" />
+		<observer class="org.owasp.appsensor.reporting.impl.ReferenceReportingEngine" />
+	</attack-store-observers>
+	
+	<response-store-observers>
+		<observer class="org.owasp.appsensor.analysis.impl.ReferenceResponseAnalysisEngine" />
+		<observer class="org.owasp.appsensor.reporting.impl.ReferenceReportingEngine" />
+	</response-store-observers>
+
+	<detection-points>
+		<detection-point>
+			<id>IE1</id>
+			<threshold>
+				<count>11</count>
+				<interval unit="minutes">4</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">31</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">11</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<id>IE2</id>
+			<threshold>
+				<count>12</count>
+				<interval unit="minutes">5</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">32</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">12</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<id>RE3</id>
+			<threshold>
+				<count>13</count>
+				<interval unit="minutes">6</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">33</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">13</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<id>RE4</id>
+			<threshold>
+				<count>14</count>
+				<interval unit="minutes">7</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">34</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">14</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<id>RE5</id>
+			<threshold>
+				<count>15</count>
+				<interval unit="minutes">8</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">35</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">15</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<!-- <detection-point><id></id></detection-point>
+		<detection-point><id>RE1</id></detection-point>
+		<detection-point><id>RE2</id></detection-point>
+		<detection-point><id>RE3</id></detection-point>-->
+		<!-- <detection-point>IE1</detection-point>
+		<detection-point>IE2</detection-point>
+		<detection-point>RE1</detection-point>
+		<detection-point>RE2</detection-point>
+		<detection-point>RE3</detection-point>-->
+	</detection-points>
+
+</appsensor-server-config>
