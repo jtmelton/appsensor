@@ -16,6 +16,7 @@ public class XmlServerConfigurationReaderTest {
 		
 		assertEquals(5, configuration.getDetectionPoints().size());
 		
+		
 //		System.err.println("read xml config");
 //		System.err.println(configuration);
 //		
