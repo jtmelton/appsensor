@@ -10,4 +10,4 @@ This code is currently INCOMPLETE and under active development.
 Contributing
 ------------
 
-Want to contribute? Great! Start at mailto:owasp-appsensor-project@lists.owasp.org
+Want to contribute? Great! Start on the mailing list at owasp-appsensor-project@lists.owasp.org
