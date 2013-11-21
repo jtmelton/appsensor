@@ -15,9 +15,5 @@ public class XmlClientConfigurationReaderTest {
 		ClientConfiguration configuration = reader.read("/appsensor-client-config.xml", "/appsensor_client_config_2.0.xsd");
 		
 		assertTrue("org.owasp.appsensor.event.impl.LocalEventManager".equals(configuration.getEventManagerImplementation()));
-//		System.err.println("read xml config");
-//		System.err.println(configuration);
-//		System.err.println(configuration.getServerConnection());
-		
 	}
 }
