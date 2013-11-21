@@ -32,16 +32,18 @@ public class Interval implements Serializable {
 		return duration;
 	}
 
-	public void setDuration(int duration) {
+	public Interval setDuration(int duration) {
 		this.duration = duration;
+		return this;
 	}
 	
 	public String getUnit() {
 		return unit;
 	}
 
-	public void setUnit(String unit) {
+	public Interval setUnit(String unit) {
 		this.unit = unit;
+		return this;
 	}
 	
 	public long toMillis() {

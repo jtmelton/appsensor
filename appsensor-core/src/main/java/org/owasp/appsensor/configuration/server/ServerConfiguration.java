@@ -60,110 +60,123 @@ public class ServerConfiguration {
 		return eventAnalysisEngineImplementation;
 	}
 
-	public void setEventAnalysisEngineImplementation(
+	public ServerConfiguration setEventAnalysisEngineImplementation(
 			String eventAnalysisEngineImplementation) {
 		this.eventAnalysisEngineImplementation = eventAnalysisEngineImplementation;
+		return this;
 	}
 
 	public String getAttackAnalysisEngineImplementation() {
 		return attackAnalysisEngineImplementation;
 	}
 
-	public void setAttackAnalysisEngineImplementation(
+	public ServerConfiguration setAttackAnalysisEngineImplementation(
 			String attackAnalysisEngineImplementation) {
 		this.attackAnalysisEngineImplementation = attackAnalysisEngineImplementation;
+		return this;
 	}
 
 	public String getResponseAnalysisEngineImplementation() {
 		return responseAnalysisEngineImplementation;
 	}
 
-	public void setResponseAnalysisEngineImplementation(
+	public ServerConfiguration setResponseAnalysisEngineImplementation(
 			String responseAnalysisEngineImplementation) {
 		this.responseAnalysisEngineImplementation = responseAnalysisEngineImplementation;
+		return this;
 	}
 
 	public String getEventStoreImplementation() {
 		return eventStoreImplementation;
 	}
 
-	public void setEventStoreImplementation(String eventStoreImplementation) {
+	public ServerConfiguration setEventStoreImplementation(String eventStoreImplementation) {
 		this.eventStoreImplementation = eventStoreImplementation;
+		return this;
 	}
 
 	public String getAttackStoreImplementation() {
 		return attackStoreImplementation;
 	}
 
-	public void setAttackStoreImplementation(String attackStoreImplementation) {
+	public ServerConfiguration setAttackStoreImplementation(String attackStoreImplementation) {
 		this.attackStoreImplementation = attackStoreImplementation;
+		return this;
 	}
 
 	public String getResponseStoreImplementation() {
 		return responseStoreImplementation;
 	}
 
-	public void setResponseStoreImplementation(String responseStoreImplementation) {
+	public ServerConfiguration setResponseStoreImplementation(String responseStoreImplementation) {
 		this.responseStoreImplementation = responseStoreImplementation;
+		return this;
 	}
 
 	public String getLoggerImplementation() {
 		return loggerImplementation;
 	}
 
-	public void setLoggerImplementation(String loggerImplementation) {
+	public ServerConfiguration setLoggerImplementation(String loggerImplementation) {
 		this.loggerImplementation = loggerImplementation;
+		return this;
 	}
 	
 	public String getResponseHandlerImplementation() {
 		return responseHandlerImplementation;
 	}
 
-	public void setResponseHandlerImplementation(String responseHandlerImplementation) {
+	public ServerConfiguration setResponseHandlerImplementation(String responseHandlerImplementation) {
 		this.responseHandlerImplementation = responseHandlerImplementation;
+		return this;
 	}
 	
 	public Collection<String> getEventStoreObserverImplementations() {
 		return eventStoreObserverImplementations;
 	}
 
-	public void setEventStoreObserverImplementations(
+	public ServerConfiguration setEventStoreObserverImplementations(
 			Collection<String> eventStoreObserverImplementations) {
 		this.eventStoreObserverImplementations = eventStoreObserverImplementations;
+		return this;
 	}
 
 	public Collection<String> getAttackStoreObserverImplementations() {
 		return attackStoreObserverImplementations;
 	}
 
-	public void setAttackStoreObserverImplementations(
+	public ServerConfiguration setAttackStoreObserverImplementations(
 			Collection<String> attackStoreObserverImplementations) {
 		this.attackStoreObserverImplementations = attackStoreObserverImplementations;
+		return this;
 	}
 
 	public Collection<String> getResponseStoreObserverImplementations() {
 		return responseStoreObserverImplementations;
 	}
 
-	public void setResponseStoreObserverImplementations(
+	public ServerConfiguration setResponseStoreObserverImplementations(
 			Collection<String> responseStoreObserverImplementations) {
 		this.responseStoreObserverImplementations = responseStoreObserverImplementations;
+		return this;
 	}
 	
 	public Collection<DetectionPoint> getDetectionPoints() {
 		return detectionPoints;
 	}
 
-	public void setDetectionPoints(Collection<DetectionPoint> detectionPoints) {
+	public ServerConfiguration setDetectionPoints(Collection<DetectionPoint> detectionPoints) {
 		this.detectionPoints = detectionPoints;
+		return this;
 	}
 	
 	public Collection<CorrelationSet> getCorrelationSets() {
 		return correlationSets;
 	}
 
-	public void setCorrelationSets(Collection<CorrelationSet> correlationSets) {
+	public ServerConfiguration setCorrelationSets(Collection<CorrelationSet> correlationSets) {
 		this.correlationSets = correlationSets;
+		return this;
 	}
 	
 	public Collection<String> getRelatedDetectionSystems(String detectionSystemId) {

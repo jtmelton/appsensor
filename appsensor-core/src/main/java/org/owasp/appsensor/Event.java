@@ -57,40 +57,45 @@ public class Event implements Serializable {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public Event setUser(User user) {
 		this.user = user;
+		return this;
 	}
 
 	public DetectionPoint getDetectionPoint() {
 		return detectionPoint;
 	}
 
-	public void setDetectionPoint(DetectionPoint detectionPoint) {
+	public Event setDetectionPoint(DetectionPoint detectionPoint) {
 		this.detectionPoint = detectionPoint;
+		return this;
 	}
 
 	public long getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(long timestamp) {
+	public Event setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
+		return this;
 	}
 	
 	public String getDetectionSystemId() {
 		return detectionSystemId;
 	}
 
-	public void setDetectionSystemId(String detectionSystemId) {
+	public Event setDetectionSystemId(String detectionSystemId) {
 		this.detectionSystemId = detectionSystemId;
+		return this;
 	}
 
 	public String getResource() {
 		return resource;
 	}
 
-	public void setResource(String resource) {
+	public Event setResource(String resource) {
 		this.resource = resource;
+		return this;
 	}
 	
 }

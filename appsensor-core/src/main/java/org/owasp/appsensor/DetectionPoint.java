@@ -43,24 +43,27 @@ public class DetectionPoint implements Serializable {
 		return id;
 	}
 
-	public void setId(String id) {
+	public DetectionPoint setId(String id) {
 		this.id = id;
+		return this;
 	} 
 	
 	public Threshold getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(Threshold threshold) {
+	public DetectionPoint setThreshold(Threshold threshold) {
 		this.threshold = threshold;
+		return this;
 	}
 
 	public Collection<Response> getResponses() {
 		return responses;
 	}
 
-	public void setResponses(Collection<Response> responses) {
+	public DetectionPoint setResponses(Collection<Response> responses) {
 		this.responses = responses;
+		return this;
 	}
 
 	@Override

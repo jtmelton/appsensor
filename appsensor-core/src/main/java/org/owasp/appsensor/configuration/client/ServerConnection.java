@@ -24,32 +24,45 @@ public class ServerConnection {
 	public String getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public ServerConnection setType(String type) {
 		this.type = type;
+		return this;
 	}
+	
 	public String getProtocol() {
 		return protocol;
 	}
-	public void setProtocol(String protocol) {
+	
+	public ServerConnection setProtocol(String protocol) {
 		this.protocol = protocol;
+		return this;
 	}
+	
 	public String getHost() {
 		return host;
 	}
-	public void setHost(String host) {
+	
+	public ServerConnection setHost(String host) {
 		this.host = host;
+		return this;
 	}
+	
 	public int getPort() {
 		return port;
 	}
-	public void setPort(int port) {
+	
+	public ServerConnection setPort(int port) {
 		this.port = port;
+		return this;
 	}
+	
 	public String getPath() {
 		return path;
 	}
-	public void setPath(String path) {
+	
+	public ServerConnection setPath(String path) {
 		this.path = path;
+		return this;
 	}
 	
 	@Override

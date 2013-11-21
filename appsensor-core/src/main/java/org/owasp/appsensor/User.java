@@ -21,16 +21,18 @@ public class User implements Serializable {
 		return username;
 	}
 
-	public void setUsername(String username) {
+	public User setUsername(String username) {
 		this.username = username;
+		return this;
 	}
 
 	public String getIpAddress() {
 		return ipAddress;
 	}
 
-	public void setIpAddress(String ipAddress) {
+	public User setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
+		return this;
 	}
 	
 }

@@ -66,48 +66,54 @@ public class Response implements Serializable {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public Response setUser(User user) {
 		this.user = user;
+		return this;
 	}
 	
 	public DetectionPoint getDetectionPoint() {
 		return detectionPoint;
 	}
 
-	public void setDetectionPoint(DetectionPoint detectionPoint) {
+	public Response setDetectionPoint(DetectionPoint detectionPoint) {
 		this.detectionPoint = detectionPoint;
+		return this;
 	}
 
 	public long getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(long timestamp) {
+	public Response setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
+		return this;
 	}
 
 	public String getAction() {
 		return action;
 	}
 
-	public void setAction(String action) {
+	public Response setAction(String action) {
 		this.action = action;
+		return this;
 	}
 
 	public Interval getInterval() {
 		return interval;
 	}
 
-	public void setInterval(Interval interval) {
+	public Response setInterval(Interval interval) {
 		this.interval = interval;
+		return this;
 	}
 
 	public String getDetectionSystemId() {
 		return detectionSystemId;
 	}
 
-	public void setDetectionSystemId(String detectionSystemId) {
+	public Response setDetectionSystemId(String detectionSystemId) {
 		this.detectionSystemId = detectionSystemId;
+		return this;
 	}
 	
 }

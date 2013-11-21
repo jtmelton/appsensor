@@ -26,16 +26,18 @@ public class Threshold implements Serializable {
 		return count;
 	}
 
-	public void setCount(int count) {
+	public Threshold setCount(int count) {
 		this.count = count;
+		return this;
 	}
 
 	public Interval getInterval() {
 		return interval;
 	}
 
-	public void setInterval(Interval interval) {
+	public Threshold setInterval(Interval interval) {
 		this.interval = interval;
+		return this;
 	}
 	
 }

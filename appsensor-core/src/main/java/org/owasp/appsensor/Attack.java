@@ -63,40 +63,45 @@ public class Attack implements Serializable {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public Attack setUser(User user) {
 		this.user = user;
+		return this;
 	}
 	
 	public DetectionPoint getDetectionPoint() {
 		return detectionPoint;
 	}
 
-	public void setDetectionPoint(DetectionPoint detectionPoint) {
+	public Attack setDetectionPoint(DetectionPoint detectionPoint) {
 		this.detectionPoint = detectionPoint;
+		return this;
 	}
 
 	public long getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(long timestamp) {
+	public Attack setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
+		return this;
 	}
 	
 	public String getDetectionSystemId() {
 		return detectionSystemId;
 	}
 
-	public void setDetectionSystemId(String detectionSystemId) {
+	public Attack setDetectionSystemId(String detectionSystemId) {
 		this.detectionSystemId = detectionSystemId;
+		return this;
 	}
 
 	public String getResource() {
 		return resource;
 	}
 
-	public void setResource(String resource) {
+	public Attack setResource(String resource) {
 		this.resource = resource;
+		return this;
 	}
 
 }

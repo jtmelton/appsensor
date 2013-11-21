@@ -30,32 +30,36 @@ public class ClientConfiguration {
 		return eventManagerImplementation;
 	}
 
-	public void setEventManagerImplementation(String eventManagerImplementation) {
+	public ClientConfiguration setEventManagerImplementation(String eventManagerImplementation) {
 		this.eventManagerImplementation = eventManagerImplementation;
+		return this;
 	}
 	
 	public String getResponseHandlerImplementation() {
 		return responseHandlerImplementation;
 	}
 
-	public void setResponseHandlerImplementation(String responseHandlerImplementation) {
+	public ClientConfiguration setResponseHandlerImplementation(String responseHandlerImplementation) {
 		this.responseHandlerImplementation = responseHandlerImplementation;
+		return this;
 	}
 	
 	public String getUserManagerImplementation() {
 		return userManagerImplementation;
 	}
 
-	public void setUserManagerImplementation(String userManagerImplementation) {
+	public ClientConfiguration setUserManagerImplementation(String userManagerImplementation) {
 		this.userManagerImplementation = userManagerImplementation;
+		return this;
 	}
 
 	public ServerConnection getServerConnection() {
 		return serverConnection;
 	}
 
-	public void setServerConnection(ServerConnection serverConnection) {
+	public ClientConfiguration setServerConnection(ServerConnection serverConnection) {
 		this.serverConnection = serverConnection;
+		return this;
 	}
 
 	@Override
