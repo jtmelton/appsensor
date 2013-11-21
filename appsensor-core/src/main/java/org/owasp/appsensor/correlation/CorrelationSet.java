@@ -17,8 +17,9 @@ public class CorrelationSet {
 		return clientApplications;
 	}
 
-	public void setClientApplications(Collection<String> clientApplications) {
+	public CorrelationSet setClientApplications(Collection<String> clientApplications) {
 		this.clientApplications = clientApplications;
+		return this;
 	}
 
 	@Override
