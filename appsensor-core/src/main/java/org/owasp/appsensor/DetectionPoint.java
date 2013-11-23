@@ -10,6 +10,15 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+/**
+ * The detection point represents the unique sensor concept in the code. 
+ * 
+ * A list of project detection points are maintained at {@link https://www.owasp.org/index.php/AppSensor_DetectionPoints}
+ * 
+ * @see java.io.Serializable
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class DetectionPoint implements Serializable {
 	
 	private static final long serialVersionUID = -6294211676275622809L;

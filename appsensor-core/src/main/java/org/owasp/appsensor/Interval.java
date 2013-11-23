@@ -6,6 +6,18 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 import org.eclipse.persistence.oxm.annotations.XmlPath;
 
+/**
+ * The Interval represents a span of time. The key components are the: 
+ * 
+ * <ul>
+ * 		<li>duration (example: 15)</li>
+ * 		<li>unit: (example: minutes)</li>
+ * </ul>
+ * 
+ * @see java.io.Serializable
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class Interval implements Serializable {
 
 	private static final long serialVersionUID = -5187503848358707060L;

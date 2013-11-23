@@ -7,6 +7,18 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * An attack can be added to the system in one of two ways: 
+ * <ol>
+ * 		<li>Analysis is performed by the event analysis engine and determines an attack has occurred</li>
+ * 		<li>Analysis is performed by an external system (ie. WAF) and added to the system.</li>
+ * </ol>
+ * 
+ * The key difference between an {@link Event} and an {@link Attack} is that an {@link Event}
+ * is "suspicous" whereas an {@link Attack} has been determined to be "malicious" by some analysis.
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 @XmlRootElement
 public class Attack implements Serializable {
 

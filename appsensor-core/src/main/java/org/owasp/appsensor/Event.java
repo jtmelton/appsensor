@@ -4,6 +4,17 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Event is a specific instance that a sensor has detected that 
+ * represents a suspicious activity.
+ * 
+ * The key difference between an {@link Event} and an {@link Attack} is that an {@link Event}
+ * is "suspicous" whereas an {@link Attack} has been determined to be "malicious" by some analysis.
+ * 
+ * @see java.io.Serializable
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 @XmlRootElement
 public abstract class Event implements Serializable {
 	

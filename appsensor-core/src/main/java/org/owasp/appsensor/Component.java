@@ -13,6 +13,7 @@ public interface Component {
 	
 	/**
      * Returns the Unique Identifier for this component/control instance.
+     * 
      * @return Unique Identifier for this component/control instance
      */
     UUID getComponentID();

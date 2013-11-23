@@ -6,6 +6,12 @@ import org.owasp.appsensor.configuration.client.ClientConfiguration;
 import org.owasp.appsensor.configuration.client.ClientConfigurationReader;
 import org.owasp.appsensor.configuration.client.XmlClientConfigurationReader;
 
+/**
+ * This class exposes the main interfaces expected to be available 
+ * to the client application. 
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ClientObjectFactory extends BaseObjectFactory {
 	
 	private static ClientConfigurationReader configurationReader;

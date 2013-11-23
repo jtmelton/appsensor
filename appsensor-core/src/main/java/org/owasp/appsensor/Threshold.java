@@ -2,6 +2,18 @@ package org.owasp.appsensor;
 
 import java.io.Serializable;
 
+/**
+ * The Threshold represents a number of occurrences over a span of time. The key components are the: 
+ * 
+ * <ul>
+ * 		<li>count: (example: 12)</li>
+ * 		<li>interval: (example: 15 minutes)</li>
+ * </ul>
+ * 
+ * @see java.io.Serializable
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class Threshold implements Serializable {
 
 	private static final long serialVersionUID = -9033433180585877243L;

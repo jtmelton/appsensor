@@ -5,6 +5,15 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+/**
+ * After an {@link Attack} has been determined to have occurred, a Response
+ * is executed. The Response configuration is done on the server-side, not 
+ * the client application. 
+ * 
+ * @see java.io.Serializable
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class Response implements Serializable {
 	
 	private static final long serialVersionUID = -4183973779552497656L;
@@ -12,7 +21,7 @@ public class Response implements Serializable {
 	private User user;
 	
 	/** Detection Point that was triggered */
-	private transient DetectionPoint detectionPoint;
+	private DetectionPoint detectionPoint;
 	
 	/** When the event occurred */
 	private long timestamp;

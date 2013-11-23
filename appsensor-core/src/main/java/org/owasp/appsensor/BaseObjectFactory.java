@@ -5,6 +5,11 @@ import java.lang.reflect.Modifier;
 
 import org.owasp.appsensor.exceptions.ConfigurationException;
 
+/**
+ * This base implementation performs object instantiation. 
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public abstract class BaseObjectFactory {
 	
 	/**
