@@ -16,7 +16,7 @@
 		</correlated-client-set>
 	</correlation-config>
 
-	<event-analyzer class="org.owasp.appsensor.analysis.impl.ReferenceEventAnalysisEngine" />
+	<event-analyzer class="org.owasp.appsensor.analysis.impl.ReferenceStatisticalEventAnalysisEngine" />
 	<attack-analyzer class="org.owasp.appsensor.analysis.impl.ReferenceAttackAnalysisEngine" />
 	<response-analyzer class="org.owasp.appsensor.analysis.impl.ReferenceResponseAnalysisEngine" />
 	
@@ -29,7 +29,7 @@
 	<response-handler class="org.owasp.appsensor.response.impl.ReferenceResponseHandler"/>
 	
 	<event-store-observers>
-		<observer class="org.owasp.appsensor.analysis.impl.ReferenceEventAnalysisEngine" />
+		<observer class="org.owasp.appsensor.analysis.impl.ReferenceStatisticalEventAnalysisEngine" />
 		<observer class="org.owasp.appsensor.reporting.impl.ReferenceReportingEngine" />
 	</event-store-observers>
 	
