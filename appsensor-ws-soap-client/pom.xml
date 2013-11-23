@@ -2,9 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.owasp.appsensor</groupId>
   	<artifactId>appsensor-ws-soap-client</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>appsensor-ws-soap-client</name>
@@ -15,30 +13,10 @@
   	</description>
 	<url>http://www.owasp.org/index.php/Category:OWASP_AppSensor_Project</url>
 
-	<!-- <scm>
-    <connection>scm:svn:http://appsensor.googlecode.com/svn/trunk/</connection>
-    <developerConnection>scm:svn:https://appsensor.googlecode.com/svn/trunk/</developerConnection>
-    <url>https://github.com/jtmelton/appsensor</url>
-  </scm>-->
-  
 	<issueManagement>
   		<system>GitHub Issue Tracking</system>
     	<url>https://github.com/jtmelton/appsensor/issues</url>
   	</issueManagement>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>sonatype-nexus-snapshots</id>
-			<name>Sonatype Nexus Snapshots</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-
-		<repository>
-			<id>sonatype-nexus-releases</id>
-			<name>Sonatype Nexus Releases</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository>
-	</distributionManagement>
 
 	<mailingLists>
 		<mailingList>
@@ -55,43 +33,6 @@
 		<url>http://www.owasp.org</url>
 	</organization>
 
-	<developers>
-		<developer>
-			<id>john</id>
-			<name>John Melton</name>
-			<email>jtmelton@gmail.com</email>
-			<url>http://www.jtmelton.com</url>
-			<organization>OWASP</organization>
-			<organizationUrl>http://www.owasp.org</organizationUrl>
-		</developer>
-		<developer>
-			<id>michael</id>
-			<name>Michael Coates</name>
-			<email>michael.coates@owasp.org</email>
-			<url>http://michael-coates.blogspot.com/</url>
-			<organization>OWASP</organization>
-			<organizationUrl>http://www.owasp.org</organizationUrl>
-		</developer>
-		<developer>
-			<id>jay</id>
-			<name>Jay Reynolds</name>
-			<organization>OWASP</organization>
-			<organizationUrl>http://www.owasp.org</organizationUrl>
-		</developer>
-		<developer>
-			<id>kevin</id>
-			<name>Kevin Wall</name>
-			<organization>OWASP</organization>
-			<organizationUrl>http://www.owasp.org</organizationUrl>
-		</developer>
-		<developer>
-			<id>rauf</id>
-			<name>Rauf Butt</name>
-			<organization>OWASP</organization>
-			<organizationUrl>http://www.owasp.org</organizationUrl>
-		</developer>
-	</developers>
-	
 	<licenses>
 		<license>
 			<name>BSD</name>
@@ -114,147 +55,10 @@
 	</dependencies>
 
 	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
+		<groupId>org.owasp.appsensor</groupId>
+	  	<artifactId>appsensor-parent</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+		<relativePath>../appsensor-parent/pom.xml</relativePath>
 	</parent>
-	
-	<!-- 
-  	http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
-  
-    In order to do a release of appsensor, you need to run these steps.
-    mvn clean
-    mvn test
-    mvn deploy
-   -->
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.14.1</version>
-				<configuration>
-					<forkMode>always</forkMode>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.4</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<detectJavaApiLink>true</detectJavaApiLink>
-					<detectLinks>true</detectLinks>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-enforcer-plugin</artifactId>
-										<versionRange>[1.0.0,)</versionRange>
-										<goals>
-											<goal>enforce</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
-	
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>2.5.3-SNAPSHOT</version>
-				<configuration>
-					<findbugsXmlOutput>true</findbugsXmlOutput>
-					<findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-					<xmlOutput>true</xmlOutput>
-					<threshold>Low</threshold>
-					<effort>Max</effort>
-					<relaxed>false</relaxed>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.0.1</version>
-				<configuration>
-					<targetJdk>1.7</targetJdk>
-					<sourceEncoding>utf-8</sourceEncoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<detectJavaApiLink>true</detectJavaApiLink>
-					<detectLinks>true</detectLinks>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 	
 </project>
