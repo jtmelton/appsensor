@@ -1,5 +1,10 @@
 package org.owasp.appsensor;
 
+/**
+ * This interface is meant to be implemented
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public interface Logger {
 
 	/**

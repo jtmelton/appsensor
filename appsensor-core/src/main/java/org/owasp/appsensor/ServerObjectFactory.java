@@ -7,6 +7,14 @@ import org.owasp.appsensor.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.configuration.server.ServerConfigurationReader;
 import org.owasp.appsensor.configuration.server.XmlServerConfigurationReader;
 
+/**
+ * AppSensor locator class is provided to make it easy to gain access to the 
+ * AppSensor classes in use. Use the set methods to override the reference 
+ * implementations with instances of any custom implementations.  Alternatively, 
+ * These configurations are set in the appsensor-server-config.xml file.
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ServerObjectFactory extends BaseObjectFactory {
 	
 	private static ServerConfigurationReader configurationReader;
@@ -83,10 +91,18 @@ public class ServerObjectFactory extends BaseObjectFactory {
 		initialize();
 	}
 	
+	/**
+	 * Accessor for ServerConfiguration object
+	 * @return ServerConfiguration object
+	 */
 	public static ServerConfiguration getConfiguration() {
 		return configuration;
 	}
 	
+	/**
+	 * Accessor for Event AnalysisEngine object
+	 * @return Event AnalysisEngine object
+	 */
 	public static AnalysisEngine getEventAnalysisEngine() {
 		if (eventAnalysisEngine == null) {
 			eventAnalysisEngine = make(getConfiguration().getEventAnalysisEngineImplementation(), "EventAnalysisEngine");
@@ -95,6 +111,10 @@ public class ServerObjectFactory extends BaseObjectFactory {
 		return eventAnalysisEngine;
 	}
 	
+	/**
+	 * Accessor for Attack AnalysisEngine object
+	 * @return Attack AnalysisEngine object
+	 */
 	public static AnalysisEngine getAttackAnalysisEngine() {
 		if (attackAnalysisEngine == null) {
 			attackAnalysisEngine = make(getConfiguration().getAttackAnalysisEngineImplementation(), "AttackAnalysisEngine");
@@ -103,6 +123,10 @@ public class ServerObjectFactory extends BaseObjectFactory {
 		return attackAnalysisEngine;
 	}
 	
+	/**
+	 * Accessor for Response AnalysisEngine object
+	 * @return Response AnalysisEngine object
+	 */
 	public static AnalysisEngine getResponseAnalysisEngine() {
 		if (responseAnalysisEngine == null) {
 			responseAnalysisEngine = make(getConfiguration().getResponseAnalysisEngineImplementation(), "ResponseAnalysisEngine");
@@ -111,6 +135,10 @@ public class ServerObjectFactory extends BaseObjectFactory {
 		return responseAnalysisEngine;
 	}
 	
+	/**
+	 * Accessor for EventStore object
+	 * @return EventStore object
+	 */
 	public static EventStore getEventStore() {
 		if (eventStore == null) {
 			eventStore = make(getConfiguration().getEventStoreImplementation(), "EventStore");
@@ -119,6 +147,10 @@ public class ServerObjectFactory extends BaseObjectFactory {
 		return eventStore; 
 	}
 	
+	/**
+	 * Accessor for AttackStore object
+	 * @return AttackStore object
+	 */
 	public static AttackStore getAttackStore() {
 		if (attackStore == null) {
 			attackStore = make(getConfiguration().getAttackStoreImplementation(), "AttackStore");
@@ -127,6 +159,10 @@ public class ServerObjectFactory extends BaseObjectFactory {
 		return attackStore;
 	}
 	
+	/**
+	 * Accessor for ResponseStore object
+	 * @return ResponseStore object
+	 */
 	public static ResponseStore getResponseStore() {
 		if (responseStore == null) {
 			responseStore = make(getConfiguration().getResponseStoreImplementation(), "ResponseStore");
@@ -135,10 +171,18 @@ public class ServerObjectFactory extends BaseObjectFactory {
 		return responseStore;
 	}
 	
+	/**
+	 * Accessor for Logger object
+	 * @return Logger object
+	 */
 	public static Logger getLogger() {
 		return make(getConfiguration().getLoggerImplementation(), "Logger");
 	}
 	
+	/**
+	 * Accessor for ReponseHandler object. 
+	 * @return ResponseHandler object
+	 */
 	public static ResponseHandler getResponseHandler() {
 		if (responseHandler == null) {
 			responseHandler = make(getConfiguration().getResponseHandlerImplementation(), "ResponseHandler");

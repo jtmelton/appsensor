@@ -12,7 +12,7 @@ public class Response implements Serializable {
 	private User user;
 	
 	/** Detection Point that was triggered */
-	private DetectionPoint detectionPoint;
+	private transient DetectionPoint detectionPoint;
 	
 	/** When the event occurred */
 	private long timestamp;
