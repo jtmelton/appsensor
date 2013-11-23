@@ -1,5 +1,6 @@
 package org.owasp.appsensor.analysis.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Observable;
 
@@ -29,7 +30,7 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 							ServerObjectFactory.getConfiguration().getRelatedDetectionSystems(attack.getDetectionSystemId())
 							);
 
-			Response response = findAppropriateResponse(triggeringDetectionPoint, existingResponses);
+			Response response = findAppropriateResponse(triggeringDetectionPoint, existingResponses, attack);
 			
 			if (response != null) {
 				logger.info("Response set for user <" + attack.getUser().getUsername() + "> - storing response action " + response.getAction());
@@ -38,14 +39,16 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 		} 
 	}
 	
-	protected Response findAppropriateResponse(DetectionPoint triggeringDetectionPoint, Collection<Response> existingResponses) {
+	protected Response findAppropriateResponse(DetectionPoint triggeringDetectionPoint, Collection<Response> existingResponses, Attack attack) {
 		Response response = null;
+		
+		Collection<Response> possibleResponses = findPossibleResponses(triggeringDetectionPoint);
 		
 		if (existingResponses == null) {
 			//no responses yet, just grab first configured response from detection point
-			response = triggeringDetectionPoint.getResponses().iterator().next();
+			response = possibleResponses.iterator().next();
 		} else {
-			for (Response configuredResponse : triggeringDetectionPoint.getResponses()) {
+			for (Response configuredResponse : possibleResponses) {
 				response = configuredResponse;
 				
 				if (! isPreviousResponse(response, existingResponses)) {
@@ -57,7 +60,30 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 			}
 		}
 		
+		if(response == null) {
+			throw new IllegalArgumentException("No appropriate response was configured for this detection point: " + triggeringDetectionPoint.getId());
+		}
+		
+		//set extra fields
+		response.setUser(attack.getUser());
+		response.setDetectionPoint(triggeringDetectionPoint);
+		response.setTimestamp(attack.getTimestamp());
+		response.setDetectionSystemId(attack.getDetectionSystemId());
+		
 		return response;
+	}
+	
+	protected Collection<Response> findPossibleResponses(DetectionPoint triggeringDetectionPoint) {
+		Collection<Response> possibleResponses = new ArrayList<Response>();
+		
+		for (DetectionPoint configuredDetectionPoint : ServerObjectFactory.getConfiguration().getDetectionPoints()) {
+			if (configuredDetectionPoint.getId().equals(triggeringDetectionPoint.getId())) {
+				possibleResponses = configuredDetectionPoint.getResponses();
+				break;
+			}
+		}
+		
+		return possibleResponses;
 	}
 	
 	protected boolean isPreviousResponse(Response response, Collection<Response> existingResponses) {
