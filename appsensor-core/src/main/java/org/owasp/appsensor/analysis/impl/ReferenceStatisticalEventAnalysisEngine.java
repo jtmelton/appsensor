@@ -8,16 +8,17 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.StatisticalEvent;
 import org.owasp.appsensor.util.DateUtils;
 
-public class ReferenceEventAnalysisEngine implements AnalysisEngine {
+public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 
-	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(ReferenceEventAnalysisEngine.class);
+	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(ReferenceStatisticalEventAnalysisEngine.class);
 	
 	@Override
 	public void update(Observable observable, Object observedObject) {
-		if (observedObject instanceof Event) {
-			Event event = (Event)observedObject;
+		if (observedObject instanceof StatisticalEvent) {
+			StatisticalEvent event = (StatisticalEvent)observedObject;
 			
 			Collection<Event> existingEvents = 
 					ServerObjectFactory.getEventStore().findEvents(
@@ -52,14 +53,16 @@ public class ReferenceEventAnalysisEngine implements AnalysisEngine {
 		long startTime = DateUtils.getCurrentTime() - intervalInMillis;
 		
 		for (Event event : existingEvents) {
-			if (intervalInMillis > 0) {
-				if (event.getTimestamp() > startTime) {
-					//only increment when event occurs within specified interval
+			if(event instanceof StatisticalEvent) {
+				if (intervalInMillis > 0) {
+					if (event.getTimestamp() > startTime) {
+						//only increment when event occurs within specified interval
+						count++;
+					}
+				} else {
+					//no interval - all events considered
 					count++;
 				}
-			} else {
-				//no interval - all events considered
-				count++;
 			}
 		}
 		
