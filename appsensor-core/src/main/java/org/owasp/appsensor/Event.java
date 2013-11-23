@@ -1,14 +1,13 @@
 package org.owasp.appsensor;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Event implements Serializable {
+public abstract class Event implements Serializable {
+	
+	public static final String STATISTICAL = "STATISTICAL";
 	
 	private static final long serialVersionUID = -3235111340901139594L;
 
@@ -21,37 +20,23 @@ public class Event implements Serializable {
 	/** When the event occurred */
 	private long timestamp;
 
-	/** Identifier label for the system that detected the event. 
+	/** 
+	 * Identifier label for the system that detected the event. 
 	 * This will be either the client application, or possible an external 
 	 * detection system, such as syslog, a WAF, network IDS, etc.  */
 	private String detectionSystemId; 
 	
-	/** The application specific location of the occurrence, which can be used 
+	/** 
+	 * The application specific location of the occurrence, which can be used 
      * later to block requests to a given function.  In this implementation, 
      * the current request URI is used.
      */
     private String resource;
-	
-    public Event () {}
     
-	public Event (User user, DetectionPoint detectionPoint, String detectionSystemId) {
-		this(user, detectionPoint, Calendar.getInstance().getTimeInMillis(), detectionSystemId);
-	}
+    /** The type of event: ie. statistical, behavioral, etc. */
+	private String eventType;
 	
-	public Event (User user, DetectionPoint detectionPoint, long timestamp, String detectionSystemId) {
-		setUser(user);
-		setDetectionPoint(detectionPoint);
-		setTimestamp(timestamp);
-		setDetectionSystemId(detectionSystemId);
-	}
-	
-	public Event (User user, DetectionPoint detectionPoint, Date timestamp, String detectionSystemId) {
-		this(user, detectionPoint, timestamp.getTime(), detectionSystemId);
-	}
-	
-	public Event (User user, DetectionPoint detectionPoint, Timestamp timestamp, String detectionSystemId) {
-		this(user, detectionPoint, timestamp.getTime(), detectionSystemId);
-	}
+	protected Event() {}
 	
 	public User getUser() {
 		return user;
@@ -95,6 +80,15 @@ public class Event implements Serializable {
 
 	public Event setResource(String resource) {
 		this.resource = resource;
+		return this;
+	}
+	
+	public String getEventType() {
+		return eventType;
+	}
+	
+	public Event setEventType(String eventType) {
+		this.eventType = eventType;
 		return this;
 	}
 	
