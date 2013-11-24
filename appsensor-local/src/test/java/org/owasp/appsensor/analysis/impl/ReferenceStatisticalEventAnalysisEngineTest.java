@@ -9,19 +9,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.owasp.appsensor.ClientObjectFactory;
 import org.owasp.appsensor.DetectionPoint;
-import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.ServerObjectFactory;
 import org.owasp.appsensor.StatisticalEvent;
-import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.User;
 
 public class ReferenceStatisticalEventAnalysisEngineTest {
 
 	private static User bob = new User("bob", "1.2.3.4");
-	
-	private static Interval fiveMinutes = new Interval(5, Interval.MINUTES);
-	
-	private static Threshold threeInFiveMinutes = new Threshold(3, fiveMinutes);
 	
 	private static DetectionPoint detectionPoint1 = new DetectionPoint();
 	
@@ -32,7 +26,6 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	@BeforeClass
 	public static void doSetup() {
 		detectionPoint1.setId("IE1");
-		detectionPoint1.setThreshold(threeInFiveMinutes);
 		
 		detectionSystems1.add(detectionSystem1);
 	}

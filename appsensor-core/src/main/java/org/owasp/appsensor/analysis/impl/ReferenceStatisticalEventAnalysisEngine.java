@@ -5,16 +5,37 @@ import java.util.Observable;
 
 import org.owasp.appsensor.AnalysisEngine;
 import org.owasp.appsensor.Attack;
+import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.ServerObjectFactory;
 import org.owasp.appsensor.StatisticalEvent;
 import org.owasp.appsensor.util.DateUtils;
 
+/**
+ * This is a statistical event analysis engine, and is an implementation of the Observer pattern. 
+ * 
+ * It is notified with implementations of the {@link java.util.Observable} interface and is 
+ * passed the observed object. In this case, we are only concerned with {@link org.owasp.appsensor.StatisticalEvent}
+ * implementations. 
+ * 
+ * The implementation performs a simple analysis that watches the configured threshold and 
+ * determines if it has been crossed. If so, an attack is created and added to the 
+ * {@link org.owasp.appsensor.AttackStore}. 
+ * 
+ * @see java.util.Observer
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 
 	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(ReferenceStatisticalEventAnalysisEngine.class);
 	
+	/**
+	 * This method analyzes statistical events that are added to the system and 
+	 * detects if the configured threshold has been crossed. If so, an attack is 
+	 * created and added to the system.
+	 */
 	@Override
 	public void update(Observable observable, Object observedObject) {
 		if (observedObject instanceof StatisticalEvent) {
@@ -35,7 +56,7 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 			//3. count is 10, t.count is 10 (10%10 = 0, Violation Observed)
 			//4. count is 30, t.count is 10 (30%10 = 0, Violation Observed)
 
-			int thresholdCount = event.getDetectionPoint().getThreshold().getCount();
+			int thresholdCount = findConfiguredDetectionPoint(event.getDetectionPoint()).getThreshold().getCount();
 			
 			if (eventCount % thresholdCount == 0) {
 				logger.info("Violation Observed for user <" + event.getUser().getUsername() + "> - storing attack");
@@ -48,12 +69,12 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 	protected int countEvents(Event currentEvent, Collection<Event> existingEvents) {
 		int count = 0;
 		
-		long intervalInMillis = currentEvent.getDetectionPoint().getThreshold().getInterval().toMillis();
+		long intervalInMillis = findConfiguredDetectionPoint(currentEvent.getDetectionPoint()).getThreshold().getInterval().toMillis();
 		
 		long startTime = DateUtils.getCurrentTime() - intervalInMillis;
 		
 		for (Event event : existingEvents) {
-			if(event instanceof StatisticalEvent) {
+			if (event instanceof StatisticalEvent) {
 				if (intervalInMillis > 0) {
 					if (event.getTimestamp() > startTime) {
 						//only increment when event occurs within specified interval
@@ -67,6 +88,19 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 		}
 		
 		return count;
+	}
+	
+	protected DetectionPoint findConfiguredDetectionPoint(DetectionPoint triggeringDetectionPoint) {
+		DetectionPoint detectionPoint = null;
+		
+		for (DetectionPoint configuredDetectionPoint : ServerObjectFactory.getConfiguration().getDetectionPoints()) {
+			if (configuredDetectionPoint.getId().equals(triggeringDetectionPoint.getId())) {
+				detectionPoint = configuredDetectionPoint;
+				break;
+			}
+		}
+		
+		return detectionPoint;
 	}
 	
 }

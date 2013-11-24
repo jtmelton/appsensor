@@ -47,8 +47,8 @@
 		<detection-point>
 			<id>IE1</id>
 			<threshold>
-				<count>11</count>
-				<interval unit="minutes">4</interval>
+				<count>3</count>
+				<interval unit="minutes">5</interval>
 			</threshold>
 			<responses>
 				<response>
