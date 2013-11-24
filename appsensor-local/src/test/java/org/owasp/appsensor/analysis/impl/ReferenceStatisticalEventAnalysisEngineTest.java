@@ -20,13 +20,10 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	private static User bob = new User("bob", "1.2.3.4");
 	
 	private static Interval fiveMinutes = new Interval(5, Interval.MINUTES);
-//	private static Interval thirtySeconds = new Interval(30, Interval.SECONDS);
 	
 	private static Threshold threeInFiveMinutes = new Threshold(3, fiveMinutes);
 	
 	private static DetectionPoint detectionPoint1 = new DetectionPoint();
-	
-//	private static Collection<Response> responses1 = new ArrayList<Response>();
 	
 	private static Collection<String> detectionSystems1 = new ArrayList<String>();
 	
@@ -34,14 +31,8 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	
 	@BeforeClass
 	public static void doSetup() {
-//		responses1.add(new Response(bob, "log", detectionPoint1, detectionSystem1));
-//		responses1.add(new Response(bob, "logout", detectionPoint1, detectionSystem1));
-//		responses1.add(new Response(bob, "disableUser", detectionPoint1, detectionSystem1));
-//		responses1.add(new Response(bob, "disableComponentForAllUsers", detectionPoint1, detectionSystem1, thirtySeconds));
-		
 		detectionPoint1.setId("IE1");
 		detectionPoint1.setThreshold(threeInFiveMinutes);
-//		detectionPoint1.setResponses(responses1);
 		
 		detectionSystems1.add(detectionSystem1);
 	}
