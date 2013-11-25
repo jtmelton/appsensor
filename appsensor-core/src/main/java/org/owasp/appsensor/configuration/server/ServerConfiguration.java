@@ -2,7 +2,10 @@ package org.owasp.appsensor.configuration.server;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -55,6 +58,8 @@ public class ServerConfiguration {
 	@XmlElementWrapper(name="correlation-config")
 	@XmlElement(name="correlated-client-set")
 	private Collection<CorrelationSet> correlationSets = new HashSet<CorrelationSet>();
+	
+	private static transient Map<String, DetectionPoint> detectionPointCache = Collections.synchronizedMap(new HashMap<String, DetectionPoint>());
 	
 	public String getEventAnalysisEngineImplementation() {
 		return eventAnalysisEngineImplementation;
@@ -179,6 +184,14 @@ public class ServerConfiguration {
 		return this;
 	}
 	
+	/**
+	 * Find related detection systems based on a given detection system. 
+	 * This simply means those systems that have been configured along with the 
+	 * specified system id as part of a correlation set. 
+	 * 
+	 * @param detectionSystemId system ID to evaluate and find correlated systems
+	 * @return collection of strings representing correlation set, INCLUDING specified system ID
+	 */
 	public Collection<String> getRelatedDetectionSystems(String detectionSystemId) {
 		Collection<String> relatedDetectionSystems = new HashSet<String>();
 		
@@ -195,6 +208,33 @@ public class ServerConfiguration {
 		}
 		
 		return relatedDetectionSystems;
+	}
+	
+	/**
+	 * Locate detection point configuration from server-side config file. 
+	 * 
+	 * @param search detection point that has been added to the system
+	 * @return DetectionPoint populated with configuration information from server-side config
+	 */
+	public DetectionPoint findDetectionPoint(DetectionPoint search) {
+		DetectionPoint detectionPoint = null;
+		
+		detectionPoint = detectionPointCache.get(search.getId());
+
+		if (detectionPoint == null) {
+			for (DetectionPoint configuredDetectionPoint : getDetectionPoints()) {
+				if (configuredDetectionPoint.getId().equals(search.getId())) {
+					detectionPoint = configuredDetectionPoint;
+					
+					//cache
+					detectionPointCache.put(detectionPoint.getId(), detectionPoint);
+					
+					break;
+				}
+			}
+		}
+		
+		return detectionPoint;
 	}
 
 	@Override
