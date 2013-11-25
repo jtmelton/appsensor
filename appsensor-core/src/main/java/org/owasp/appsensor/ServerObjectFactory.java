@@ -99,6 +99,10 @@ public class ServerObjectFactory extends BaseObjectFactory {
 		return configuration;
 	}
 	
+	public static void setConfiguration(ServerConfiguration updatedConfiguration) {
+		configuration = updatedConfiguration;
+	}
+	
 	/**
 	 * Accessor for Event AnalysisEngine object
 	 * @return Event AnalysisEngine object
