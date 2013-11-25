@@ -29,13 +29,13 @@ public class InMemoryResponseStore extends ResponseStore {
 	}
 	
 	@Override
-	public Collection<Response> findResponses(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds) {
+	public Collection<Response> findResponses(User user, DetectionPoint search, Collection<String> detectionSystemIds) {
 		Collection<Response> matchingResponses = new ArrayList<Response>();
 		
 		for (Response response : responses) {
 			if (user.equals(response.getUser()) && 
 					detectionSystemIds.contains(response.getDetectionSystemId()) &&
-					response.getDetectionPoint().getId().equals(detectionPoint.getId())) {
+					response.getDetectionPoint().getId().equals(search.getId())) {
 				matchingResponses.add(response);
 			}
 		}

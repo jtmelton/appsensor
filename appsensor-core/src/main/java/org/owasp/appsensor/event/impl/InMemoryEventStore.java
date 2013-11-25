@@ -29,13 +29,13 @@ public class InMemoryEventStore extends EventStore {
 	}
 
 	@Override
-	public Collection<Event> findEvents(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds) {
+	public Collection<Event> findEvents(User user, DetectionPoint search, Collection<String> detectionSystemIds) {
 		Collection<Event> matchingEvents = new ArrayList<Event>();
 		
 		for (Event event : events) {
 			if (user.equals(event.getUser()) && 
 					detectionSystemIds.contains(event.getDetectionSystemId()) &&
-					event.getDetectionPoint().getId().equals(detectionPoint.getId())) {
+					event.getDetectionPoint().getId().equals(search.getId())) {
 				matchingEvents.add(event);
 			}
 		}

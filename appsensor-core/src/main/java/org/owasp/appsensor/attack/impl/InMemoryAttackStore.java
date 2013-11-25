@@ -29,13 +29,13 @@ public class InMemoryAttackStore extends AttackStore {
 	}
 	
 	@Override
-	public Collection<Attack> findAttacks(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds) {
+	public Collection<Attack> findAttacks(User user, DetectionPoint search, Collection<String> detectionSystemIds) {
 		Collection<Attack> matchingAttacks = new ArrayList<Attack>();
 		
 		for (Attack attack : attacks) {
 			if (user.equals(attack.getUser()) && 
 					detectionSystemIds.contains(attack.getDetectionSystemId()) &&
-					attack.getDetectionPoint().getId().equals(detectionPoint.getId())) {
+					attack.getDetectionPoint().getId().equals(search.getId())) {
 				matchingAttacks.add(attack);
 			}
 		}
