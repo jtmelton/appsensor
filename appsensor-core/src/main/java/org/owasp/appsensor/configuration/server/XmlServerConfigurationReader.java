@@ -11,8 +11,6 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-
-
 public class XmlServerConfigurationReader implements ServerConfigurationReader {
 	
 	/**
