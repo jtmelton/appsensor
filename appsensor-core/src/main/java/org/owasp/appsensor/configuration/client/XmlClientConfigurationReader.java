@@ -35,7 +35,7 @@ public class XmlClientConfigurationReader implements ClientConfigurationReader {
 	}
 	
 	private ClientConfiguration readConfiguration(String xml, String xsd) throws ParseException {
-		ClientConfiguration configuration = new ClientConfiguration();
+		ClientConfiguration configuration = new ReferenceJaxbClientConfiguration();
 		
 		InputStream xsdStream = null;
 		InputStream xmlStream = null;
@@ -44,7 +44,7 @@ public class XmlClientConfigurationReader implements ClientConfigurationReader {
 			xsdStream = getClass().getResourceAsStream(xsd);
 			xmlStream = getClass().getResourceAsStream(xml);
 
-			JAXBContext jaxbContext = JAXBContext.newInstance(ClientConfiguration.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(ReferenceJaxbClientConfiguration.class);
 			Unmarshaller unMarshaller = jaxbContext.createUnmarshaller();
 
 			//do validation
