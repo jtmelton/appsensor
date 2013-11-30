@@ -11,12 +11,27 @@ import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.ServerObjectFactory;
 import org.owasp.appsensor.User;
 
+/**
+ * This is a reference implementation of the attack store, and is an implementation of the Observable pattern.
+ * 
+ * It notifies implementations of the {@link java.util.Observer} interface and passes the observed object. 
+ * In this case, we are only concerned with {@link org.owasp.appsensor.Attack} implementations. 
+ * 
+ * The implementation is trivial and simply stores the Attacks in an in-memory collection.
+ * 
+ * @see java.util.Observable
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class InMemoryAttackStore extends AttackStore {
 	
 	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(InMemoryAttackStore.class);
 	
 	private Collection<Attack> attacks = new CopyOnWriteArrayList<Attack>();
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addAttack(Attack attack) {
 		logger.warning("Security attack " + attack.getDetectionPoint().getId() + " triggered by user: " + attack.getUser().getUsername());
@@ -28,6 +43,9 @@ public class InMemoryAttackStore extends AttackStore {
 		super.notifyObservers(attack);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Collection<Attack> findAttacks(User user, DetectionPoint search, Collection<String> detectionSystemIds) {
 		Collection<Attack> matchingAttacks = new ArrayList<Attack>();
