@@ -15,6 +15,9 @@ public class NoopResponseHandler implements ResponseHandler {
 
 	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(NoopResponseHandler.class);
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void handle(Response response) {
 		logger.debug("NO-OP response handler invoked for action: " + response.getAction());
