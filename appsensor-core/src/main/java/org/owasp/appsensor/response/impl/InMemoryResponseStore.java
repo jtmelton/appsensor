@@ -11,12 +11,27 @@ import org.owasp.appsensor.ResponseStore;
 import org.owasp.appsensor.ServerObjectFactory;
 import org.owasp.appsensor.User;
 
+/**
+ * This is a reference implementation of the response store, and is an implementation of the Observable pattern.
+ * 
+ * It notifies implementations of the {@link java.util.Observer} interface and passes the observed object. 
+ * In this case, we are only concerned with {@link org.owasp.appsensor.Response} implementations. 
+ * 
+ * The implementation is trivial and simply stores the Responses in an in-memory collection.
+ * 
+ * @see java.util.Observable
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class InMemoryResponseStore extends ResponseStore {
 
 	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(InMemoryResponseStore.class);
 	
 	private Collection<Response> responses = new CopyOnWriteArrayList<Response>();
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addResponse(Response response) {
 		logger.warning("Security response " + response + " triggered for user: " + response.getUser().getUsername());
@@ -28,6 +43,9 @@ public class InMemoryResponseStore extends ResponseStore {
 		super.notifyObservers(response);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Collection<Response> findResponses(User user, DetectionPoint search, Collection<String> detectionSystemIds) {
 		Collection<Response> matchingResponses = new ArrayList<Response>();
@@ -43,6 +61,9 @@ public class InMemoryResponseStore extends ResponseStore {
 		return matchingResponses;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Collection<Response> findResponses(String detectionSystemId, long earliest) {
 		Collection<Response> matchingResponses = new ArrayList<Response>();
