@@ -11,7 +11,7 @@
 		<server-connection-config>
 			<protocol>https</protocol>
 			<host>www.owasp.org</host>
-			<port>31337</port>
+			<port>5000</port>
 			<path>/appsensor/v2/api/</path>
 		</server-connection-config>
 	</server-connection>
