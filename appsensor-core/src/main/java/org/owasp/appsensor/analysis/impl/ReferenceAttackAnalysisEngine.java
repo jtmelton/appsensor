@@ -42,7 +42,7 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 	protected Response findAppropriateResponse(DetectionPoint triggeringDetectionPoint, Collection<Response> existingResponses, Attack attack) {
 		Response response = null;
 		
-		Collection<Response> possibleResponses = findPossibleResponses(triggeringDetectionPoint);
+		Collection<? extends Response> possibleResponses = findPossibleResponses(triggeringDetectionPoint);
 		
 		if (existingResponses == null) {
 			//no responses yet, just grab first configured response from detection point
@@ -73,8 +73,8 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 		return response;
 	}
 	
-	protected Collection<Response> findPossibleResponses(DetectionPoint triggeringDetectionPoint) {
-		Collection<Response> possibleResponses = new ArrayList<Response>();
+	protected Collection<? extends Response> findPossibleResponses(DetectionPoint triggeringDetectionPoint) {
+		Collection<? extends Response> possibleResponses = new ArrayList<Response>();
 		
 		for (DetectionPoint configuredDetectionPoint : ServerObjectFactory.getConfiguration().getDetectionPoints()) {
 			if (configuredDetectionPoint.getId().equals(triggeringDetectionPoint.getId())) {
