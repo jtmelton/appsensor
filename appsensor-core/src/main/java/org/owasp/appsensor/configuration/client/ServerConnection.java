@@ -1,25 +1,102 @@
 package org.owasp.appsensor.configuration.client;
 
-public interface ServerConnection {
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+public class ServerConnection {
 	
-	public String getType();
+	private String type;
+	private String protocol;
+	private String host;
+	private int port;
+	private String path;
 	
-	public ServerConnection setType(String type);
+	public String getType() {
+		return type;
+	}
 	
-	public String getProtocol();
+	public ServerConnection setType(String type) {
+		this.type = type;
+		return this;
+	}
 	
-	public ServerConnection setProtocol(String protocol);
+	public String getProtocol() {
+		return protocol;
+	}
 	
-	public String getHost();
+	public ServerConnection setProtocol(String protocol) {
+		this.protocol = protocol;
+		return this;
+	}
 	
-	public ServerConnection setHost(String host);
+	public String getHost() {
+		return host;
+	}
 	
-	public int getPort();
+	public ServerConnection setHost(String host) {
+		this.host = host;
+		return this;
+	}
 	
-	public ServerConnection setPort(int port);
+	public int getPort() {
+		return port;
+	}
 	
-	public String getPath();
+	public ServerConnection setPort(int port) {
+		this.port = port;
+		return this;
+	}
 	
-	public ServerConnection setPath(String path);
+	public String getPath() {
+		return path;
+	}
+	
+	public ServerConnection setPath(String path) {
+		this.path = path;
+		return this;
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17,31).
+				append(type).
+				append(protocol).
+				append(host).
+				append(port).
+				append(path).
+				toHashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
+		ServerConnection other = (ServerConnection) obj;
+		
+		return new EqualsBuilder().
+				append(type, other.getType()).
+				append(protocol, other.getProtocol()).
+				append(host, other.getHost()).
+				append(port, other.getPort()).
+				append(path, other.getPath()).
+				isEquals();
+	}
+	
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).
+				append("type", type).
+				append("protocol", protocol).
+				append("host", host).
+				append("port", port).
+				append("path", path).
+			    toString();
+	}
 	
 }
