@@ -1,8 +1,7 @@
 package org.owasp.appsensor.correlation;
 
+import java.util.ArrayList;
 import java.util.Collection;
-
-import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -10,8 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class CorrelationSet {
 
-	@XmlElement(name="client-application-name")
-	private Collection<String> clientApplications;
+	private Collection<String> clientApplications = new ArrayList<>();
 	
 	public Collection<String> getClientApplications() {
 		return clientApplications;
@@ -51,5 +49,5 @@ public class CorrelationSet {
 			       append("clientApplications", clientApplications).
 			       toString();
 	}
-	
+
 }
