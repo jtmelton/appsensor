@@ -2,10 +2,6 @@ package org.owasp.appsensor;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlAttribute;
-
-import org.eclipse.persistence.oxm.annotations.XmlPath;
-
 /**
  * The Interval represents a span of time. The key components are the: 
  * 
@@ -20,17 +16,15 @@ import org.eclipse.persistence.oxm.annotations.XmlPath;
  */
 public class Interval implements Serializable {
 
-	private static final long serialVersionUID = -5187503848358707060L;
-	
 	public static final String SECONDS = "seconds";
 	public static final String MINUTES = "minutes";
 	public static final String HOURS = "hours";
 	public static final String DAYS = "days";
 	
-	@XmlPath("text()")
+	private static final long serialVersionUID = 6660305744465650539L;
+
 	private int duration;
 	
-	@XmlAttribute
 	private String unit;
 
 	public Interval() {}

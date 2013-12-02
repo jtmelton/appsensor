@@ -4,7 +4,7 @@ import java.text.ParseException;
 
 import org.owasp.appsensor.configuration.client.ClientConfiguration;
 import org.owasp.appsensor.configuration.client.ClientConfigurationReader;
-import org.owasp.appsensor.configuration.client.XmlClientConfigurationReader;
+import org.owasp.appsensor.configuration.client.StaxClientConfigurationReader;
 
 /**
  * This class exposes the main interfaces expected to be available 
@@ -26,7 +26,7 @@ public class ClientObjectFactory extends BaseObjectFactory {
 	
 	static {
 		if(configurationReader == null) {
-			configurationReader = new XmlClientConfigurationReader();
+			configurationReader = new StaxClientConfigurationReader();
 		}
 		
 		if(configuration == null) {

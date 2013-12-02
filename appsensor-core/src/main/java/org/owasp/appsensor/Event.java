@@ -2,8 +2,6 @@ package org.owasp.appsensor;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * Event is a specific instance that a sensor has detected that 
  * represents a suspicious activity.
@@ -15,7 +13,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-@XmlRootElement
 public abstract class Event implements Serializable {
 	
 	public static final String STATISTICAL = "STATISTICAL";

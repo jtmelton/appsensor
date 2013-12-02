@@ -1,10 +1,8 @@
 package org.owasp.appsensor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -27,9 +25,7 @@ public class DetectionPoint implements Serializable {
 	
 	private Threshold threshold;
 	
-	@XmlElementWrapper(name="responses")
-	@XmlElement(name="response")
-	private Collection<Response> responses;
+	private Collection<Response> responses = new ArrayList<>();
 	
 	public DetectionPoint() {}
 	
@@ -110,4 +106,5 @@ public class DetectionPoint implements Serializable {
 			       append("responses", responses).
 			       toString();
 	}
+
 }

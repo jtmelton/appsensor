@@ -5,8 +5,6 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 /**
  * An attack can be added to the system in one of two ways: 
  * <ol>
@@ -19,7 +17,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-@XmlRootElement
 public class Attack implements Serializable {
 
 	private static final long serialVersionUID = 7231666413877649836L;

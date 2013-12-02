@@ -5,7 +5,7 @@ import java.util.Observer;
 
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.configuration.server.ServerConfigurationReader;
-import org.owasp.appsensor.configuration.server.XmlServerConfigurationReader;
+import org.owasp.appsensor.configuration.server.StaxServerConfigurationReader;
 
 /**
  * AppSensor locator class is provided to make it easy to gain access to the 
@@ -37,7 +37,7 @@ public class ServerObjectFactory extends BaseObjectFactory {
 	
 	static {
 		if(configurationReader == null) {
-			configurationReader = new XmlServerConfigurationReader();
+			configurationReader = new StaxServerConfigurationReader();
 		}
 		
 		if(configuration == null) {
