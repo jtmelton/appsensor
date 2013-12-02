@@ -7,7 +7,11 @@ import java.text.ParseException;
 public interface ClientConfigurationReader {
 	
 	/**
-	 * Read content using default locations
+	 * Read content using default locations of: 
+	 * 
+	 * XML: /appsensor-client-config.xml
+	 * XSD: /appsensor_client_config_2.0.xsd
+	 * 
 	 * @return populated configuration object
 	 * @throws ParseException
 	 */
