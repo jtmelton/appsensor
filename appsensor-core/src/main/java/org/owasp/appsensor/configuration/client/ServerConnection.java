@@ -4,6 +4,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+/**
+ * Represents a connection to a server from a client. 
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ServerConnection {
 	
 	private String type;
