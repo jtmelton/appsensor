@@ -13,6 +13,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.correlation.CorrelationSet;
 
+/**
+ * Represents the configuration for server-side components. Additionally, 
+ * contains various helper methods for common configuration-related 
+ * actions.
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ServerConfiguration {
 	
 	private String eventAnalysisEngineImplementation;
