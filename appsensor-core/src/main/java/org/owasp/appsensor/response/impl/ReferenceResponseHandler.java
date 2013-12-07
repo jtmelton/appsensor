@@ -11,7 +11,7 @@ import org.owasp.appsensor.ServerObjectFactory;
  * if you are in local mode. Otherwise, use a NO-OP implementation 
  * on the server-side.
  * 
- * @author jtmelton
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  *
  */
 public class ReferenceResponseHandler implements ResponseHandler {
