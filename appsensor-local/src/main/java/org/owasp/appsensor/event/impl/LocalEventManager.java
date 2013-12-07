@@ -14,7 +14,7 @@ import org.owasp.appsensor.ServerObjectFactory;
  * Local event manager that is used when the application is configured
  * to run within the same JVM as the Analysis Engine.  
  * 
- * @author jtmelton
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  *
  */
 public class LocalEventManager implements EventManager {
