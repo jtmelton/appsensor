@@ -20,7 +20,7 @@ import org.owasp.appsensor.ServerObjectFactory;
 /**
  * This is the restful endpoint that handles requests on the server-side. 
  * 
- * @author jtmelton
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Path("/api/v1.0")
 @Produces("application/json")
