@@ -9,7 +9,7 @@ import org.owasp.appsensor.Response;
 
 /**
  * 
- * @author jtmelton
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  *
  */
 public class SoapEventManager implements EventManager {
