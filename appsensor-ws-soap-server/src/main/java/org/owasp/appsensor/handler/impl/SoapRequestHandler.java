@@ -2,34 +2,28 @@ package org.owasp.appsensor.handler.impl;
 
 import java.util.Collection;
 
+import javax.jws.WebService;
+
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.RequestHandler;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.ServerObjectFactory;
 
 /**
- * This is the soap endpoint that handles requests on the server-side. 
+ * This is the soap endpoint interface for handling requests on the server-side. 
  * 
- * @author jtmelton
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public class SoapRequestHandler implements RequestHandler {
-
-	//TODO: add ws server-side handlers here 
-	
-	@Override
-	public void addEvent(Event event) {
-		ServerObjectFactory.getEventStore().addEvent(event);
-	}
+@WebService(targetNamespace = "https://www.owasp.org/index.php/OWASP_AppSensor_Project/wsdl")
+public interface SoapRequestHandler extends RequestHandler {
 
 	@Override
-	public void addAttack(Attack attack) {
-		ServerObjectFactory.getAttackStore().addAttack(attack);
-	}
+	public void addEvent(Event event);
 
 	@Override
-	public Collection<Response> getResponses(String detectionSystemId, long earliest) {
-		return ServerObjectFactory.getResponseStore().findResponses(detectionSystemId, earliest);
-	}
+	public void addAttack(Attack attack);
+
+	@Override
+	public Collection<Response> getResponses(String detectionSystemId, long earliest);
 
 }
