@@ -2,6 +2,10 @@ package org.owasp.appsensor;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * The Interval represents a span of time. The key components are the: 
  * 
@@ -66,6 +70,39 @@ public class Interval implements Serializable {
 		} 
 		
 		return millis;
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17,31).
+				append(duration).
+				append(unit).
+				toHashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
+		Interval other = (Interval) obj;
+		
+		return new EqualsBuilder().
+				append(duration, other.getDuration()).
+				append(unit, other.getUnit()).
+				isEquals();
+	}
+	
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).
+			       append("duration", duration).
+			       append("unit", unit).
+			       toString();
 	}
 	
 }

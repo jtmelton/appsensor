@@ -2,6 +2,10 @@ package org.owasp.appsensor;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * The Threshold represents a number of occurrences over a span of time. The key components are the: 
  * 
@@ -50,6 +54,39 @@ public class Threshold implements Serializable {
 	public Threshold setInterval(Interval interval) {
 		this.interval = interval;
 		return this;
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17,31).
+				append(count).
+				append(interval).
+				toHashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
+		Threshold other = (Threshold) obj;
+		
+		return new EqualsBuilder().
+				append(count, other.getCount()).
+				append(interval, other.getInterval()).
+				isEquals();
+	}
+	
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).
+			       append("count", count).
+			       append("interval", interval).
+			       toString();
 	}
 	
 }

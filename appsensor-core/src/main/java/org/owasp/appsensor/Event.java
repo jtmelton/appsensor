@@ -2,6 +2,12 @@ package org.owasp.appsensor;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlSeeAlso;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Event is a specific instance that a sensor has detected that 
  * represents a suspicious activity.
@@ -13,6 +19,7 @@ import java.io.Serializable;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@XmlSeeAlso({StatisticalEvent.class})
 public abstract class Event implements Serializable {
 	
 	public static final String STATISTICAL = "STATISTICAL";
@@ -36,7 +43,7 @@ public abstract class Event implements Serializable {
 	
 	/** 
 	 * The application specific location of the occurrence, which can be used 
-     * later to block requests to a given function.  In this implementation, 
+     * later to block requests to a given function. In this implementation, 
      * the current request URI is used.
      */
     private String resource;
@@ -100,4 +107,48 @@ public abstract class Event implements Serializable {
 		return this;
 	}
 	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17,31).
+				append(user).
+				append(detectionPoint).
+				append(timestamp).
+				append(detectionSystemId).
+				append(resource).
+				append(eventType).
+				toHashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
+		Event other = (Event) obj;
+		
+		return new EqualsBuilder().
+				append(user, other.getUser()).
+				append(detectionPoint, other.getDetectionPoint()).
+				append(timestamp, other.getTimestamp()).
+				append(detectionSystemId, other.getDetectionSystemId()).
+				append(resource, other.getResource()).
+				append(eventType, other.getEventType()).
+				isEquals();
+	}
+	
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).
+				append("user", user).
+				append("detectionPoint", detectionPoint).
+				append("timestamp", timestamp).
+				append("detectionSystemId", detectionSystemId).
+				append("resource", resource).
+				append("eventType", eventType).
+			    toString();
+	}
 }
