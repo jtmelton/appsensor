@@ -82,7 +82,6 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	private Collection<DetectionPoint> loadMockedDetectionPoints() {
 		final Collection<DetectionPoint> configuredDetectionPoints = new ArrayList<DetectionPoint>();
 
-//		Interval minutes4 = new Interval(4, Interval.MINUTES);
 		Interval minutes5 = new Interval(5, Interval.MINUTES);
 		Interval minutes6 = new Interval(6, Interval.MINUTES);
 		Interval minutes7 = new Interval(7, Interval.MINUTES);
