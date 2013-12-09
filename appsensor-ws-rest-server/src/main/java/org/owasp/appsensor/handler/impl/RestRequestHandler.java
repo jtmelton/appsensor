@@ -1,8 +1,6 @@
 package org.owasp.appsensor.handler.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -26,8 +24,9 @@ import org.owasp.appsensor.ServerObjectFactory;
 @Produces("application/json")
 public class RestRequestHandler implements RequestHandler {
 
-	//TODO: add rest server-side handlers here 
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@POST
 	@Path("/events")
@@ -35,6 +34,9 @@ public class RestRequestHandler implements RequestHandler {
 		ServerObjectFactory.getEventStore().addEvent(event);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@POST
 	@Path("/attacks")
@@ -42,32 +44,14 @@ public class RestRequestHandler implements RequestHandler {
 		ServerObjectFactory.getAttackStore().addAttack(attack);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	@GET
 	@Path("/responses")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Response> getResponses(@QueryParam("detectionSystemId") String detectionSystemId, @QueryParam("earliest") long earliest) {
-		Collection<Response> responses = new ArrayList<Response>();
-		
-		Response response1 = new Response();
-		response1.setAction("log");
-		response1.setDetectionSystemId("server1");
-		response1.setTimestamp(new GregorianCalendar().getTimeInMillis() - 30);
-		responses.add(response1);
-		
-		Response response2 = new Response();
-		response2.setAction("logout");
-		response2.setDetectionSystemId("server2");
-		response2.setTimestamp(new GregorianCalendar().getTimeInMillis() - 15);
-		responses.add(response2);
-		
-		Response response3 = new Response();
-		response3.setAction("disable");
-		response3.setDetectionSystemId("server2");
-		response3.setTimestamp(new GregorianCalendar().getTimeInMillis() + 10);
-		responses.add(response3);
-		
-		return responses;
-//		return ServerObjectFactory.getResponseStore().findResponses(detectionSystemId, earliest);
+		return ServerObjectFactory.getResponseStore().findResponses(detectionSystemId, earliest);
 	}
 }
