@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.StatisticalEvent;
 import org.owasp.appsensor.User;
+import org.owasp.appsensor.handler.SoapRequestHandler;
 
 
 public class ReferenceSoapRequestHandlerTest {

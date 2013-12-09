@@ -1,4 +1,4 @@
-package org.owasp.appsensor.handler.impl;
+package org.owasp.appsensor.handler;
 
 import java.util.Collection;
 
@@ -17,12 +17,21 @@ import org.owasp.appsensor.Response;
 @WebService(targetNamespace = "https://www.owasp.org/index.php/OWASP_AppSensor_Project/wsdl")
 public interface SoapRequestHandler extends RequestHandler {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addEvent(Event event);
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addAttack(Attack attack);
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Collection<Response> getResponses(String detectionSystemId, long earliest);
 

@@ -9,6 +9,7 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.handler.SoapRequestHandler;
 
 /**
  * This is the soap endpoint that handles requests on the server-side. 
@@ -19,21 +20,30 @@ import org.owasp.appsensor.ServerObjectFactory;
         portName = "SoapRequestHandlerPort",
         serviceName = "SoapRequestHandlerService",
         targetNamespace = "https://www.owasp.org/index.php/OWASP_AppSensor_Project/wsdl",
-        endpointInterface = "org.owasp.appsensor.handler.impl.SoapRequestHandler")
+        endpointInterface = "org.owasp.appsensor.handler.SoapRequestHandler")
 public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@WebMethod
 	@Override
 	public void addEvent(Event event) {
 		ServerObjectFactory.getEventStore().addEvent(event);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@WebMethod
 	@Override
 	public void addAttack(Attack attack) {
 		ServerObjectFactory.getAttackStore().addAttack(attack);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@WebMethod
 	@Override
 	public Collection<Response> getResponses(String detectionSystemId, long earliest) {
