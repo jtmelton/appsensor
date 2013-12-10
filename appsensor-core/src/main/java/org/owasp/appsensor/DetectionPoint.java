@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -53,6 +55,7 @@ public class DetectionPoint implements Serializable {
 		return this;
 	} 
 	
+	@XmlTransient
 	public Threshold getThreshold() {
 		return threshold;
 	}
@@ -62,6 +65,7 @@ public class DetectionPoint implements Serializable {
 		return this;
 	}
 
+	@XmlTransient
 	public Collection<Response> getResponses() {
 		return responses;
 	}

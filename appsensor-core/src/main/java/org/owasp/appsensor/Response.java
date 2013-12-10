@@ -5,6 +5,12 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * After an {@link Attack} has been determined to have occurred, a Response
  * is executed. The Response configuration is done on the server-side, not 
@@ -21,6 +27,7 @@ public class Response implements Serializable {
 	private User user;
 	
 	/** Detection Point that was triggered */
+	
 	private DetectionPoint detectionPoint;
 	
 	/** When the event occurred */
@@ -80,6 +87,7 @@ public class Response implements Serializable {
 		return this;
 	}
 	
+	@XmlTransient
 	public DetectionPoint getDetectionPoint() {
 		return detectionPoint;
 	}
@@ -123,6 +131,55 @@ public class Response implements Serializable {
 	public Response setDetectionSystemId(String detectionSystemId) {
 		this.detectionSystemId = detectionSystemId;
 		return this;
+	}
+	
+	
+//	private String ; 	
+	
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17,31).
+				append(user).
+				append(detectionPoint).
+				append(timestamp).
+				append(action).
+				append(interval).
+				append(detectionSystemId).
+				toHashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
+		Response other = (Response) obj;
+		
+		return new EqualsBuilder().
+				append(user, other.getUser()).
+				append(detectionPoint, other.getDetectionPoint()).
+				append(timestamp, other.getTimestamp()).
+				append(action, other.getAction()).
+				append(interval, other.getInterval()).
+				append(detectionSystemId, other.getDetectionSystemId()).
+				isEquals();
+	}
+	
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).
+			       append("user", user).
+			       append("detectionPoint", detectionPoint).
+			       append("timestamp", timestamp).
+			       append("action", action).
+			       append("interval", interval).
+			       append("detectionSystemId", detectionSystemId).
+			       toString();
 	}
 	
 }
