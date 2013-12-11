@@ -7,6 +7,11 @@ import org.owasp.appsensor.configuration.client.ClientConfiguration;
 import org.owasp.appsensor.configuration.client.ClientConfigurationReader;
 import org.owasp.appsensor.configuration.client.StaxClientConfigurationReader;
 
+/**
+ * Test various configuration settings from the xml client configuration
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class XmlClientConfigurationReaderTest {
 	
 	@Test
