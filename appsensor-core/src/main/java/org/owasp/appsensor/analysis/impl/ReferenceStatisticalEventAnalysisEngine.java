@@ -83,8 +83,10 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 	protected int countEvents(long intervalInMillis, Collection<Event> existingEvents, Event triggeringEvent) {
 		int count = 0;
 		
+		//grab the startTime to begin counting from based on the current time - interval
 		long startTime = DateUtils.getCurrentTime() - intervalInMillis;
 		
+		//count events after most recent attack.
 		long mostRecentAttackTime = findMostRecentAttackTime(triggeringEvent);
 		
 		for (Event event : existingEvents) {
@@ -108,6 +110,15 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 		return count;
 	}
 	
+	/**
+	 * Find most recent attack matching the given event (user, detection point, detection system)
+	 * and find it's timestamp. 
+	 * 
+	 * Event should only be counted if they've occurred after the most recent attack.
+	 * 
+	 * @param event event to use to find matching attacks
+	 * @return timestamp representing last matching attack, or -1L if not found
+	 */
 	protected long findMostRecentAttackTime(Event event) {
 		long newest = -1L;
 		
