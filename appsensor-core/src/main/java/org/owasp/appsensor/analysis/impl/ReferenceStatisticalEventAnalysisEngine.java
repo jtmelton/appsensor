@@ -55,7 +55,7 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 			
 			DetectionPoint configuredDetectionPoint = ServerObjectFactory.getConfiguration().findDetectionPoint(event.getDetectionPoint());
 			
-			int eventCount = countEvents(configuredDetectionPoint.getThreshold().getInterval().toMillis(), existingEvents);
+			int eventCount = countEvents(configuredDetectionPoint.getThreshold().getInterval().toMillis(), existingEvents, event);
 			
 			//4 examples for the below code
 			//1. count is 5, t.count is 10 (5%10 = 5, No Violation)
@@ -80,26 +80,49 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 	 * @param existingEvents set of events matching triggering event id/user pulled from event storage
 	 * @return number of events matching time interval
 	 */
-	protected int countEvents(long intervalInMillis, Collection<Event> existingEvents) {
+	protected int countEvents(long intervalInMillis, Collection<Event> existingEvents, Event triggeringEvent) {
 		int count = 0;
 		
 		long startTime = DateUtils.getCurrentTime() - intervalInMillis;
 		
+		long mostRecentAttackTime = findMostRecentAttackTime(triggeringEvent);
+		
 		for (Event event : existingEvents) {
 			if (event instanceof StatisticalEvent) {
-				if (intervalInMillis > 0) {
-					if (event.getTimestamp() > startTime) {
-						//only increment when event occurs within specified interval
+				
+				//ensure only events that have occurred since the last attack are considered
+				if (event.getTimestamp() > mostRecentAttackTime) {
+					if (intervalInMillis > 0) {
+						if (event.getTimestamp() > startTime) {
+							//only increment when event occurs within specified interval
+							count++;
+						}
+					} else {
+						//no interval - all events considered
 						count++;
 					}
-				} else {
-					//no interval - all events considered
-					count++;
 				}
 			}
 		}
 		
 		return count;
+	}
+	
+	protected long findMostRecentAttackTime(Event event) {
+		long newest = -1L;
+		
+		Collection<Attack> attacks = ServerObjectFactory.getAttackStore().findAttacks(
+				event.getUser(), 
+				event.getDetectionPoint(), 
+				ServerObjectFactory.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
+
+		for (Attack attack : attacks) {
+			if (attack.getTimestamp() > newest) {
+				newest = attack.getTimestamp();
+			}
+		}
+		
+		return newest;
 	}
 	
 }
