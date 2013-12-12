@@ -17,6 +17,13 @@ import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.User;
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
 
+/**
+ * Test basic event analysis engine. Add a number of events matching 
+ * the known set of criteria and ensure the attacks are triggered at 
+ * the appropriate points.
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ReferenceStatisticalEventAnalysisEngineTest {
 
 	private static User bob = new User("bob", "1.2.3.4");
