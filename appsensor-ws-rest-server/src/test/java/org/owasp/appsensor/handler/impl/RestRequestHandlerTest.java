@@ -18,6 +18,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.owasp.appsensor.Response;
 
+/**
+ * Test basic rest request handling. 
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class RestRequestHandlerTest {
 
 	// Base URI the Grizzly HTTP server will listen on
