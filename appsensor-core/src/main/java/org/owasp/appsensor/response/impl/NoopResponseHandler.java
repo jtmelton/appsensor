@@ -9,7 +9,7 @@ import org.owasp.appsensor.ServerObjectFactory;
  * This class is a simple NO-OP response handler. Calls to this response handler simply 
  * log the action to the configured logger. 
  * 
- * @author johnmelton
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 public class NoopResponseHandler implements ResponseHandler {
 

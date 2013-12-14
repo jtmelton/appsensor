@@ -4,6 +4,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * Helper class for Date related utility methods
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class DateUtils {
 
 	public static long getCurrentTime() {
