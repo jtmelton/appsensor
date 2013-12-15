@@ -79,15 +79,15 @@ public class AppSensorServer extends ObjectFactory {
 		
 		//load up observer configurations on static load
 		for(String observer : configuration.getEventStoreObserverImplementations()) {
-			getInstance().getEventStore().addObserver((Observer)make(observer, "EventStoreObserver"));
+			SingletonHolder.instance.getEventStore().addObserver((Observer)make(observer, "EventStoreObserver"));
 		}
 		
 		for(String observer : configuration.getAttackStoreObserverImplementations()) {
-			getInstance().getAttackStore().addObserver((Observer)make(observer, "AttackStoreObserver"));
+			SingletonHolder.instance.getAttackStore().addObserver((Observer)make(observer, "AttackStoreObserver"));
 		}
 		
 		for(String observer : configuration.getResponseStoreObserverImplementations()) {
-			getInstance().getResponseStore().addObserver((Observer)make(observer, "ResponseStoreObserver"));
+			SingletonHolder.instance.getResponseStore().addObserver((Observer)make(observer, "ResponseStoreObserver"));
 		}
 	}
 	
