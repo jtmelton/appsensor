@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <appsensor-server-config xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd">
 	
+	<client-application-identification-header-name>X-Appsensor-Client-Application-Name2</client-application-identification-header-name>
+	
 	<correlation-config>
 		<correlated-client-set>
 			<client-application-name>server1</client-application-name>

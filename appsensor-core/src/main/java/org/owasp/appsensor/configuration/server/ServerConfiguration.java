@@ -42,6 +42,8 @@ public class ServerConfiguration {
 	
 	private Collection<CorrelationSet> correlationSets = new HashSet<>();
 	
+	private String clientApplicationIdentificationHeaderName;
+	
 	private static transient Map<String, DetectionPoint> detectionPointCache = Collections.synchronizedMap(new HashMap<String, DetectionPoint>());
 	
 	public String getEventAnalysisEngineImplementation() {
@@ -167,6 +169,15 @@ public class ServerConfiguration {
 		return this;
 	}
 	
+	public String getClientApplicationIdentificationHeaderName() {
+		return clientApplicationIdentificationHeaderName;
+	}
+
+	public void setClientApplicationIdentificationHeaderName(
+			String clientApplicationIdentificationHeaderName) {
+		this.clientApplicationIdentificationHeaderName = clientApplicationIdentificationHeaderName;
+	}
+
 	/**
 	 * Find related detection systems based on a given detection system. 
 	 * This simply means those systems that have been configured along with the 
@@ -236,6 +247,7 @@ public class ServerConfiguration {
 				append(responseStoreObserverImplementations).
 				append(detectionPoints).
 				append(correlationSets).
+				append(clientApplicationIdentificationHeaderName).
 				toHashCode();
 	}
 	
@@ -264,6 +276,7 @@ public class ServerConfiguration {
 				append(responseStoreObserverImplementations, other.getResponseStoreObserverImplementations()).
 				append(detectionPoints, other.getDetectionPoints()).
 				append(correlationSets, other.getCorrelationSets()).
+				append(clientApplicationIdentificationHeaderName, other.getClientApplicationIdentificationHeaderName()).
 				isEquals();
 	}
 	
@@ -283,6 +296,7 @@ public class ServerConfiguration {
 				append("responseStoreObserverImplementations", responseStoreObserverImplementations).
 			    append("detectionPoints", detectionPoints).
 			    append("correlationSets", correlationSets).
+			    append("clientApplicationIdentificationHeaderName", clientApplicationIdentificationHeaderName).
 			    toString();
 	}
 

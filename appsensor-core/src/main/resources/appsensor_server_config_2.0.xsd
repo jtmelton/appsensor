@@ -82,6 +82,8 @@
 	<xsd:element name="appsensor-server-config">
 	  <xsd:complexType>
 	    <xsd:sequence>
+	    	<xsd:element name="client-application-identification-header-name" type="xsd:string" minOccurs="0" maxOccurs="1" />
+	    
 	    	<xsd:element name="correlation-config" type="asconfig:correlation-config" minOccurs="0" maxOccurs="1" />
 	    	
 			<xsd:element name="event-analyzer" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />

@@ -116,6 +116,8 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 				case XMLStreamConstants.START_ELEMENT:
 					if("config:appsensor-server-config".equals(name)) {
 						//
+					} else if("config:client-application-identification-header-name".equals(name)) {
+						configuration.setClientApplicationIdentificationHeaderName(xmlReader.getElementText().trim());
 					} else if("config:correlation-config".equals(name)) {
 						configuration.getCorrelationSets().addAll(readCorrelationSets(xmlReader));
 					} else if("config:event-analyzer".equals(name)) {

@@ -11,7 +11,6 @@ import javax.ws.rs.core.GenericType;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.internal.util.Base64;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.After;
 import org.junit.Before;
@@ -76,7 +75,7 @@ public class RestRequestHandlerTest {
         
         GenericType<Collection<Response>> responseType = new GenericType<Collection<Response>>() {};
         
-        String encodedAuthzHeader = "Basic " + Base64.encodeAsString("myuser:mypass");
+//        String encodedAuthzHeader = "Basic " + Base64.encodeAsString("myuser:mypass");
         
         Collection<Response> responses = target
 		.path("api")
@@ -85,7 +84,7 @@ public class RestRequestHandlerTest {
 		.queryParam("detectionSystemId", "server1")
 		.queryParam("earliest", (new GregorianCalendar().getTimeInMillis()) - (1000 * 60 * 60 * 2))	//2 hrs ago
 		.request()
-		.header("Authorization", encodedAuthzHeader)
+		.header("X-Appsensor-Client-Application-Name2",  "myclientapp")
 		.get(responseType);
         
         System.err.println("responses: " + responses);
