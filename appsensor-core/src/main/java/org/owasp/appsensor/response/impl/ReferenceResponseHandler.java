@@ -1,10 +1,10 @@
 package org.owasp.appsensor.response.impl;
 
-import org.owasp.appsensor.ClientObjectFactory;
+import org.owasp.appsensor.AppSensorClient;
 import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.ResponseHandler;
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 
 /**
  * This class should only be used as the server-side response handler
@@ -16,7 +16,7 @@ import org.owasp.appsensor.ServerObjectFactory;
  */
 public class ReferenceResponseHandler implements ResponseHandler {
 
-	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(ReferenceResponseHandler.class);
+	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceResponseHandler.class);
 	
 	@Override
 	public void handle(Response response) {
@@ -30,13 +30,13 @@ public class ReferenceResponseHandler implements ResponseHandler {
 					" due to event code: " + response.getDetectionPoint().getId() + 
 					", Action: Logging out malicious account");
 			
-			ClientObjectFactory.getUserManager().logout(response.getUser());
+			AppSensorClient.getInstance().getUserManager().logout(response.getUser());
 		} else if (DISABLE_USER.equals(response.getAction())) {
 			logger.fatal("Response executed for user:" + response.getUser().getUsername() + 
 					" due to event code: " + response.getDetectionPoint().getId() + 
 					", Action: Disabling malicious account");
 			
-			ClientObjectFactory.getUserManager().logout(response.getUser());
+			AppSensorClient.getInstance().getUserManager().logout(response.getUser());
 		} else if (DISABLE_COMPONENT_FOR_SPECIFIC_USER.equals(response.getAction())) {
 			logger.fatal("Response executed for user:" + response.getUser().getUsername() + 
 					" due to event code: " + response.getDetectionPoint().getId() + 

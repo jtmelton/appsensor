@@ -8,7 +8,7 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.AttackStore;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Logger;
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.User;
 
 /**
@@ -25,7 +25,7 @@ import org.owasp.appsensor.User;
  */
 public class InMemoryAttackStore extends AttackStore {
 	
-	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(InMemoryAttackStore.class);
+	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(InMemoryAttackStore.class);
 	
 	private Collection<Attack> attacks = new CopyOnWriteArrayList<Attack>();
 	

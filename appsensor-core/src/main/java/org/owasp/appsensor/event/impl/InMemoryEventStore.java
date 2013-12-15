@@ -8,7 +8,7 @@ import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.EventStore;
 import org.owasp.appsensor.Logger;
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.User;
 
 /**
@@ -25,7 +25,7 @@ import org.owasp.appsensor.User;
  */
 public class InMemoryEventStore extends EventStore {
 	
-	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(InMemoryEventStore.class);
+	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(InMemoryEventStore.class);
 	
 	private Collection<Event> events = new CopyOnWriteArrayList<Event>();
 	

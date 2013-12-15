@@ -7,11 +7,11 @@ import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.ReportingEngine;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 
 public class ReferenceReportingEngine implements ReportingEngine {
 	
-	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(ReferenceReportingEngine.class);
+	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceReportingEngine.class);
 	
 	@Override
 	public void update(Observable observable, Object observedObject) {

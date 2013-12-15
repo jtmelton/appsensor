@@ -8,7 +8,7 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Logger;
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.StatisticalEvent;
 import org.owasp.appsensor.util.DateUtils;
 
@@ -29,7 +29,7 @@ import org.owasp.appsensor.util.DateUtils;
  */
 public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 
-	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(ReferenceStatisticalEventAnalysisEngine.class);
+	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceStatisticalEventAnalysisEngine.class);
 	
 	/**
 	 * This method analyzes statistical events that are added to the system and 
@@ -47,13 +47,13 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 			StatisticalEvent event = (StatisticalEvent)observedObject;
 			
 			Collection<Event> existingEvents = 
-					ServerObjectFactory.getEventStore().findEvents(
+					AppSensorServer.getInstance().getEventStore().findEvents(
 							event.getUser(), 
 							event.getDetectionPoint(),
-							ServerObjectFactory.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId())
+							AppSensorServer.getInstance().getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId())
 							);
 			
-			DetectionPoint configuredDetectionPoint = ServerObjectFactory.getConfiguration().findDetectionPoint(event.getDetectionPoint());
+			DetectionPoint configuredDetectionPoint = AppSensorServer.getInstance().getConfiguration().findDetectionPoint(event.getDetectionPoint());
 			
 			int eventCount = countEvents(configuredDetectionPoint.getThreshold().getInterval().toMillis(), existingEvents, event);
 			
@@ -68,7 +68,7 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 			if (eventCount % thresholdCount == 0) {
 				logger.info("Violation Observed for user <" + event.getUser().getUsername() + "> - storing attack");
 				//have determined this event triggers attack
-				ServerObjectFactory.getAttackStore().addAttack(new Attack(event));
+				AppSensorServer.getInstance().getAttackStore().addAttack(new Attack(event));
 			}
 		} 
 	}
@@ -122,10 +122,10 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 	protected long findMostRecentAttackTime(Event event) {
 		long newest = -1L;
 		
-		Collection<Attack> attacks = ServerObjectFactory.getAttackStore().findAttacks(
+		Collection<Attack> attacks = AppSensorServer.getInstance().getAttackStore().findAttacks(
 				event.getUser(), 
 				event.getDetectionPoint(), 
-				ServerObjectFactory.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
+				AppSensorServer.getInstance().getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
 
 		for (Attack attack : attacks) {
 			if (attack.getTimestamp() > newest) {

@@ -6,7 +6,7 @@ import org.owasp.appsensor.AnalysisEngine;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 
 /**
  * This is a reference response handler, and is an implementation of the Observer pattern. 
@@ -24,7 +24,7 @@ import org.owasp.appsensor.ServerObjectFactory;
  */
 public class ReferenceResponseAnalysisEngine implements AnalysisEngine {
 
-	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(ReferenceResponseAnalysisEngine.class);
+	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceResponseAnalysisEngine.class);
 	
 	/**
 	 * This method simply catches responses and calls the 
@@ -43,7 +43,7 @@ public class ReferenceResponseAnalysisEngine implements AnalysisEngine {
 			if (response != null) {
 				logger.info("Response executed for user <" + response.getUser().getUsername() + "> - executing response action " + response.getAction());
 				
-				ServerObjectFactory.getResponseHandler().handle(response);
+				AppSensorServer.getInstance().getResponseHandler().handle(response);
 			}
 		} 
 	}

@@ -8,7 +8,7 @@ import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.ResponseStore;
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.User;
 
 /**
@@ -25,7 +25,7 @@ import org.owasp.appsensor.User;
  */
 public class InMemoryResponseStore extends ResponseStore {
 
-	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(InMemoryResponseStore.class);
+	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(InMemoryResponseStore.class);
 	
 	private Collection<Response> responses = new CopyOnWriteArrayList<Response>();
 	

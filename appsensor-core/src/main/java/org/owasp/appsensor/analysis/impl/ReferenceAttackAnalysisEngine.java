@@ -9,11 +9,11 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 
 public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 
-	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(ReferenceAttackAnalysisEngine.class);
+	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceAttackAnalysisEngine.class);
 	
 	@Override
 	public void update(Observable observable, Object observedObject) {
@@ -24,17 +24,17 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 			
 			//grab any existing responses
 			Collection<Response> existingResponses = 
-					ServerObjectFactory.getResponseStore().findResponses(
+					AppSensorServer.getInstance().getResponseStore().findResponses(
 							attack.getUser(), 
 							triggeringDetectionPoint,
-							ServerObjectFactory.getConfiguration().getRelatedDetectionSystems(attack.getDetectionSystemId())
+							AppSensorServer.getInstance().getConfiguration().getRelatedDetectionSystems(attack.getDetectionSystemId())
 							);
 
 			Response response = findAppropriateResponse(triggeringDetectionPoint, existingResponses, attack);
 			
 			if (response != null) {
 				logger.info("Response set for user <" + attack.getUser().getUsername() + "> - storing response action " + response.getAction());
-				ServerObjectFactory.getResponseStore().addResponse(response);
+				AppSensorServer.getInstance().getResponseStore().addResponse(response);
 			}
 		} 
 	}
@@ -76,7 +76,7 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 	protected Collection<? extends Response> findPossibleResponses(DetectionPoint triggeringDetectionPoint) {
 		Collection<? extends Response> possibleResponses = new ArrayList<Response>();
 		
-		for (DetectionPoint configuredDetectionPoint : ServerObjectFactory.getConfiguration().getDetectionPoints()) {
+		for (DetectionPoint configuredDetectionPoint : AppSensorServer.getInstance().getConfiguration().getDetectionPoints()) {
 			if (configuredDetectionPoint.getId().equals(triggeringDetectionPoint.getId())) {
 				possibleResponses = configuredDetectionPoint.getResponses();
 				break;
