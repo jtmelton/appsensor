@@ -7,7 +7,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 
 @Provider
 public class ClientApplicationIdentificationFilter implements ContainerRequestFilter {
@@ -21,7 +21,7 @@ public class ClientApplicationIdentificationFilter implements ContainerRequestFi
 	private static String HEADER_NAME = "X-Appsensor-Client-Application-Name";
 	
 	static {
-		String configuredHeaderName = ServerObjectFactory.getConfiguration().getClientApplicationIdentificationHeaderName();
+		String configuredHeaderName = AppSensorServer.getInstance().getConfiguration().getClientApplicationIdentificationHeaderName();
 		
 		if (configuredHeaderName != null && configuredHeaderName.trim().length() > 0) {
 			HEADER_NAME = configuredHeaderName;

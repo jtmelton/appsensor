@@ -7,11 +7,11 @@ import java.util.Collection;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.owasp.appsensor.ClientObjectFactory;
+import org.owasp.appsensor.AppSensorClient;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.StatisticalEvent;
 import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.User;
@@ -43,47 +43,47 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	
 	@Test
 	public void testAttackCreation() throws Exception {
-		ServerConfiguration updatedConfiguration = ServerObjectFactory.getConfiguration();
+		ServerConfiguration updatedConfiguration = AppSensorServer.getInstance().getConfiguration();
 		updatedConfiguration.setDetectionPoints(loadMockedDetectionPoints());
-		ServerObjectFactory.setConfiguration(updatedConfiguration);
+		AppSensorServer.getInstance().setConfiguration(updatedConfiguration);
 
-		assertEquals(0, ServerObjectFactory.getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
-		assertEquals(0, ServerObjectFactory.getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(0, AppSensorServer.getInstance().getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(0, AppSensorServer.getInstance().getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
 		
-		ClientObjectFactory.getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
+		AppSensorClient.getInstance().getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
 		
-		assertEquals(1, ServerObjectFactory.getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
-		assertEquals(0, ServerObjectFactory.getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(1, AppSensorServer.getInstance().getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(0, AppSensorServer.getInstance().getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
 		
-		ClientObjectFactory.getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
+		AppSensorClient.getInstance().getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
 		
-		assertEquals(2, ServerObjectFactory.getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
-		assertEquals(0, ServerObjectFactory.getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(2, AppSensorServer.getInstance().getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(0, AppSensorServer.getInstance().getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
 		
-		ClientObjectFactory.getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
+		AppSensorClient.getInstance().getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
 		
-		assertEquals(3, ServerObjectFactory.getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
-		assertEquals(1, ServerObjectFactory.getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(3, AppSensorServer.getInstance().getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(1, AppSensorServer.getInstance().getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
 		
-		ClientObjectFactory.getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
+		AppSensorClient.getInstance().getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
 		
-		assertEquals(4, ServerObjectFactory.getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
-		assertEquals(1, ServerObjectFactory.getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(4, AppSensorServer.getInstance().getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(1, AppSensorServer.getInstance().getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
 		
-		ClientObjectFactory.getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
+		AppSensorClient.getInstance().getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
 		
-		assertEquals(5, ServerObjectFactory.getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
-		assertEquals(1, ServerObjectFactory.getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(5, AppSensorServer.getInstance().getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(1, AppSensorServer.getInstance().getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
 		
-		ClientObjectFactory.getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
+		AppSensorClient.getInstance().getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
 		
-		assertEquals(6, ServerObjectFactory.getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
-		assertEquals(2, ServerObjectFactory.getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(6, AppSensorServer.getInstance().getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(2, AppSensorServer.getInstance().getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
 		
-		ClientObjectFactory.getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
+		AppSensorClient.getInstance().getEventManager().addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
 		
-		assertEquals(7, ServerObjectFactory.getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
-		assertEquals(2, ServerObjectFactory.getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(7, AppSensorServer.getInstance().getEventStore().findEvents(bob, detectionPoint1, detectionSystems1).size());
+		assertEquals(2, AppSensorServer.getInstance().getAttackStore().findAttacks(bob, detectionPoint1, detectionSystems1).size());
 	}
 	
 	private Collection<DetectionPoint> loadMockedDetectionPoints() {

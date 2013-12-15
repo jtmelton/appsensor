@@ -13,7 +13,7 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.RequestHandler;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 
 /**
  * This is the restful endpoint that handles requests on the server-side. 
@@ -31,7 +31,7 @@ public class RestRequestHandler implements RequestHandler {
 	@POST
 	@Path("/events")
 	public void addEvent(Event event) {
-		ServerObjectFactory.getEventStore().addEvent(event);
+		AppSensorServer.getInstance().getEventStore().addEvent(event);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class RestRequestHandler implements RequestHandler {
 	@POST
 	@Path("/attacks")
 	public void addAttack(Attack attack) {
-		ServerObjectFactory.getAttackStore().addAttack(attack);
+		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
 	}
 
 	/**
@@ -52,6 +52,6 @@ public class RestRequestHandler implements RequestHandler {
 	@Path("/responses")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Response> getResponses(@QueryParam("detectionSystemId") String detectionSystemId, @QueryParam("earliest") long earliest) {
-		return ServerObjectFactory.getResponseStore().findResponses(detectionSystemId, earliest);
+		return AppSensorServer.getInstance().getResponseStore().findResponses(detectionSystemId, earliest);
 	}
 }

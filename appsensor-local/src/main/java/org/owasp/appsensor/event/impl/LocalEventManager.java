@@ -8,7 +8,7 @@ import org.owasp.appsensor.Event;
 import org.owasp.appsensor.EventManager;
 import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 
 /**
  * Local event manager that is used when the application is configured
@@ -19,15 +19,15 @@ import org.owasp.appsensor.ServerObjectFactory;
  */
 public class LocalEventManager implements EventManager {
 
-	private static Logger logger = ServerObjectFactory.getLogger().setLoggerClass(LocalEventManager.class);
+	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(LocalEventManager.class);
 	
 	@Override
 	public void addEvent(Event event) {
-		ServerObjectFactory.getEventStore().addEvent(event);
+		AppSensorServer.getInstance().getEventStore().addEvent(event);
 	}
 	
 	public void addAttack(Attack attack) {
-		ServerObjectFactory.getAttackStore().addAttack(attack);
+		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
 	}
 	
 	@Override

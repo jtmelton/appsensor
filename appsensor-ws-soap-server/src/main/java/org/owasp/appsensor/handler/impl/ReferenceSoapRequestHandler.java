@@ -8,7 +8,7 @@ import javax.jws.WebService;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.ServerObjectFactory;
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.handler.SoapRequestHandler;
 
 /**
@@ -29,7 +29,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	@WebMethod
 	@Override
 	public void addEvent(Event event) {
-		ServerObjectFactory.getEventStore().addEvent(event);
+		AppSensorServer.getInstance().getEventStore().addEvent(event);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	@WebMethod
 	@Override
 	public void addAttack(Attack attack) {
-		ServerObjectFactory.getAttackStore().addAttack(attack);
+		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	@WebMethod
 	@Override
 	public Collection<Response> getResponses(String detectionSystemId, long earliest) {
-		return ServerObjectFactory.getResponseStore().findResponses(detectionSystemId, earliest);
+		return AppSensorServer.getInstance().getResponseStore().findResponses(detectionSystemId, earliest);
 	}
 
 }
