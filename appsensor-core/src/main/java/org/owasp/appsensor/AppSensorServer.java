@@ -15,7 +15,7 @@ import org.owasp.appsensor.configuration.server.StaxServerConfigurationReader;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public class ServerObjectFactory extends BaseObjectFactory {
+public class AppSensorServer extends ObjectFactory {
 	
 	private static ServerConfigurationReader configurationReader;
 	
@@ -35,20 +35,41 @@ public class ServerObjectFactory extends BaseObjectFactory {
 	
 	private static ResponseHandler responseHandler;
 	
-	static {
+	public static AppSensorServer getInstance() {
 		if(configurationReader == null) {
+			//load default configuration reader
 			configurationReader = new StaxServerConfigurationReader();
 		}
 		
 		if(configuration == null) {
 			try {
 				configuration = configurationReader.read();
+				
+				initialize();
 			} catch(ParseException pe) {
 				throw new RuntimeException(pe);
 			}
 		}
 		
-		initialize();
+		return SingletonHolder.instance;
+	}
+	
+	public static AppSensorServer getInstance(ServerConfigurationReader overriddenConfigurationReader) {
+		configurationReader = overriddenConfigurationReader;
+		
+		try {
+			configuration = configurationReader.read();
+			
+			initialize();
+		} catch(ParseException pe) {
+			throw new RuntimeException(pe);
+		}
+		
+		return SingletonHolder.instance;
+	}
+	
+	private static final class SingletonHolder {
+		static final AppSensorServer instance = new AppSensorServer();
 	}
 	
 	private static void initialize() {
@@ -58,48 +79,48 @@ public class ServerObjectFactory extends BaseObjectFactory {
 		
 		//load up observer configurations on static load
 		for(String observer : configuration.getEventStoreObserverImplementations()) {
-			getEventStore().addObserver((Observer)make(observer, "EventStoreObserver"));
+			getInstance().getEventStore().addObserver((Observer)make(observer, "EventStoreObserver"));
 		}
 		
 		for(String observer : configuration.getAttackStoreObserverImplementations()) {
-			getAttackStore().addObserver((Observer)make(observer, "AttackStoreObserver"));
+			getInstance().getAttackStore().addObserver((Observer)make(observer, "AttackStoreObserver"));
 		}
 		
 		for(String observer : configuration.getResponseStoreObserverImplementations()) {
-			getResponseStore().addObserver((Observer)make(observer, "ResponseStoreObserver"));
+			getInstance().getResponseStore().addObserver((Observer)make(observer, "ResponseStoreObserver"));
 		}
 	}
 	
 	//singleton
-	private ServerObjectFactory() { }
+	private AppSensorServer() { }
 	
-	/**
-	 * call this to load your own config reader post-initialization
-	 * @param configurationReader your own custom config reader
-	 */
-	public static void setServerConfigurationReader(ServerConfigurationReader configurationReader) {
-		ServerObjectFactory.configurationReader = configurationReader;
-	}
-	
-	/**
-	 * Call this after calling setServerConfigurationReader() to reload the configuration
-	 * @throws ParseException
-	 */
-	public static void reloadConfiguration() throws ParseException {
-		configuration = configurationReader.read();
-		
-		initialize();
-	}
-	
+//	/**
+//	 * call this to load your own config reader post-initialization
+//	 * @param configurationReader your own custom config reader
+//	 */
+//	public void setServerConfigurationReader(ServerConfigurationReader configurationReader) {
+//		AppSensorServer.configurationReader = configurationReader;
+//	}
+//	
+//	/**
+//	 * Call this after calling setServerConfigurationReader() to reload the configuration
+//	 * @throws ParseException
+//	 */
+//	public void reloadConfiguration() throws ParseException {
+//		configuration = configurationReader.read();
+//		
+//		initialize();
+//	}
+//	
 	/**
 	 * Accessor for ServerConfiguration object
 	 * @return ServerConfiguration object
 	 */
-	public static ServerConfiguration getConfiguration() {
+	public ServerConfiguration getConfiguration() {
 		return configuration;
 	}
 	
-	public static void setConfiguration(ServerConfiguration updatedConfiguration) {
+	public void setConfiguration(ServerConfiguration updatedConfiguration) {
 		configuration = updatedConfiguration;
 	}
 	
@@ -107,7 +128,7 @@ public class ServerObjectFactory extends BaseObjectFactory {
 	 * Accessor for Event AnalysisEngine object
 	 * @return Event AnalysisEngine object
 	 */
-	public static AnalysisEngine getEventAnalysisEngine() {
+	public AnalysisEngine getEventAnalysisEngine() {
 		if (eventAnalysisEngine == null) {
 			eventAnalysisEngine = make(getConfiguration().getEventAnalysisEngineImplementation(), "EventAnalysisEngine");
 		}
@@ -119,7 +140,7 @@ public class ServerObjectFactory extends BaseObjectFactory {
 	 * Accessor for Attack AnalysisEngine object
 	 * @return Attack AnalysisEngine object
 	 */
-	public static AnalysisEngine getAttackAnalysisEngine() {
+	public AnalysisEngine getAttackAnalysisEngine() {
 		if (attackAnalysisEngine == null) {
 			attackAnalysisEngine = make(getConfiguration().getAttackAnalysisEngineImplementation(), "AttackAnalysisEngine");
 		}
@@ -131,7 +152,7 @@ public class ServerObjectFactory extends BaseObjectFactory {
 	 * Accessor for Response AnalysisEngine object
 	 * @return Response AnalysisEngine object
 	 */
-	public static AnalysisEngine getResponseAnalysisEngine() {
+	public AnalysisEngine getResponseAnalysisEngine() {
 		if (responseAnalysisEngine == null) {
 			responseAnalysisEngine = make(getConfiguration().getResponseAnalysisEngineImplementation(), "ResponseAnalysisEngine");
 		}
@@ -143,7 +164,7 @@ public class ServerObjectFactory extends BaseObjectFactory {
 	 * Accessor for EventStore object
 	 * @return EventStore object
 	 */
-	public static EventStore getEventStore() {
+	public EventStore getEventStore() {
 		if (eventStore == null) {
 			eventStore = make(getConfiguration().getEventStoreImplementation(), "EventStore");
 		}
@@ -155,7 +176,7 @@ public class ServerObjectFactory extends BaseObjectFactory {
 	 * Accessor for AttackStore object
 	 * @return AttackStore object
 	 */
-	public static AttackStore getAttackStore() {
+	public AttackStore getAttackStore() {
 		if (attackStore == null) {
 			attackStore = make(getConfiguration().getAttackStoreImplementation(), "AttackStore");
 		}
@@ -167,7 +188,7 @@ public class ServerObjectFactory extends BaseObjectFactory {
 	 * Accessor for ResponseStore object
 	 * @return ResponseStore object
 	 */
-	public static ResponseStore getResponseStore() {
+	public ResponseStore getResponseStore() {
 		if (responseStore == null) {
 			responseStore = make(getConfiguration().getResponseStoreImplementation(), "ResponseStore");
 		}
@@ -179,7 +200,7 @@ public class ServerObjectFactory extends BaseObjectFactory {
 	 * Accessor for Logger object
 	 * @return Logger object
 	 */
-	public static Logger getLogger() {
+	public Logger getLogger() {
 		return make(getConfiguration().getLoggerImplementation(), "Logger");
 	}
 	
@@ -187,7 +208,7 @@ public class ServerObjectFactory extends BaseObjectFactory {
 	 * Accessor for ReponseHandler object. 
 	 * @return ResponseHandler object
 	 */
-	public static ResponseHandler getResponseHandler() {
+	public ResponseHandler getResponseHandler() {
 		if (responseHandler == null) {
 			responseHandler = make(getConfiguration().getResponseHandlerImplementation(), "ResponseHandler");
 		}

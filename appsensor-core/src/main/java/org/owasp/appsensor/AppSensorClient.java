@@ -12,7 +12,7 @@ import org.owasp.appsensor.configuration.client.StaxClientConfigurationReader;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public class ClientObjectFactory extends BaseObjectFactory {
+public class AppSensorClient extends ObjectFactory {
 	
 	private static ClientConfigurationReader configurationReader;
 	
@@ -24,8 +24,9 @@ public class ClientObjectFactory extends BaseObjectFactory {
 	
 	private static UserManager userManager;
 	
-	static {
+	public static AppSensorClient getInstance() {
 		if(configurationReader == null) {
+			//load default configuration reader
 			configurationReader = new StaxClientConfigurationReader();
 		}
 		
@@ -36,16 +37,34 @@ public class ClientObjectFactory extends BaseObjectFactory {
 				throw new RuntimeException(pe);
 			}
 		}
+		
+		return SingletonHolder.instance;
+	}
+	
+	public static AppSensorClient getInstance(ClientConfigurationReader overriddenConfigurationReader) {
+		configurationReader = overriddenConfigurationReader;
+		
+		try {
+			configuration = configurationReader.read();
+		} catch(ParseException pe) {
+			throw new RuntimeException(pe);
+		}
+		
+		return SingletonHolder.instance;
+	}
+	
+	private static final class SingletonHolder {
+		static final AppSensorClient instance = new AppSensorClient();
 	}
 	
 	//singleton
-	private ClientObjectFactory() { }
+	private AppSensorClient() { }
 	
-	public static ClientConfiguration getConfiguration() {
+	public ClientConfiguration getConfiguration() {
 		return configuration;
 	}
 	
-	public static EventManager getEventManager() {
+	public EventManager getEventManager() {
 		if (eventManager == null) {
 			eventManager = make(getConfiguration().getEventManagerImplementation(), "EventManager");
 		}
@@ -53,7 +72,7 @@ public class ClientObjectFactory extends BaseObjectFactory {
 		return eventManager;
 	}
 	
-	public static ResponseHandler getResponseHandler() {
+	public ResponseHandler getResponseHandler() {
 		if (responseHandler == null) {
 			responseHandler = make(getConfiguration().getResponseHandlerImplementation(), "ResponseHandler");
 		}
@@ -61,7 +80,7 @@ public class ClientObjectFactory extends BaseObjectFactory {
 		return responseHandler;
 	}
 	
-	public static UserManager getUserManager() {
+	public UserManager getUserManager() {
 		if (userManager == null) {
 			userManager = make(getConfiguration().getUserManagerImplementation(), "UserManager");
 		}
