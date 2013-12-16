@@ -6,6 +6,7 @@ import java.util.Observer;
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.configuration.server.ServerConfigurationReader;
 import org.owasp.appsensor.configuration.server.StaxServerConfigurationReader;
+import org.owasp.appsensor.exceptions.NotBootstrappedException;
 
 /**
  * AppSensor locator class is provided to make it easy to gain access to the 
@@ -35,27 +36,16 @@ public class AppSensorServer extends ObjectFactory {
 	
 	private static ResponseHandler responseHandler;
 	
-	public static AppSensorServer getInstance() {
-		if(configurationReader == null) {
-			//load default configuration reader
-			configurationReader = new StaxServerConfigurationReader();
-		}
-		
-		if(configuration == null) {
-			try {
-				configuration = configurationReader.read();
-				
-				initialize();
-			} catch(ParseException pe) {
-				throw new RuntimeException(pe);
-			}
-		}
-		
-		return SingletonHolder.instance;
+	public static synchronized void bootstrap() {
+		bootstrap(new StaxServerConfigurationReader());
 	}
 	
-	public static AppSensorServer getInstance(ServerConfigurationReader overriddenConfigurationReader) {
-		configurationReader = overriddenConfigurationReader;
+	public static synchronized void bootstrap(ServerConfigurationReader specifiedConfigurationReader) {
+		if (configuration != null) {
+			throw new IllegalStateException("Bootstrapping the AppSensorServer should only occur 1 time per JVM instance.");
+		}
+		
+		configurationReader = specifiedConfigurationReader;
 		
 		try {
 			configuration = configurationReader.read();
@@ -63,6 +53,12 @@ public class AppSensorServer extends ObjectFactory {
 			initialize();
 		} catch(ParseException pe) {
 			throw new RuntimeException(pe);
+		}
+	}
+	
+	public static AppSensorServer getInstance() {
+		if (configuration == null) {
+			throw new NotBootstrappedException("AppSensorServer must be bootstrapped before use.");
 		}
 		
 		return SingletonHolder.instance;

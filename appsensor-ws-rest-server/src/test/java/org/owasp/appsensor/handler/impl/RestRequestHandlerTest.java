@@ -15,6 +15,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Response;
 
 /**
@@ -56,6 +57,7 @@ public class RestRequestHandlerTest {
      */
     @Test
     public void testGetIt() {
+    	AppSensorServer.bootstrap();
 //    	@SuppressWarnings("unchecked")
 //		Collection<Response> responses = (Collection<Response>) target
     	/*javax.ws.rs.core.Response response = target

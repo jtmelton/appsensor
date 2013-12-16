@@ -5,6 +5,7 @@ import java.text.ParseException;
 import org.owasp.appsensor.configuration.client.ClientConfiguration;
 import org.owasp.appsensor.configuration.client.ClientConfigurationReader;
 import org.owasp.appsensor.configuration.client.StaxClientConfigurationReader;
+import org.owasp.appsensor.exceptions.NotBootstrappedException;
 
 /**
  * This class exposes the main interfaces expected to be available 
@@ -24,30 +25,27 @@ public class AppSensorClient extends ObjectFactory {
 	
 	private static UserManager userManager;
 	
-	public static AppSensorClient getInstance() {
-		if(configurationReader == null) {
-			//load default configuration reader
-			configurationReader = new StaxClientConfigurationReader();
-		}
-		
-		if(configuration == null) {
-			try {
-				configuration = configurationReader.read();
-			} catch(ParseException pe) {
-				throw new RuntimeException(pe);
-			}
-		}
-		
-		return SingletonHolder.instance;
+	public static synchronized void bootstrap() {
+		bootstrap(new StaxClientConfigurationReader());
 	}
 	
-	public static AppSensorClient getInstance(ClientConfigurationReader overriddenConfigurationReader) {
-		configurationReader = overriddenConfigurationReader;
+	public static synchronized void bootstrap(ClientConfigurationReader specifiedConfigurationReader) {
+		if (configuration != null) {
+			throw new IllegalStateException("Bootstrapping the AppSensorClient should only occur 1 time per JVM instance.");
+		}
+		
+		configurationReader = specifiedConfigurationReader;
 		
 		try {
 			configuration = configurationReader.read();
 		} catch(ParseException pe) {
 			throw new RuntimeException(pe);
+		}
+	}
+	
+	public static AppSensorClient getInstance() {
+		if (configuration == null) {
+			throw new NotBootstrappedException("AppSensorClient must be bootstrapped before use.");
 		}
 		
 		return SingletonHolder.instance;

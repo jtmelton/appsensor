@@ -11,6 +11,7 @@ import javax.xml.ws.Endpoint;
 import javax.xml.ws.Service;
 
 import org.junit.Test;
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.StatisticalEvent;
 import org.owasp.appsensor.User;
@@ -29,6 +30,7 @@ public class ReferenceSoapRequestHandlerTest {
     @Test
     public void test() throws Exception {
 		System.err.println("Starting service");
+		AppSensorServer.bootstrap();
     	Endpoint endpoint = Endpoint.publish(SERVICE_URL, new ReferenceSoapRequestHandler());
 		
         Service soapHandlerService = Service.create(

@@ -20,24 +20,32 @@ public class ClientApplicationIdentificationFilter implements ContainerRequestFi
 	/** default name for client application identification header */
 	private static String HEADER_NAME = "X-Appsensor-Client-Application-Name";
 	
-	static {
-		String configuredHeaderName = AppSensorServer.getInstance().getConfiguration().getClientApplicationIdentificationHeaderName();
-		
-		if (configuredHeaderName != null && configuredHeaderName.trim().length() > 0) {
-			HEADER_NAME = configuredHeaderName;
-		}
-	}
+	private static boolean checkedConfigurationHeaderName = false;
 	
 	@Override
 	public void filter(ContainerRequestContext context) 
 	        throws WebApplicationException {
 
+		//should only run on first request
+		if (! checkedConfigurationHeaderName) {
+			updateHeaderFromConfiguration();
+			checkedConfigurationHeaderName = true;
+		}
+		
 	    // Get the client application identifier passed in HTTP headers parameters
 	    String clientApplicationIdentifier = context.getHeaderString(HEADER_NAME);
 	    
 	    if (clientApplicationIdentifier == null) {
 	    	throw unauthorized;
 	    }
+	}
+	
+	private void updateHeaderFromConfiguration() {
+		String configuredHeaderName = AppSensorServer.getInstance().getConfiguration().getClientApplicationIdentificationHeaderName();
+		
+		if (configuredHeaderName != null && configuredHeaderName.trim().length() > 0) {
+			HEADER_NAME = configuredHeaderName;
+		}
 	}
 }
 

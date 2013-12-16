@@ -43,6 +43,9 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	
 	@Test
 	public void testAttackCreation() throws Exception {
+		AppSensorServer.bootstrap();
+		AppSensorClient.bootstrap();
+		
 		ServerConfiguration updatedConfiguration = AppSensorServer.getInstance().getConfiguration();
 		updatedConfiguration.setDetectionPoints(loadMockedDetectionPoints());
 		AppSensorServer.getInstance().setConfiguration(updatedConfiguration);
