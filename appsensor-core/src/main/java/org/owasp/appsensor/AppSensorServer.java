@@ -18,8 +18,6 @@ import org.owasp.appsensor.exceptions.NotBootstrappedException;
  */
 public class AppSensorServer extends ObjectFactory {
 	
-	private static ServerConfigurationReader configurationReader;
-	
 	private static ServerConfiguration configuration;
 	
 	private static EventStore eventStore;
@@ -36,16 +34,30 @@ public class AppSensorServer extends ObjectFactory {
 	
 	private static ResponseHandler responseHandler;
 	
+	/**
+	 * Bootstrap mechanism that loads the configuration for the server object based 
+	 * on the default configuration reading mechanism. 
+	 * 
+	 * The reference implementation of the configuration is XML-based and a schema is 
+	 * available in the appsensor_server_config_VERSION.xsd.
+	 */
 	public static synchronized void bootstrap() {
 		bootstrap(new StaxServerConfigurationReader());
 	}
 	
-	public static synchronized void bootstrap(ServerConfigurationReader specifiedConfigurationReader) {
+	/**
+	 * Bootstrap mechanism that loads the configuration for the server object based 
+	 * on the specified configuration reading mechanism. 
+	 * 
+	 * The reference implementation of the configuration is XML-based, but this interface 
+	 * allows for whatever mechanism is desired
+	 * 
+	 * @param configurationReader desired configuration reader 
+	 */
+	public static synchronized void bootstrap(ServerConfigurationReader configurationReader) {
 		if (configuration != null) {
 			throw new IllegalStateException("Bootstrapping the AppSensorServer should only occur 1 time per JVM instance.");
 		}
-		
-		configurationReader = specifiedConfigurationReader;
 		
 		try {
 			configuration = configurationReader.read();
