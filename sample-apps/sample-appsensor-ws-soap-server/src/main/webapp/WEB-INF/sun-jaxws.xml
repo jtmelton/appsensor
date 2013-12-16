@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoints xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime" version="2.0">
+  
+  <endpoint
+      name="SoapRequestHandlerService"
+      implementation="org.owasp.appsensor.handler.impl.ReferenceSoapRequestHandler"
+      url-pattern="/appsensor/services/SoapRequestHandler"/>
+      
+</endpoints>

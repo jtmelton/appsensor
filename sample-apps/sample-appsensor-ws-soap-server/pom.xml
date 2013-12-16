@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.owasp.appsensor</groupId>
+  	<artifactId>sample-appsensor-ws-soap-server</artifactId>
+  	<version>2.0.0-SNAPSHOT</version>
+	<packaging>war</packaging>
+
+	<name>sample-appsensor-ws-soap-server</name>
+
+	<description>
+        This is a sample app showing the soap services for AppSensor
+  	</description>
+	<url>http://www.owasp.org/index.php/Category:OWASP_AppSensor_Project</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-ws-soap-server</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>2.2.8</version>
+		</dependency>
+            
+	</dependencies>
+
+ 	<!-- <parent>
+		<groupId>org.owasp.appsensor</groupId>
+	  	<artifactId>appsensor-parent</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+		<relativePath>../../appsensor-parent/pom.xml</relativePath>
+	</parent>  -->
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.14.1</version>
+				<configuration>
+					<forkMode>always</forkMode>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+</project>
