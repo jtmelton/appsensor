@@ -17,7 +17,14 @@ import org.owasp.appsensor.StatisticalEvent;
 import org.owasp.appsensor.User;
 import org.owasp.appsensor.handler.SoapRequestHandler;
 
-
+/**
+ * Test basic soap event handling. Add a number of events matching 
+ * the known set of criteria and ensure the attacks are triggered at 
+ * the appropriate points and that the expected responses are returned 
+ * from the soap handler
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ReferenceSoapRequestHandlerTest {
 	
 	private static User bob = new User("bob", "1.2.3.4");
