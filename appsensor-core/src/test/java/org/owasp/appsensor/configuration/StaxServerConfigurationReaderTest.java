@@ -7,6 +7,11 @@ import org.owasp.appsensor.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.configuration.server.ServerConfigurationReader;
 import org.owasp.appsensor.configuration.server.StaxServerConfigurationReader;
 
+/**
+ * Test server xml configuration reader
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class StaxServerConfigurationReaderTest {
 	
 	@Test
