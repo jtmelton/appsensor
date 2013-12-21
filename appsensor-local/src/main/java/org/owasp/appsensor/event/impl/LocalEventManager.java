@@ -21,15 +21,25 @@ public class LocalEventManager implements EventManager {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(LocalEventManager.class);
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addEvent(Event event) {
 		AppSensorServer.getInstance().getEventStore().addEvent(event);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void addAttack(Attack attack) {
 		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Collection<Response> getResponses() {
 		logger.info("The local event manager executes responses immediately " +
