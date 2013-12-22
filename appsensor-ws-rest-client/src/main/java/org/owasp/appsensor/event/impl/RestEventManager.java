@@ -28,6 +28,7 @@ public class RestEventManager implements EventManager {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void addAttack(Attack attack) {
 		//make request
 	}
