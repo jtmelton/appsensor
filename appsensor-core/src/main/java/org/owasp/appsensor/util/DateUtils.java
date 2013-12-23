@@ -5,12 +5,18 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * Helper class for Date related utility methods
+ * Helper class for Date/time related utility methods
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 public class DateUtils {
 
+	/**
+	 * Helper method to grab current time. Returns current 
+	 * timestamp used for events/attacks, etc. 
+	 * 
+	 * @return current time represented as long
+	 */
 	public static long getCurrentTime() {
 		TimeZone tz = TimeZone.getDefault();
 		Calendar cal = Calendar.getInstance(tz);
