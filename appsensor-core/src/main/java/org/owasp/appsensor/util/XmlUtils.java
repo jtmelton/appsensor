@@ -23,6 +23,7 @@ public class XmlUtils {
 	
 	/**
 	 * Validate XML matches XSD. Path-based method.
+	 * Simple redirect to the overloaded version that accepts streams.
 	 * 
 	 * @param xsdPath resource based path to XSD file
 	 * @param xmlPath resource based path to XML file
