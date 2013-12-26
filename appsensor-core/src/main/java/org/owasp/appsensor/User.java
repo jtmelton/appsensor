@@ -8,9 +8,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * The standard User object. The base implementation assumes the username is 
- * provided by the client application. It is up to the client application to 
- * manage the username. If the username doesn't exist, the base implementation 
- * will attempt to fall back to the IP address as an identifier.
+ * provided by the client application. 
+ * 
+ * It is up to the client application to manage the username. 
+ * The username could be anything, an actual username, an IP address, 
+ * or any other identifier desired. The core notion is that any desired 
+ * correlation on the user is done by comparing the username.
  * 
  * @see java.io.Serializable
  *
@@ -22,18 +25,10 @@ public class User implements Serializable {
 
 	private String username;
 
-	private String ipAddress;
-	
 	public User() {}
 	
-	public User(String username, String ipAddress) {
+	public User(String username) {
 		setUsername(username);
-		setIpAddress(ipAddress);
-		
-		//attempt fallback to IP address
-		if (username == null) {
-			setUsername(ipAddress);
-		}
 	}
 	
 	public String getUsername() {
@@ -43,28 +38,13 @@ public class User implements Serializable {
 	public User setUsername(String username) {
 		this.username = username;
 		
-		//attempt fallback to IP address
-		if (username == null) {
-			setUsername(ipAddress);
-		}
-				
 		return this;
 	}
 
-	public String getIpAddress() {
-		return ipAddress;
-	}
-
-	public User setIpAddress(String ipAddress) {
-		this.ipAddress = ipAddress;
-		return this;
-	}
-	
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).
 				append(username).
-				append(ipAddress).
 				toHashCode();
 	}
 	
@@ -81,7 +61,6 @@ public class User implements Serializable {
 		
 		return new EqualsBuilder().
 				append(username, other.getUsername()).
-				append(ipAddress, other.getIpAddress()).
 				isEquals();
 	}
 	
@@ -89,7 +68,6 @@ public class User implements Serializable {
 	public String toString() {
 		return new ToStringBuilder(this).
 				append("username", username).
-				append("ipAddress", ipAddress).
 			    toString();
 	}
 	
