@@ -23,10 +23,20 @@ public class DetectionPoint implements Serializable {
 	
 	private static final long serialVersionUID = -6294211676275622809L;
 
+	/**
+	 * Identifier for the detection point. (ex. "IE1", "RE2")
+	 */
 	private String id;
 	
+	/**
+	 * Threshold for determining whether given detection point (associated event) 
+	 * should be considered an attack.
+	 */
 	private Threshold threshold;
 	
+	/**
+	 * Set of responses associated with given detection point.
+	 */
 	private Collection<Response> responses = new ArrayList<>();
 	
 	public DetectionPoint() {}
