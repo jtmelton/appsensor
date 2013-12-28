@@ -20,15 +20,30 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class Interval implements Serializable {
 
+	/** Constant representing seconds unit of time */
 	public static final String SECONDS = "seconds";
+	/** Constant representing minutes unit of time */
 	public static final String MINUTES = "minutes";
+	/** Constant representing hours unit of time */
 	public static final String HOURS = "hours";
+	/** Constant representing days unit of time */
 	public static final String DAYS = "days";
 	
 	private static final long serialVersionUID = 6660305744465650539L;
 
+	/** 
+	 * Duration portion of interval, ie. '3' if you wanted 
+	 * to represent an interval of '3 minutes' 
+	 */
 	private int duration;
 	
+	/** 
+	 * Unit portion of interval, ie. 'minutes' if you wanted 
+	 * to represent an interval of '3 minutes'.
+	 * Constants are provided in the Interval class for the 
+	 * units supported by the reference implementation, ie.
+	 * SECONDS, MINUTES, HOURS, DAYS.
+	 */
 	private String unit;
 
 	public Interval() {}
