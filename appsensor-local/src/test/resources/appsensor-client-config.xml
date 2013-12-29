@@ -13,6 +13,7 @@
 			<host>www.owasp.org</host>
 			<port>5000</port>
 			<path>/appsensor/v2/api/</path>
+			<client-application-identification-header-value>my-sample-client</client-application-identification-header-value>
 		</server-connection-config>
 	</server-connection>
 
