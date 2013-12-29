@@ -75,6 +75,7 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 			
 			configuration = readClientConfiguration(xmlReader);
 		} catch(XMLStreamException | IOException | SAXException e) {
+			e.printStackTrace();
 			throw new ParseException(e.getMessage(), 0);
 		} finally {
 			if(xmlReader != null) {
@@ -157,6 +158,10 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 						serverConnection.setPort(Integer.parseInt(xmlReader.getElementText().trim()));
 					} else if("config:path".equals(name)) {
 						serverConnection.setPath(xmlReader.getElementText().trim());
+					} else if("config:client-application-identification-header-name".equals(name)) {
+						serverConnection.setClientApplicationIdentificationHeaderName(xmlReader.getElementText().trim());
+					} else if("config:client-application-identification-header-value".equals(name)) {
+						serverConnection.setClientApplicationIdentificationHeaderValue(xmlReader.getElementText().trim());
 					} else {
 						/** unexpected start element **/
 					}

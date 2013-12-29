@@ -38,6 +38,8 @@
 	    	<xsd:element name="host" type="xsd:string" minOccurs="1" maxOccurs="1" />
 	    	<xsd:element name="port" type="asclientconfig:server-port" minOccurs="1" maxOccurs="1" />
 	    	<xsd:element name="path" type="xsd:string" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="client-application-identification-header-name" type="xsd:string" minOccurs="0" maxOccurs="1" />
+	    	<xsd:element name="client-application-identification-header-value" type="xsd:string" minOccurs="1" maxOccurs="1" />
 	    </xsd:sequence>
 	</xsd:complexType>
 	 

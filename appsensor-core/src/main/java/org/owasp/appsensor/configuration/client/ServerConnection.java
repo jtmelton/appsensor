@@ -16,6 +16,8 @@ public class ServerConnection {
 	private String host;
 	private int port;
 	private String path;
+	private String clientApplicationIdentificationHeaderName;
+	private String clientApplicationIdentificationHeaderValue;
 	
 	public String getType() {
 		return type;
@@ -62,6 +64,24 @@ public class ServerConnection {
 		return this;
 	}
 	
+	public String getClientApplicationIdentificationHeaderName() {
+		return clientApplicationIdentificationHeaderName;
+	}
+
+	public void setClientApplicationIdentificationHeaderName(
+			String clientApplicationIdentificationHeaderName) {
+		this.clientApplicationIdentificationHeaderName = clientApplicationIdentificationHeaderName;
+	}
+
+	public String getClientApplicationIdentificationHeaderValue() {
+		return clientApplicationIdentificationHeaderValue;
+	}
+
+	public void setClientApplicationIdentificationHeaderValue(
+			String clientApplicationIdentificationHeaderValue) {
+		this.clientApplicationIdentificationHeaderValue = clientApplicationIdentificationHeaderValue;
+	}
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).
@@ -70,6 +90,8 @@ public class ServerConnection {
 				append(host).
 				append(port).
 				append(path).
+				append(clientApplicationIdentificationHeaderName).
+				append(clientApplicationIdentificationHeaderValue).
 				toHashCode();
 	}
 	
@@ -90,6 +112,8 @@ public class ServerConnection {
 				append(host, other.getHost()).
 				append(port, other.getPort()).
 				append(path, other.getPath()).
+				append(clientApplicationIdentificationHeaderName, other.getClientApplicationIdentificationHeaderName()).
+				append(clientApplicationIdentificationHeaderValue, other.getClientApplicationIdentificationHeaderValue()).
 				isEquals();
 	}
 	
@@ -101,6 +125,8 @@ public class ServerConnection {
 				append("host", host).
 				append("port", port).
 				append("path", path).
+				append("clientApplicationIdentificationHeaderName", clientApplicationIdentificationHeaderName).
+				append("clientApplicationIdentificationHeaderValue", clientApplicationIdentificationHeaderValue).
 			    toString();
 	}
 	
