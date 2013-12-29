@@ -22,10 +22,13 @@ public class Interval implements Serializable {
 
 	/** Constant representing seconds unit of time */
 	public static final String SECONDS = "seconds";
+	
 	/** Constant representing minutes unit of time */
 	public static final String MINUTES = "minutes";
+	
 	/** Constant representing hours unit of time */
 	public static final String HOURS = "hours";
+	
 	/** Constant representing days unit of time */
 	public static final String DAYS = "days";
 	
