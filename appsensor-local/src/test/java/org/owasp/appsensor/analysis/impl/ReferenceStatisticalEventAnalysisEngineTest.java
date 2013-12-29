@@ -26,7 +26,7 @@ import org.owasp.appsensor.configuration.server.ServerConfiguration;
  */
 public class ReferenceStatisticalEventAnalysisEngineTest {
 
-	private static User bob = new User("bob", "1.2.3.4");
+	private static User bob = new User("bob");
 	
 	private static DetectionPoint detectionPoint1 = new DetectionPoint();
 	
