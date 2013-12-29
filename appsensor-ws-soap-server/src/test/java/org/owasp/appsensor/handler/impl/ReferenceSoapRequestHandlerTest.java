@@ -4,11 +4,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.namespace.QName;
+import javax.xml.ws.Binding;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.Service;
+import javax.xml.ws.handler.Handler;
 
 import org.junit.Test;
 import org.owasp.appsensor.AppSensorServer;
@@ -27,14 +32,16 @@ import org.owasp.appsensor.handler.SoapRequestHandler;
  */
 public class ReferenceSoapRequestHandlerTest {
 	
-	private static User bob = new User("bob", "1.2.3.4");
+	private static User bob = new User("bob");
 	
 	private static DetectionPoint detectionPoint1 = new DetectionPoint("IE1");
 	
 	private static String detectionSystem1 = "localhostme";
 	
 	private static String SERVICE_URL = "http://localhost:8080/appsensor/services/SoapRequestHandler";
-    @Test
+	
+    @SuppressWarnings("rawtypes")
+	@Test
     public void test() throws Exception {
 		System.err.println("Starting service");
 		AppSensorServer.bootstrap();
@@ -47,6 +54,15 @@ public class ReferenceSoapRequestHandlerTest {
         assertNotNull(soapHandlerService);
 
         SoapRequestHandler requestHandler = soapHandlerService.getPort(SoapRequestHandler.class);
+        
+        // HandlerChain installation
+        Binding binding = ((BindingProvider) requestHandler).getBinding();
+        List<Handler> handlerChain = binding.getHandlerChain();
+        if (handlerChain == null) {
+        	handlerChain = new ArrayList<Handler>();
+        }
+        handlerChain.add(new RegisterClientApplicationIdentificationHandler());
+        binding.setHandlerChain(handlerChain);
         
         long startMillis = new Date().getTime() - 1000;	//current time - 1 second - account for clock drift
         
