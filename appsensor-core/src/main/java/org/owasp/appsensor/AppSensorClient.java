@@ -5,7 +5,6 @@ import java.text.ParseException;
 import org.owasp.appsensor.configuration.client.ClientConfiguration;
 import org.owasp.appsensor.configuration.client.ClientConfigurationReader;
 import org.owasp.appsensor.configuration.client.StaxClientConfigurationReader;
-import org.owasp.appsensor.exceptions.NotBootstrappedException;
 
 /**
  * This class exposes the main interfaces expected to be available 
@@ -57,7 +56,8 @@ public class AppSensorClient extends ObjectFactory {
 	
 	public static AppSensorClient getInstance() {
 		if (configuration == null) {
-			throw new NotBootstrappedException("AppSensorClient must be bootstrapped before use.");
+			//if getInstance is called without the bootstrap having been run, just execute the default bootstrapping
+			bootstrap();
 		}
 		
 		return SingletonHolder.instance;

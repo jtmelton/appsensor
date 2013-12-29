@@ -6,7 +6,6 @@ import java.util.Observer;
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.configuration.server.ServerConfigurationReader;
 import org.owasp.appsensor.configuration.server.StaxServerConfigurationReader;
-import org.owasp.appsensor.exceptions.NotBootstrappedException;
 
 /**
  * AppSensor locator class is provided to make it easy to gain access to the 
@@ -70,7 +69,8 @@ public class AppSensorServer extends ObjectFactory {
 	
 	public static AppSensorServer getInstance() {
 		if (configuration == null) {
-			throw new NotBootstrappedException("AppSensorServer must be bootstrapped before use.");
+			//if getInstance is called without the bootstrap having been run, just execute the default bootstrapping
+			bootstrap();
 		}
 		
 		return SingletonHolder.instance;
