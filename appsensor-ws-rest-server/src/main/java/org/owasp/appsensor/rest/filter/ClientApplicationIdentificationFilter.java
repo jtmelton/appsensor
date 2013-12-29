@@ -23,8 +23,7 @@ public class ClientApplicationIdentificationFilter implements ContainerRequestFi
 	private static boolean checkedConfigurationHeaderName = false;
 	
 	@Override
-	public void filter(ContainerRequestContext context) 
-	        throws WebApplicationException {
+	public void filter(ContainerRequestContext context) throws WebApplicationException {
 
 		//should only run on first request
 		if (! checkedConfigurationHeaderName) {
