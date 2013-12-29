@@ -2,13 +2,14 @@ package org.owasp.appsensor.handler.impl;
 
 import java.util.Collection;
 
+import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.handler.SoapRequestHandler;
 
 /**
@@ -21,6 +22,7 @@ import org.owasp.appsensor.handler.SoapRequestHandler;
         serviceName = "SoapRequestHandlerService",
         targetNamespace = "https://www.owasp.org/index.php/OWASP_AppSensor_Project/wsdl",
         endpointInterface = "org.owasp.appsensor.handler.SoapRequestHandler")
+@HandlerChain(file="handler-chain.xml")
 public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 
 	/**
