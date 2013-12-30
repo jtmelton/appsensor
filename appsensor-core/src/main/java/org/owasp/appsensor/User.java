@@ -7,8 +7,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * The standard User object. The base implementation assumes the username is 
- * provided by the client application. 
+ * The standard User object. This represents the end user in the system, 
+ * NOT the client application. 
+ * 
+ * The base implementation assumes the username is provided by the client application. 
  * 
  * It is up to the client application to manage the username. 
  * The username could be anything, an actual username, an IP address, 
