@@ -96,7 +96,7 @@
 	    	
 	    	<xsd:element name="logger" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
 	    
-	       	<xsd:element name="response-handler" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="access-controller" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
 	    	
 	    	<xsd:element name="event-store-observers" type="asconfig:store-observers" minOccurs="1" maxOccurs="1" />
 	    	<xsd:element name="attack-store-observers" type="asconfig:store-observers" minOccurs="1" maxOccurs="1" />
