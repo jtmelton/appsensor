@@ -18,31 +18,31 @@
 		</correlated-client-set>
 	</correlation-config>
 
-	<event-analyzer class="org.owasp.appsensor.analysis.impl.ReferenceStatisticalEventAnalysisEngine" />
-	<attack-analyzer class="org.owasp.appsensor.analysis.impl.ReferenceAttackAnalysisEngine" />
-	<response-analyzer class="org.owasp.appsensor.analysis.impl.ReferenceResponseAnalysisEngine" />
+	<event-analyzer class="org.owasp.appsensor.analysis.ReferenceStatisticalEventAnalysisEngine" />
+	<attack-analyzer class="org.owasp.appsensor.analysis.ReferenceAttackAnalysisEngine" />
+	<response-analyzer class="org.owasp.appsensor.analysis.ReferenceResponseAnalysisEngine" />
 	
-	<event-store class="org.owasp.appsensor.event.impl.InMemoryEventStore" />
-	<attack-store class="org.owasp.appsensor.attack.impl.InMemoryAttackStore" />
-	<response-store class="org.owasp.appsensor.response.impl.InMemoryResponseStore" />
+	<event-store class="org.owasp.appsensor.storage.InMemoryEventStore" />
+	<attack-store class="org.owasp.appsensor.storage.InMemoryAttackStore" />
+	<response-store class="org.owasp.appsensor.storage.InMemoryResponseStore" />
 	
-	<logger class="org.owasp.appsensor.logging.impl.Slf4jLogger" />
+	<logger class="org.owasp.appsensor.logging.Slf4jLogger" />
 	
-	<response-handler class="org.owasp.appsensor.response.impl.ReferenceResponseHandler"/>
+	<response-handler class="org.owasp.appsensor.response.ReferenceResponseHandler"/>
 	
 	<event-store-observers>
-		<observer class="org.owasp.appsensor.analysis.impl.ReferenceStatisticalEventAnalysisEngine" />
-		<observer class="org.owasp.appsensor.reporting.impl.ReferenceReportingEngine" />
+		<observer class="org.owasp.appsensor.analysis.ReferenceStatisticalEventAnalysisEngine" />
+		<observer class="org.owasp.appsensor.reporting.ReferenceReportingEngine" />
 	</event-store-observers>
 	
 	<attack-store-observers>
-		<observer class="org.owasp.appsensor.analysis.impl.ReferenceAttackAnalysisEngine" />
-		<observer class="org.owasp.appsensor.reporting.impl.ReferenceReportingEngine" />
+		<observer class="org.owasp.appsensor.analysis.ReferenceAttackAnalysisEngine" />
+		<observer class="org.owasp.appsensor.reporting.ReferenceReportingEngine" />
 	</attack-store-observers>
 	
 	<response-store-observers>
-		<observer class="org.owasp.appsensor.analysis.impl.ReferenceResponseAnalysisEngine" />
-		<observer class="org.owasp.appsensor.reporting.impl.ReferenceReportingEngine" />
+		<observer class="org.owasp.appsensor.analysis.ReferenceResponseAnalysisEngine" />
+		<observer class="org.owasp.appsensor.reporting.ReferenceReportingEngine" />
 	</response-store-observers>
 
 	<detection-points>
