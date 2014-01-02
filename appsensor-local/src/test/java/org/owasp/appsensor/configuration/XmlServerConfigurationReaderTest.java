@@ -19,6 +19,6 @@ public class XmlServerConfigurationReaderTest {
 		ServerConfigurationReader reader = new StaxServerConfigurationReader();
 		ServerConfiguration configuration = reader.read("/appsensor-server-config.xml", "/appsensor_server_config_2.0.xsd");
 		
-		assertTrue("org.owasp.appsensor.analysis.impl.ReferenceStatisticalEventAnalysisEngine".equals(configuration.getEventAnalysisEngineImplementation()));
+		assertTrue("org.owasp.appsensor.analysis.ReferenceStatisticalEventAnalysisEngine".equals(configuration.getEventAnalysisEngineImplementation()));
 	}
 }

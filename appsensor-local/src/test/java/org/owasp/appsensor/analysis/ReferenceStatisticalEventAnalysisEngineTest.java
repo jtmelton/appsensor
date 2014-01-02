@@ -1,4 +1,4 @@
-package org.owasp.appsensor.analysis.impl;
+package org.owasp.appsensor.analysis;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,10 +12,10 @@ import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.StatisticalEvent;
 import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.User;
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
+import org.owasp.appsensor.event.StatisticalEvent;
 
 /**
  * Test basic event analysis engine. Add a number of events matching 

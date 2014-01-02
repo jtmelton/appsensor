@@ -1,10 +1,10 @@
-package org.owasp.appsensor.user.impl;
+package org.owasp.appsensor.user;
 
 import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.User;
-import org.owasp.appsensor.UserManager;
-import org.owasp.appsensor.event.impl.LocalEventManager;
+import org.owasp.appsensor.event.LocalEventManager;
+import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.response.UserManager;
 
 /**
  * No-op user manager that is used most likely in test configurations. 
