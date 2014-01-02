@@ -22,26 +22,26 @@ public class StaxServerConfigurationReaderTest {
 		assertEquals(3, configuration.getCorrelationSets().size());
 		assertEquals("server1", configuration.getCorrelationSets().iterator().next().getClientApplications().iterator().next());
 		
-		assertEquals("org.owasp.appsensor.analysis.impl.ReferenceStatisticalEventAnalysisEngine", configuration.getEventAnalysisEngineImplementation());
-		assertEquals("org.owasp.appsensor.analysis.impl.ReferenceAttackAnalysisEngine", configuration.getAttackAnalysisEngineImplementation());
-		assertEquals("org.owasp.appsensor.analysis.impl.ReferenceResponseAnalysisEngine", configuration.getResponseAnalysisEngineImplementation());
+		assertEquals("org.owasp.appsensor.analysis.ReferenceStatisticalEventAnalysisEngine", configuration.getEventAnalysisEngineImplementation());
+		assertEquals("org.owasp.appsensor.analysis.ReferenceAttackAnalysisEngine", configuration.getAttackAnalysisEngineImplementation());
+		assertEquals("org.owasp.appsensor.analysis.ReferenceResponseAnalysisEngine", configuration.getResponseAnalysisEngineImplementation());
 		
-		assertEquals("org.owasp.appsensor.event.impl.InMemoryEventStore", configuration.getEventStoreImplementation());
-		assertEquals("org.owasp.appsensor.attack.impl.InMemoryAttackStore", configuration.getAttackStoreImplementation());
-		assertEquals("org.owasp.appsensor.response.impl.InMemoryResponseStore", configuration.getResponseStoreImplementation());
+		assertEquals("org.owasp.appsensor.storage.InMemoryEventStore", configuration.getEventStoreImplementation());
+		assertEquals("org.owasp.appsensor.storage.InMemoryAttackStore", configuration.getAttackStoreImplementation());
+		assertEquals("org.owasp.appsensor.storage.InMemoryResponseStore", configuration.getResponseStoreImplementation());
 		
-		assertEquals("org.owasp.appsensor.logging.impl.Slf4jLogger", configuration.getLoggerImplementation());
+		assertEquals("org.owasp.appsensor.logging.Slf4jLogger", configuration.getLoggerImplementation());
 		
-		assertEquals("org.owasp.appsensor.response.impl.ReferenceResponseHandler", configuration.getResponseHandlerImplementation());
+		assertEquals("org.owasp.appsensor.accesscontrol.ReferenceAccessController", configuration.getAccessControllerImplementation());
 		
 		assertEquals(2, configuration.getEventStoreObserverImplementations().size());
-		assertEquals("org.owasp.appsensor.analysis.impl.ReferenceStatisticalEventAnalysisEngine", configuration.getEventStoreObserverImplementations().iterator().next());
+		assertEquals("org.owasp.appsensor.analysis.ReferenceStatisticalEventAnalysisEngine", configuration.getEventStoreObserverImplementations().iterator().next());
 		
 		assertEquals(2, configuration.getAttackStoreObserverImplementations().size());
-		assertEquals("org.owasp.appsensor.analysis.impl.ReferenceAttackAnalysisEngine", configuration.getAttackStoreObserverImplementations().iterator().next());
+		assertEquals("org.owasp.appsensor.analysis.ReferenceAttackAnalysisEngine", configuration.getAttackStoreObserverImplementations().iterator().next());
 		
 		assertEquals(2, configuration.getResponseStoreObserverImplementations().size());
-		assertEquals("org.owasp.appsensor.analysis.impl.ReferenceResponseAnalysisEngine", configuration.getResponseStoreObserverImplementations().iterator().next());
+		assertEquals("org.owasp.appsensor.analysis.ReferenceResponseAnalysisEngine", configuration.getResponseStoreObserverImplementations().iterator().next());
 		
 		assertEquals(5, configuration.getDetectionPoints().size());
 		assertEquals("IE1", configuration.getDetectionPoints().iterator().next().getId());
