@@ -3,7 +3,7 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<javaee:handler-chain>
 		<javaee:handler>
-			<javaee:handler-class>org.owasp.appsensor.handler.impl.ClientApplicationIdentificationHandler</javaee:handler-class>
+			<javaee:handler-class>org.owasp.appsensor.handler.ClientApplicationIdentificationHandler</javaee:handler-class>
 		</javaee:handler>
 	</javaee:handler-chain>
 </javaee:handler-chains>

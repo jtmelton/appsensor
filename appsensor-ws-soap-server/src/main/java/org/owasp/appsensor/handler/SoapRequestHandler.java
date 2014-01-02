@@ -8,6 +8,7 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.RequestHandler;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
 /**
  * This is the soap endpoint interface for handling requests on the server-side. 
@@ -21,18 +22,18 @@ public interface SoapRequestHandler extends RequestHandler {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addEvent(Event event);
+	public void addEvent(Event event) throws NotAuthorizedException;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addAttack(Attack attack);
+	public void addAttack(Attack attack) throws NotAuthorizedException;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Response> getResponses(String detectionSystemId, long earliest);
+	public Collection<Response> getResponses(long earliest) throws NotAuthorizedException;
 
 }
