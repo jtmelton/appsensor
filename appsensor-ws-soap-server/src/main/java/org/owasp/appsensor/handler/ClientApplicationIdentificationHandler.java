@@ -12,6 +12,25 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.exceptions.NotAuthenticatedException;
 
+/**
+ * This is the jax-ws soap handler that performs
+ * authentication of the client applications. 
+ * 
+ * The authentication mechanism involves checking an HTTP request header 
+ * for the username of the given client application. 
+ * 
+ * NOTE: This means that implementors must ensure that end users are not able 
+ * to make direct requests to the service or it will be possible to masquerade 
+ * as a valid client application. 
+ * 
+ * The intended deployment scenario is to use a standard reverse proxy setup 
+ * whereby a web server or agent of some kind performs the authentication 
+ * (SSO, HTTP Basic Auth, etc.) and then sets the request header key-value pair, 
+ * and then forwards the request to the servlet container/app server where 
+ * this soap handler then processes the request. 
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ClientApplicationIdentificationHandler implements SOAPHandler<SOAPMessageContext> {
 	
 	/** default name for client application identification header */

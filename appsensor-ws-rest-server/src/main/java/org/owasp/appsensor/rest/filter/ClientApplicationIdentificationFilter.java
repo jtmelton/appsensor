@@ -10,6 +10,25 @@ import javax.ws.rs.ext.Provider;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.handler.RestRequestHandler;
 
+/**
+ * This is the jax-rs container request filter that performs
+ * authentication of the client applications. 
+ * 
+ * The authentication mechanism involves checking an HTTP request header 
+ * for the username of the given client application. 
+ * 
+ * NOTE: This means that implementors must ensure that end users are not able 
+ * to make direct requests to the service or it will be possible to masquerade 
+ * as a valid client application. 
+ * 
+ * The intended deployment scenario is to use a standard reverse proxy setup 
+ * whereby a web server or agent of some kind performs the authentication 
+ * (SSO, HTTP Basic Auth, etc.) and then sets the request header key-value pair, 
+ * and then forwards the request to the servlet container/app server where 
+ * this container request filter then processes the request. 
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 @Provider
 public class ClientApplicationIdentificationFilter implements ContainerRequestFilter {
 	
