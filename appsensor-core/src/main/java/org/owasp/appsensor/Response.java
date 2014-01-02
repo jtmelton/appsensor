@@ -24,19 +24,22 @@ public class Response implements Serializable {
 	
 	private static final long serialVersionUID = -4183973779552497656L;
 
+	/** User the response is for */
 	private User user;
 	
 	/** Detection Point that was triggered */
-	
 	private DetectionPoint detectionPoint;
 	
 	/** When the event occurred */
 	private long timestamp;
 	
+	/** String representing response action name */
 	private String action;
 	
+	/** Interval response should last for, if applicable. Ie. block access for 30 minutes */
 	private Interval interval;
 
+	/** Client application name that response applies to. */
 	private String detectionSystemId; 
 	
 	public Response() {}
