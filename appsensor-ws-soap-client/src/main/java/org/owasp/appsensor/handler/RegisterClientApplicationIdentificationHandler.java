@@ -1,4 +1,4 @@
-package org.owasp.appsensor.handler.impl;
+package org.owasp.appsensor.handler;
 
 import java.util.Collections;
 import java.util.HashMap;

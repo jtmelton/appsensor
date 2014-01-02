@@ -1,4 +1,4 @@
-package org.owasp.appsensor.event.impl;
+package org.owasp.appsensor.event;
 
 import org.junit.Test;
 
