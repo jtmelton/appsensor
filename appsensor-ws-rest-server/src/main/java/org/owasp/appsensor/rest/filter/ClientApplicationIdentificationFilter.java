@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
 import org.owasp.appsensor.AppSensorServer;
+import org.owasp.appsensor.handler.RestRequestHandler;
 
 @Provider
 public class ClientApplicationIdentificationFilter implements ContainerRequestFilter {
@@ -37,6 +38,8 @@ public class ClientApplicationIdentificationFilter implements ContainerRequestFi
 	    if (clientApplicationIdentifier == null) {
 	    	throw unauthorized;
 	    }
+	    
+	    context.setProperty(RestRequestHandler.CLIENT_APPLICATION_IDENTIFIER_ATTR, clientApplicationIdentifier);
 	}
 	
 	private void updateHeaderFromConfiguration() {
