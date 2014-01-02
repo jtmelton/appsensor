@@ -32,7 +32,7 @@ public class ServerConfiguration {
 	
 	private String loggerImplementation;
 	
-	private String responseHandlerImplementation;
+	private String accessControllerImplementation;
 	
 	private Collection<String> eventStoreObserverImplementations = new ArrayList<>();
 	private Collection<String> attackStoreObserverImplementations = new ArrayList<>();
@@ -112,15 +112,16 @@ public class ServerConfiguration {
 		return this;
 	}
 	
-	public String getResponseHandlerImplementation() {
-		return responseHandlerImplementation;
+	public String getAccessControllerImplementation() {
+		return accessControllerImplementation;
 	}
 
-	public ServerConfiguration setResponseHandlerImplementation(String responseHandlerImplementation) {
-		this.responseHandlerImplementation = responseHandlerImplementation;
+	public ServerConfiguration setAccessControllerImplementation(
+			String accessControllerImplementation) {
+		this.accessControllerImplementation = accessControllerImplementation;
 		return this;
 	}
-	
+
 	public Collection<String> getEventStoreObserverImplementations() {
 		return eventStoreObserverImplementations;
 	}
@@ -241,7 +242,7 @@ public class ServerConfiguration {
 				append(attackStoreImplementation).
 				append(responseStoreImplementation).
 				append(loggerImplementation).
-				append(responseHandlerImplementation).
+				append(accessControllerImplementation).
 				append(eventStoreObserverImplementations).
 				append(attackStoreObserverImplementations).
 				append(responseStoreObserverImplementations).
@@ -270,7 +271,7 @@ public class ServerConfiguration {
 				append(attackStoreImplementation, other.getAttackStoreImplementation()).
 				append(responseStoreImplementation, other.getResponseStoreImplementation()).
 				append(loggerImplementation, other.getLoggerImplementation()).
-				append(responseHandlerImplementation, other.getResponseHandlerImplementation()).
+				append(accessControllerImplementation, other.getAccessControllerImplementation()).
 				append(eventStoreObserverImplementations, other.getEventStoreObserverImplementations()).
 				append(attackStoreObserverImplementations, other.getAttackStoreObserverImplementations()).
 				append(responseStoreObserverImplementations, other.getResponseStoreObserverImplementations()).
@@ -290,7 +291,7 @@ public class ServerConfiguration {
 				append("attackStoreImplementation", attackStoreImplementation).
 				append("responseStoreImplementation", responseStoreImplementation).
 				append("loggerImplementation", loggerImplementation).
-				append("responseHandlerImplementation", responseHandlerImplementation).
+				append("accessControllerImplementation", accessControllerImplementation).
 				append("eventStoreObserverImplementations", eventStoreObserverImplementations).
 				append("attackStoreObserverImplementations", attackStoreObserverImplementations).
 				append("responseStoreObserverImplementations", responseStoreObserverImplementations).

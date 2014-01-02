@@ -1,4 +1,4 @@
-package org.owasp.appsensor;
+package org.owasp.appsensor.analysis;
 
 import java.util.Observer;
 

@@ -1,4 +1,4 @@
-package org.owasp.appsensor.event.impl;
+package org.owasp.appsensor.storage;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,10 +6,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
-import org.owasp.appsensor.EventStore;
-import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.User;
+import org.owasp.appsensor.logging.Logger;
 
 /**
  * This is a reference implementation of the event store, and is an implementation of the Observable pattern.

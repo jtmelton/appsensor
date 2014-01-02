@@ -2,9 +2,11 @@ package org.owasp.appsensor;
 
 import java.util.Collection;
 
+import org.owasp.appsensor.exceptions.NotAuthorizedException;
+
 /**
  * The RequestHandler is the key interface that the server side of 
- * AppSensor implements to handle the different components.
+ * AppSensor implements to handle the different functional requests.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
@@ -15,13 +17,13 @@ public interface RequestHandler {
 	 * 
 	 * @param event Event to add
 	 */
-	public void addEvent(Event event);
+	public void addEvent(Event event) throws NotAuthorizedException;
 	
 	/**
 	 * Add an Attack
 	 * @param attack Attack to add
 	 */
-	public void addAttack(Attack attack);
+	public void addAttack(Attack attack) throws NotAuthorizedException;
 	
 	/**
 	 * Retrieve any responses generated that apply to this client application 
@@ -29,6 +31,6 @@ public interface RequestHandler {
 	 *  
 	 * @return a Collection of Response objects 
 	 */
-	public Collection<Response> getResponses(String detectionSystemId, long earliest);
+	public Collection<Response> getResponses(long earliest) throws NotAuthorizedException;
 	
 }

@@ -1,4 +1,7 @@
-package org.owasp.appsensor;
+package org.owasp.appsensor.response;
+
+import org.owasp.appsensor.Response;
+import org.owasp.appsensor.User;
 
 /**
  * The UserManager is used by the client application as an interface that must

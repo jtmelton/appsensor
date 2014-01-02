@@ -1,6 +1,10 @@
-package org.owasp.appsensor;
+package org.owasp.appsensor.event;
 
 import java.util.Collection;
+
+import org.owasp.appsensor.Attack;
+import org.owasp.appsensor.Event;
+import org.owasp.appsensor.Response;
 
 /**
  * The EventManager is the key interface that the client application accesses to 

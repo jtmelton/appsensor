@@ -30,16 +30,17 @@ public class Attack implements Serializable {
 	/** When the attack occurred */
 	private long timestamp;
 
-	/** Identifier label for the system that detected the attack. 
-	 * This will be either the client application, or possible an external 
+	/** 
+	 * Identifier label for the system that detected the attack. 
+	 * This will be either the client application, or possibly an external 
 	 * detection system, such as syslog, a WAF, network IDS, etc.  */
 	private String detectionSystemId; 
 	
-	/** The application specific location of the occurrence, which can be used 
-     * later to block requests to a given function.  In this implementation, 
-     * the current request URI is used.
+	/** 
+	 * The resource being requested when the attack was triggered, which can be used 
+     * later to block requests to a given function. 
      */
-    private String resource;
+    private Resource resource;
 	
 	public Attack (User user, DetectionPoint detectionPoint, String detectionSystemId) {
 		this(user, detectionPoint, Calendar.getInstance().getTimeInMillis(), detectionSystemId);
@@ -104,11 +105,11 @@ public class Attack implements Serializable {
 		return this;
 	}
 
-	public String getResource() {
+	public Resource getResource() {
 		return resource;
 	}
 
-	public Attack setResource(String resource) {
+	public Attack setResource(Resource resource) {
 		this.resource = resource;
 		return this;
 	}

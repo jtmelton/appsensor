@@ -1,15 +1,14 @@
-package org.owasp.appsensor.analysis.impl;
+package org.owasp.appsensor.analysis;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Observable;
 
-import org.owasp.appsensor.AnalysisEngine;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
-import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.AppSensorServer;
+import org.owasp.appsensor.logging.Logger;
 
 public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 

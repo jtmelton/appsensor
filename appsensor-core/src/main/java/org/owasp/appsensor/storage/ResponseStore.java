@@ -1,7 +1,11 @@
-package org.owasp.appsensor;
+package org.owasp.appsensor.storage;
 
 import java.util.Collection;
 import java.util.Observable;
+
+import org.owasp.appsensor.DetectionPoint;
+import org.owasp.appsensor.Response;
+import org.owasp.appsensor.User;
 
 /**
  * A store is an implementation of the Observable pattern. 

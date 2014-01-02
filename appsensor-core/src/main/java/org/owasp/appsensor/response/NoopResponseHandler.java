@@ -1,9 +1,8 @@
-package org.owasp.appsensor.response.impl;
+package org.owasp.appsensor.response;
 
-import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.ResponseHandler;
 import org.owasp.appsensor.AppSensorServer;
+import org.owasp.appsensor.logging.Logger;
 
 /**
  * This class is a simple NO-OP response handler. Calls to this response handler simply 

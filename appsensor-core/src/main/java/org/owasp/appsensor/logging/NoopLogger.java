@@ -1,17 +1,17 @@
-package org.owasp.appsensor.logging.impl;
+package org.owasp.appsensor.logging;
 
 /**
  * A simple no-op logger implementation for those that need it. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public class NoopLogger implements org.owasp.appsensor.Logger {
+public class NoopLogger implements org.owasp.appsensor.logging.Logger {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public org.owasp.appsensor.Logger setLoggerClass(String className) {
+	public org.owasp.appsensor.logging.Logger setLoggerClass(String className) {
 		return null;
 	}
 	
@@ -19,7 +19,7 @@ public class NoopLogger implements org.owasp.appsensor.Logger {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public org.owasp.appsensor.Logger setLoggerClass(Class<?> clazz) {
+	public org.owasp.appsensor.logging.Logger setLoggerClass(Class<?> clazz) {
 		return null;
 	}
 	

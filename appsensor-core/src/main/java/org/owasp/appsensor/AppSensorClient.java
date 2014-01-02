@@ -5,6 +5,9 @@ import java.text.ParseException;
 import org.owasp.appsensor.configuration.client.ClientConfiguration;
 import org.owasp.appsensor.configuration.client.ClientConfigurationReader;
 import org.owasp.appsensor.configuration.client.StaxClientConfigurationReader;
+import org.owasp.appsensor.event.EventManager;
+import org.owasp.appsensor.response.ResponseHandler;
+import org.owasp.appsensor.response.UserManager;
 
 /**
  * This class exposes the main interfaces expected to be available 

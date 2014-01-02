@@ -1,15 +1,14 @@
-package org.owasp.appsensor.response.impl;
+package org.owasp.appsensor.storage;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.owasp.appsensor.DetectionPoint;
-import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.ResponseStore;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.User;
+import org.owasp.appsensor.logging.Logger;
 
 /**
  * This is a reference implementation of the response store, and is an implementation of the Observable pattern.

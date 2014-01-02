@@ -1,8 +1,12 @@
-package org.owasp.appsensor;
+package org.owasp.appsensor.event;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+
+import org.owasp.appsensor.DetectionPoint;
+import org.owasp.appsensor.Event;
+import org.owasp.appsensor.User;
 
 /**
  * Event representing a standard statistical event. This is an event 

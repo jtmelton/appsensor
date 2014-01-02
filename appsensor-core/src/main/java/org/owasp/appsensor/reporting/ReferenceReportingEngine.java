@@ -1,13 +1,12 @@
-package org.owasp.appsensor.reporting.impl;
+package org.owasp.appsensor.reporting;
 
 import java.util.Observable;
 
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
-import org.owasp.appsensor.Logger;
-import org.owasp.appsensor.ReportingEngine;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.AppSensorServer;
+import org.owasp.appsensor.logging.Logger;
 
 public class ReferenceReportingEngine implements ReportingEngine {
 	

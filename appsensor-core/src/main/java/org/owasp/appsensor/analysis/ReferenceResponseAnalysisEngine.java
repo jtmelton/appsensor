@@ -1,12 +1,12 @@
-package org.owasp.appsensor.analysis.impl;
+package org.owasp.appsensor.analysis;
 
 import java.util.Observable;
 
-import org.owasp.appsensor.AnalysisEngine;
-import org.owasp.appsensor.Attack;
-import org.owasp.appsensor.Logger;
-import org.owasp.appsensor.Response;
+import org.owasp.appsensor.AppSensorClient;
 import org.owasp.appsensor.AppSensorServer;
+import org.owasp.appsensor.Attack;
+import org.owasp.appsensor.Response;
+import org.owasp.appsensor.logging.Logger;
 
 /**
  * This is a reference response handler, and is an implementation of the Observer pattern. 
@@ -16,7 +16,7 @@ import org.owasp.appsensor.AppSensorServer;
  * implementations. 
  * 
  * The implementation is trivial and simply delegates the work to the configured 
- * {@link org.owasp.appsensor.ResponseHandler} for processing.
+ * {@link org.owasp.appsensor.response.ResponseHandler} for processing.
  * 
  * @see java.util.Observer
  *
@@ -28,7 +28,7 @@ public class ReferenceResponseAnalysisEngine implements AnalysisEngine {
 	
 	/**
 	 * This method simply catches responses and calls the 
-	 * configured {@link org.owasp.appsensor.ResponseHandler} to process them. 
+	 * configured {@link org.owasp.appsensor.response.ResponseHandler} to process them. 
 	 * 
 	 * @param observable object that was being obeserved - ignored in this case
 	 * @param observedObject object that was added to observable. In this case
@@ -43,7 +43,7 @@ public class ReferenceResponseAnalysisEngine implements AnalysisEngine {
 			if (response != null) {
 				logger.info("Response executed for user <" + response.getUser().getUsername() + "> - executing response action " + response.getAction());
 				
-				AppSensorServer.getInstance().getResponseHandler().handle(response);
+				AppSensorClient.getInstance().getResponseHandler().handle(response);
 			}
 		} 
 	}

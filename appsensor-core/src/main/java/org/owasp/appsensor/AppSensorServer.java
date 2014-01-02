@@ -3,9 +3,15 @@ package org.owasp.appsensor;
 import java.text.ParseException;
 import java.util.Observer;
 
+import org.owasp.appsensor.accesscontrol.AccessController;
+import org.owasp.appsensor.analysis.AnalysisEngine;
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.configuration.server.ServerConfigurationReader;
 import org.owasp.appsensor.configuration.server.StaxServerConfigurationReader;
+import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.storage.AttackStore;
+import org.owasp.appsensor.storage.EventStore;
+import org.owasp.appsensor.storage.ResponseStore;
 
 /**
  * AppSensor locator class is provided to make it easy to gain access to the 
@@ -31,7 +37,7 @@ public class AppSensorServer extends ObjectFactory {
 	
 	private static AnalysisEngine responseAnalysisEngine;
 	
-	private static ResponseHandler responseHandler;
+	private static AccessController accessController;
 	
 	/**
 	 * Bootstrap mechanism that loads the configuration for the server object based 
@@ -102,24 +108,6 @@ public class AppSensorServer extends ObjectFactory {
 	//singleton
 	private AppSensorServer() { }
 	
-//	/**
-//	 * call this to load your own config reader post-initialization
-//	 * @param configurationReader your own custom config reader
-//	 */
-//	public void setServerConfigurationReader(ServerConfigurationReader configurationReader) {
-//		AppSensorServer.configurationReader = configurationReader;
-//	}
-//	
-//	/**
-//	 * Call this after calling setServerConfigurationReader() to reload the configuration
-//	 * @throws ParseException
-//	 */
-//	public void reloadConfiguration() throws ParseException {
-//		configuration = configurationReader.read();
-//		
-//		initialize();
-//	}
-//	
 	/**
 	 * Accessor for ServerConfiguration object
 	 * @return ServerConfiguration object
@@ -213,15 +201,15 @@ public class AppSensorServer extends ObjectFactory {
 	}
 	
 	/**
-	 * Accessor for ReponseHandler object. 
-	 * @return ResponseHandler object
+	 * Accessor for AccessController object. 
+	 * @return AccessController object
 	 */
-	public ResponseHandler getResponseHandler() {
-		if (responseHandler == null) {
-			responseHandler = make(getConfiguration().getResponseHandlerImplementation(), "ResponseHandler");
+	public AccessController getAccessController() {
+		if (accessController == null) {
+			accessController = make(getConfiguration().getAccessControllerImplementation(), "AccessController");
 		}
 		
-		return responseHandler;
+		return accessController;
 	}
 	
 }

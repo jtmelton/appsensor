@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.owasp.appsensor.event.StatisticalEvent;
 
 /**
  * Event is a specific instance that a sensor has detected that 
@@ -22,6 +23,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @XmlSeeAlso({StatisticalEvent.class})
 public abstract class Event implements Serializable {
 	
+	/** Event type representing policy-based statistical event, default event type for appsensor */
 	public static final String STATISTICAL = "STATISTICAL";
 	
 	private static final long serialVersionUID = -3235111340901139594L;
@@ -37,16 +39,15 @@ public abstract class Event implements Serializable {
 
 	/** 
 	 * Identifier label for the system that detected the event. 
-	 * This will be either the client application, or possible an external 
+	 * This will be either the client application, or possibly an external 
 	 * detection system, such as syslog, a WAF, network IDS, etc.  */
 	private String detectionSystemId; 
 	
 	/** 
-	 * The application specific location of the occurrence, which can be used 
-     * later to block requests to a given function. In this implementation, 
-     * the current request URI is used.
+	 * The resource being requested when the event was triggered, which can be used 
+     * later to block requests to a given function. 
      */
-    private String resource;
+    private Resource resource;
     
     /** The type of event: ie. statistical, behavioral, etc. */
 	private String eventType;
@@ -89,11 +90,11 @@ public abstract class Event implements Serializable {
 		return this;
 	}
 
-	public String getResource() {
+	public Resource getResource() {
 		return resource;
 	}
 
-	public Event setResource(String resource) {
+	public Event setResource(Resource resource) {
 		this.resource = resource;
 		return this;
 	}

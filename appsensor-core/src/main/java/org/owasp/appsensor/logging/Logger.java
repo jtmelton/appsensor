@@ -1,4 +1,4 @@
-package org.owasp.appsensor;
+package org.owasp.appsensor.logging;
 
 /**
  * This interface is meant to be implemented by a compliant logger implementation. 

@@ -1,27 +1,26 @@
-package org.owasp.appsensor.analysis.impl;
+package org.owasp.appsensor.analysis;
 
 import java.util.Collection;
 import java.util.Observable;
 
-import org.owasp.appsensor.AnalysisEngine;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
-import org.owasp.appsensor.Logger;
 import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.StatisticalEvent;
+import org.owasp.appsensor.event.StatisticalEvent;
+import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.util.DateUtils;
 
 /**
  * This is a statistical event analysis engine, and is an implementation of the Observer pattern. 
  * 
  * It is notified with implementations of the {@link java.util.Observable} interface and is 
- * passed the observed object. In this case, we are only concerned with {@link org.owasp.appsensor.StatisticalEvent}
+ * passed the observed object. In this case, we are only concerned with {@link org.owasp.appsensor.event.StatisticalEvent}
  * implementations. 
  * 
  * The implementation performs a simple analysis that watches the configured threshold and 
  * determines if it has been crossed. If so, an attack is created and added to the 
- * {@link org.owasp.appsensor.AttackStore}. 
+ * {@link org.owasp.appsensor.storage.AttackStore}. 
  * 
  * @see java.util.Observer
  *
@@ -39,7 +38,7 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 	 * @param observable object that was being obeserved - ignored in this case
 	 * @param observedObject object that was added to observable. In this case
 	 * 			we are only interested if the object is 
-	 * 			a {@link org.owasp.appsensor.StatisticalEvent} object
+	 * 			a {@link org.owasp.appsensor.event.StatisticalEvent} object
 	 */
 	@Override
 	public void update(Observable observable, Object observedObject) {

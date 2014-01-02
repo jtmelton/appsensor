@@ -134,8 +134,8 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 						configuration.setResponseStoreImplementation(xmlReader.getAttributeValue(null, "class"));
 					} else if("config:logger".equals(name)) {
 						configuration.setLoggerImplementation(xmlReader.getAttributeValue(null, "class"));
-					} else if("config:response-handler".equals(name)) {
-						configuration.setResponseHandlerImplementation(xmlReader.getAttributeValue(null, "class"));
+					} else if("config:access-controller".equals(name)) {
+						configuration.setAccessControllerImplementation(xmlReader.getAttributeValue(null, "class"));
 					} else if("config:event-store-observers".equals(name)) {
 						configuration.getEventStoreObserverImplementations().addAll(readObservers(xmlReader, "config:event-store-observers"));
 					} else if("config:attack-store-observers".equals(name)) {

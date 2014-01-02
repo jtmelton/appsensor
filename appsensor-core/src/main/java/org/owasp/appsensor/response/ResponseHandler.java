@@ -1,4 +1,6 @@
-package org.owasp.appsensor;
+package org.owasp.appsensor.response;
+
+import org.owasp.appsensor.Response;
 
 /**
  * The ResponseHandler is executed when a {@link Response} needs to be executed. 

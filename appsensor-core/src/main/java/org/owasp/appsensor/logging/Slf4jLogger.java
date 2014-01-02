@@ -1,4 +1,4 @@
-package org.owasp.appsensor.logging.impl;
+package org.owasp.appsensor.logging;
 
 import org.slf4j.LoggerFactory;
 
@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public class Slf4jLogger implements org.owasp.appsensor.Logger {
+public class Slf4jLogger implements org.owasp.appsensor.logging.Logger {
 	
 	private org.slf4j.Logger logger = LoggerFactory.getLogger(Slf4jLogger.class);
 
@@ -15,7 +15,7 @@ public class Slf4jLogger implements org.owasp.appsensor.Logger {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public org.owasp.appsensor.Logger setLoggerClass(String className) {
+	public org.owasp.appsensor.logging.Logger setLoggerClass(String className) {
 		logger = LoggerFactory.getLogger(className);
 		return this;
 	}
@@ -24,7 +24,7 @@ public class Slf4jLogger implements org.owasp.appsensor.Logger {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public org.owasp.appsensor.Logger setLoggerClass(Class<?> clazz) {
+	public org.owasp.appsensor.logging.Logger setLoggerClass(Class<?> clazz) {
 		logger = LoggerFactory.getLogger(clazz);
 		return this;
 	}
