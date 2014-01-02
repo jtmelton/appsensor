@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <appsensor-client-config xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_client_config_2.0.xsd">
 
-	<event-manager class="org.owasp.appsensor.event.impl.LocalEventManager" />
+	<event-manager class="org.owasp.appsensor.event.LocalEventManager" />
 	
-	<response-handler class="org.owasp.appsensor.response.impl.NoopResponseHandler"/>
+	<response-handler class="org.owasp.appsensor.response.LocalResponseHandler"/>
 	
-	<user-manager class="org.owasp.appsensor.user.impl.NoopUserManager"/>
+	<user-manager class="org.owasp.appsensor.user.NoopUserManager"/>
 	
 	<server-connection type="rest">
 		<server-connection-config>
