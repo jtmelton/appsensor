@@ -17,6 +17,9 @@ public class LocalResponseHandler implements ResponseHandler {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(LocalResponseHandler.class);
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void handle(Response response) {
 		
