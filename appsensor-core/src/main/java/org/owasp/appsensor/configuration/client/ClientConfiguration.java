@@ -11,12 +11,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class ClientConfiguration {
 
+	/** Event manager for client-code to interact with appsensor */
 	private String eventManagerImplementation;
 
+	/** Response handler */
 	private String responseHandlerImplementation;
 	
+	/** User manager for performing responses on users */
 	private String userManagerImplementation;
 	
+	/** Server connection with configuration info for rest/soap connections */
 	private ServerConnection serverConnection;
 	
 	public String getEventManagerImplementation() {
