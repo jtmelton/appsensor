@@ -10,6 +10,20 @@ import org.owasp.appsensor.Response;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.logging.Logger;
 
+/**
+ * This is the reference attack analysis engine, and is an implementation of the Observer pattern. 
+ * 
+ * It is notified with implementations of the {@link java.util.Observable} interface and is 
+ * passed the observed object. In this case, we are only concerned with {@link org.owasp.appsensor.Attack}
+ * implementations. 
+ * 
+ * The implementation performs a simple analysis that checks the created attack against any created responses. 
+ * It then creates a response and adds it to the {@link org.owasp.appsensor.storage.ResponseStore}. 
+ * 
+ * @see java.util.Observer
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceAttackAnalysisEngine.class);
