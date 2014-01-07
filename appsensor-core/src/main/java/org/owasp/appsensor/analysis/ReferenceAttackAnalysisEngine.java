@@ -99,6 +99,13 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 		return possibleResponses;
 	}
 	
+	/**
+	 * Test a given {@link org.owasp.appsensor.Response} to see if it's been executed before.
+	 * 
+	 * @param response response to test to see if it's been executed before
+	 * @param existingResponses set of previously executed responses
+	 * @return true if response has been executed before
+	 */
 	protected boolean isPreviousResponse(Response response, Collection<Response> existingResponses) {
 		boolean previousResponse = false;
 		
