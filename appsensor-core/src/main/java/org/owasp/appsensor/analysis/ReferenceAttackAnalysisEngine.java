@@ -86,6 +86,13 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 		return response;
 	}
 	
+	/**
+	 * Lookup configured {@link org.owasp.appsensor.Response} objects for 
+	 * specified {@link org.owasp.appsensor.DetectionPoint}
+	 * 
+	 * @param triggeringDetectionPoint detection point that triggered attack
+	 * @return collection of Response objects for given detection point
+	 */
 	protected Collection<? extends Response> findPossibleResponses(DetectionPoint triggeringDetectionPoint) {
 		Collection<? extends Response> possibleResponses = new ArrayList<Response>();
 		
