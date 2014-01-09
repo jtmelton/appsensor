@@ -33,17 +33,7 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 		if (observedObject instanceof Attack) {
 			Attack attack = (Attack)observedObject;
 			
-			DetectionPoint triggeringDetectionPoint = attack.getDetectionPoint();
-			
-			//grab any existing responses
-			Collection<Response> existingResponses = 
-					AppSensorServer.getInstance().getResponseStore().findResponses(
-							attack.getUser(), 
-							triggeringDetectionPoint,
-							AppSensorServer.getInstance().getConfiguration().getRelatedDetectionSystems(attack.getDetectionSystemId())
-							);
-
-			Response response = findAppropriateResponse(triggeringDetectionPoint, existingResponses, attack);
+			Response response = findAppropriateResponse(attack);
 			
 			if (response != null) {
 				logger.info("Response set for user <" + attack.getUser().getUsername() + "> - storing response action " + response.getAction());
@@ -52,7 +42,23 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 		} 
 	}
 	
-	protected Response findAppropriateResponse(DetectionPoint triggeringDetectionPoint, Collection<Response> existingResponses, Attack attack) {
+	/**
+	 * Find/generate response appropriate for specified attack.
+	 * 
+	 * @param attack attack that is being analyzed
+	 * @return response to be executed for given attack
+	 */
+	protected Response findAppropriateResponse(Attack attack) {
+		DetectionPoint triggeringDetectionPoint = attack.getDetectionPoint();
+		
+		//grab any existing responses
+		Collection<Response> existingResponses = 
+				AppSensorServer.getInstance().getResponseStore().findResponses(
+						attack.getUser(), 
+						triggeringDetectionPoint,
+						AppSensorServer.getInstance().getConfiguration().getRelatedDetectionSystems(attack.getDetectionSystemId())
+						);
+		
 		Response response = null;
 		
 		Collection<? extends Response> possibleResponses = findPossibleResponses(triggeringDetectionPoint);
