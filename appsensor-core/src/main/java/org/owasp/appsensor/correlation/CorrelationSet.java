@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class CorrelationSet {
 
+	/** Client applications that are represented in this correlation set */
 	private Collection<String> clientApplications = new ArrayList<>();
 	
 	public Collection<String> getClientApplications() {
