@@ -15,7 +15,7 @@ public class DateUtils {
 	 * Helper method to grab current time. Returns current 
 	 * timestamp used for events/attacks, etc. 
 	 * 
-	 * @return current time represented as long
+	 * @return current time represented as long (unix timestamp)
 	 */
 	public static long getCurrentTime() {
 		TimeZone tz = TimeZone.getDefault();
