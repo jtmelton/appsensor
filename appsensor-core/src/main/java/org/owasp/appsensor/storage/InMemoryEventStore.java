@@ -26,6 +26,7 @@ public class InMemoryEventStore extends EventStore {
 	
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(InMemoryEventStore.class);
 	
+	/** maintain a collection of events as an in-memory list */
 	private Collection<Event> events = new CopyOnWriteArrayList<Event>();
 	
 	/**
