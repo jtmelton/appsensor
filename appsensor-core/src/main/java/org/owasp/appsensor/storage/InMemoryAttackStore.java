@@ -26,6 +26,7 @@ public class InMemoryAttackStore extends AttackStore {
 	
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(InMemoryAttackStore.class);
 	
+	/** maintain a collection of attacks as an in-memory list */
 	private Collection<Attack> attacks = new CopyOnWriteArrayList<Attack>();
 	
 	/**
