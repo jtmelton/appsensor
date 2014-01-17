@@ -11,6 +11,7 @@ import org.owasp.appsensor.Response;
  */
 public interface ResponseHandler {
 	
+	/** provide increased logging for this specific user */
 	public final static String LOG = "log";
 	public final static String LOGOUT = "logout"; 
 	public final static String DISABLE_USER = "disableUser";
