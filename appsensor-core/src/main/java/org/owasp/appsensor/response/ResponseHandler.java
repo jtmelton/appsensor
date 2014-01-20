@@ -15,6 +15,7 @@ public interface ResponseHandler {
 	public final static String LOG = "log";
 	/** logout this specific user */
 	public final static String LOGOUT = "logout"; 
+	/** disable this specific user */
 	public final static String DISABLE_USER = "disableUser";
 	public final static String DISABLE_COMPONENT_FOR_SPECIFIC_USER = "disableComponentForSpecificUser";
 	public final static String DISABLE_COMPONENT_FOR_ALL_USERS = "disableComponentForAllUsers";
