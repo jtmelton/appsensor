@@ -9,6 +9,9 @@ import java.util.Observer;
  * 
  * In this case the analysis engines watch the *Store interfaces of AppSensor.
  * 
+ * AnalysisEngine implementations are the components of AppSensor that 
+ * constitute the "brain" of the system. 
+ * 
  * @see java.util.Observer
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
