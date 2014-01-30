@@ -13,8 +13,10 @@ import javax.xml.ws.handler.MessageContext;
 
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
+import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.accesscontrol.Action;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
 /**
@@ -41,6 +43,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	@WebMethod
 	@Override
 	public void addEvent(Event event) throws NotAuthorizedException {
+		checkAuthorization(Action.ADD_EVENT);
 		AppSensorServer.getInstance().getEventStore().addEvent(event);
 	}
 
@@ -50,6 +53,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	@WebMethod
 	@Override
 	public void addAttack(Attack attack) throws NotAuthorizedException {
+		checkAuthorization(Action.ADD_ATTACK);
 		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
 	}
 
@@ -59,12 +63,31 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	@WebMethod
 	@Override
 	public Collection<Response> getResponses(long earliest) throws NotAuthorizedException {
+		checkAuthorization(Action.GET_RESPONSES);
+		
 		@SuppressWarnings("unchecked")
 		Map<String, List<String>> httpHeaders = (Map<String, List<String>>) wsContext.getMessageContext().get(MessageContext.HTTP_REQUEST_HEADERS);
 		
-		String detectionSystemId = httpHeaders.get(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR).get(0);
+		String clientApplicationName = httpHeaders.get(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR).get(0);
 		
-		return AppSensorServer.getInstance().getResponseStore().findResponses(detectionSystemId, earliest);
+		return AppSensorServer.getInstance().getResponseStore().findResponses(clientApplicationName, earliest);
+	}
+	
+	/**
+	 * Check authz before performing action.
+	 * @param action desired action
+	 * @throws NotAuthorizedException thrown if user does not have role.
+	 */
+	private void checkAuthorization(Action action) throws NotAuthorizedException {
+		@SuppressWarnings("unchecked")
+		Map<String, List<String>> httpHeaders = (Map<String, List<String>>) wsContext.getMessageContext().get(MessageContext.HTTP_REQUEST_HEADERS);
+		String clientApplicationName = httpHeaders.get(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR).get(0);
+
+		ClientApplication clientApplication = AppSensorServer.getInstance().getConfiguration().findClientApplication(clientApplicationName);
+		
+		org.owasp.appsensor.accesscontrol.Context context = new org.owasp.appsensor.accesscontrol.Context();
+		
+		AppSensorServer.getInstance().getAccessController().assertAuthorized(clientApplication, action, context);
 	}
 
 }
