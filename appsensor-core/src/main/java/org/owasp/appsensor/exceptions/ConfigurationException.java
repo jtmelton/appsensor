@@ -3,6 +3,9 @@ package org.owasp.appsensor.exceptions;
 /**
  * This exception is for anytime the configuration for appsensor is invalid.
  * 
+ * This is used by the {@link org.owasp.appsensor.configuration.client.ClientConfigurationReader}
+ * and the {@link org.owasp.appsensor.configuration.server.ServerConfigurationReader}
+ * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 public class ConfigurationException extends RuntimeException  {
