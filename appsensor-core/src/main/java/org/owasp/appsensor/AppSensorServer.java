@@ -1,6 +1,5 @@
 package org.owasp.appsensor;
 
-import java.text.ParseException;
 import java.util.Observer;
 
 import org.owasp.appsensor.accesscontrol.AccessController;
@@ -8,6 +7,7 @@ import org.owasp.appsensor.analysis.AnalysisEngine;
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.configuration.server.ServerConfigurationReader;
 import org.owasp.appsensor.configuration.server.StaxServerConfigurationReader;
+import org.owasp.appsensor.exceptions.ConfigurationException;
 import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.storage.AttackStore;
 import org.owasp.appsensor.storage.EventStore;
@@ -68,7 +68,7 @@ public class AppSensorServer extends ObjectFactory {
 			configuration = configurationReader.read();
 			
 			initialize();
-		} catch(ParseException pe) {
+		} catch(ConfigurationException pe) {
 			throw new RuntimeException(pe);
 		}
 	}

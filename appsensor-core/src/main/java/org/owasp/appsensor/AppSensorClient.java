@@ -1,11 +1,10 @@
 package org.owasp.appsensor;
 
-import java.text.ParseException;
-
 import org.owasp.appsensor.configuration.client.ClientConfiguration;
 import org.owasp.appsensor.configuration.client.ClientConfigurationReader;
 import org.owasp.appsensor.configuration.client.StaxClientConfigurationReader;
 import org.owasp.appsensor.event.EventManager;
+import org.owasp.appsensor.exceptions.ConfigurationException;
 import org.owasp.appsensor.response.ResponseHandler;
 import org.owasp.appsensor.response.UserManager;
 
@@ -52,7 +51,7 @@ public class AppSensorClient extends ObjectFactory {
 		
 		try {
 			configuration = configurationReader.read();
-		} catch(ParseException pe) {
+		} catch(ConfigurationException pe) {
 			throw new RuntimeException(pe);
 		}
 	}
