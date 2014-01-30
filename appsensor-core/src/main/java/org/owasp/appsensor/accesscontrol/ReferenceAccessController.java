@@ -1,6 +1,7 @@
 package org.owasp.appsensor.accesscontrol;
 
 import org.owasp.appsensor.ClientApplication;
+import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
 public class ReferenceAccessController implements AccessController {
 	
@@ -22,5 +23,14 @@ public class ReferenceAccessController implements AccessController {
 		}
 		
 		return authorized;
+	}
+	
+	@Override
+	public void assertAuthorized(ClientApplication clientApplication, Action action, Context context) throws NotAuthorizedException {
+		if (! isAuthorized(clientApplication, action, context)) {
+			throw new NotAuthorizedException("Access is not allowed for client application: " + clientApplication + 
+					" when trying to perform action : " + action + 
+					" using context: " + context);
+		}
 	}
 }

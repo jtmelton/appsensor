@@ -1,6 +1,7 @@
 package org.owasp.appsensor.accesscontrol;
 
 import org.owasp.appsensor.ClientApplication;
+import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
 /**
  * This interface is meant to gate access to the different actions 
@@ -11,5 +12,7 @@ import org.owasp.appsensor.ClientApplication;
 public interface AccessController {
 
 	public boolean isAuthorized(ClientApplication clientApplication, Action action, Context context);
+	
+	public void assertAuthorized(ClientApplication clientApplication, Action action, Context context) throws NotAuthorizedException;
 	
 }
