@@ -13,9 +13,11 @@ import javax.ws.rs.core.MediaType;
 
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
+import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.RequestHandler;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.accesscontrol.Action;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
 /**
@@ -27,10 +29,10 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
 @Produces("application/json")
 public class RestRequestHandler implements RequestHandler {
 
-	public static String CLIENT_APPLICATION_IDENTIFIER_ATTR = "APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR";
+	public static String APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR = "APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR";
 	
 	@Context
-	ContainerRequestContext context;
+	private ContainerRequestContext requestContext;
 	
 	/**
 	 * {@inheritDoc}
@@ -39,6 +41,7 @@ public class RestRequestHandler implements RequestHandler {
 	@POST
 	@Path("/events")
 	public void addEvent(Event event) throws NotAuthorizedException {
+		checkAuthorization(Action.ADD_EVENT);
 		AppSensorServer.getInstance().getEventStore().addEvent(event);
 	}
 
@@ -49,6 +52,7 @@ public class RestRequestHandler implements RequestHandler {
 	@POST
 	@Path("/attacks")
 	public void addAttack(Attack attack) throws NotAuthorizedException {
+		checkAuthorization(Action.ADD_ATTACK);
 		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
 	}
 
@@ -60,8 +64,24 @@ public class RestRequestHandler implements RequestHandler {
 	@Path("/responses")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Response> getResponses(@QueryParam("earliest") long earliest) throws NotAuthorizedException {
-		String detectionSystemId = (String)context.getProperty(CLIENT_APPLICATION_IDENTIFIER_ATTR);
+		checkAuthorization(Action.GET_RESPONSES);
+		
+		String clientApplicationName = (String)requestContext.getProperty(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR);
+		return AppSensorServer.getInstance().getResponseStore().findResponses(clientApplicationName, earliest);
+	}
+	
+	/**
+	 * Check authz before performing action.
+	 * @param action desired action
+	 * @throws NotAuthorizedException thrown if user does not have role.
+	 */
+	private void checkAuthorization(Action action) throws NotAuthorizedException {
+		String clientApplicationName = (String)requestContext.getProperty(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR);
 
-		return AppSensorServer.getInstance().getResponseStore().findResponses(detectionSystemId, earliest);
+		ClientApplication clientApplication = AppSensorServer.getInstance().getConfiguration().findClientApplication(clientApplicationName);
+		
+		org.owasp.appsensor.accesscontrol.Context context = new org.owasp.appsensor.accesscontrol.Context();
+		
+		AppSensorServer.getInstance().getAccessController().assertAuthorized(clientApplication, action, context);
 	}
 }

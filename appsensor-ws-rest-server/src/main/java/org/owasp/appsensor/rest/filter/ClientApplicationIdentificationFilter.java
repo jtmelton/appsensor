@@ -58,7 +58,7 @@ public class ClientApplicationIdentificationFilter implements ContainerRequestFi
 	    	throw unauthorized;
 	    }
 	    
-	    context.setProperty(RestRequestHandler.CLIENT_APPLICATION_IDENTIFIER_ATTR, clientApplicationIdentifier);
+	    context.setProperty(RestRequestHandler.APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR, clientApplicationIdentifier);
 	}
 	
 	private void updateHeaderFromConfiguration() {
