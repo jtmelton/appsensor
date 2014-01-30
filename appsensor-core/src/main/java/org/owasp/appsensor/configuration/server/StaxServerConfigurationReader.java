@@ -4,7 +4,6 @@ package org.owasp.appsensor.configuration.server;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,11 +15,14 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.Threshold;
+import org.owasp.appsensor.accesscontrol.Role;
 import org.owasp.appsensor.correlation.CorrelationSet;
+import org.owasp.appsensor.exceptions.ConfigurationException;
 import org.owasp.appsensor.util.XmlUtils;
 import org.xml.sax.SAXException;
 
@@ -44,7 +46,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ServerConfiguration read() throws ParseException {
+	public ServerConfiguration read() throws ConfigurationException {
 		String defaultXmlLocation = "/appsensor-server-config.xml";
 		String defaultXsdLocation = "/appsensor_server_config_2.0.xsd";
 		
@@ -55,7 +57,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ServerConfiguration read(String xml, String xsd) throws ParseException {
+	public ServerConfiguration read(String xml, String xsd) throws ConfigurationException {
 		ServerConfiguration configuration = null;
 		InputStream xmlInputStream = null;
 		XMLStreamReader xmlReader = null;
@@ -82,7 +84,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			
 			configuration = readServerConfiguration(xmlReader);
 		} catch(XMLStreamException | IOException | SAXException e) {
-			throw new ParseException(e.getMessage(), 0);
+			throw new ConfigurationException(e.getMessage(), e);
 		} finally {
 			if(xmlReader != null) {
 				try {
@@ -118,6 +120,8 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 						//
 					} else if("config:client-application-identification-header-name".equals(name)) {
 						configuration.setClientApplicationIdentificationHeaderName(xmlReader.getElementText().trim());
+					} else if("config:client-applications".equals(name)) {
+						configuration.getClientApplications().addAll(readClientApplications(xmlReader));
 					} else if("config:correlation-config".equals(name)) {
 						configuration.getCorrelationSets().addAll(readCorrelationSets(xmlReader));
 					} else if("config:event-analyzer".equals(name)) {
@@ -162,6 +166,46 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 		}
 		
 		return configuration;
+	}
+	
+	private Collection<ClientApplication> readClientApplications(XMLStreamReader xmlReader) throws XMLStreamException {
+		Collection<ClientApplication> clientApplications = new ArrayList<>();
+		boolean finished = false;
+		
+		ClientApplication clientApplication = null;
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:client-application".equals(name)) {
+						clientApplication = new ClientApplication();
+					} else if("config:name".equals(name)) {
+						clientApplication.setName(xmlReader.getElementText().trim());
+					} else if("config:role".equals(name)) {
+						clientApplication.getRoles().add(Role.valueOf(xmlReader.getElementText().trim()));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:client-application".equals(name)) {
+						clientApplications.add(clientApplication);
+					} else if("config:correlation-config".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+		
+		return clientApplications;
 	}
 	
 	private Collection<CorrelationSet> readCorrelationSets(XMLStreamReader xmlReader) throws XMLStreamException {

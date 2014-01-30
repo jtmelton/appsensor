@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.correlation.CorrelationSet;
 
@@ -44,7 +45,11 @@ public class ServerConfiguration {
 	
 	private String clientApplicationIdentificationHeaderName;
 	
+	private Collection<ClientApplication> clientApplications = new HashSet<>();
+	
 	private static transient Map<String, DetectionPoint> detectionPointCache = Collections.synchronizedMap(new HashMap<String, DetectionPoint>());
+	
+	private static transient Map<String, ClientApplication> clientApplicationCache = Collections.synchronizedMap(new HashMap<String, ClientApplication>());
 	
 	public String getEventAnalysisEngineImplementation() {
 		return eventAnalysisEngineImplementation;
@@ -174,9 +179,19 @@ public class ServerConfiguration {
 		return clientApplicationIdentificationHeaderName;
 	}
 
-	public void setClientApplicationIdentificationHeaderName(
+	public ServerConfiguration setClientApplicationIdentificationHeaderName(
 			String clientApplicationIdentificationHeaderName) {
 		this.clientApplicationIdentificationHeaderName = clientApplicationIdentificationHeaderName;
+		return this;
+	}
+
+	public Collection<ClientApplication> getClientApplications() {
+		return clientApplications;
+	}
+
+	public ServerConfiguration setClientApplications(Collection<ClientApplication> clientApplications) {
+		this.clientApplications = clientApplications;
+		return this;
 	}
 
 	/**
@@ -231,6 +246,27 @@ public class ServerConfiguration {
 		
 		return detectionPoint;
 	}
+	
+	public ClientApplication findClientApplication(String clientApplicationName) {
+		ClientApplication clientApplication = null;
+		
+		clientApplication = clientApplicationCache.get(clientApplicationName);
+
+		if (clientApplication == null) {
+			for (ClientApplication configuredClientApplication : getClientApplications()) {
+				if (configuredClientApplication.getName().equals(clientApplicationName)) {
+					clientApplication = configuredClientApplication;
+					
+					//cache
+					clientApplicationCache.put(clientApplicationName, clientApplication);
+					
+					break;
+				}
+			}
+		}
+		
+		return clientApplication;
+	}
 
 	@Override
 	public int hashCode() {
@@ -249,6 +285,7 @@ public class ServerConfiguration {
 				append(detectionPoints).
 				append(correlationSets).
 				append(clientApplicationIdentificationHeaderName).
+				append(clientApplications).
 				toHashCode();
 	}
 	
@@ -278,6 +315,7 @@ public class ServerConfiguration {
 				append(detectionPoints, other.getDetectionPoints()).
 				append(correlationSets, other.getCorrelationSets()).
 				append(clientApplicationIdentificationHeaderName, other.getClientApplicationIdentificationHeaderName()).
+				append(clientApplications, other.getClientApplications()).
 				isEquals();
 	}
 	
@@ -298,6 +336,7 @@ public class ServerConfiguration {
 			    append("detectionPoints", detectionPoints).
 			    append("correlationSets", correlationSets).
 			    append("clientApplicationIdentificationHeaderName", clientApplicationIdentificationHeaderName).
+			    append("clientApplications", clientApplications).
 			    toString();
 	}
 
