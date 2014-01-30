@@ -1,6 +1,6 @@
 package org.owasp.appsensor.configuration.client;
 
-import java.text.ParseException;
+import org.owasp.appsensor.exceptions.ConfigurationException;
 
 /**
  * This interface is to be fulfilled by implementations that load a configuration 
@@ -24,16 +24,16 @@ public interface ClientConfigurationReader {
 	 * XSD: /appsensor_client_config_2.0.xsd
 	 * 
 	 * @return populated configuration object
-	 * @throws ParseException
+	 * @throws ConfigurationException
 	 */
-	public ClientConfiguration read() throws ParseException;
+	public ClientConfiguration read() throws ConfigurationException;
 	
 	/**
 	 * 
 	 * @param configurationLocation specify configuration location (ie. file location of XML file)
 	 * @param validatorLocation specify validator location (ie. file location of XSD file)
 	 * @return populated configuration object
-	 * @throws ParseException
+	 * @throws ConfigurationException
 	 */
-	public ClientConfiguration read(String configurationLocation, String validatorLocation) throws ParseException;
+	public ClientConfiguration read(String configurationLocation, String validatorLocation) throws ConfigurationException;
 }

@@ -11,13 +11,20 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class ServerConnection {
 	
+	/** type of server connection: rest/soap */
 	private String type;
+	
+	/** The protocol that should be used: http or https */
 	private String protocol;
+	
+	/** The host to connect to: IP or hostname */
 	private String host;
+	
+	/** The port to connect to  */
 	private int port;
+	
+	/** The path used: essentially the prefix where the webapp is deployed, eg. "/appsensor-ws-rest-server/api/v1" */
 	private String path;
-	private String clientApplicationIdentificationHeaderName;
-	private String clientApplicationIdentificationHeaderValue;
 	
 	public String getType() {
 		return type;
@@ -64,24 +71,6 @@ public class ServerConnection {
 		return this;
 	}
 	
-	public String getClientApplicationIdentificationHeaderName() {
-		return clientApplicationIdentificationHeaderName;
-	}
-
-	public void setClientApplicationIdentificationHeaderName(
-			String clientApplicationIdentificationHeaderName) {
-		this.clientApplicationIdentificationHeaderName = clientApplicationIdentificationHeaderName;
-	}
-
-	public String getClientApplicationIdentificationHeaderValue() {
-		return clientApplicationIdentificationHeaderValue;
-	}
-
-	public void setClientApplicationIdentificationHeaderValue(
-			String clientApplicationIdentificationHeaderValue) {
-		this.clientApplicationIdentificationHeaderValue = clientApplicationIdentificationHeaderValue;
-	}
-
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).
@@ -90,8 +79,6 @@ public class ServerConnection {
 				append(host).
 				append(port).
 				append(path).
-				append(clientApplicationIdentificationHeaderName).
-				append(clientApplicationIdentificationHeaderValue).
 				toHashCode();
 	}
 	
@@ -112,8 +99,6 @@ public class ServerConnection {
 				append(host, other.getHost()).
 				append(port, other.getPort()).
 				append(path, other.getPath()).
-				append(clientApplicationIdentificationHeaderName, other.getClientApplicationIdentificationHeaderName()).
-				append(clientApplicationIdentificationHeaderValue, other.getClientApplicationIdentificationHeaderValue()).
 				isEquals();
 	}
 	
@@ -125,8 +110,6 @@ public class ServerConnection {
 				append("host", host).
 				append("port", port).
 				append("path", path).
-				append("clientApplicationIdentificationHeaderName", clientApplicationIdentificationHeaderName).
-				append("clientApplicationIdentificationHeaderValue", clientApplicationIdentificationHeaderValue).
 			    toString();
 	}
 	

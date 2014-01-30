@@ -4,7 +4,6 @@ package org.owasp.appsensor.configuration.client;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +13,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.owasp.appsensor.exceptions.ConfigurationException;
 import org.owasp.appsensor.util.XmlUtils;
 import org.xml.sax.SAXException;
 
@@ -37,7 +37,7 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ClientConfiguration read() throws ParseException {
+	public ClientConfiguration read() throws ConfigurationException {
 		String defaultXmlLocation = "/appsensor-client-config.xml";
 		String defaultXsdLocation = "/appsensor_client_config_2.0.xsd";
 		
@@ -48,7 +48,7 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ClientConfiguration read(String xml, String xsd) throws ParseException {
+	public ClientConfiguration read(String xml, String xsd) throws ConfigurationException {
 		ClientConfiguration configuration = null;
 		InputStream xmlInputStream = null;
 		XMLStreamReader xmlReader = null;
@@ -75,8 +75,7 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 			
 			configuration = readClientConfiguration(xmlReader);
 		} catch(XMLStreamException | IOException | SAXException e) {
-			e.printStackTrace();
-			throw new ParseException(e.getMessage(), 0);
+			throw new ConfigurationException(e.getMessage(), e);
 		} finally {
 			if(xmlReader != null) {
 				try {
@@ -158,10 +157,6 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 						serverConnection.setPort(Integer.parseInt(xmlReader.getElementText().trim()));
 					} else if("config:path".equals(name)) {
 						serverConnection.setPath(xmlReader.getElementText().trim());
-					} else if("config:client-application-identification-header-name".equals(name)) {
-						serverConnection.setClientApplicationIdentificationHeaderName(xmlReader.getElementText().trim());
-					} else if("config:client-application-identification-header-value".equals(name)) {
-						serverConnection.setClientApplicationIdentificationHeaderValue(xmlReader.getElementText().trim());
 					} else {
 						/** unexpected start element **/
 					}
