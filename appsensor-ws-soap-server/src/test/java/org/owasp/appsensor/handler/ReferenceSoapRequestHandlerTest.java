@@ -38,8 +38,6 @@ public class ReferenceSoapRequestHandlerTest {
 	
 	private static DetectionPoint detectionPoint1 = new DetectionPoint("IE1");
 	
-//	private static String detectionSystem1 = "localhostme";
-	
 	private static String SERVICE_URL = "http://localhost:8080/appsensor/services/SoapRequestHandler";
 	
     @SuppressWarnings("rawtypes")
