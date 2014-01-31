@@ -23,20 +23,28 @@ import org.owasp.appsensor.storage.ResponseStore;
  */
 public class AppSensorServer extends ObjectFactory {
 	
+	/** accessor for {@link org.owasp.appsensor.configuration.server.ServerConfiguration} */
 	private static ServerConfiguration configuration;
 	
+	/** accessor for {@link org.owasp.appsensor.storage.EventStore} */
 	private static EventStore eventStore;
 	
+	/** accessor for {@link org.owasp.appsensor.storage.AttackStore} */
 	private static AttackStore attackStore;
 	
+	/** accessor for {@link org.owasp.appsensor.storage.ResponseStore} */
 	private static ResponseStore responseStore;
 	
+	/** accessor for Event {@link org.owasp.appsensor.storage.AnalysisEngine} */
 	private static AnalysisEngine eventAnalysisEngine;
 	
+	/** accessor for Attack {@link org.owasp.appsensor.storage.AnalysisEngine} */
 	private static AnalysisEngine attackAnalysisEngine;
 	
+	/** accessor for Response {@link org.owasp.appsensor.storage.AnalysisEngine} */
 	private static AnalysisEngine responseAnalysisEngine;
 	
+	/** accessor for {@link org.owasp.appsensor.accesscontrol.AccessController} */
 	private static AccessController accessController;
 	
 	/**
