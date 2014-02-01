@@ -16,12 +16,16 @@ import org.owasp.appsensor.response.UserManager;
  */
 public class AppSensorClient extends ObjectFactory {
 	
+	/** accessor for {@link org.owasp.appsensor.configuration.client.ClientConfiguration} */
 	private static ClientConfiguration configuration;
 	
+	/** accessor for {@link org.owasp.appsensor.event.EventManager} */
 	private static EventManager eventManager; 
 
+	/** accessor for {@link org.owasp.appsensor.response.ResponseHandler} */
 	private static ResponseHandler responseHandler;
 	
+	/** accessor for {@link org.owasp.appsensor.response.UserManager} */
 	private static UserManager userManager;
 	
 	/**
