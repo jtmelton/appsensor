@@ -23,17 +23,17 @@ public abstract class ResponseStore extends Observable {
 	/**
 	 * Add a response to the ResponseStore
 	 * 
-	 * @param response Response to add to the ResponseStore
+	 * @param response {@link org.owasp.appsensor.Response} to add to the ResponseStore
 	 */
 	public abstract void addResponse(Response response);
 	
 	/**
 	 * Finder for responses in the ResponseStore
 	 * 
-	 * @param user User object to search by
-	 * @param detectionPoint DetectionPoint object to search by
-	 * @param detectionSystemIds Collection of detection system ids to search by
-	 * @return Collection of Response objects matching search criteria
+	 * * @param user the {@link org.owasp.appsensor.User} object to search by
+	 * @param detectionPoint The {@link org.owasp.appsensor.DetectionPoint} to search by
+	 * @param detectionSystemIds A {@link java.util.Collection} of detection system ids to search by
+	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Response} objects matching the search criteria.
 	 */
 	public abstract Collection<Response> findResponses(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds);
 
@@ -42,7 +42,7 @@ public abstract class ResponseStore extends Observable {
 	 * 
 	 * @param detectionSystemId Detection system id to search by
 	 * @param earliest long representing timestamp of time to start search with
-	 * @return Collection of Response objects matching search criteria
+	 * @return Collection of {@link org.owasp.appsensor.Response} objects matching search criteria
 	 */
 	public abstract Collection<Response> findResponses(String detectionSystemId, long earliest);
 
