@@ -21,19 +21,19 @@ import org.owasp.appsensor.User;
 public abstract class EventStore extends Observable {
 	
 	/**
-	 * Add an Event to the EventStore
+	 * Add an {@link org.owasp.appsensor.Event} to the EventStore
 	 * 
-	 * @param event the Event to add to the EventStore
+	 * @param event the {@link org.owasp.appsensor.Event} to add to the EventStore
 	 */
 	public abstract void addEvent(Event event);
 	
 	/**
 	 * A finder for Event objects in the EventStore
 	 * 
-	 * @param user the User object to search by
-	 * @param detectionPoint The DetectionPoint object to search by
-	 * @param detectionSystemIds A Collection of detection system ids to search by
-	 * @return A Collection of Event objects matching the search criteria
+	 * @param user the {@link org.owasp.appsensor.User} object to search by
+	 * @param detectionPoint The {@link org.owasp.appsensor.DetectionPoint} to search by
+	 * @param detectionSystemIds A {@link java.util.Collection} of detection system ids to search by
+	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Event} objects matching the search criteria.
 	 */
 	public abstract Collection<Event> findEvents(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds);
 

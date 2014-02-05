@@ -32,7 +32,7 @@ public abstract class AttackStore extends Observable {
 	 * 
 	 * @param user the {@link org.owasp.appsensor.User} object to search by
 	 * @param detectionPoint The {@link org.owasp.appsensor.DetectionPoint} to search by
-	 * @param detectionSystemIds A Collection of detection system ids to search by
+	 * @param detectionSystemIds A {@link java.util.Collection} of detection system ids to search by
 	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Attack} objects matching the search criteria.
 	 */
 	public abstract Collection<Attack> findAttacks(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds);
