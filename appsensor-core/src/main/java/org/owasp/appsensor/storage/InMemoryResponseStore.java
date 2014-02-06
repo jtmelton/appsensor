@@ -26,7 +26,7 @@ public class InMemoryResponseStore extends ResponseStore {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(InMemoryResponseStore.class);
 	
-	/** maintain a collection of responses as an in-memory list */
+	/** maintain a collection of {@link org.owasp.appsensor.Response}s as an in-memory list */
 	private Collection<Response> responses = new CopyOnWriteArrayList<Response>();
 	
 	/**
