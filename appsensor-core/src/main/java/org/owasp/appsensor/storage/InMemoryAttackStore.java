@@ -16,7 +16,7 @@ import org.owasp.appsensor.logging.Logger;
  * It notifies implementations of the {@link java.util.Observer} interface and passes the observed object. 
  * In this case, we are only concerned with {@link org.owasp.appsensor.Attack} implementations. 
  * 
- * The implementation is trivial and simply stores the Attacks in an in-memory collection.
+ * The implementation is trivial and simply stores the {@link org.owasp.appsensor.Attack}s in an in-memory collection.
  * 
  * @see java.util.Observable
  *
