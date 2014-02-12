@@ -5,7 +5,7 @@ import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.logging.Logger;
 
 /**
- * This class is a simple NO-OP response handler. Calls to this response handler simply 
+ * This class is a simple NO-OP {@link org.owasp.appsensor.Response} handler. Calls to this {@link org.owasp.appsensor.Response} handler simply 
  * log the action to the configured logger. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
