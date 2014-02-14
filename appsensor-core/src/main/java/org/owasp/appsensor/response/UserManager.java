@@ -1,25 +1,24 @@
 package org.owasp.appsensor.response;
 
-import org.owasp.appsensor.Response;
 import org.owasp.appsensor.User;
 
 /**
  * The UserManager is used by the client application as an interface that must
- * be implemented to handle certain {@link Response} actions. 
+ * be implemented to handle certain {@link org.owasp.appsensor.Response} actions. 
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 public interface UserManager {
 	
 	/**
-	 * Logout the User
+	 * Logout the {@link org.owasp.appsensor.User}
 	 * 
 	 * @param user User to logout
 	 */
 	public void logout(User user);
 	
 	/**
-	 * Disable (lock) the User
+	 * Disable (lock) the {@link org.owasp.appsensor.User}
 	 * 
 	 * @param user User to disable (lock)
 	 */
