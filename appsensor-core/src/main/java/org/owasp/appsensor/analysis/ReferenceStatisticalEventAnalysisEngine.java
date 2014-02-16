@@ -3,23 +3,24 @@ package org.owasp.appsensor.analysis;
 import java.util.Collection;
 import java.util.Observable;
 
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
-import org.owasp.appsensor.AppSensorServer;
+import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.event.StatisticalEvent;
 import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.util.DateUtils;
 
 /**
- * This is a statistical event analysis engine, and is an implementation of the Observer pattern. 
+ * This is a statistical {@link Event} analysis engine, and is an implementation of the Observer pattern. 
  * 
  * It is notified with implementations of the {@link java.util.Observable} interface and is 
  * passed the observed object. In this case, we are only concerned with {@link org.owasp.appsensor.event.StatisticalEvent}
  * implementations. 
  * 
- * The implementation performs a simple analysis that watches the configured threshold and 
- * determines if it has been crossed. If so, an attack is created and added to the 
+ * The implementation performs a simple analysis that watches the configured {@link Threshold} and 
+ * determines if it has been crossed. If so, an {@link Attack} is created and added to the 
  * {@link org.owasp.appsensor.storage.AttackStore}. 
  * 
  * @see java.util.Observer
@@ -31,8 +32,8 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceStatisticalEventAnalysisEngine.class);
 	
 	/**
-	 * This method analyzes statistical events that are added to the system and 
-	 * detects if the configured threshold has been crossed. If so, an attack is 
+	 * This method analyzes statistical {@link Event}s that are added to the system and 
+	 * detects if the configured {@link Threshold} has been crossed. If so, an {@link Attack} is 
 	 * created and added to the system.
 	 * 
 	 * @param observable object that was being obeserved - ignored in this case
