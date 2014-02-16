@@ -2,16 +2,40 @@ package org.owasp.appsensor.reporting;
 
 import java.util.Observable;
 
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.logging.Logger;
 
+/**
+ * This is the reference reporting engine, and is an implementation of the Observer pattern. 
+ * 
+ * It is notified with implementations of the {@link java.util.Observable} interface and is 
+ * passed the observed object. In this case, we are concerned with, {@link Event},
+ *  {@link Attack} and {@link Response}
+ * implementations. 
+ * 
+ * The implementation simply logs the action. Other implementations are expected to create 
+ * some manner of visualization.
+ * 
+ * @see java.util.Observer
+ *
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ReferenceReportingEngine implements ReportingEngine {
 	
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceReportingEngine.class);
 	
+	/**
+	 * This method reports on {@link Event}, {@link Attack} and {@link Response} objects 
+	 * that are added to the system.
+	 * 
+	 * @param observable object that was being obeserved - ignored in this case
+	 * @param observedObject object that was added to observable. In this case
+	 * 			we are only interested if the object is 
+	 * 			an {@link Event}, {@link Attack} or {@link {@link Attack}}object
+	 */
 	@Override
 	public void update(Observable observable, Object observedObject) {
 		if (observedObject instanceof Event) {
