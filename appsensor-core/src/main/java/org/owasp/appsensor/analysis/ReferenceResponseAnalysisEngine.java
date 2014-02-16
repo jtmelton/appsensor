@@ -9,7 +9,7 @@ import org.owasp.appsensor.Response;
 import org.owasp.appsensor.logging.Logger;
 
 /**
- * This is a reference response handler, and is an implementation of the Observer pattern. 
+ * This is a reference {@link Response} handler, and is an implementation of the Observer pattern. 
  * 
  * It is notified with implementations of the {@link java.util.Observable} interface and is 
  * passed the observed object. In this case, we are only concerned with {@link org.owasp.appsensor.Response}
