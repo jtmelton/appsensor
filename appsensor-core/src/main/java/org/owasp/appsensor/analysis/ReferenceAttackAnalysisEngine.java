@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Observable;
 
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.storage.ResponseStore;
 
 /**
  * This is the reference {@link Attack} analysis engine, and is an implementation of the Observer pattern. 
@@ -18,7 +19,7 @@ import org.owasp.appsensor.logging.Logger;
  * implementations. 
  * 
  * The implementation performs a simple analysis that checks the created attack against any created {@link Response}s. 
- * It then creates a {@link Response} and adds it to the {@link org.owasp.appsensor.storage.ResponseStore}. 
+ * It then creates a {@link Response} and adds it to the {@link ResponseStore}. 
  * 
  * @see java.util.Observer
  *
