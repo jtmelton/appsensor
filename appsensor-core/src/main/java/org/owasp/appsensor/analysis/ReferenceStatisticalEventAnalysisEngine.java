@@ -7,21 +7,23 @@ import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
+import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.event.StatisticalEvent;
 import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.storage.AttackStore;
 import org.owasp.appsensor.util.DateUtils;
 
 /**
  * This is a statistical {@link Event} analysis engine, and is an implementation of the Observer pattern. 
  * 
  * It is notified with implementations of the {@link java.util.Observable} interface and is 
- * passed the observed object. In this case, we are only concerned with {@link org.owasp.appsensor.event.StatisticalEvent}
+ * passed the observed object. In this case, we are only concerned with {@link StatisticalEvent}
  * implementations. 
  * 
  * The implementation performs a simple analysis that watches the configured {@link Threshold} and 
  * determines if it has been crossed. If so, an {@link Attack} is created and added to the 
- * {@link org.owasp.appsensor.storage.AttackStore}. 
+ * {@link AttackStore}. 
  * 
  * @see java.util.Observer
  *
@@ -39,7 +41,7 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 	 * @param observable object that was being obeserved - ignored in this case
 	 * @param observedObject object that was added to observable. In this case
 	 * 			we are only interested if the object is 
-	 * 			a {@link org.owasp.appsensor.event.StatisticalEvent} object
+	 * 			a {@link StatisticalEvent} object
 	 */
 	@Override
 	public void update(Observable observable, Object observedObject) {
@@ -74,11 +76,11 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 	}
 	
 	/**
-	 * Count the number of events over a time interval.
+	 * Count the number of {@link Event}s over a time {@link Interval} specified in milliseconds.
 	 * 
-	 * @param intervalInMillis interval as measured in milliseconds
-	 * @param existingEvents set of events matching triggering event id/user pulled from event storage
-	 * @return number of events matching time interval
+	 * @param intervalInMillis {@link Interval} as measured in milliseconds
+	 * @param existingEvents set of {@link Event}s matching triggering {@link Event} id/user pulled from {@link Event} storage
+	 * @return number of {@link Event}s matching time {@link Interval}
 	 */
 	protected int countEvents(long intervalInMillis, Collection<Event> existingEvents, Event triggeringEvent) {
 		int count = 0;
