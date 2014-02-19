@@ -1,15 +1,17 @@
 package org.owasp.appsensor.analysis;
 
 import java.util.Observable;
+import java.util.Observer;
 
 import org.owasp.appsensor.AppSensorClient;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.response.ResponseHandler;
 
 /**
- * This is a reference {@link Response} handler, and is an implementation of the Observer pattern. 
+ * This is a reference {@link Response} handler, and is an implementation of the {@link Observer} pattern. 
  * 
  * It is notified with implementations of the {@link java.util.Observable} interface and is 
  * passed the observed object. In this case, we are only concerned with {@link org.owasp.appsensor.Response}
@@ -28,12 +30,12 @@ public class ReferenceResponseAnalysisEngine implements AnalysisEngine {
 	
 	/**
 	 * This method simply catches responses and calls the 
-	 * configured {@link org.owasp.appsensor.response.ResponseHandler} to process them. 
+	 * configured {@link ResponseHandler} to process them. 
 	 * 
 	 * @param observable object that was being obeserved - ignored in this case
 	 * @param observedObject object that was added to observable. In this case
 	 * 			we are only interested if the object is 
-	 * 			a {@link org.owasp.appsensor.Response} object
+	 * 			a {@link Response} object
 	 */
 	@Override
 	public void update(Observable observable, Object observedObject) {
