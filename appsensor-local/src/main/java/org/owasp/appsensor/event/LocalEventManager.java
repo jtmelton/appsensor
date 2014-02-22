@@ -9,7 +9,7 @@ import org.owasp.appsensor.handler.LocalRequestHandler;
 import org.owasp.appsensor.util.DateUtils;
 
 /**
- * Local event manager that is used when the application is configured
+ * Local {@link EventManager} that is used when the application is configured
  * to run within the same JVM as the Analysis Engine.  
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
