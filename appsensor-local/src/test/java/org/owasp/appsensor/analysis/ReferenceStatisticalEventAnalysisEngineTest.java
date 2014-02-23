@@ -8,18 +8,20 @@ import java.util.Collection;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.owasp.appsensor.AppSensorClient;
+import org.owasp.appsensor.AppSensorServer;
+import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
+import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.User;
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.event.StatisticalEvent;
 
 /**
- * Test basic event analysis engine. Add a number of events matching 
- * the known set of criteria and ensure the attacks are triggered at 
+ * Test basic {@link Event} analysis engine. Add a number of {@link Event}s matching 
+ * the known set of criteria and ensure the {@link Attack}s are triggered at 
  * the appropriate points.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
