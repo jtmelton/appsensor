@@ -30,17 +30,17 @@
 	
 	<event-store-observers>
 		<observer class="org.owasp.appsensor.analysis.ReferenceStatisticalEventAnalysisEngine" />
-		<observer class="org.owasp.appsensor.reporting.ReferenceReportingEngine" />
+		<observer class="org.owasp.appsensor.reporting.SimpleLoggingReportingEngine" />
 	</event-store-observers>
 	
 	<attack-store-observers>
 		<observer class="org.owasp.appsensor.analysis.ReferenceAttackAnalysisEngine" />
-		<observer class="org.owasp.appsensor.reporting.ReferenceReportingEngine" />
+		<observer class="org.owasp.appsensor.reporting.SimpleLoggingReportingEngine" />
 	</attack-store-observers>
 	
 	<response-store-observers>
 		<observer class="org.owasp.appsensor.analysis.ReferenceResponseAnalysisEngine" />
-		<observer class="org.owasp.appsensor.reporting.ReferenceReportingEngine" />
+		<observer class="org.owasp.appsensor.reporting.SimpleLoggingReportingEngine" />
 	</response-store-observers>
 
 	<detection-points>
