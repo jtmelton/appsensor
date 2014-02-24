@@ -11,12 +11,12 @@ import org.owasp.appsensor.User;
 import org.owasp.appsensor.logging.Logger;
 
 /**
- * This is a reference implementation of the event store, and is an implementation of the Observable pattern.
+ * This is a reference implementation of the {@link EventStore}, and is an implementation of the Observable pattern.
  * 
  * It notifies implementations of the {@link java.util.Observer} interface and passes the observed object. 
- * In this case, we are only concerned with {@link org.owasp.appsensor.Event} implementations. 
+ * In this case, we are only concerned with {@link Event} implementations. 
  * 
- * The implementation is trivial and simply stores the {@link org.owasp.appsensor.Event} in an in-memory collection.
+ * The implementation is trivial and simply stores the {@link Event} in an in-memory collection.
  * 
  * @see java.util.Observable
  *
@@ -26,7 +26,7 @@ public class InMemoryEventStore extends EventStore {
 	
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(InMemoryEventStore.class);
 	
-	/** maintain a collection of {@link org.owasp.appsensor.Event}s as an in-memory list */
+	/** maintain a collection of {@link Event}s as an in-memory list */
 	private Collection<Event> events = new CopyOnWriteArrayList<Event>();
 	
 	/**
