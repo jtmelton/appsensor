@@ -23,9 +23,9 @@ import org.owasp.appsensor.logging.Logger;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public class ReferenceReportingEngine implements ReportingEngine {
+public class SimpleLoggingReportingEngine implements ReportingEngine {
 	
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceReportingEngine.class);
+	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(SimpleLoggingReportingEngine.class);
 	
 	/**
 	 * This method reports on {@link Event}, {@link Attack} and {@link Response} objects 
