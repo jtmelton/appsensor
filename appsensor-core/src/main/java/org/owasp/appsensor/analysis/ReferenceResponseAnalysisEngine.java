@@ -14,11 +14,11 @@ import org.owasp.appsensor.response.ResponseHandler;
  * This is a reference {@link Response} handler, and is an implementation of the {@link Observer} pattern. 
  * 
  * It is notified with implementations of the {@link java.util.Observable} interface and is 
- * passed the observed object. In this case, we are only concerned with {@link org.owasp.appsensor.Response}
+ * passed the observed object. In this case, we are only concerned with {@link Response}
  * implementations. 
  * 
  * The implementation is trivial and simply delegates the work to the configured 
- * {@link org.owasp.appsensor.response.ResponseHandler} for processing.
+ * {@link ResponseHandler} for processing.
  * 
  * @see java.util.Observer
  *
