@@ -113,13 +113,13 @@ public class ReferenceStatisticalEventAnalysisEngine implements AnalysisEngine {
 	}
 	
 	/**
-	 * Find most recent attack matching the given event (user, detection point, detection system)
+	 * Find most recent {@link Attack} matching the given {@link Event} ({@link User}, {@link DetectionPoint}, detection system)
 	 * and find it's timestamp. 
 	 * 
-	 * Event should only be counted if they've occurred after the most recent attack.
+	 * The {@link Event} should only be counted if they've occurred after the most recent {@link Attack}.
 	 * 
-	 * @param event event to use to find matching attacks
-	 * @return timestamp representing last matching attack, or -1L if not found
+	 * @param event {@link Event} to use to find matching {@link Attack}s
+	 * @return timestamp representing last matching {@link Attack}, or -1L if not found
 	 */
 	protected long findMostRecentAttackTime(Event event) {
 		long newest = -1L;
