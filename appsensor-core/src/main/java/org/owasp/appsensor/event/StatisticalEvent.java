@@ -9,10 +9,10 @@ import org.owasp.appsensor.Event;
 import org.owasp.appsensor.User;
 
 /**
- * Event representing a standard statistical event. This is an event 
- * that is intended to be processed by a statistical analysis engine.
+ * Event representing a standard statistical {@link Event}. This is an {@link Event} 
+ * that is intended to be processed by a statistical {@link AnalysisEngine}.
  * <p> 
- * This is the type of engine provided by the reference analysis engine. 
+ * This is the type of engine provided by the reference {@link AnalysisEngine}. 
  * It typically follows the simple policy construct of: 
  * </p>
  * <code>
