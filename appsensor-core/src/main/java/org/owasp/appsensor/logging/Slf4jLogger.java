@@ -3,7 +3,7 @@ package org.owasp.appsensor.logging;
 import org.slf4j.LoggerFactory;
 
 /**
- * A simple pass-through logger implementation using slf4j 
+ * A simple pass-through {@link Logger} implementation using slf4j 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
