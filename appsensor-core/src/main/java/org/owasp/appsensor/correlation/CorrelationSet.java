@@ -8,20 +8,20 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * The CorrelationSet represents a set of client applications that 
- * should be considered to share the same user base. 
+ * The CorrelationSet represents a set of {@link ClientApplication}s that 
+ * should be considered to share the same {@link User} base. 
  * 
  * For example if server1 and server2 are part of a correlation set, 
- * then client1/userA is considered the same user as client2/userA. 
+ * then client1/userA is considered the same {@link User} as client2/userA. 
  * 
- * This can be useful for simple tracking of user activity across multiple
- * client applications.
+ * This can be useful for simple tracking of {@link User} activity across multiple
+ * {@link ClientApplication}s.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 public class CorrelationSet {
 
-	/** Client applications that are represented in this correlation set */
+	/** {@link ClientApplication}s that are represented in this correlation set */
 	private Collection<String> clientApplications = new ArrayList<>();
 	
 	public Collection<String> getClientApplications() {
