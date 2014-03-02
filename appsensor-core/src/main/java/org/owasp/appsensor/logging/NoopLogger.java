@@ -1,7 +1,7 @@
 package org.owasp.appsensor.logging;
 
 /**
- * A simple no-op logger implementation for those that need it. 
+ * A simple no-op {@link Logger} implementation for those that need it. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
