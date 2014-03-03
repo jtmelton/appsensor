@@ -5,6 +5,12 @@ import java.util.Collection;
 
 import org.owasp.appsensor.accesscontrol.Role;
 
+/**
+ * The ClientApplication object represents a consumer of the AppSensor 
+ * services in any of the client-server style setups.
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ClientApplication {
 	
 	private String name;
