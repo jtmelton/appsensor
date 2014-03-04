@@ -13,8 +13,10 @@ import org.owasp.appsensor.accesscontrol.Role;
  */
 public class ClientApplication {
 	
+	/** The name of the client application */
 	private String name;
 	
+	/** The collection of {@link Role}s associated with this client application */
 	private Collection<Role> roles = new ArrayList<Role>();
 
 	public String getName() {
