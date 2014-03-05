@@ -23,8 +23,9 @@ public class ClientApplication {
 		return name;
 	}
 
-	public void setName(String name) {
+	public ClientApplication setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	public Collection<Role> getRoles() {
