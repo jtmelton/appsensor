@@ -35,9 +35,9 @@ public class DetectionPoint implements Serializable {
 	private Threshold threshold;
 	
 	/**
-	 * Set of responses associated with given detection point.
+	 * Set of {@link Response}s associated with given detection point.
 	 */
-	private Collection<Response> responses = new ArrayList<>();
+	private Collection<Response> responses = new ArrayList<Response>();
 	
 	public DetectionPoint() {}
 	
