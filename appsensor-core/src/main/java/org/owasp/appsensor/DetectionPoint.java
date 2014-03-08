@@ -29,7 +29,7 @@ public class DetectionPoint implements Serializable {
 	private String id;
 	
 	/**
-	 * Threshold for determining whether given detection point (associated {@link Event}) 
+	 * {@link Threshold} for determining whether given detection point (associated {@link Event}) 
 	 * should be considered an {@link Attack}.
 	 */
 	private Threshold threshold;
