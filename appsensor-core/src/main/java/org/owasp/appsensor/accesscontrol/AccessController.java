@@ -5,7 +5,7 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
 /**
  * This interface is meant to gate access to the different {@link Action} 
- * that can be performed to ensure a client has appropriate permissions.
+ * that can be performed to ensure a {@link ClientApplication} has appropriate permissions.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
