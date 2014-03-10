@@ -5,6 +5,9 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
 public class ReferenceAccessController implements AccessController {
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean isAuthorized(ClientApplication clientApplication, Action action, Context context) {
 		boolean authorized = false;
@@ -25,6 +28,9 @@ public class ReferenceAccessController implements AccessController {
 		return authorized;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void assertAuthorized(ClientApplication clientApplication, Action action, Context context) throws NotAuthorizedException {
 		if (! isAuthorized(clientApplication, action, context)) {
