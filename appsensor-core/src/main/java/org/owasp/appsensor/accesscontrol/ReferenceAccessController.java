@@ -3,6 +3,13 @@ package org.owasp.appsensor.accesscontrol;
 import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
+/**
+ * This particular implementation simply checks the {@link ClientApplication}s 
+ * role(s) to see if it matches the expected {@link Action}. If there is a match found, 
+ * then the access is considered valid.
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ReferenceAccessController implements AccessController {
 	
 	/**
