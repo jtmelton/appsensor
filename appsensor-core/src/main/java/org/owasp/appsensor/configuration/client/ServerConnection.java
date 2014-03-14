@@ -3,9 +3,10 @@ package org.owasp.appsensor.configuration.client;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.owasp.appsensor.ClientApplication;
 
 /**
- * Represents a connection to a server from a client. 
+ * Represents a connection to a server from a {@link ClientApplication}. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
