@@ -44,6 +44,9 @@ public class RestRequestHandler implements RequestHandler {
 	@Path("/events")
 	public void addEvent(Event event) throws NotAuthorizedException {
 		AccessControlUtils.checkAuthorization(Action.ADD_EVENT, requestContext);
+		
+		event.setDetectionSystemId(getClientApplicationName());
+		
 		AppSensorServer.getInstance().getEventStore().addEvent(event);
 	}
 
@@ -55,6 +58,9 @@ public class RestRequestHandler implements RequestHandler {
 	@Path("/attacks")
 	public void addAttack(Attack attack) throws NotAuthorizedException {
 		AccessControlUtils.checkAuthorization(Action.ADD_ATTACK, requestContext);
+		
+		attack.setDetectionSystemId(getClientApplicationName());
+		
 		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
 	}
 
@@ -67,14 +73,18 @@ public class RestRequestHandler implements RequestHandler {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Response> getResponses(@QueryParam("earliest") Long earliest) throws NotAuthorizedException {
 		AccessControlUtils.checkAuthorization(Action.GET_RESPONSES, requestContext);
-		
-		String clientApplicationName = (String)requestContext.getProperty(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR);
 
 		SearchCriteria criteria = new SearchCriteria().
-				setDetectionSystemIds(StringUtils.toCollection(clientApplicationName)).
+				setDetectionSystemIds(StringUtils.toCollection(getClientApplicationName())).
 				setEarliest(earliest);
 		
 		return AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
+	}
+	
+	private String getClientApplicationName() {
+		String clientApplicationName = (String)requestContext.getProperty(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR);
+		
+		return clientApplicationName;
 	}
 	
 }

@@ -48,9 +48,6 @@ public class Event implements Serializable {
      */
     private Resource resource;
     
-    /** The type of event: ie. statistical, behavioral, etc. */
-	private String eventType;
-	
     public Event () {}
     
 	public Event (User user, DetectionPoint detectionPoint, String detectionSystemId) {
@@ -70,7 +67,6 @@ public class Event implements Serializable {
 		setDetectionPoint(detectionPoint);
 		setTimestamp(timestamp);
 		setDetectionSystemId(detectionSystemId);
-		setEventType(STATISTICAL);
 	}
 	
 	public User getUser() {
@@ -118,15 +114,6 @@ public class Event implements Serializable {
 		return this;
 	}
 	
-	public String getEventType() {
-		return eventType;
-	}
-	
-	public Event setEventType(String eventType) {
-		this.eventType = eventType;
-		return this;
-	}
-	
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).
@@ -135,7 +122,6 @@ public class Event implements Serializable {
 				append(timestamp).
 				append(detectionSystemId).
 				append(resource).
-				append(eventType).
 				toHashCode();
 	}
 	
@@ -156,7 +142,6 @@ public class Event implements Serializable {
 				append(timestamp, other.getTimestamp()).
 				append(detectionSystemId, other.getDetectionSystemId()).
 				append(resource, other.getResource()).
-				append(eventType, other.getEventType()).
 				isEquals();
 	}
 	
@@ -168,7 +153,6 @@ public class Event implements Serializable {
 				append("timestamp", timestamp).
 				append("detectionSystemId", detectionSystemId).
 				append("resource", resource).
-				append("eventType", eventType).
 			    toString();
 	}
 }

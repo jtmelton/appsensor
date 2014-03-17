@@ -44,6 +44,9 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	@Override
 	public void addEvent(Event event) throws NotAuthorizedException {
 		checkAuthorization(Action.ADD_EVENT);
+		
+		event.setDetectionSystemId(getClientApplicationName());
+		
 		AppSensorServer.getInstance().getEventStore().addEvent(event);
 	}
 
@@ -54,6 +57,9 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	@Override
 	public void addAttack(Attack attack) throws NotAuthorizedException {
 		checkAuthorization(Action.ADD_ATTACK);
+		
+		attack.setDetectionSystemId(getClientApplicationName());
+		
 		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
 	}
 
@@ -65,13 +71,8 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	public Collection<Response> getResponses(Long earliest) throws NotAuthorizedException {
 		checkAuthorization(Action.GET_RESPONSES);
 		
-		@SuppressWarnings("unchecked")
-		Map<String, List<String>> httpHeaders = (Map<String, List<String>>) wsContext.getMessageContext().get(MessageContext.HTTP_REQUEST_HEADERS);
-		
-		String clientApplicationName = httpHeaders.get(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR).get(0);
-		
 		SearchCriteria criteria = new SearchCriteria().
-				setDetectionSystemIds(StringUtils.toCollection(clientApplicationName)).
+				setDetectionSystemIds(StringUtils.toCollection(getClientApplicationName())).
 				setEarliest(earliest);
 		
 		return AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
@@ -92,6 +93,15 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 		org.owasp.appsensor.accesscontrol.Context context = new org.owasp.appsensor.accesscontrol.Context();
 		
 		AppSensorServer.getInstance().getAccessController().assertAuthorized(clientApplication, action, context);
+	}
+	
+	private String getClientApplicationName() {
+		@SuppressWarnings("unchecked")
+		Map<String, List<String>> httpHeaders = (Map<String, List<String>>) wsContext.getMessageContext().get(MessageContext.HTTP_REQUEST_HEADERS);
+		
+		String clientApplicationName = httpHeaders.get(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR).get(0);
+		
+		return clientApplicationName;
 	}
 
 }

@@ -107,7 +107,7 @@
     		var should_run = true;
     		
 	        function addRecord(name){
-	        	var jsonStr = '{"user":{"username":"' + name + '"},"detectionPoint":{"id":"IE1","responses":[]},"timestamp":' + Date.now() + ',"detectionSystemId":"localhostme","eventType":"STATISTICAL"}';
+	        	var jsonStr = '{"user":{"username":"' + name + '"},"detectionPoint":{"id":"IE1"},"timestamp":' + Date.now() + '}';
 	        	
 	            $.ajax({
 	            	type: "POST",
@@ -201,7 +201,7 @@
     				    case "event":
     				        p.innerHTML = "Event triggered for detection point [" + as.detectionPoint.id + "] " +
     				        	"by user [" + as.user.username + "] at [" + toDateString(as.timestamp) + "] " + 
-    				        	"on system [" + as.detectionSystemId + "] and is of type [" + as.eventType + "]";
+    				        	"on system [" + as.detectionSystemId + "]";
     				        break;
     				    case "attack":
     				    	p.innerHTML = "Attack triggered for detection point [" + as.detectionPoint.id + "] " +
