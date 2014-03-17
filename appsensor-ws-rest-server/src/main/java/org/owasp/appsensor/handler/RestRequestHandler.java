@@ -2,6 +2,7 @@ package org.owasp.appsensor.handler;
 
 import java.util.Collection;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -13,12 +14,14 @@ import javax.ws.rs.core.MediaType;
 
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
-import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.RequestHandler;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.accesscontrol.Action;
+import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.rest.AccessControlUtils;
+import org.owasp.appsensor.util.StringUtils;
 
 /**
  * This is the restful endpoint that handles requests on the server-side. 
@@ -26,11 +29,10 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Path("/api/v1.0")
-@Produces("application/json")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class RestRequestHandler implements RequestHandler {
 
-	public static String APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR = "APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR";
-	
 	@Context
 	private ContainerRequestContext requestContext;
 	
@@ -41,7 +43,7 @@ public class RestRequestHandler implements RequestHandler {
 	@POST
 	@Path("/events")
 	public void addEvent(Event event) throws NotAuthorizedException {
-		checkAuthorization(Action.ADD_EVENT);
+		AccessControlUtils.checkAuthorization(Action.ADD_EVENT, requestContext);
 		AppSensorServer.getInstance().getEventStore().addEvent(event);
 	}
 
@@ -52,7 +54,7 @@ public class RestRequestHandler implements RequestHandler {
 	@POST
 	@Path("/attacks")
 	public void addAttack(Attack attack) throws NotAuthorizedException {
-		checkAuthorization(Action.ADD_ATTACK);
+		AccessControlUtils.checkAuthorization(Action.ADD_ATTACK, requestContext);
 		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
 	}
 
@@ -63,25 +65,16 @@ public class RestRequestHandler implements RequestHandler {
 	@GET
 	@Path("/responses")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Response> getResponses(@QueryParam("earliest") long earliest) throws NotAuthorizedException {
-		checkAuthorization(Action.GET_RESPONSES);
+	public Collection<Response> getResponses(@QueryParam("earliest") Long earliest) throws NotAuthorizedException {
+		AccessControlUtils.checkAuthorization(Action.GET_RESPONSES, requestContext);
 		
-		String clientApplicationName = (String)requestContext.getProperty(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR);
-		return AppSensorServer.getInstance().getResponseStore().findResponses(clientApplicationName, earliest);
-	}
-	
-	/**
-	 * Check authz before performing action.
-	 * @param action desired action
-	 * @throws NotAuthorizedException thrown if user does not have role.
-	 */
-	private void checkAuthorization(Action action) throws NotAuthorizedException {
 		String clientApplicationName = (String)requestContext.getProperty(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR);
 
-		ClientApplication clientApplication = AppSensorServer.getInstance().getConfiguration().findClientApplication(clientApplicationName);
+		SearchCriteria criteria = new SearchCriteria().
+				setDetectionSystemIds(StringUtils.toCollection(clientApplicationName)).
+				setEarliest(earliest);
 		
-		org.owasp.appsensor.accesscontrol.Context context = new org.owasp.appsensor.accesscontrol.Context();
-		
-		AppSensorServer.getInstance().getAccessController().assertAuthorized(clientApplication, action, context);
+		return AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
 	}
+	
 }
