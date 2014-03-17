@@ -3,9 +3,8 @@ package org.owasp.appsensor.storage;
 import java.util.Collection;
 import java.util.Observable;
 
-import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
-import org.owasp.appsensor.User;
+import org.owasp.appsensor.criteria.SearchCriteria;
 
 /**
  * A store is an implementation of the Observable pattern. 
@@ -27,14 +26,42 @@ public abstract class EventStore extends Observable {
 	 */
 	public abstract void addEvent(Event event);
 	
-	/**
-	 * A finder for Event objects in the EventStore
-	 * 
-	 * @param user the {@link org.owasp.appsensor.User} object to search by
-	 * @param detectionPoint The {@link org.owasp.appsensor.DetectionPoint} to search by
-	 * @param detectionSystemIds A {@link java.util.Collection} of detection system ids to search by
-	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Event} objects matching the search criteria.
-	 */
-	public abstract Collection<Event> findEvents(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds);
+	public abstract Collection<Event> findEvents(SearchCriteria criteria);
+//	/**
+//	 * A finder for Event objects in the EventStore
+//	 * 
+//	 * @param user the {@link org.owasp.appsensor.User} object to search by
+//	 * @param detectionPoint The {@link org.owasp.appsensor.DetectionPoint} to search by
+//	 * @param detectionSystemIds A {@link java.util.Collection} of detection system ids to search by
+//	 * @param earliest long representing timestamp of time to start search with
+//	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Event} objects matching the search criteria.
+//	 */
+//	public abstract Collection<Event> findEvents(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds, Long earliest);
+//	
+//	/**
+//	 * A finder for Event objects in the EventStore
+//	 * 
+//	 * @param user the {@link org.owasp.appsensor.User} object to search by
+//	 * @param detectionPoint The {@link org.owasp.appsensor.DetectionPoint} to search by
+//	 * @param detectionSystemIds A {@link java.util.Collection} of detection system ids to search by
+//	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Event} objects matching the search criteria.
+//	 */
+//	public abstract Collection<Event> findEvents(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds);
+//	
+//	/**
+//	 * A finder for Event objects in the EventStore
+//	 * 
+//	 * @param detectionSystemId Detection system id to search by
+//	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Event} objects matching the search criteria.
+//	 */
+//	public abstract Collection<Event> findEvents(String detectionSystemId, Long earliest);
+//	
+//	/**
+//	 * A finder for Event objects in the EventStore
+//	 * 
+//	 * @param earliest long representing timestamp of time to start search with
+//	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Event} objects matching the search criteria.
+//	 */
+//	public abstract Collection<Event> findEvents(Long earliest);
 
 }

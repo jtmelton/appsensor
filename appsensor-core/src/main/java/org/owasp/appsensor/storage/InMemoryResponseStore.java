@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.User;
+import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.logging.Logger;
 
 /**
@@ -26,8 +27,8 @@ public class InMemoryResponseStore extends ResponseStore {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(InMemoryResponseStore.class);
 	
-	/** maintain a collection of {@link org.owasp.appsensor.Response}s as an in-memory list */
-	private Collection<Response> responses = new CopyOnWriteArrayList<Response>();
+	/** maintain a collection of {@link Response}s as an in-memory list */
+	private static Collection<Response> responses = new CopyOnWriteArrayList<Response>();
 	
 	/**
 	 * {@inheritDoc}
@@ -35,7 +36,7 @@ public class InMemoryResponseStore extends ResponseStore {
 	@Override
 	public void addResponse(Response response) {
 		logger.warning("Security response " + response + " triggered for user: " + response.getUser().getUsername());
-	    
+
 		responses.add(response);
 		
 		super.setChanged();
@@ -47,35 +48,93 @@ public class InMemoryResponseStore extends ResponseStore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Response> findResponses(User user, DetectionPoint search, Collection<String> detectionSystemIds) {
-		Collection<Response> matchingResponses = new ArrayList<Response>();
+	public Collection<Response> findResponses(SearchCriteria criteria) {
+		if (criteria == null) {
+			throw new IllegalArgumentException("criteria must be non-null");
+		}
+		
+		Collection<Response> matches = new ArrayList<Response>();
+		
+		User user = criteria.getUser();
+		DetectionPoint detectionPoint = criteria.getDetectionPoint();
+		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
+		Long earliest = criteria.getEarliest();
 		
 		for (Response response : responses) {
-			if (user.equals(response.getUser()) && 
-					detectionSystemIds.contains(response.getDetectionSystemId()) &&
-					response.getDetectionPoint().getId().equals(search.getId())) {
-				matchingResponses.add(response);
+			//check user match if user specified
+			boolean userMatch = (user != null) ? user.equals(response.getUser()) : true;
+			
+			//check detection system match if detection systems specified
+			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
+					detectionSystemIds.contains(response.getDetectionSystemId()) : true;
+			
+			//check detection point match if detection point specified
+			boolean detectionPointMatch = (detectionPoint != null) ? 
+					detectionPoint.getId().equals(response.getDetectionPoint().getId()) : true;
+			
+			boolean earliestMatch = (earliest != null) ? earliest.longValue() < response.getTimestamp() : true;
+			
+			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
+				matches.add(response);
 			}
 		}
 		
-		return matchingResponses;
+		return matches;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Collection<Response> findResponses(String detectionSystemId, long earliest) {
-		Collection<Response> matchingResponses = new ArrayList<Response>();
-		
-		for (Response response : responses) {
-			if (detectionSystemId.equals(response.getDetectionSystemId()) && 
-					earliest < response.getTimestamp()) {
-				matchingResponses.add(response);
-			}
-		}
-		
-		return matchingResponses;
-	}
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public Collection<Response> findResponses(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds, Long earliest) {
+//		Collection<Response> matches = new ArrayList<Response>();
+//		
+////		System.err.println("yaaaaaa");
+//		for (Response response : responses) {
+////			System.err.println("yo");
+//			//check user match if user specified
+//			boolean userMatch = (user != null) ? user.equals(response.getUser()) : true;
+//			
+//			//check detection system match if detection systems specified
+//			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
+//					detectionSystemIds.contains(response.getDetectionSystemId()) : true;
+//			
+//			//check detection point match if detection point specified
+//			boolean detectionPointMatch = (detectionPoint != null) ? 
+//					detectionPoint.getId().equals(response.getDetectionPoint().getId()) : true;
+//			
+//			boolean earliestMatch = (earliest != null) ? earliest.longValue() < response.getTimestamp() : true;
+//			
+//			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
+//				matches.add(response);
+//			}
+//		}
+//		
+//		return matches;
+//	}
+//	
+//	@Override
+//	public Collection<Response> findResponses(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds) {
+//		return findResponses(user, detectionPoint, detectionSystemIds, null);
+//	}
+//	
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public Collection<Response> findResponses(String detectionSystemId, Long earliest) {
+//		Collection<String> detectionSystemIds = new ArrayList<String>();
+//		detectionSystemIds.add(detectionSystemId);
+//		
+//		return findResponses(null, null, detectionSystemIds, earliest);
+//	}
+//	
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public Collection<Response> findResponses(Long earliest) {
+//		return findResponses(null, null, null, earliest);
+//	}
 
 }

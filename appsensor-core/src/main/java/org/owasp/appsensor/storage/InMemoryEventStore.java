@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
-import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.User;
+import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.logging.Logger;
 
 /**
@@ -42,23 +43,99 @@ public class InMemoryEventStore extends EventStore {
 		
 		super.notifyObservers(event);
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Event> findEvents(User user, DetectionPoint search, Collection<String> detectionSystemIds) {
-		Collection<Event> matchingEvents = new ArrayList<Event>();
+	public Collection<Event> findEvents(SearchCriteria criteria) {
+		if (criteria == null) {
+			throw new IllegalArgumentException("criteria must be non-null");
+		}
+		
+		Collection<Event> matches = new ArrayList<Event>();
+		
+		User user = criteria.getUser();
+		DetectionPoint detectionPoint = criteria.getDetectionPoint();
+		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
+		Long earliest = criteria.getEarliest();
 		
 		for (Event event : events) {
-			if (user.equals(event.getUser()) && 
-					detectionSystemIds.contains(event.getDetectionSystemId()) &&
-					event.getDetectionPoint().getId().equals(search.getId())) {
-				matchingEvents.add(event);
+			//check user match if user specified
+			boolean userMatch = (user != null) ? user.equals(event.getUser()) : true;
+			
+			//check detection system match if detection systems specified
+			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
+					detectionSystemIds.contains(event.getDetectionSystemId()) : true;
+			
+			//check detection point match if detection point specified
+			boolean detectionPointMatch = (detectionPoint != null) ? 
+					detectionPoint.getId().equals(event.getDetectionPoint().getId()) : true;
+			
+			boolean earliestMatch = (earliest != null) ? earliest.longValue() < event.getTimestamp() : true;
+			
+			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
+				matches.add(event);
 			}
 		}
 		
-		return matchingEvents;
+		return matches;
 	}
+	
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public Collection<Event> findEvents(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds, Long earliest) {
+//		Collection<Event> matches = new ArrayList<Event>();
+//		
+//		for (Event event : events) {
+//			//check user match if user specified
+//			boolean userMatch = (user != null) ? user.equals(event.getUser()) : true;
+//			
+//			//check detection system match if detection systems specified
+//			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
+//					detectionSystemIds.contains(event.getDetectionSystemId()) : true;
+//			
+//			//check detection point match if detection point specified
+//			boolean detectionPointMatch = (detectionPoint != null) ? 
+//					detectionPoint.getId().equals(event.getDetectionPoint().getId()) : true;
+//			
+//			boolean earliestMatch = (earliest != null) ? earliest.longValue() < event.getTimestamp() : true;
+//			
+//			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
+//				matches.add(event);
+//			}
+//		}
+//		
+//		return matches;
+//	}
+//
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public Collection<Event> findEvents(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds) {
+//		return findEvents(user, detectionPoint, detectionSystemIds, null);
+//	}
+//
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public Collection<Event> findEvents(String detectionSystemId, Long earliest) {
+//		Collection<String> detectionSystemIds = new ArrayList<String>();
+//		detectionSystemIds.add(detectionSystemId);
+//		
+//		return findEvents(null, null, detectionSystemIds, earliest);
+//	}
+//
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public Collection<Event> findEvents(Long earliest) {
+//		return findEvents(null, null, null, earliest);
+//	}
 
 }

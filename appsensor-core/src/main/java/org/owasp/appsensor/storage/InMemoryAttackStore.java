@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
-import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.User;
+import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.logging.Logger;
 
 /**
@@ -26,8 +27,8 @@ public class InMemoryAttackStore extends AttackStore {
 	
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(InMemoryAttackStore.class);
 	
-	/** maintain a collection of {@link org.owasp.appsensor.Attack}s as an in-memory list */
-	private Collection<Attack> attacks = new CopyOnWriteArrayList<Attack>();
+	/** maintain a collection of {@link Attack}s as an in-memory list */
+	private static Collection<Attack> attacks = new CopyOnWriteArrayList<Attack>();
 	
 	/**
 	 * {@inheritDoc}
@@ -47,18 +48,94 @@ public class InMemoryAttackStore extends AttackStore {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Attack> findAttacks(User user, DetectionPoint search, Collection<String> detectionSystemIds) {
-		Collection<Attack> matchingAttacks = new ArrayList<Attack>();
+	public Collection<Attack> findAttacks(SearchCriteria criteria) {
+		if (criteria == null) {
+			throw new IllegalArgumentException("criteria must be non-null");
+		}
+		
+		Collection<Attack> matches = new ArrayList<Attack>();
+		
+		User user = criteria.getUser();
+		DetectionPoint detectionPoint = criteria.getDetectionPoint();
+		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
+		Long earliest = criteria.getEarliest();
 		
 		for (Attack attack : attacks) {
-			if (user.equals(attack.getUser()) && 
-					detectionSystemIds.contains(attack.getDetectionSystemId()) &&
-					attack.getDetectionPoint().getId().equals(search.getId())) {
-				matchingAttacks.add(attack);
+			//check user match if user specified
+			boolean userMatch = (user != null) ? user.equals(attack.getUser()) : true;
+			
+			//check detection system match if detection systems specified
+			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
+					detectionSystemIds.contains(attack.getDetectionSystemId()) : true;
+			
+			//check detection point match if detection point specified
+			boolean detectionPointMatch = (detectionPoint != null) ? 
+					detectionPoint.getId().equals(attack.getDetectionPoint().getId()) : true;
+			
+			boolean earliestMatch = (earliest != null) ? earliest.longValue() < attack.getTimestamp() : true;
+			
+			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
+				matches.add(attack);
 			}
 		}
 		
-		return matchingAttacks;
+		return matches;
 	}
 	
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public Collection<Attack> findAttacks(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds, Long earliest) {
+//		Collection<Attack> matches = new ArrayList<Attack>();
+//		
+//		for (Attack attack : attacks) {
+//			//check user match if user specified
+//			boolean userMatch = (user != null) ? user.equals(attack.getUser()) : true;
+//			
+//			//check detection system match if detection systems specified
+//			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
+//					detectionSystemIds.contains(attack.getDetectionSystemId()) : true;
+//			
+//			//check detection point match if detection point specified
+//			boolean detectionPointMatch = (detectionPoint != null) ? 
+//					detectionPoint.getId().equals(attack.getDetectionPoint().getId()) : true;
+//			
+//			boolean earliestMatch = (earliest != null) ? earliest.longValue() < attack.getTimestamp() : true;
+//			
+//			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
+//				matches.add(attack);
+//			}
+//		}
+//		
+//		return matches;
+//	}
+//
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public Collection<Attack> findAttacks(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds) {
+//		return findAttacks(user, detectionPoint, detectionSystemIds, null);
+//	}
+//
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public Collection<Attack> findAttacks(String detectionSystemId, Long earliest) {
+//		Collection<String> detectionSystemIds = new ArrayList<String>();
+//		detectionSystemIds.add(detectionSystemId);
+//		
+//		return findAttacks(null, null, detectionSystemIds, earliest);
+//	}
+//
+//	/**
+//	 * {@inheritDoc}
+//	 */
+//	@Override
+//	public Collection<Attack> findAttacks(Long earliest) {
+//		return findAttacks(null, null, null, earliest);
+//	}
+//	
 }
