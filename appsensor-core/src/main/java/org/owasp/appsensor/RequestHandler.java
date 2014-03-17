@@ -12,6 +12,8 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
  */
 public interface RequestHandler {
 	
+	public static String APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR = "APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR";
+	
 	/**
 	 * Add an Event.
 	 * 
@@ -31,6 +33,6 @@ public interface RequestHandler {
 	 *  
 	 * @return a Collection of Response objects 
 	 */
-	public Collection<Response> getResponses(long earliest) throws NotAuthorizedException;
+	public Collection<Response> getResponses(Long earliest) throws NotAuthorizedException;
 	
 }
