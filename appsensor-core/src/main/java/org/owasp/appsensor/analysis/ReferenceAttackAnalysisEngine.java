@@ -7,7 +7,9 @@ import java.util.Observable;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
+import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.storage.ResponseStore;
 
@@ -63,26 +65,31 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 	protected Response findAppropriateResponse(Attack attack) {
 		DetectionPoint triggeringDetectionPoint = attack.getDetectionPoint();
 		
+		SearchCriteria criteria = new SearchCriteria().
+				setUser(attack.getUser()).
+				setDetectionPoint(triggeringDetectionPoint).
+				setDetectionSystemIds(AppSensorServer.getInstance().getConfiguration().getRelatedDetectionSystems(attack.getDetectionSystemId()));
+		
 		//grab any existing responses
-		Collection<Response> existingResponses = 
-				AppSensorServer.getInstance().getResponseStore().findResponses(
-						attack.getUser(), 
-						triggeringDetectionPoint,
-						AppSensorServer.getInstance().getConfiguration().getRelatedDetectionSystems(attack.getDetectionSystemId())
-						);
+		Collection<Response> existingResponses = AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
 		
-		Response response = null;
+		String responseAction = null;
+		Interval interval = null;
 		
-		Collection<? extends Response> possibleResponses = findPossibleResponses(triggeringDetectionPoint);
-		
-		if (existingResponses == null) {
+		Collection<Response> possibleResponses = findPossibleResponses(triggeringDetectionPoint);
+
+		if (existingResponses == null || existingResponses.size() == 0) {
 			//no responses yet, just grab first configured response from detection point
-			response = possibleResponses.iterator().next();
+			Response response = possibleResponses.iterator().next();
+			
+			responseAction = response.getAction();
+			interval = response.getInterval();
 		} else {
 			for (Response configuredResponse : possibleResponses) {
-				response = configuredResponse;
-				
-				if (! isPreviousResponse(response, existingResponses)) {
+				responseAction = configuredResponse.getAction();
+				interval = configuredResponse.getInterval();
+
+				if (! isPreviousResponse(configuredResponse, existingResponses)) {
 					//if we find that this response doesn't already exist, use it
 					break;
 				}
@@ -91,14 +98,16 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 			}
 		}
 		
-		if(response == null) {
+		if(responseAction == null) {
 			throw new IllegalArgumentException("No appropriate response was configured for this detection point: " + triggeringDetectionPoint.getId());
 		}
 		
-		//set extra fields
+		Response response = new Response();
 		response.setUser(attack.getUser());
 		response.setDetectionPoint(triggeringDetectionPoint);
 		response.setTimestamp(attack.getTimestamp());
+		response.setAction(responseAction);
+		response.setInterval(interval);
 		response.setDetectionSystemId(attack.getDetectionSystemId());
 		
 		return response;
@@ -110,8 +119,8 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 	 * @param triggeringDetectionPoint {@link DetectionPoint} that triggered {@link Attack}
 	 * @return collection of {@link Response} objects for given {@link DetectionPoint}
 	 */
-	protected Collection<? extends Response> findPossibleResponses(DetectionPoint triggeringDetectionPoint) {
-		Collection<? extends Response> possibleResponses = new ArrayList<Response>();
+	protected Collection<Response> findPossibleResponses(DetectionPoint triggeringDetectionPoint) {
+		Collection<Response> possibleResponses = new ArrayList<Response>();
 		
 		for (DetectionPoint configuredDetectionPoint : AppSensorServer.getInstance().getConfiguration().getDetectionPoints()) {
 			if (configuredDetectionPoint.getId().equals(triggeringDetectionPoint.getId())) {
