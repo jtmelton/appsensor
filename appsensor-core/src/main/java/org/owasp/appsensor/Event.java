@@ -1,13 +1,13 @@
 package org.owasp.appsensor;
 
 import java.io.Serializable;
-
-import javax.xml.bind.annotation.XmlSeeAlso;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.owasp.appsensor.event.StatisticalEvent;
 
 /**
  * Event is a specific instance that a sensor has detected that 
@@ -20,8 +20,7 @@ import org.owasp.appsensor.event.StatisticalEvent;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-@XmlSeeAlso({StatisticalEvent.class})
-public abstract class Event implements Serializable {
+public class Event implements Serializable {
 	
 	/** Event type representing policy-based statistical event, default event type for appsensor */
 	public static final String STATISTICAL = "STATISTICAL";
@@ -52,7 +51,27 @@ public abstract class Event implements Serializable {
     /** The type of event: ie. statistical, behavioral, etc. */
 	private String eventType;
 	
-	protected Event() {}
+    public Event () {}
+    
+	public Event (User user, DetectionPoint detectionPoint, String detectionSystemId) {
+		this(user, detectionPoint, Calendar.getInstance().getTimeInMillis(), detectionSystemId);
+	}
+	
+	public Event (User user, DetectionPoint detectionPoint, Date timestamp, String detectionSystemId) {
+		this(user, detectionPoint, timestamp.getTime(), detectionSystemId);
+	}
+	
+	public Event (User user, DetectionPoint detectionPoint, Timestamp timestamp, String detectionSystemId) {
+		this(user, detectionPoint, timestamp.getTime(), detectionSystemId);
+	}
+	
+	public Event (User user, DetectionPoint detectionPoint, long timestamp, String detectionSystemId) {
+		setUser(user);
+		setDetectionPoint(detectionPoint);
+		setTimestamp(timestamp);
+		setDetectionSystemId(detectionSystemId);
+		setEventType(STATISTICAL);
+	}
 	
 	public User getUser() {
 		return user;
