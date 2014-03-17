@@ -22,7 +22,7 @@ public class StaxServerConfigurationReaderTest {
 		assertEquals(3, configuration.getCorrelationSets().size());
 		assertEquals("server1", configuration.getCorrelationSets().iterator().next().getClientApplications().iterator().next());
 		
-		assertEquals("org.owasp.appsensor.analysis.ReferenceStatisticalEventAnalysisEngine", configuration.getEventAnalysisEngineImplementation());
+		assertEquals("org.owasp.appsensor.analysis.ReferenceEventAnalysisEngine", configuration.getEventAnalysisEngineImplementation());
 		assertEquals("org.owasp.appsensor.analysis.ReferenceAttackAnalysisEngine", configuration.getAttackAnalysisEngineImplementation());
 		assertEquals("org.owasp.appsensor.analysis.ReferenceResponseAnalysisEngine", configuration.getResponseAnalysisEngineImplementation());
 		
@@ -35,7 +35,7 @@ public class StaxServerConfigurationReaderTest {
 		assertEquals("org.owasp.appsensor.accesscontrol.ReferenceAccessController", configuration.getAccessControllerImplementation());
 		
 		assertEquals(2, configuration.getEventStoreObserverImplementations().size());
-		assertEquals("org.owasp.appsensor.analysis.ReferenceStatisticalEventAnalysisEngine", configuration.getEventStoreObserverImplementations().iterator().next());
+		assertEquals("org.owasp.appsensor.analysis.ReferenceEventAnalysisEngine", configuration.getEventStoreObserverImplementations().iterator().next());
 		
 		assertEquals(2, configuration.getAttackStoreObserverImplementations().size());
 		assertEquals("org.owasp.appsensor.analysis.ReferenceAttackAnalysisEngine", configuration.getAttackStoreObserverImplementations().iterator().next());
