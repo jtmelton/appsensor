@@ -18,11 +18,8 @@ import javax.xml.ws.handler.Handler;
 import org.junit.Test;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.DetectionPoint;
+import org.owasp.appsensor.Event;
 import org.owasp.appsensor.User;
-import org.owasp.appsensor.event.StatisticalEvent;
-import org.owasp.appsensor.handler.ReferenceSoapRequestHandler;
-import org.owasp.appsensor.handler.RegisterClientApplicationIdentificationHandler;
-import org.owasp.appsensor.handler.SoapRequestHandler;
 
 /**
  * Test basic soap event handling. Add a number of events matching 
@@ -67,41 +64,41 @@ public class ReferenceSoapRequestHandlerTest {
         long startMillis = new Date().getTime() - 1000;	//current time - 1 second - account for clock drift
         
         assertEquals(0, requestHandler.getResponses(startMillis).size());
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         
         assertEquals(0, requestHandler.getResponses(startMillis).size());
         //this is 11th
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         assertEquals(1, requestHandler.getResponses(startMillis).size());
         
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         
         assertEquals(1, requestHandler.getResponses(startMillis).size());
         //this is 22nd
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         assertEquals(2, requestHandler.getResponses(startMillis).size());
         
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new StatisticalEvent(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         
         assertEquals(2, requestHandler.getResponses(startMillis).size());
         
