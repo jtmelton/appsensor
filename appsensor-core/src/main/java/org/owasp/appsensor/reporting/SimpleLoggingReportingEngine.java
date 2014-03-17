@@ -1,5 +1,6 @@
 package org.owasp.appsensor.reporting;
 
+import java.util.Collection;
 import java.util.Observable;
 
 import org.owasp.appsensor.AppSensorServer;
@@ -52,4 +53,20 @@ public class SimpleLoggingReportingEngine implements ReportingEngine {
 			logger.info("Reporter observed response for user [" + response.getUser().getUsername() + "]");
 		}
 	}
+
+	@Override
+	public Collection<Event> findEvents(Long earliest) {
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
+	}
+
+	@Override
+	public Collection<Attack> findAttacks(Long earliest) {
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
+	}
+
+	@Override
+	public Collection<Response> findResponses(Long earliest) {
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
+	}
+	
 }

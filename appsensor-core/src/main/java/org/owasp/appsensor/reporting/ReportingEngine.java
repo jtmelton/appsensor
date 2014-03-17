@@ -1,6 +1,12 @@
 package org.owasp.appsensor.reporting;
 
+import java.util.Collection;
 import java.util.Observer;
+
+import org.owasp.appsensor.Attack;
+import org.owasp.appsensor.Event;
+import org.owasp.appsensor.Response;
+import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
 /**
  * A reporting engine is an implementation of the Observer pattern. 
@@ -18,4 +24,10 @@ import java.util.Observer;
  */
 public interface ReportingEngine extends Observer {
 
+	public Collection<Event> findEvents(Long earliest) throws NotAuthorizedException;
+	
+	public Collection<Attack> findAttacks(Long earliest) throws NotAuthorizedException;
+	
+	public Collection<Response> findResponses(Long earliest) throws NotAuthorizedException;
+	
 }
