@@ -17,7 +17,9 @@ import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.accesscontrol.Action;
+import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.util.StringUtils;
 
 /**
  * This is the soap endpoint that handles requests on the server-side. 
@@ -32,8 +34,6 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
 @HandlerChain(file="handler-chain.xml")
 public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 
-	public static String APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR = "APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR";
-	
 	@Resource 
 	private WebServiceContext wsContext;
 	
@@ -62,7 +62,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	 */
 	@WebMethod
 	@Override
-	public Collection<Response> getResponses(long earliest) throws NotAuthorizedException {
+	public Collection<Response> getResponses(Long earliest) throws NotAuthorizedException {
 		checkAuthorization(Action.GET_RESPONSES);
 		
 		@SuppressWarnings("unchecked")
@@ -70,7 +70,11 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 		
 		String clientApplicationName = httpHeaders.get(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR).get(0);
 		
-		return AppSensorServer.getInstance().getResponseStore().findResponses(clientApplicationName, earliest);
+		SearchCriteria criteria = new SearchCriteria().
+				setDetectionSystemIds(StringUtils.toCollection(clientApplicationName)).
+				setEarliest(earliest);
+		
+		return AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
 	}
 	
 	/**
