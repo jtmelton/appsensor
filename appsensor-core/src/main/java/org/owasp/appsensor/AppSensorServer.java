@@ -81,7 +81,7 @@ public class AppSensorServer extends ObjectFactory {
 		}
 	}
 	
-	public static AppSensorServer getInstance() {
+	public static synchronized AppSensorServer getInstance() {
 		if (configuration == null) {
 			//if getInstance is called without the bootstrap having been run, just execute the default bootstrapping
 			bootstrap();
