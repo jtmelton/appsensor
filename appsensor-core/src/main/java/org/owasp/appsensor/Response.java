@@ -136,10 +136,6 @@ public class Response implements Serializable {
 		return this;
 	}
 	
-	
-//	private String ; 	
-	
-	
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).
