@@ -7,7 +7,9 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.RequestHandler;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.util.StringUtils;
 
 /**
  * This is the local endpoint that handles requests on the server-side.
@@ -52,7 +54,11 @@ public class LocalRequestHandler implements RequestHandler {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Response> getResponses(long earliest) throws NotAuthorizedException {
-		return AppSensorServer.getInstance().getResponseStore().findResponses(detectionSystemId != null ? detectionSystemId : "", earliest);
+	public Collection<Response> getResponses(Long earliest) throws NotAuthorizedException {
+		SearchCriteria criteria = new SearchCriteria().
+				setDetectionSystemIds(StringUtils.toCollection(detectionSystemId != null ? detectionSystemId : "")).
+				setEarliest(earliest);
+		
+		return AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
 	}
 }
