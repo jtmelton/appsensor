@@ -1,5 +1,8 @@
 package org.owasp.appsensor.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * Helper class for String related utility methods
  * 
@@ -9,5 +12,13 @@ public class StringUtils {
 	
 	/** Empty String */
 	public static final String EMPTY = "";
+	
+	public static Collection<String> toCollection(String value) {
+		Collection<String> collection = new ArrayList<String>();
+		
+		collection.add(value);
+		
+		return collection;
+	}
 	
 }
