@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 import org.owasp.appsensor.handler.RestRequestHandler;
+import org.owasp.appsensor.reporting.RestReportingEngine;
 import org.owasp.appsensor.rest.filter.ClientApplicationIdentificationFilter;
 
 public class AppSensorApplication extends Application {
@@ -15,6 +16,7 @@ public class AppSensorApplication extends Application {
         Set<Class<?>> restClasses = new HashSet<Class<?>>();
         restClasses.add(RestRequestHandler.class);
         restClasses.add(ClientApplicationIdentificationFilter.class);
+        restClasses.add(RestReportingEngine.class);
         return restClasses;
     }
     
