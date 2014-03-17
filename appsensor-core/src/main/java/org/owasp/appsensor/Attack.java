@@ -5,6 +5,10 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * An attack can be added to the system in one of two ways: 
  * <ol>
@@ -42,7 +46,9 @@ public class Attack implements Serializable {
      */
     private Resource resource;
 	
-	public Attack (User user, DetectionPoint detectionPoint, String detectionSystemId) {
+    public Attack () { }
+
+    public Attack (User user, DetectionPoint detectionPoint, String detectionSystemId) {
 		this(user, detectionPoint, Calendar.getInstance().getTimeInMillis(), detectionSystemId);
 	}
 	
@@ -112,6 +118,48 @@ public class Attack implements Serializable {
 	public Attack setResource(Resource resource) {
 		this.resource = resource;
 		return this;
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17,31).
+				append(user).
+				append(detectionPoint).
+				append(timestamp).
+				append(detectionSystemId).
+				append(resource).
+				toHashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		
+		Attack other = (Attack) obj;
+		
+		return new EqualsBuilder().
+				append(user, other.getUser()).
+				append(detectionPoint, other.getDetectionPoint()).
+				append(timestamp, other.getTimestamp()).
+				append(detectionSystemId, other.getDetectionSystemId()).
+				append(resource, other.getResource()).
+				isEquals();
+	}
+	
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).
+			       append("user", user).
+			       append("detectionPoint", detectionPoint).
+			       append("timestamp", timestamp).
+			       append("detectionSystemId", detectionSystemId).
+			       append("resource", resource).
+			       toString();
 	}
 
 }
