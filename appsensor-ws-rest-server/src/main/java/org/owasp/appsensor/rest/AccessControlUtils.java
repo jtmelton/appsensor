@@ -8,6 +8,11 @@ import org.owasp.appsensor.RequestHandler;
 import org.owasp.appsensor.accesscontrol.Action;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
+/**
+ * This is a simple helper class for performing access control checks for REST requests.
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class AccessControlUtils {
 
 	/**
