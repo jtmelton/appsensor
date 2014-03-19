@@ -19,7 +19,9 @@ import org.owasp.appsensor.rest.filter.ClientApplicationIdentificationFilter;
 public class AppSensorApplication extends Application {
 	
 	/**
-	 * Add classes that need to have DI to Application
+	 * Add classes that need to have DI to Application. 
+	 * Needed by JAX-RS to perform DI and injection the 
+	 * {@link javax.ws.rs.core.Context}.
 	 */
 	@Override
     public Set<Class<?>> getClasses() {
