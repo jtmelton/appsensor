@@ -18,7 +18,10 @@ import org.owasp.appsensor.rest.filter.ClientApplicationIdentificationFilter;
  */
 public class AppSensorApplication extends Application {
 	
-    @Override
+	/**
+	 * Add classes that need to have DI to Application
+	 */
+	@Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> restClasses = new HashSet<Class<?>>();
         restClasses.add(RestRequestHandler.class);
