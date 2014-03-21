@@ -1,7 +1,6 @@
 package org.owasp.appsensor.reporting;
 
 import java.util.Collection;
-import java.util.Observable;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -38,9 +37,24 @@ public class RestReportingEngine implements ReportingEngine {
 	/**
 	 * {@inheritDoc}
 	 */
+//	@Override
+//	public void update(Observable o, Object arg) {
+//		//ignore - don't need updates - not collecting notifications here
+//	}
+	
 	@Override
-	public void update(Observable o, Object arg) {
-		//ignore - don't need updates - not collecting notifications here
+	public void onAdd(Event event) {
+//		logger.info("Reporter observed event by user [" + event.getUser().getUsername() + "]");
+	}
+
+	@Override
+	public void onAdd(Attack attack) {
+//		logger.info("Reporter observed attack by user [" + attack.getUser().getUsername() + "]");
+	}
+
+	@Override
+	public void onAdd(Response response) {
+//		logger.info("Reporter observed response for user [" + response.getUser().getUsername() + "]");
 	}
 	
 	/**

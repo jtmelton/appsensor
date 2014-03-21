@@ -2,7 +2,6 @@ package org.owasp.appsensor.analysis;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Observable;
 
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
@@ -10,6 +9,7 @@ import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.criteria.SearchCriteria;
+import org.owasp.appsensor.listener.AttackListener;
 import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.storage.ResponseStore;
 
@@ -27,7 +27,7 @@ import org.owasp.appsensor.storage.ResponseStore;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
+public class ReferenceAttackAnalysisEngine implements AnalysisEngine, AttackListener {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceAttackAnalysisEngine.class);
 
@@ -43,9 +43,9 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 	 * 			an {@link Attack} object
 	 */
 	@Override
-	public void update(Observable observable, Object observedObject) {
-		if (observedObject instanceof Attack) {
-			Attack attack = (Attack)observedObject;
+	public void onAdd(Attack attack) {
+//		if (observedObject instanceof Attack) {
+//			Attack attack = (Attack)observedObject;
 			
 			Response response = findAppropriateResponse(attack);
 			
@@ -53,8 +53,20 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine {
 				logger.info("Response set for user <" + attack.getUser().getUsername() + "> - storing response action " + response.getAction());
 				AppSensorServer.getInstance().getResponseStore().addResponse(response);
 			}
-		} 
+//		} 
 	}
+//	public void update(Observable observable, Object observedObject) {
+//		if (observedObject instanceof Attack) {
+//			Attack attack = (Attack)observedObject;
+//			
+//			Response response = findAppropriateResponse(attack);
+//			
+//			if (response != null) {
+//				logger.info("Response set for user <" + attack.getUser().getUsername() + "> - storing response action " + response.getAction());
+//				AppSensorServer.getInstance().getResponseStore().addResponse(response);
+//			}
+//		} 
+//	}
 	
 	/**
 	 * Find/generate {@link Response} appropriate for specified {@link Attack}.

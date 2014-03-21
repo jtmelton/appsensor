@@ -39,9 +39,10 @@ public class InMemoryResponseStore extends ResponseStore {
 
 		responses.add(response);
 		
-		super.setChanged();
-		
-		super.notifyObservers(response);
+		super.notifyListeners(response);
+//		super.setChanged();
+//		
+//		super.notifyObservers(response);
 	}
 	
 	/**

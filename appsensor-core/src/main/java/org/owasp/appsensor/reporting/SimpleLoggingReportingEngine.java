@@ -1,7 +1,6 @@
 package org.owasp.appsensor.reporting;
 
 import java.util.Collection;
-import java.util.Observable;
 
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
@@ -37,23 +36,40 @@ public class SimpleLoggingReportingEngine implements ReportingEngine {
 	 * 			we are only interested if the object is 
 	 * 			an {@link Event}, {@link Attack} or {@link {@link Attack}}object
 	 */
+	
+//	@Override
+	
+//	public void update(Observable observable, Object observedObject) {
+//		if (observedObject instanceof Event) {
+//			Event event = (Event)observedObject;
+//			
+//			logger.info("Reporter observed event by user [" + event.getUser().getUsername() + "]");
+//		} else if (observedObject instanceof Attack) {
+//			Attack attack = (Attack)observedObject;
+//
+//			logger.info("Reporter observed attack by user [" + attack.getUser().getUsername() + "]");
+//		} else if (observedObject instanceof Response) {
+//			Response response = (Response)observedObject;
+//
+//			logger.info("Reporter observed response for user [" + response.getUser().getUsername() + "]");
+//		}
+//	}
+
 	@Override
-	public void update(Observable observable, Object observedObject) {
-		if (observedObject instanceof Event) {
-			Event event = (Event)observedObject;
-			
-			logger.info("Reporter observed event by user [" + event.getUser().getUsername() + "]");
-		} else if (observedObject instanceof Attack) {
-			Attack attack = (Attack)observedObject;
-
-			logger.info("Reporter observed attack by user [" + attack.getUser().getUsername() + "]");
-		} else if (observedObject instanceof Response) {
-			Response response = (Response)observedObject;
-
-			logger.info("Reporter observed response for user [" + response.getUser().getUsername() + "]");
-		}
+	public void onAdd(Event event) {
+		logger.info("Reporter observed event by user [" + event.getUser().getUsername() + "]");
 	}
 
+	@Override
+	public void onAdd(Attack attack) {
+		logger.info("Reporter observed attack by user [" + attack.getUser().getUsername() + "]");
+	}
+
+	@Override
+	public void onAdd(Response response) {
+		logger.info("Reporter observed response for user [" + response.getUser().getUsername() + "]");
+	}
+	
 	@Override
 	public Collection<Event> findEvents(Long earliest) {
 		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
@@ -68,5 +84,7 @@ public class SimpleLoggingReportingEngine implements ReportingEngine {
 	public Collection<Response> findResponses(Long earliest) {
 		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
 	}
+
+	
 	
 }

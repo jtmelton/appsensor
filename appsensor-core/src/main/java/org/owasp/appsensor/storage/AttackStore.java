@@ -1,10 +1,11 @@
 package org.owasp.appsensor.storage;
 
 import java.util.Collection;
-import java.util.Observable;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.criteria.SearchCriteria;
+import org.owasp.appsensor.listener.AttackListener;
 
 /**
  * A store is an implementation of the Observable pattern. 
@@ -17,7 +18,9 @@ import org.owasp.appsensor.criteria.SearchCriteria;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public abstract class AttackStore extends Observable {
+public abstract class AttackStore { //extends Observable {
+	
+	private static Collection<AttackListener> listeners = new CopyOnWriteArrayList<>();
 	
 	/**
 	 * Add an attack to the AttackStore
@@ -26,44 +29,23 @@ public abstract class AttackStore extends Observable {
 	 */
 	public abstract void addAttack(Attack attack);
 	
+	/**
+	 * Finder for attacks in the AttackStore. 
+	 * 
+	 * @param criteria the {@link org.owasp.appsensor.criteria.SearchCriteria} object to search by
+	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Attack} objects matching the search criteria.
+	 */
 	public abstract Collection<Attack> findAttacks(SearchCriteria criteria);
-//	
-//	/**
-//	 * Finder for attacks in the AttackStore. 
-//	 * 
-//	 * @param user the {@link org.owasp.appsensor.User} object to search by
-//	 * @param detectionPoint The {@link org.owasp.appsensor.DetectionPoint} to search by
-//	 * @param detectionSystemIds A {@link java.util.Collection} of detection system ids to search by
-//	 * @param earliest long representing timestamp of time to start search with
-//	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Attack} objects matching the search criteria.
-//	 */
-//	public abstract Collection<Attack> findAttacks(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds, Long earliest);
-//	
-//	/**
-//	 * Finder for attacks in the AttackStore. 
-//	 * 
-//	 * @param user the {@link org.owasp.appsensor.User} object to search by
-//	 * @param detectionPoint The {@link org.owasp.appsensor.DetectionPoint} to search by
-//	 * @param detectionSystemIds A {@link java.util.Collection} of detection system ids to search by
-//	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Attack} objects matching the search criteria.
-//	 */
-//	public abstract Collection<Attack> findAttacks(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds);
-//	
-//	/**
-//	 * Finder for attacks in the AttackStore. 
-//	 * 
-//	 * @param detectionSystemId Detection system id to search by
-//	 * @param earliest long representing timestamp of time to start search with
-//	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Attack} objects matching the search criteria.
-//	 */
-//	public abstract Collection<Attack> findAttacks(String detectionSystemId, Long earliest);
-//	
-//	/**
-//	 * A finder for Attack objects in the AttackStore
-//	 * 
-//	 * @param earliest long representing timestamp of time to start search with
-//	 * @return a {@link java.util.Collection} of {@link Attack} objects matching the search criteria.
-//	 */
-//	public abstract Collection<Attack> findAttacks(Long earliest);
 	
+	public void registerListener(AttackListener listener) {
+		if (! listeners.contains(listener)) {
+			listeners.add(listener);
+		}
+	}
+	
+	public void notifyListeners(Attack attack) {
+		for (AttackListener listener : listeners) {
+			listener.onAdd(attack);
+		}
+	}
 }

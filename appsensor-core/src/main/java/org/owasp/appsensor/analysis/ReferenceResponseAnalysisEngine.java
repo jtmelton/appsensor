@@ -1,12 +1,11 @@
 package org.owasp.appsensor.analysis;
 
-import java.util.Observable;
 import java.util.Observer;
 
 import org.owasp.appsensor.AppSensorClient;
 import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.listener.ResponseListener;
 import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.response.ResponseHandler;
 
@@ -24,7 +23,7 @@ import org.owasp.appsensor.response.ResponseHandler;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public class ReferenceResponseAnalysisEngine implements AnalysisEngine {
+public class ReferenceResponseAnalysisEngine implements AnalysisEngine, ResponseListener {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceResponseAnalysisEngine.class);
 	
@@ -38,16 +37,27 @@ public class ReferenceResponseAnalysisEngine implements AnalysisEngine {
 	 * 			a {@link Response} object
 	 */
 	@Override
-	public void update(Observable observable, Object observedObject) {
-		if (observedObject instanceof Attack) {
-			Response response = (Response)observedObject;
-			
+	public void onAdd(Response response) {
+//		if (observedObject instanceof Attack) {
+//			Response response = (Response)observedObject;
+//			
 			if (response != null) {
 				logger.info("Response executed for user <" + response.getUser().getUsername() + "> - executing response action " + response.getAction());
 				
 				AppSensorClient.getInstance().getResponseHandler().handle(response);
 			}
-		} 
+//		} 
 	}
+//	public void update(Observable observable, Object observedObject) {
+//		if (observedObject instanceof Attack) {
+//			Response response = (Response)observedObject;
+//			
+//			if (response != null) {
+//				logger.info("Response executed for user <" + response.getUser().getUsername() + "> - executing response action " + response.getAction());
+//				
+//				AppSensorClient.getInstance().getResponseHandler().handle(response);
+//			}
+//		} 
+//	}
 	
 }

@@ -1,13 +1,14 @@
 package org.owasp.appsensor;
 
-import java.util.Observer;
-
 import org.owasp.appsensor.accesscontrol.AccessController;
 import org.owasp.appsensor.analysis.AnalysisEngine;
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.configuration.server.ServerConfigurationReader;
 import org.owasp.appsensor.configuration.server.StaxServerConfigurationReader;
 import org.owasp.appsensor.exceptions.ConfigurationException;
+import org.owasp.appsensor.listener.AttackListener;
+import org.owasp.appsensor.listener.EventListener;
+import org.owasp.appsensor.listener.ResponseListener;
 import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.storage.AttackStore;
 import org.owasp.appsensor.storage.EventStore;
@@ -101,15 +102,15 @@ public class AppSensorServer extends ObjectFactory {
 		
 		//load up observer configurations on static load
 		for(String observer : configuration.getEventStoreObserverImplementations()) {
-			SingletonHolder.instance.getEventStore().addObserver((Observer)make(observer, "EventStoreObserver"));
+			SingletonHolder.instance.getEventStore().registerListener((EventListener)make(observer, "EventStoreObserver"));
 		}
 		
 		for(String observer : configuration.getAttackStoreObserverImplementations()) {
-			SingletonHolder.instance.getAttackStore().addObserver((Observer)make(observer, "AttackStoreObserver"));
+			SingletonHolder.instance.getAttackStore().registerListener((AttackListener)make(observer, "AttackStoreObserver"));
 		}
 		
 		for(String observer : configuration.getResponseStoreObserverImplementations()) {
-			SingletonHolder.instance.getResponseStore().addObserver((Observer)make(observer, "ResponseStoreObserver"));
+			SingletonHolder.instance.getResponseStore().registerListener((ResponseListener)make(observer, "ResponseStoreObserver"));
 		}
 	}
 	

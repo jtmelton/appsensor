@@ -39,9 +39,10 @@ public class InMemoryAttackStore extends AttackStore {
 	       
 		attacks.add(attack);
 		
-		super.setChanged();
-		
-		super.notifyObservers(attack);
+		super.notifyListeners(attack);
+//		super.setChanged();
+//		
+//		super.notifyObservers(attack);
 	}
 	
 	/**

@@ -1,10 +1,11 @@
 package org.owasp.appsensor.storage;
 
 import java.util.Collection;
-import java.util.Observable;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.criteria.SearchCriteria;
+import org.owasp.appsensor.listener.ResponseListener;
 
 /**
  * A store is an implementation of the Observable pattern. 
@@ -17,7 +18,9 @@ import org.owasp.appsensor.criteria.SearchCriteria;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public abstract class ResponseStore extends Observable {
+public abstract class ResponseStore { //extends Observable {
+	
+	private static Collection<ResponseListener> listeners = new CopyOnWriteArrayList<>();
 	
 	/**
 	 * Add a response to the ResponseStore
@@ -26,43 +29,23 @@ public abstract class ResponseStore extends Observable {
 	 */
 	public abstract void addResponse(Response response);
 	
+	/**
+	 * Finder for responses in the ResponseStore
+	 * 
+	 * @param criteria the {@link org.owasp.appsensor.criteria.SearchCriteria} object to search by
+	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Response} objects matching the search criteria.
+	 */
 	public abstract Collection<Response> findResponses(SearchCriteria criteria);
-//	/**
-//	 * Finder for responses in the ResponseStore
-//	 * 
-//	 * * @param user the {@link org.owasp.appsensor.User} object to search by
-//	 * @param detectionPoint The {@link org.owasp.appsensor.DetectionPoint} to search by
-//	 * @param detectionSystemIds A {@link java.util.Collection} of detection system ids to search by
-//	 * @param earliest long representing timestamp of time to start search with
-//	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Response} objects matching the search criteria.
-//	 */
-//	public abstract Collection<Response> findResponses(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds, Long earliest);
-//
-//	/**
-//	 * Finder for responses in the ResponseStore
-//	 * 
-//	 * * @param user the {@link org.owasp.appsensor.User} object to search by
-//	 * @param detectionPoint The {@link org.owasp.appsensor.DetectionPoint} to search by
-//	 * @param detectionSystemIds A {@link java.util.Collection} of detection system ids to search by
-//	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.Response} objects matching the search criteria.
-//	 */
-//	public abstract Collection<Response> findResponses(User user, DetectionPoint detectionPoint, Collection<String> detectionSystemIds);
-//	
-//	/**
-//	 * Finder for responses in the ResponseStore
-//	 * 
-//	 * @param detectionSystemId Detection system id to search by
-//	 * @param earliest long representing timestamp of time to start search with
-//	 * @return Collection of {@link org.owasp.appsensor.Response} objects matching search criteria
-//	 */
-//	public abstract Collection<Response> findResponses(String detectionSystemId, Long earliest);
-//	
-//	/**
-//	 * Finder for responses in the ResponseStore
-//	 * 
-//	 * @param earliest long representing timestamp of time to start search with
-//	 * @return Collection of {@link org.owasp.appsensor.Response} objects matching search criteria
-//	 */
-//	public abstract Collection<Response> findResponses(Long earliest);
 
+	public void registerListener(ResponseListener listener) {
+		if (! listeners.contains(listener)) {
+			listeners.add(listener);
+		}
+	}
+	
+	public void notifyListeners(Response response) {
+		for (ResponseListener listener : listeners) {
+			listener.onAdd(response);
+		}
+	}
 }

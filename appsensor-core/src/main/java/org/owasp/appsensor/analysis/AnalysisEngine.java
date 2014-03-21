@@ -1,6 +1,5 @@
 package org.owasp.appsensor.analysis;
 
-import java.util.Observer;
 
 /**
  * An analysis engine is an implementation of the Observer pattern. 
@@ -16,6 +15,6 @@ import java.util.Observer;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public interface AnalysisEngine extends Observer {
+public interface AnalysisEngine {
 
 }

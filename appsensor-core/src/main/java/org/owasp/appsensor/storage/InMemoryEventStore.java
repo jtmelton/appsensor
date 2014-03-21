@@ -39,9 +39,10 @@ public class InMemoryEventStore extends EventStore {
 		
 		events.add(event);
 		
-		super.setChanged();
-		
-		super.notifyObservers(event);
+		super.notifyListeners(event);
+//		super.setChanged();
+//		
+//		super.notifyObservers(event);
 	}
 	
 	/**
