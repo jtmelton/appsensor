@@ -37,24 +37,22 @@ public class RestReportingEngine implements ReportingEngine {
 	/**
 	 * {@inheritDoc}
 	 */
-//	@Override
-//	public void update(Observable o, Object arg) {
-//		//ignore - don't need updates - not collecting notifications here
-//	}
-	
 	@Override
 	public void onAdd(Event event) {
-//		logger.info("Reporter observed event by user [" + event.getUser().getUsername() + "]");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onAdd(Attack attack) {
-//		logger.info("Reporter observed attack by user [" + attack.getUser().getUsername() + "]");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onAdd(Response response) {
-//		logger.info("Reporter observed response for user [" + response.getUser().getUsername() + "]");
 	}
 	
 	/**
