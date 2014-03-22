@@ -3,7 +3,7 @@
 
 	<event-manager class="org.owasp.appsensor.event.LocalEventManager" />
 	
-	<response-handler class="org.owasp.appsensor.response.LocalResponseHandler"/>
+	<response-handler class="org.owasp.appsensor.response.NoopResponseHandler"/>
 	
 	<user-manager class="org.owasp.appsensor.user.NoopUserManager"/>
 	
