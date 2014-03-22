@@ -11,6 +11,17 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
+import org.owasp.appsensor.AppSensorClient;
+
+/**
+ * This is the jax-ws SOAP handler that adds authentication info 
+ * of client applications to outbound requests 
+ * 
+ * The authentication mechanism involves adding an HTTP request header 
+ * for the username of the given client application. 
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class RegisterClientApplicationIdentificationHandler implements
 		SOAPHandler<SOAPMessageContext> {
 
@@ -29,7 +40,9 @@ public class RegisterClientApplicationIdentificationHandler implements
 				httpHeaders = new HashMap<String, List<String>>();
 			}
 			
-			httpHeaders.put(HEADER_NAME, Collections.singletonList("localhostme"));
+			String clientApplicationName = AppSensorClient.getInstance().getConfiguration().getServerConnection().getClientApplicationIdentificationHeaderValue();
+			
+			httpHeaders.put(HEADER_NAME, Collections.singletonList(clientApplicationName));
 			context.put(MessageContext.HTTP_REQUEST_HEADERS, httpHeaders);
 		}
 		return true;
