@@ -37,30 +37,9 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	public WebSocketReportingEngine() {
 	}
 	
-//	@Override
-//	public void update(Observable observable, Object observedObject) {
-//		ensureConnected();
-//		if (observedObject instanceof Event) {
-//			Event event = (Event)observedObject;
-//			
-//			notifyWebSocket("event", event);
-//			
-//			logger.info("Reporter observed event by user [" + event.getUser().getUsername() + "]");
-//		} else if (observedObject instanceof Attack) {
-//			Attack attack = (Attack)observedObject;
-//
-//			notifyWebSocket("attack", attack);
-//			
-//			logger.info("Reporter observed attack by user [" + attack.getUser().getUsername() + "]");
-//		} else if (observedObject instanceof Response) {
-//			Response response = (Response)observedObject;
-//
-//			notifyWebSocket("response", response);
-//			
-//			logger.info("Reporter observed response for user [" + response.getUser().getUsername() + "]");
-//		}
-//	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onAdd(Event event) {
 		notifyWebSocket("event", event);
@@ -68,6 +47,9 @@ public class WebSocketReportingEngine implements ReportingEngine {
 		logger.info("Reporter observed event by user [" + event.getUser().getUsername() + "]");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onAdd(Attack attack) {
 		notifyWebSocket("attack", attack);
@@ -75,6 +57,9 @@ public class WebSocketReportingEngine implements ReportingEngine {
 		logger.info("Reporter observed attack by user [" + attack.getUser().getUsername() + "]");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onAdd(Response response) {
 		notifyWebSocket("response", response);
@@ -82,16 +67,25 @@ public class WebSocketReportingEngine implements ReportingEngine {
 		logger.info("Reporter observed response for user [" + response.getUser().getUsername() + "]");
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Collection<Event> findEvents(Long earliest) {
 		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Collection<Attack> findAttacks(Long earliest) {
 		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Collection<Response> findResponses(Long earliest) {
 		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
