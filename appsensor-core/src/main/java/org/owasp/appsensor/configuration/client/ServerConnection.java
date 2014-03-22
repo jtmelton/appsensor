@@ -27,6 +27,9 @@ public class ServerConnection {
 	/** The path used: essentially the prefix where the webapp is deployed, eg. "/appsensor-ws-rest-server/api/v1" */
 	private String path;
 	
+	/** The client application identifier header value */
+	private String clientApplicationIdentificationHeaderValue;
+	
 	public String getType() {
 		return type;
 	}
@@ -72,6 +75,17 @@ public class ServerConnection {
 		return this;
 	}
 	
+	public String getClientApplicationIdentificationHeaderValue() {
+		return clientApplicationIdentificationHeaderValue;
+	}
+
+	public ServerConnection setClientApplicationIdentificationHeaderValue(
+			String clientApplicationIdentificationHeaderValue) {
+		this.clientApplicationIdentificationHeaderValue = clientApplicationIdentificationHeaderValue;
+		
+		return this;
+	}
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).
@@ -80,6 +94,7 @@ public class ServerConnection {
 				append(host).
 				append(port).
 				append(path).
+				append(clientApplicationIdentificationHeaderValue).
 				toHashCode();
 	}
 	
@@ -100,6 +115,7 @@ public class ServerConnection {
 				append(host, other.getHost()).
 				append(port, other.getPort()).
 				append(path, other.getPath()).
+				append(clientApplicationIdentificationHeaderValue, other.getClientApplicationIdentificationHeaderValue()).
 				isEquals();
 	}
 	
@@ -111,6 +127,7 @@ public class ServerConnection {
 				append("host", host).
 				append("port", port).
 				append("path", path).
+				append("clientApplicationIdentificationHeaderValue", clientApplicationIdentificationHeaderValue).
 			    toString();
 	}
 	
