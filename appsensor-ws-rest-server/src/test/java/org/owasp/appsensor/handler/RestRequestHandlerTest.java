@@ -59,26 +59,8 @@ public class RestRequestHandlerTest {
     @Test
     public void testGetIt() {
     	AppSensorServer.bootstrap();
-//    	@SuppressWarnings("unchecked")
-//		Collection<Response> responses = (Collection<Response>) target
-    	/*javax.ws.rs.core.Response response = target
-			.path("api")
-			.path("v1.0")
-			.path("responses")
-			.queryParam("detectionSystemId", "server1")
-			.queryParam("earliest", (new GregorianCalendar().getTimeInMillis()) - (1000 * 60 * 60 * 2))	//2 hrs ago
-			.request()
-			.get();
-//			.get(Collection.class);
-//    	Response response = target.path("responses")
-//    			.queryParam("detectionSystemId", "server1")
-//    			.queryParam("earliest", (new GregorianCalendar().getTimeInMillis()) - (1000 * 60 * 60 * 2));	//2 hrs ago 
-        System.err.println("response: " + response);
-        */
         
         GenericType<Collection<Response>> responseType = new GenericType<Collection<Response>>() {};
-        
-//        String encodedAuthzHeader = "Basic " + Base64.encodeAsString("myuser:mypass");
         
         Collection<Response> responses = target
 		.path("api")
@@ -94,40 +76,6 @@ public class RestRequestHandlerTest {
         	System.err.println(resp.getAction() + " / " + resp.getDetectionSystemId() + " / " + resp.getTimestamp());
         }
         
-//        List<Response> list = new ArrayList<Response>();
-//        GenericEntity<List<Response>> entity = new GenericEntity<List<Response>>(list) {};
-//        javax.ws.rs.core.Response r = Response.ok(entity).build();
-        
-//        Collection<Response> responses = (Collection<Response>)response.getEntity();
-//        System.err.println("responses: " + responses);
-        
-//        HttpUrlConnector huc = (HttpUrlConnector)response.getEntity();
-//        
-//        System.err.println(huc.toString());
-        
-        
-//        try {
-//			Thread.sleep(30000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-        
-//        http://localhost:9000/myapp/api/v1.0/responses?detectionSystemId=server1&earliest=1382410098068
-        
-        
-//        Collection<Response> responses = response.readEntity(Collection.class);
-//        System.err.println("entity: " + response.getEntity().getClass());
-//        ConnectionFactory cf = (ConnectionFactory)response.getEntity();
-//        System.err.println(cf);
-        
-//    	
-//    	Form form = new Form().param("customer", "Bill")
-//    	                      .param("product", "IPhone 5")
-//    	                      .param("CC", "4444 4444 4444 4444");
-//    	Response response = target.request().post(Entity.form(form));
-//    	assert response.getStatus() == 200;
-//    	Order order = response.readEntity(Order.class);
     }
     
     /**
