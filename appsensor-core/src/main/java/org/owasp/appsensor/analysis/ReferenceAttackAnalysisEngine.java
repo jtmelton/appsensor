@@ -11,6 +11,7 @@ import org.owasp.appsensor.Response;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.AttackListener;
 import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.storage.AttackStore;
 import org.owasp.appsensor.storage.ResponseStore;
 
 /**
@@ -37,36 +38,19 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine, AttackList
 	 * engine), generates an appropriate {@link Response} object, 
 	 * and adds it to the configured {@link ResponseStore} 
 	 * 
-	 * @param observable object that was being obeserved - ignored in this case
-	 * @param observedObject object that was added to observable. In this case
-	 * 			we are only interested if the object is 
-	 * 			an {@link Attack} object
+	 * @param event the {@link Attack} that was added to the {@link AttackStore}
 	 */
 	@Override
 	public void onAdd(Attack attack) {
-//		if (observedObject instanceof Attack) {
-//			Attack attack = (Attack)observedObject;
-			
+		if (attack != null) {
 			Response response = findAppropriateResponse(attack);
 			
 			if (response != null) {
 				logger.info("Response set for user <" + attack.getUser().getUsername() + "> - storing response action " + response.getAction());
 				AppSensorServer.getInstance().getResponseStore().addResponse(response);
 			}
-//		} 
+		}
 	}
-//	public void update(Observable observable, Object observedObject) {
-//		if (observedObject instanceof Attack) {
-//			Attack attack = (Attack)observedObject;
-//			
-//			Response response = findAppropriateResponse(attack);
-//			
-//			if (response != null) {
-//				logger.info("Response set for user <" + attack.getUser().getUsername() + "> - storing response action " + response.getAction());
-//				AppSensorServer.getInstance().getResponseStore().addResponse(response);
-//			}
-//		} 
-//	}
 	
 	/**
 	 * Find/generate {@link Response} appropriate for specified {@link Attack}.

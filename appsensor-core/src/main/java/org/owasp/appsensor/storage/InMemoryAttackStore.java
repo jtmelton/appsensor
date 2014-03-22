@@ -9,18 +9,17 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.User;
 import org.owasp.appsensor.criteria.SearchCriteria;
+import org.owasp.appsensor.listener.AttackListener;
 import org.owasp.appsensor.logging.Logger;
 
 /**
- * This is a reference implementation of the attack store, and is an implementation of the Observable pattern.
+ * This is a reference implementation of the {@link AttackStore}.
  * 
- * It notifies implementations of the {@link java.util.Observer} interface and passes the observed object. 
- * In this case, we are only concerned with {@link org.owasp.appsensor.Attack} implementations. 
+ * Implementations of the {@link AttackListener} interface can register with 
+ * this class and be notified when new {@link Attack}s are added to the data store 
  * 
- * The implementation is trivial and simply stores the {@link org.owasp.appsensor.Attack}s in an in-memory collection.
+ * The implementation is trivial and simply stores the {@link Attack} in an in-memory collection.
  * 
- * @see java.util.Observable
- *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 public class InMemoryAttackStore extends AttackStore {
@@ -40,9 +39,6 @@ public class InMemoryAttackStore extends AttackStore {
 		attacks.add(attack);
 		
 		super.notifyListeners(attack);
-//		super.setChanged();
-//		
-//		super.notifyObservers(attack);
 	}
 	
 	/**

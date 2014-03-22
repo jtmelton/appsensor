@@ -11,9 +11,7 @@ import org.owasp.appsensor.listener.EventListener;
 import org.owasp.appsensor.listener.ResponseListener;
 
 /**
- * A reporting engine is an implementation of the Observer pattern. 
- * 
- * It watches implementations of the {@link java.util.Observable} interface. 
+ * A reporting engine is an implementation of the observer pattern. 
  * 
  * In this case the reporting engines watch the *Store interfaces of AppSensor.
  * 

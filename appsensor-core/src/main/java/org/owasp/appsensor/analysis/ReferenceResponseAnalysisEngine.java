@@ -8,6 +8,7 @@ import org.owasp.appsensor.Response;
 import org.owasp.appsensor.listener.ResponseListener;
 import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.response.ResponseHandler;
+import org.owasp.appsensor.storage.ResponseStore;
 
 /**
  * This is a reference {@link Response} handler, and is an implementation of the {@link Observer} pattern. 
@@ -31,33 +32,15 @@ public class ReferenceResponseAnalysisEngine implements AnalysisEngine, Response
 	 * This method simply catches responses and calls the 
 	 * configured {@link ResponseHandler} to process them. 
 	 * 
-	 * @param observable object that was being obeserved - ignored in this case
-	 * @param observedObject object that was added to observable. In this case
-	 * 			we are only interested if the object is 
-	 * 			a {@link Response} object
+	 * @param response {@link Response} that has been added to the {@link ResponseStore}.
 	 */
 	@Override
 	public void onAdd(Response response) {
-//		if (observedObject instanceof Attack) {
-//			Response response = (Response)observedObject;
-//			
-			if (response != null) {
-				logger.info("Response executed for user <" + response.getUser().getUsername() + "> - executing response action " + response.getAction());
-				
-				AppSensorClient.getInstance().getResponseHandler().handle(response);
-			}
-//		} 
+		if (response != null) {
+			logger.info("Response executed for user <" + response.getUser().getUsername() + "> - executing response action " + response.getAction());
+			
+			AppSensorClient.getInstance().getResponseHandler().handle(response);
+		}
 	}
-//	public void update(Observable observable, Object observedObject) {
-//		if (observedObject instanceof Attack) {
-//			Response response = (Response)observedObject;
-//			
-//			if (response != null) {
-//				logger.info("Response executed for user <" + response.getUser().getUsername() + "> - executing response action " + response.getAction());
-//				
-//				AppSensorClient.getInstance().getResponseHandler().handle(response);
-//			}
-//		} 
-//	}
 	
 }
