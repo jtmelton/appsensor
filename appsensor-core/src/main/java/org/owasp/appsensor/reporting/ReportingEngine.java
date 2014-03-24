@@ -23,10 +23,31 @@ import org.owasp.appsensor.listener.ResponseListener;
  */
 public interface ReportingEngine extends EventListener, AttackListener, ResponseListener {
 
+	/**
+	 * Find {@link Event}s starting from specified time (unix timestamp)
+	 * 
+	 * @param earliest long representing start time to use to find {@link Event}s
+	 * @return Collection of {@link Event}s from starting time
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
 	public Collection<Event> findEvents(Long earliest) throws NotAuthorizedException;
 	
+	/**
+	 * Find {@link Attack}s starting from specified time (unix timestamp)
+	 * 
+	 * @param earliest long representing start time to use to find {@link Attack}s
+	 * @return Collection of {@link Attack}s from starting time
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
 	public Collection<Attack> findAttacks(Long earliest) throws NotAuthorizedException;
 	
+	/**
+	 * Find {@link Response}s starting from specified time (unix timestamp)
+	 * 
+	 * @param earliest long representing start time to use to find {@link Response}s
+	 * @return Collection of {@link Response}s from starting time
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
 	public Collection<Response> findResponses(Long earliest) throws NotAuthorizedException;
 	
 }
