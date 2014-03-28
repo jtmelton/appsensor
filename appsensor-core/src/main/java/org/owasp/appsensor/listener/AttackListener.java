@@ -13,9 +13,9 @@ public interface AttackListener {
 	
 	/**
 	 * Listener method to handle when a new 
-	 * {@link AttackStore} is added to the {@link AttackStore}
+	 * {@link Attack} is added to the {@link AttackStore}
 	 * 
-	 * @param attack {@link AttackStore} that is added to the {@link AttackStore}
+	 * @param attack {@link Attack} that is added to the {@link AttackStore}
 	 */
 	public void onAdd(Attack attack);
 	
