@@ -5,8 +5,6 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -27,9 +25,6 @@ public class Response implements Serializable {
 	/** User the response is for */
 	private User user;
 	
-	/** Detection Point that was triggered */
-	private DetectionPoint detectionPoint;
-	
 	/** When the event occurred */
 	private long timestamp;
 	
@@ -44,41 +39,40 @@ public class Response implements Serializable {
 	
 	public Response() {}
 	
-	public Response (User user, String action, DetectionPoint detectionPoint, String detectionSystemId) {
-		this(user, action, detectionPoint, Calendar.getInstance().getTimeInMillis(), detectionSystemId, null);
+	public Response (User user, String action, String detectionSystemId) {
+		this(user, action, Calendar.getInstance().getTimeInMillis(), detectionSystemId, null);
 	}
 	
-	public Response (User user, String action, DetectionPoint detectionPoint, long timestamp, String detectionSystemId) {
-		this(user, action, detectionPoint, timestamp, detectionSystemId, null);
+	public Response (User user, String action, long timestamp, String detectionSystemId) {
+		this(user, action, timestamp, detectionSystemId, null);
 	}
 	
-	public Response (User user, String action, DetectionPoint detectionPoint, Date timestamp, String detectionSystemId) {
-		this(user, action, detectionPoint, timestamp.getTime(), detectionSystemId, null);
+	public Response (User user, String action, Date timestamp, String detectionSystemId) {
+		this(user, action, timestamp.getTime(), detectionSystemId, null);
 	}
 	
-	public Response (User user, String action, DetectionPoint detectionPoint, Timestamp timestamp, String detectionSystemId) {
-		this(user, action, detectionPoint, timestamp.getTime(), detectionSystemId, null);
+	public Response (User user, String action, Timestamp timestamp, String detectionSystemId) {
+		this(user, action, timestamp.getTime(), detectionSystemId, null);
 	}
 	
-	public Response (User user, String action, DetectionPoint detectionPoint, String detectionSystemId, Interval interval) {
-		this(user, action, detectionPoint, Calendar.getInstance().getTimeInMillis(), detectionSystemId, interval);
+	public Response (User user, String action, String detectionSystemId, Interval interval) {
+		this(user, action, Calendar.getInstance().getTimeInMillis(), detectionSystemId, interval);
 	}
 	
-	public Response (User user, String action, DetectionPoint detectionPoint, long timestamp, String detectionSystemId, Interval interval) {
+	public Response (User user, String action, long timestamp, String detectionSystemId, Interval interval) {
 		setUser(user);
 		setAction(action);
-		setDetectionPoint(detectionPoint);
 		setTimestamp(timestamp);
 		setDetectionSystemId(detectionSystemId);
 		setInterval(interval);
 	}
 	
-	public Response (User user, String action, DetectionPoint detectionPoint, Date timestamp, String detectionSystemId, Interval interval) {
-		this(user, action, detectionPoint, timestamp.getTime(), detectionSystemId, interval);
+	public Response (User user, String action, Date timestamp, String detectionSystemId, Interval interval) {
+		this(user, action, timestamp.getTime(), detectionSystemId, interval);
 	}
 	
-	public Response (User user, String action, DetectionPoint detectionPoint, Timestamp timestamp, String detectionSystemId, Interval interval) {
-		this(user, action, detectionPoint, timestamp.getTime(), detectionSystemId, interval);
+	public Response (User user, String action, Timestamp timestamp, String detectionSystemId, Interval interval) {
+		this(user, action, timestamp.getTime(), detectionSystemId, interval);
 	}
 	
 	public User getUser() {
@@ -87,16 +81,6 @@ public class Response implements Serializable {
 
 	public Response setUser(User user) {
 		this.user = user;
-		return this;
-	}
-	
-	@XmlTransient
-	public DetectionPoint getDetectionPoint() {
-		return detectionPoint;
-	}
-
-	public Response setDetectionPoint(DetectionPoint detectionPoint) {
-		this.detectionPoint = detectionPoint;
 		return this;
 	}
 
@@ -140,7 +124,6 @@ public class Response implements Serializable {
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).
 				append(user).
-				append(detectionPoint).
 				append(timestamp).
 				append(action).
 				append(interval).
@@ -161,7 +144,6 @@ public class Response implements Serializable {
 		
 		return new EqualsBuilder().
 				append(user, other.getUser()).
-				append(detectionPoint, other.getDetectionPoint()).
 				append(timestamp, other.getTimestamp()).
 				append(action, other.getAction()).
 				append(interval, other.getInterval()).
@@ -173,7 +155,6 @@ public class Response implements Serializable {
 	public String toString() {
 		return new ToStringBuilder(this).
 			       append("user", user).
-			       append("detectionPoint", detectionPoint).
 			       append("timestamp", timestamp).
 			       append("action", action).
 			       append("interval", interval).

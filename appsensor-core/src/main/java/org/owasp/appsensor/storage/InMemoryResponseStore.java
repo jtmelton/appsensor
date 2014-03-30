@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.User;
 import org.owasp.appsensor.criteria.SearchCriteria;
@@ -53,7 +52,6 @@ public class InMemoryResponseStore extends ResponseStore {
 		Collection<Response> matches = new ArrayList<Response>();
 		
 		User user = criteria.getUser();
-		DetectionPoint detectionPoint = criteria.getDetectionPoint();
 		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
 		Long earliest = criteria.getEarliest();
 		
@@ -65,13 +63,9 @@ public class InMemoryResponseStore extends ResponseStore {
 			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
 					detectionSystemIds.contains(response.getDetectionSystemId()) : true;
 			
-			//check detection point match if detection point specified
-			boolean detectionPointMatch = (detectionPoint != null) ? 
-					detectionPoint.getId().equals(response.getDetectionPoint().getId()) : true;
-			
 			boolean earliestMatch = (earliest != null) ? earliest.longValue() < response.getTimestamp() : true;
 			
-			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
+			if (userMatch && detectionSystemMatch && earliestMatch) {
 				matches.add(response);
 			}
 		}

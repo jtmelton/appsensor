@@ -25,29 +25,24 @@ public class LocalResponseHandler implements ResponseHandler {
 		
 		if (LOG.equals(response.getAction())) {
 			logger.fatal("Response executed for user:" + response.getUser().getUsername() + 
-					" due to event code: " + response.getDetectionPoint().getId() + 
 					", Action: Increased Logging");
 		} else if (LOGOUT.equals(response.getAction())) {
 			logger.fatal("Response executed for user:" + response.getUser().getUsername() + 
-					" due to event code: " + response.getDetectionPoint().getId() + 
 					", Action: Logging out malicious account");
 			
 			AppSensorClient.getInstance().getUserManager().logout(response.getUser());
 		} else if (DISABLE_USER.equals(response.getAction())) {
 			logger.fatal("Response executed for user:" + response.getUser().getUsername() + 
-					" due to event code: " + response.getDetectionPoint().getId() + 
 					", Action: Disabling malicious account");
 			
 			AppSensorClient.getInstance().getUserManager().logout(response.getUser());
 		} else if (DISABLE_COMPONENT_FOR_SPECIFIC_USER.equals(response.getAction())) {
 			logger.fatal("Response executed for user:" + response.getUser().getUsername() + 
-					" due to event code: " + response.getDetectionPoint().getId() + 
 					", Action: Disabling Component for Specific User");
 			
 			//TODO: fill in real code for disabling component for specific user
 		} else if (DISABLE_COMPONENT_FOR_ALL_USERS.equals(response.getAction())) {
 			logger.fatal("Response executed for user:" + response.getUser().getUsername() + 
-					" due to event code: " + response.getDetectionPoint().getId() + 
 					", Action: Disabling Component for All Users");
 			
 			//TODO: fill in real code for disabling component for all users

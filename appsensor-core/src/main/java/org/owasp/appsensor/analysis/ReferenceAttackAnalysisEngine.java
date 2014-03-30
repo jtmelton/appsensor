@@ -100,7 +100,6 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine, AttackList
 		
 		Response response = new Response();
 		response.setUser(attack.getUser());
-		response.setDetectionPoint(triggeringDetectionPoint);
 		response.setTimestamp(attack.getTimestamp());
 		response.setAction(responseAction);
 		response.setInterval(interval);
