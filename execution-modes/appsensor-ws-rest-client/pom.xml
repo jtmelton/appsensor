@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-  	<artifactId>appsensor-ws-soap-client</artifactId>
+  	<artifactId>appsensor-ws-rest-client</artifactId>
 	<packaging>jar</packaging>
 
-	<name>appsensor-ws-soap-client</name>
+	<name>appsensor-ws-rest-client</name>
 
 	<description>
         The AppSensor project is an OWASP project to create a knowledge base as well as 
@@ -28,6 +28,13 @@
 		</mailingList>
 	</mailingLists>
 
+	<parent>
+		<groupId>org.owasp.appsensor</groupId>
+	  	<artifactId>appsensor-parent</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+	
 	<organization>
 		<name>The Open Web Application Security Project (OWASP)</name>
 		<url>http://www.owasp.org</url>
@@ -43,10 +50,39 @@
 	</licenses>
 
 	<properties>
+		<jersey.version>2.4</jersey.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.glassfish.jersey</groupId>
+				<artifactId>jersey-bom</artifactId>
+				<version>${jersey.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
 	<dependencies>
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-grizzly2-http</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-moxy</artifactId>
+        </dependency>
+        
 		<dependency>
 			<groupId>org.owasp.appsensor</groupId>
 			<artifactId>appsensor-core</artifactId>
@@ -54,11 +90,5 @@
 		</dependency>
 	</dependencies>
 
-	<parent>
-		<groupId>org.owasp.appsensor</groupId>
-	  	<artifactId>appsensor-parent</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
 	
 </project>

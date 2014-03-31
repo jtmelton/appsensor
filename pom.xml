@@ -107,11 +107,12 @@
 
 	<modules>
 		<module>appsensor-core</module>
-		<module>appsensor-local</module>
-		<module>appsensor-ws-rest-client</module>
-		<module>appsensor-ws-rest-server</module>
-		<module>appsensor-ws-soap-client</module>
-		<module>appsensor-ws-soap-server</module>
+		<module>execution-modes/appsensor-local</module>
+		<module>execution-modes/appsensor-ws-rest-client</module>
+		<module>execution-modes/appsensor-ws-rest-server</module>
+		<module>execution-modes/appsensor-ws-soap-client</module>
+		<module>execution-modes/appsensor-ws-soap-server</module>
+		<module>reporting-engines/appsensor-reporting-websocket</module>
 	</modules>
 	
 	<dependencies>	
@@ -157,6 +158,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
 	
 </project>
