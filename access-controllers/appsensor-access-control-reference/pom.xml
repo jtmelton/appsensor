@@ -1,0 +1,85 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+  	<artifactId>appsensor-access-control-reference</artifactId>
+	<packaging>jar</packaging>
+
+	<name>appsensor-access-control-reference</name>
+
+	<description>
+        The AppSensor project is an OWASP project to create a knowledge base as well as 
+        practical implementations for intrusion detection within applications.
+  	</description>
+	<url>http://www.owasp.org/index.php/Category:OWASP_AppSensor_Project</url>
+
+	<!-- <scm>
+    <connection>scm:svn:http://appsensor.googlecode.com/svn/trunk/</connection>
+    <developerConnection>scm:svn:https://appsensor.googlecode.com/svn/trunk/</developerConnection>
+    <url>https://github.com/jtmelton/appsensor</url>
+  </scm>-->
+  
+	<issueManagement>
+  		<system>GitHub Issue Tracking</system>
+    	<url>https://github.com/jtmelton/appsensor/issues</url>
+  	</issueManagement>
+
+	<!-- <distributionManagement>
+		<snapshotRepository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+
+		<repository>
+			<id>sonatype-nexus-releases</id>
+			<name>Sonatype Nexus Releases</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+	</distributionManagement> -->
+
+	<mailingLists>
+		<mailingList>
+			<name>OWASP-AppSensor</name>
+			<subscribe>https://lists.owasp.org/mailman/listinfo/owasp-appsensor-project</subscribe>
+			<unsubscribe>https://lists.owasp.org/mailman/listinfo/owasp-appsensor-project</unsubscribe>
+			<post>mailto:owasp-appsensor-project@lists.owasp.org</post>
+			<archive>https://lists.owasp.org/pipermail/owasp-appsensor-project/</archive>
+		</mailingList>
+	</mailingLists>
+
+	<organization>
+		<name>The Open Web Application Security Project (OWASP)</name>
+		<url>http://www.owasp.org</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>BSD</name>
+			<url>http://www.opensource.org/licenses/bsd-license.html</url>
+			<distribution>repo</distribution>
+			<comments>Open Source License</comments>
+		</license>
+	</licenses>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-core</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
+	<parent>
+		<groupId>org.owasp.appsensor</groupId>
+	  	<artifactId>appsensor-parent</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+	
+</project>
+
