@@ -50,7 +50,7 @@
 	</licenses>
 
 	<properties>
-		<jersey.version>2.4</jersey.version>
+		<jersey.version>2.7</jersey.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
