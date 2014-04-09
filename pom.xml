@@ -92,6 +92,7 @@
 		<module>execution-modes/appsensor-ws-soap-server</module>
 		<module>reporting-engines/appsensor-reporting-simple-logging</module>
 		<module>reporting-engines/appsensor-reporting-websocket</module>
+		<module>storage-providers/appsensor-storage-file-based</module>
 	</modules>
 	
 	<dependencies>	
