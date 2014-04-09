@@ -83,6 +83,7 @@ public class AppSensorClient extends ObjectFactory {
 	public EventManager getEventManager() {
 		if (eventManager == null) {
 			eventManager = make(getConfiguration().getEventManagerImplementation(), "EventManager");
+			eventManager.setExtendedConfiguration(configuration.getEventManagerExtendedConfiguration());
 		}
 		
 		return eventManager;
@@ -91,6 +92,7 @@ public class AppSensorClient extends ObjectFactory {
 	public ResponseHandler getResponseHandler() {
 		if (responseHandler == null) {
 			responseHandler = make(getConfiguration().getResponseHandlerImplementation(), "ResponseHandler");
+			responseHandler.setExtendedConfiguration(configuration.getResponseHandlerExtendedConfiguration());
 		}
 		
 		return responseHandler;
@@ -99,6 +101,7 @@ public class AppSensorClient extends ObjectFactory {
 	public UserManager getUserManager() {
 		if (userManager == null) {
 			userManager = make(getConfiguration().getUserManagerImplementation(), "UserManager");
+			userManager.setExtendedConfiguration(configuration.getUserManagerExtendedConfiguration());
 		}
 		
 		return userManager;

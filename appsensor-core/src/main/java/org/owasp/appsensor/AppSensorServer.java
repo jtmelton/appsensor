@@ -136,6 +136,7 @@ public class AppSensorServer extends ObjectFactory {
 	public AnalysisEngine getEventAnalysisEngine() {
 		if (eventAnalysisEngine == null) {
 			eventAnalysisEngine = make(getConfiguration().getEventAnalysisEngineImplementation(), "EventAnalysisEngine");
+			eventAnalysisEngine.setExtendedConfiguration(getConfiguration().getEventAnalysisEngineExtendedConfiguration());
 		}
 		
 		return eventAnalysisEngine;
@@ -148,6 +149,7 @@ public class AppSensorServer extends ObjectFactory {
 	public AnalysisEngine getAttackAnalysisEngine() {
 		if (attackAnalysisEngine == null) {
 			attackAnalysisEngine = make(getConfiguration().getAttackAnalysisEngineImplementation(), "AttackAnalysisEngine");
+			attackAnalysisEngine.setExtendedConfiguration(getConfiguration().getAttackAnalysisEngineExtendedConfiguration());
 		}
 		
 		return attackAnalysisEngine;
@@ -160,6 +162,7 @@ public class AppSensorServer extends ObjectFactory {
 	public AnalysisEngine getResponseAnalysisEngine() {
 		if (responseAnalysisEngine == null) {
 			responseAnalysisEngine = make(getConfiguration().getResponseAnalysisEngineImplementation(), "ResponseAnalysisEngine");
+			responseAnalysisEngine.setExtendedConfiguration(getConfiguration().getResponseAnalysisEngineExtendedConfiguration());
 		}
 		
 		return responseAnalysisEngine;
@@ -172,6 +175,7 @@ public class AppSensorServer extends ObjectFactory {
 	public EventStore getEventStore() {
 		if (eventStore == null) {
 			eventStore = make(getConfiguration().getEventStoreImplementation(), "EventStore");
+			eventStore.setExtendedConfiguration(getConfiguration().getEventStoreExtendedConfiguration());
 		}
 		
 		return eventStore; 
@@ -184,6 +188,7 @@ public class AppSensorServer extends ObjectFactory {
 	public AttackStore getAttackStore() {
 		if (attackStore == null) {
 			attackStore = make(getConfiguration().getAttackStoreImplementation(), "AttackStore");
+			attackStore.setExtendedConfiguration(getConfiguration().getAttackStoreExtendedConfiguration());
 		}
 		
 		return attackStore;
@@ -196,6 +201,7 @@ public class AppSensorServer extends ObjectFactory {
 	public ResponseStore getResponseStore() {
 		if (responseStore == null) {
 			responseStore = make(getConfiguration().getResponseStoreImplementation(), "ResponseStore");
+			responseStore.setExtendedConfiguration(getConfiguration().getResponseStoreExtendedConfiguration());
 		}
 		
 		return responseStore;
@@ -206,7 +212,10 @@ public class AppSensorServer extends ObjectFactory {
 	 * @return Logger object
 	 */
 	public Logger getLogger() {
-		return make(getConfiguration().getLoggerImplementation(), "Logger");
+		Logger logger = make(getConfiguration().getLoggerImplementation(), "Logger");
+		logger.setExtendedConfiguration(getConfiguration().getLoggerExtendedConfiguration());
+		
+		return logger;
 	}
 	
 	/**
@@ -216,6 +225,7 @@ public class AppSensorServer extends ObjectFactory {
 	public AccessController getAccessController() {
 		if (accessController == null) {
 			accessController = make(getConfiguration().getAccessControllerImplementation(), "AccessController");
+			accessController.setExtendedConfiguration(getConfiguration().getAccessControllerExtendedConfiguration());
 		}
 		
 		return accessController;
