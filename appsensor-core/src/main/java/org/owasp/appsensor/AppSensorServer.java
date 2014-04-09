@@ -1,17 +1,22 @@
 package org.owasp.appsensor;
 
-import java.util.Observer;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.owasp.appsensor.accesscontrol.AccessController;
 import org.owasp.appsensor.analysis.AnalysisEngine;
-import org.owasp.appsensor.configuration.server.ServerConfiguration;
-import org.owasp.appsensor.configuration.server.ServerConfigurationReader;
-import org.owasp.appsensor.configuration.server.StaxServerConfigurationReader;
-import org.owasp.appsensor.exceptions.ConfigurationException;
-import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.correlation.CorrelationSet;
+import org.owasp.appsensor.logging.Loggable;
 import org.owasp.appsensor.storage.AttackStore;
 import org.owasp.appsensor.storage.EventStore;
 import org.owasp.appsensor.storage.ResponseStore;
+import org.slf4j.Logger;
 
 /**
  * AppSensor locator class is provided to make it easy to gain access to the 
@@ -21,122 +26,87 @@ import org.owasp.appsensor.storage.ResponseStore;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public class AppSensorServer extends ObjectFactory {
-	
-	/** accessor for {@link org.owasp.appsensor.configuration.server.ServerConfiguration} */
-	private static ServerConfiguration configuration;
+@Named
+@Loggable
+public class AppSensorServer {
 	
 	/** accessor for {@link org.owasp.appsensor.storage.EventStore} */
-	private static EventStore eventStore;
+	private EventStore eventStore;
 	
 	/** accessor for {@link org.owasp.appsensor.storage.AttackStore} */
-	private static AttackStore attackStore;
+	private AttackStore attackStore;
 	
 	/** accessor for {@link org.owasp.appsensor.storage.ResponseStore} */
-	private static ResponseStore responseStore;
+	private ResponseStore responseStore;
 	
 	/** accessor for Event {@link org.owasp.appsensor.storage.AnalysisEngine} */
-	private static AnalysisEngine eventAnalysisEngine;
+	private AnalysisEngine eventAnalysisEngine;
 	
 	/** accessor for Attack {@link org.owasp.appsensor.storage.AnalysisEngine} */
-	private static AnalysisEngine attackAnalysisEngine;
+	private AnalysisEngine attackAnalysisEngine;
 	
 	/** accessor for Response {@link org.owasp.appsensor.storage.AnalysisEngine} */
-	private static AnalysisEngine responseAnalysisEngine;
+	private AnalysisEngine responseAnalysisEngine;
 	
 	/** accessor for {@link org.owasp.appsensor.accesscontrol.AccessController} */
-	private static AccessController accessController;
+	private AccessController accessController;
 	
-	/**
-	 * Bootstrap mechanism that loads the configuration for the server object based 
-	 * on the default configuration reading mechanism. 
-	 * 
-	 * The reference implementation of the configuration is XML-based and a schema is 
-	 * available in the appsensor_server_config_VERSION.xsd.
-	 */
-	public static synchronized void bootstrap() {
-		bootstrap(new StaxServerConfigurationReader());
+	private Logger logger;
+	
+	private Collection<CorrelationSet> correlationSets = new HashSet<>();
+	
+	private String clientApplicationIdentificationHeaderName;
+	
+	private Map<String, DetectionPoint> detectionPoints = Collections.synchronizedMap(new HashMap<String, DetectionPoint>());
+
+	private Map<String, ClientApplication> clientApplications = Collections.synchronizedMap(new HashMap<String, ClientApplication>());
+	
+	public String getClientApplicationIdentificationHeaderName() {
+		return clientApplicationIdentificationHeaderName;
+	}
+
+	public void setClientApplicationIdentificationHeaderName(
+			String clientApplicationIdentificationHeaderName) {
+		this.clientApplicationIdentificationHeaderName = clientApplicationIdentificationHeaderName;
+	}
+
+	public Collection<DetectionPoint> getDetectionPoints() {
+		return detectionPoints.values();
+	}
+
+	public DetectionPoint findDetectionPoint(String detectionPointId) {
+		return detectionPoints != null ? detectionPoints.get(detectionPointId) : null;
+	}
+
+	public ClientApplication findClientApplication(String search) {
+		return clientApplications != null ? clientApplications.get(search) : null;
 	}
 	
-	/**
-	 * Bootstrap mechanism that loads the configuration for the server object based 
-	 * on the specified configuration reading mechanism. 
-	 * 
-	 * The reference implementation of the configuration is XML-based, but this interface 
-	 * allows for whatever mechanism is desired
-	 * 
-	 * @param configurationReader desired configuration reader 
-	 */
-	public static synchronized void bootstrap(ServerConfigurationReader configurationReader) {
-		if (configuration != null) {
-			throw new IllegalStateException("Bootstrapping the AppSensorServer should only occur 1 time per JVM instance.");
+	public Collection<String> getRelatedDetectionSystems(String detectionSystemId) {
+		Collection<String> relatedDetectionSystems = new HashSet<String>();
+
+		relatedDetectionSystems.add(detectionSystemId);
+
+		if(correlationSets != null) {
+			for(CorrelationSet correlationSet : correlationSets) {
+				if(correlationSet.getClientApplications() != null) {
+					if(correlationSet.getClientApplications().contains(detectionSystemId)) {
+						relatedDetectionSystems.addAll(correlationSet.getClientApplications());
+					}
+				}
+			}
 		}
-		
-		try {
-			configuration = configurationReader.read();
-			
-			initialize();
-		} catch(ConfigurationException pe) {
-			throw new RuntimeException(pe);
-		}
+
+		return relatedDetectionSystems;
 	}
-	
-	public static synchronized AppSensorServer getInstance() {
-		if (configuration == null) {
-			//if getInstance is called without the bootstrap having been run, just execute the default bootstrapping
-			bootstrap();
-		}
-		
-		return SingletonHolder.instance;
-	}
-	
-	private static final class SingletonHolder {
-		static final AppSensorServer instance = new AppSensorServer();
-	}
-	
-	private static void initialize() {
-		eventStore = null;
-		attackStore = null;
-		responseStore = null;
-		
-		//load up observer configurations on static load
-		for(String observer : configuration.getEventStoreObserverImplementations()) {
-			SingletonHolder.instance.getEventStore().addObserver((Observer)make(observer, "EventStoreObserver"));
-		}
-		
-		for(String observer : configuration.getAttackStoreObserverImplementations()) {
-			SingletonHolder.instance.getAttackStore().addObserver((Observer)make(observer, "AttackStoreObserver"));
-		}
-		
-		for(String observer : configuration.getResponseStoreObserverImplementations()) {
-			SingletonHolder.instance.getResponseStore().addObserver((Observer)make(observer, "ResponseStoreObserver"));
-		}
-	}
-	
-	//singleton
+
 	private AppSensorServer() { }
-	
-	/**
-	 * Accessor for ServerConfiguration object
-	 * @return ServerConfiguration object
-	 */
-	public ServerConfiguration getConfiguration() {
-		return configuration;
-	}
-	
-	public void setConfiguration(ServerConfiguration updatedConfiguration) {
-		configuration = updatedConfiguration;
-	}
 	
 	/**
 	 * Accessor for Event AnalysisEngine object
 	 * @return Event AnalysisEngine object
 	 */
 	public AnalysisEngine getEventAnalysisEngine() {
-		if (eventAnalysisEngine == null) {
-			eventAnalysisEngine = make(getConfiguration().getEventAnalysisEngineImplementation(), "EventAnalysisEngine");
-		}
-		
 		return eventAnalysisEngine;
 	}
 	
@@ -145,10 +115,6 @@ public class AppSensorServer extends ObjectFactory {
 	 * @return Attack AnalysisEngine object
 	 */
 	public AnalysisEngine getAttackAnalysisEngine() {
-		if (attackAnalysisEngine == null) {
-			attackAnalysisEngine = make(getConfiguration().getAttackAnalysisEngineImplementation(), "AttackAnalysisEngine");
-		}
-		
 		return attackAnalysisEngine;
 	}
 	
@@ -157,10 +123,6 @@ public class AppSensorServer extends ObjectFactory {
 	 * @return Response AnalysisEngine object
 	 */
 	public AnalysisEngine getResponseAnalysisEngine() {
-		if (responseAnalysisEngine == null) {
-			responseAnalysisEngine = make(getConfiguration().getResponseAnalysisEngineImplementation(), "ResponseAnalysisEngine");
-		}
-		
 		return responseAnalysisEngine;
 	}
 	
@@ -169,10 +131,6 @@ public class AppSensorServer extends ObjectFactory {
 	 * @return EventStore object
 	 */
 	public EventStore getEventStore() {
-		if (eventStore == null) {
-			eventStore = make(getConfiguration().getEventStoreImplementation(), "EventStore");
-		}
-		
 		return eventStore; 
 	}
 	
@@ -181,10 +139,6 @@ public class AppSensorServer extends ObjectFactory {
 	 * @return AttackStore object
 	 */
 	public AttackStore getAttackStore() {
-		if (attackStore == null) {
-			attackStore = make(getConfiguration().getAttackStoreImplementation(), "AttackStore");
-		}
-		
 		return attackStore;
 	}
 	
@@ -193,10 +147,6 @@ public class AppSensorServer extends ObjectFactory {
 	 * @return ResponseStore object
 	 */
 	public ResponseStore getResponseStore() {
-		if (responseStore == null) {
-			responseStore = make(getConfiguration().getResponseStoreImplementation(), "ResponseStore");
-		}
-		
 		return responseStore;
 	}
 	
@@ -205,7 +155,7 @@ public class AppSensorServer extends ObjectFactory {
 	 * @return Logger object
 	 */
 	public Logger getLogger() {
-		return make(getConfiguration().getLoggerImplementation(), "Logger");
+		return logger;
 	}
 	
 	/**
@@ -213,11 +163,44 @@ public class AppSensorServer extends ObjectFactory {
 	 * @return AccessController object
 	 */
 	public AccessController getAccessController() {
-		if (accessController == null) {
-			accessController = make(getConfiguration().getAccessControllerImplementation(), "AccessController");
-		}
-		
 		return accessController;
 	}
 	
+	public void setDetectionPoints(Collection<DetectionPoint> detectionPoints) {
+		Map<String, DetectionPoint> mappedDetectionPoints = Collections.synchronizedMap(new HashMap<String, DetectionPoint>());
+		for (DetectionPoint detectionPoint : detectionPoints == null ? Collections.<DetectionPoint>emptyList() : detectionPoints) {
+			mappedDetectionPoints.put(detectionPoint.getId(), detectionPoint);
+		}
+		this.detectionPoints = mappedDetectionPoints;
+	}
+
+	@Inject
+	public void setEventStore(EventStore eventStore) {
+		this.eventStore = eventStore;
+	}
+
+	@Inject
+	public void setAttackStore(AttackStore attackStore) {
+		this.attackStore = attackStore;
+	}
+
+	@Inject
+	public void setResponseStore(ResponseStore responseStore) {
+		this.responseStore = responseStore;
+	}
+
+	@Inject @Named("EventAnalysisEngine")
+	public void setEventAnalysisEngine(AnalysisEngine eventAnalysisEngine) {
+		this.eventAnalysisEngine = eventAnalysisEngine;
+	}
+
+	@Inject @Named("AttackAnalysisEngine")
+	public void setAttackAnalysisEngine(AnalysisEngine attackAnalysisEngine) {
+		this.attackAnalysisEngine = attackAnalysisEngine;
+	}
+
+	@Inject
+	public void setAccessController(AccessController accessController) {
+		this.accessController = accessController;
+	}
 }

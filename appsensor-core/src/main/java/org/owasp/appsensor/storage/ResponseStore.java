@@ -2,6 +2,9 @@ package org.owasp.appsensor.storage;
 
 import java.util.Collection;
 import java.util.Observable;
+import java.util.Observer;
+
+import javax.inject.Inject;
 
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.criteria.SearchCriteria;
@@ -27,6 +30,14 @@ public abstract class ResponseStore extends Observable {
 	public abstract void addResponse(Response response);
 	
 	public abstract Collection<Response> findResponses(SearchCriteria criteria);
+	
+	@Inject @ResponseStoreObserver
+	public void setObservers(Collection<Observer> observers) {
+		for (Observer observer : observers) {
+			super.addObserver(observer);	
+		}
+	}
+	
 //	/**
 //	 * Finder for responses in the ResponseStore
 //	 * 

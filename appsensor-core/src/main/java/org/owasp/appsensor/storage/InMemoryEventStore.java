@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.owasp.appsensor.AppSensorServer;
+import javax.inject.Named;
+
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.User;
 import org.owasp.appsensor.criteria.SearchCriteria;
-import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.logging.Loggable;
+import org.slf4j.Logger;
 
 /**
  * This is a reference implementation of the {@link EventStore}, and is an implementation of the Observable pattern.
@@ -23,9 +25,11 @@ import org.owasp.appsensor.logging.Logger;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
+@Loggable
 public class InMemoryEventStore extends EventStore {
 	
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(InMemoryEventStore.class);
+	private Logger logger;
 	
 	/** maintain a collection of {@link Event}s as an in-memory list */
 	private Collection<Event> events = new CopyOnWriteArrayList<Event>();
@@ -35,7 +39,7 @@ public class InMemoryEventStore extends EventStore {
 	 */
 	@Override
 	public void addEvent(Event event) {
-		logger.warning("Security event " + event.getDetectionPoint().getId() + " triggered by user: " + event.getUser().getUsername());
+		logger.warn("Security event " + event.getDetectionPoint().getId() + " triggered by user: " + event.getUser().getUsername());
 		
 		events.add(event);
 		

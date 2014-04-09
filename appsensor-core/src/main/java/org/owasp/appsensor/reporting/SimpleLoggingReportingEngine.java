@@ -3,11 +3,16 @@ package org.owasp.appsensor.reporting;
 import java.util.Collection;
 import java.util.Observable;
 
-import org.owasp.appsensor.AppSensorServer;
+import javax.inject.Named;
+
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.logging.Loggable;
+import org.owasp.appsensor.storage.AttackStoreObserver;
+import org.owasp.appsensor.storage.EventStoreObserver;
+import org.owasp.appsensor.storage.ResponseStoreObserver;
+import org.slf4j.Logger;
 
 /**
  * This is the reference reporting engine, and is an implementation of the Observer pattern. 
@@ -24,9 +29,14 @@ import org.owasp.appsensor.logging.Logger;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
+@EventStoreObserver
+@AttackStoreObserver
+@ResponseStoreObserver
+@Loggable
 public class SimpleLoggingReportingEngine implements ReportingEngine {
 	
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(SimpleLoggingReportingEngine.class);
+	private Logger logger;
 	
 	/**
 	 * This method reports on {@link Event}, {@link Attack} and {@link Response} objects 

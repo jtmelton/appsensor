@@ -2,6 +2,9 @@ package org.owasp.appsensor.storage;
 
 import java.util.Collection;
 import java.util.Observable;
+import java.util.Observer;
+
+import javax.inject.Inject;
 
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.criteria.SearchCriteria;
@@ -27,6 +30,14 @@ public abstract class EventStore extends Observable {
 	public abstract void addEvent(Event event);
 	
 	public abstract Collection<Event> findEvents(SearchCriteria criteria);
+	
+	@Inject @EventStoreObserver
+	public void setObservers(Collection<Observer> observers) {
+		for (Observer observer : observers) {
+			super.addObserver(observer);	
+		}
+	}
+	
 //	/**
 //	 * A finder for Event objects in the EventStore
 //	 * 

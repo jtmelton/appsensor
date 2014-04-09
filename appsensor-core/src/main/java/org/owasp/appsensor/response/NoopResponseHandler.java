@@ -1,8 +1,7 @@
 package org.owasp.appsensor.response;
 
-import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.logging.Logger;
+import org.slf4j.Logger;
 
 /**
  * This class is a simple NO-OP {@link Response} handler. Calls to this {@link Response} handler simply 
@@ -12,7 +11,7 @@ import org.owasp.appsensor.logging.Logger;
  */
 public class NoopResponseHandler implements ResponseHandler {
 
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(NoopResponseHandler.class);
+	private Logger logger;
 	
 	/**
 	 * {@inheritDoc}

@@ -3,6 +3,9 @@ package org.owasp.appsensor.analysis;
 import java.util.Collection;
 import java.util.Observable;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
@@ -11,9 +14,11 @@ import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.User;
 import org.owasp.appsensor.criteria.SearchCriteria;
-import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.logging.Loggable;
 import org.owasp.appsensor.storage.AttackStore;
+import org.owasp.appsensor.storage.EventStoreObserver;
 import org.owasp.appsensor.util.DateUtils;
+import org.slf4j.Logger;
 
 /**
  * This is a statistical {@link Event} analysis engine, and is an implementation of the Observer pattern. 
@@ -30,9 +35,15 @@ import org.owasp.appsensor.util.DateUtils;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named("EventAnalysisEngine")
+@EventStoreObserver
+@Loggable
 public class ReferenceEventAnalysisEngine implements AnalysisEngine {
 
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceEventAnalysisEngine.class);
+	private Logger logger;
+	
+	@Inject
+	private AppSensorServer appSensorServer;
 	
 	/**
 	 * This method analyzes statistical {@link Event}s that are added to the system and 
@@ -52,11 +63,11 @@ public class ReferenceEventAnalysisEngine implements AnalysisEngine {
 			SearchCriteria criteria = new SearchCriteria().
 					setUser(event.getUser()).
 					setDetectionPoint(event.getDetectionPoint()).
-					setDetectionSystemIds(AppSensorServer.getInstance().getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
+					setDetectionSystemIds(appSensorServer.getRelatedDetectionSystems(event.getDetectionSystemId()));
 			
-			Collection<Event> existingEvents = AppSensorServer.getInstance().getEventStore().findEvents(criteria);
+			Collection<Event> existingEvents = appSensorServer.getEventStore().findEvents(criteria);
 			
-			DetectionPoint configuredDetectionPoint = AppSensorServer.getInstance().getConfiguration().findDetectionPoint(event.getDetectionPoint());
+			DetectionPoint configuredDetectionPoint = appSensorServer.findDetectionPoint(event.getDetectionPoint().getId());
 			
 			int eventCount = countEvents(configuredDetectionPoint.getThreshold().getInterval().toMillis(), existingEvents, event);
 			
@@ -71,7 +82,7 @@ public class ReferenceEventAnalysisEngine implements AnalysisEngine {
 			if (eventCount % thresholdCount == 0) {
 				logger.info("Violation Observed for user <" + event.getUser().getUsername() + "> - storing attack");
 				//have determined this event triggers attack
-				AppSensorServer.getInstance().getAttackStore().addAttack(new Attack(event));
+				appSensorServer.getAttackStore().addAttack(new Attack(event));
 			}
 		} 
 	}
@@ -125,9 +136,9 @@ public class ReferenceEventAnalysisEngine implements AnalysisEngine {
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(event.getUser()).
 				setDetectionPoint(event.getDetectionPoint()).
-				setDetectionSystemIds(AppSensorServer.getInstance().getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
+				setDetectionSystemIds(appSensorServer.getRelatedDetectionSystems(event.getDetectionSystemId()));
 		
-		Collection<Attack> attacks = AppSensorServer.getInstance().getAttackStore().findAttacks(criteria);
+		Collection<Attack> attacks = appSensorServer.getAttackStore().findAttacks(criteria);
 		
 		for (Attack attack : attacks) {
 			if (attack.getTimestamp() > newest) {

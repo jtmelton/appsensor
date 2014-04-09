@@ -1,5 +1,7 @@
 package org.owasp.appsensor.accesscontrol;
 
+import javax.inject.Named;
+
 import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
@@ -10,6 +12,7 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
 public class ReferenceAccessController implements AccessController {
 	
 	/**
