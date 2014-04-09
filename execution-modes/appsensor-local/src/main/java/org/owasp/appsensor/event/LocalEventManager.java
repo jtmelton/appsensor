@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.handler.LocalRequestHandler;
 import org.owasp.appsensor.util.DateUtils;
 
@@ -18,6 +19,8 @@ import org.owasp.appsensor.util.DateUtils;
 public class LocalEventManager implements EventManager {
 
 	private static LocalRequestHandler requestHandler = new LocalRequestHandler();
+	
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	private long responsesLastChecked = DateUtils.getCurrentTime();
 	
@@ -42,11 +45,6 @@ public class LocalEventManager implements EventManager {
 	 */
 	@Override
 	public Collection<Response> getResponses() {
-//		logger.info("The local event manager executes responses immediately " +
-//				"and therefore does not support retrieving responses");
-//		
-//		return Collections.emptyList();
-		
 		Collection<Response> responses = requestHandler.getResponses(responsesLastChecked);
 		
 		//now update last checked
@@ -55,4 +53,16 @@ public class LocalEventManager implements EventManager {
 		return responses;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
+	}
+	
 }

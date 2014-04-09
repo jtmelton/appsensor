@@ -3,6 +3,7 @@ package org.owasp.appsensor.response;
 import org.owasp.appsensor.AppSensorClient;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.AppSensorServer;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.logging.Logger;
 
 /**
@@ -16,6 +17,8 @@ import org.owasp.appsensor.logging.Logger;
 public class LocalResponseHandler implements ResponseHandler {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(LocalResponseHandler.class);
+	
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	/**
 	 * {@inheritDoc}
@@ -53,4 +56,16 @@ public class LocalResponseHandler implements ResponseHandler {
 		
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
+	}
+	
 }

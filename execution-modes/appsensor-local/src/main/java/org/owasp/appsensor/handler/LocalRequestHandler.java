@@ -7,6 +7,7 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.RequestHandler;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 import org.owasp.appsensor.util.StringUtils;
@@ -26,6 +27,9 @@ import org.owasp.appsensor.util.StringUtils;
 public class LocalRequestHandler implements RequestHandler {
 
 	private static String detectionSystemId = null;	//start with blank
+	
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -61,4 +65,17 @@ public class LocalRequestHandler implements RequestHandler {
 		
 		return AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
+	}
+	
 }

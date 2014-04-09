@@ -2,6 +2,7 @@ package org.owasp.appsensor.user;
 
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.User;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.event.LocalEventManager;
 import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.response.UserManager;
@@ -17,6 +18,8 @@ import org.owasp.appsensor.response.UserManager;
 public class NoopUserManager implements UserManager {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(LocalEventManager.class);
+	
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	/**
 	 * {@inheritDoc}
@@ -34,4 +37,16 @@ public class NoopUserManager implements UserManager {
 		logger.info("The no-op user manager did not disable the user as requested.");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
+	}
+	
 }
