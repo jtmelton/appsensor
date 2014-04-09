@@ -1,5 +1,6 @@
 package org.owasp.appsensor.logging;
 
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -11,6 +12,8 @@ public class Slf4jLogger implements org.owasp.appsensor.logging.Logger {
 	
 	private org.slf4j.Logger logger = LoggerFactory.getLogger(Slf4jLogger.class);
 
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -109,4 +112,16 @@ public class Slf4jLogger implements org.owasp.appsensor.logging.Logger {
 		logger.trace(message,throwable);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
+	}
+	
 }
