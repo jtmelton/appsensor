@@ -7,27 +7,6 @@
 
 	<name>appsensor-ws-rest-client</name>
 
-	<description>
-        The AppSensor project is an OWASP project to create a knowledge base as well as 
-        practical implementations for intrusion detection within applications.
-  	</description>
-	<url>http://www.owasp.org/index.php/Category:OWASP_AppSensor_Project</url>
-
-	<issueManagement>
-  		<system>GitHub Issue Tracking</system>
-    	<url>https://github.com/jtmelton/appsensor/issues</url>
-  	</issueManagement>
-
-	<mailingLists>
-		<mailingList>
-			<name>OWASP-AppSensor</name>
-			<subscribe>https://lists.owasp.org/mailman/listinfo/owasp-appsensor-project</subscribe>
-			<unsubscribe>https://lists.owasp.org/mailman/listinfo/owasp-appsensor-project</unsubscribe>
-			<post>mailto:owasp-appsensor-project@lists.owasp.org</post>
-			<archive>https://lists.owasp.org/pipermail/owasp-appsensor-project/</archive>
-		</mailingList>
-	</mailingLists>
-
 	<parent>
 		<groupId>org.owasp.appsensor</groupId>
 	  	<artifactId>appsensor-parent</artifactId>
@@ -35,20 +14,6 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	
-	<organization>
-		<name>The Open Web Application Security Project (OWASP)</name>
-		<url>http://www.owasp.org</url>
-	</organization>
-
-	<licenses>
-		<license>
-			<name>BSD</name>
-			<url>http://www.opensource.org/licenses/bsd-license.html</url>
-			<distribution>repo</distribution>
-			<comments>Open Source License</comments>
-		</license>
-	</licenses>
-
 	<properties>
 		<jersey.version>2.7</jersey.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
