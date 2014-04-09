@@ -12,6 +12,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.DetectionPoint;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.correlation.CorrelationSet;
 
 /**
@@ -24,16 +25,24 @@ import org.owasp.appsensor.correlation.CorrelationSet;
 public class ServerConfiguration {
 	
 	private String eventAnalysisEngineImplementation;
+	private ExtendedConfiguration eventAnalysisEngineExtendedConfiguration;
 	private String attackAnalysisEngineImplementation;
+	private ExtendedConfiguration attackAnalysisEngineExtendedConfiguration;
 	private String responseAnalysisEngineImplementation;
+	private ExtendedConfiguration responseAnalysisEngineExtendedConfiguration;
 	
 	private String eventStoreImplementation;
+	private ExtendedConfiguration eventStoreExtendedConfiguration;
 	private String attackStoreImplementation;
+	private ExtendedConfiguration attackStoreExtendedConfiguration;
 	private String responseStoreImplementation;
+	private ExtendedConfiguration responseStoreExtendedConfiguration;
 	
 	private String loggerImplementation;
+	private ExtendedConfiguration loggerExtendedConfiguration;
 	
 	private String accessControllerImplementation;
+	private ExtendedConfiguration accessControllerExtendedConfiguration;
 	
 	private Collection<String> eventStoreObserverImplementations = new ArrayList<>();
 	private Collection<String> attackStoreObserverImplementations = new ArrayList<>();
@@ -191,6 +200,86 @@ public class ServerConfiguration {
 
 	public ServerConfiguration setClientApplications(Collection<ClientApplication> clientApplications) {
 		this.clientApplications = clientApplications;
+		return this;
+	}
+
+	public ExtendedConfiguration getEventAnalysisEngineExtendedConfiguration() {
+		return eventAnalysisEngineExtendedConfiguration;
+	}
+
+	public ServerConfiguration setEventAnalysisEngineExtendedConfiguration(
+			ExtendedConfiguration eventAnalysisEngineExtendedConfiguration) {
+		this.eventAnalysisEngineExtendedConfiguration = eventAnalysisEngineExtendedConfiguration;
+		return this;
+	}
+
+	public ExtendedConfiguration getAttackAnalysisEngineExtendedConfiguration() {
+		return attackAnalysisEngineExtendedConfiguration;
+	}
+
+	public ServerConfiguration setAttackAnalysisEngineExtendedConfiguration(
+			ExtendedConfiguration attackAnalysisEngineExtendedConfiguration) {
+		this.attackAnalysisEngineExtendedConfiguration = attackAnalysisEngineExtendedConfiguration;
+		return this;
+	}
+
+	public ExtendedConfiguration getResponseAnalysisEngineExtendedConfiguration() {
+		return responseAnalysisEngineExtendedConfiguration;
+	}
+
+	public ServerConfiguration setResponseAnalysisEngineExtendedConfiguration(
+			ExtendedConfiguration responseAnalysisEngineExtendedConfiguration) {
+		this.responseAnalysisEngineExtendedConfiguration = responseAnalysisEngineExtendedConfiguration;
+		return this;
+	}
+
+	public ExtendedConfiguration getEventStoreExtendedConfiguration() {
+		return eventStoreExtendedConfiguration;
+	}
+
+	public ServerConfiguration setEventStoreExtendedConfiguration(
+			ExtendedConfiguration eventStoreExtendedConfiguration) {
+		this.eventStoreExtendedConfiguration = eventStoreExtendedConfiguration;
+		return this;
+	}
+
+	public ExtendedConfiguration getAttackStoreExtendedConfiguration() {
+		return attackStoreExtendedConfiguration;
+	}
+
+	public ServerConfiguration setAttackStoreExtendedConfiguration(
+			ExtendedConfiguration attackStoreExtendedConfiguration) {
+		this.attackStoreExtendedConfiguration = attackStoreExtendedConfiguration;
+		return this;
+	}
+
+	public ExtendedConfiguration getResponseStoreExtendedConfiguration() {
+		return responseStoreExtendedConfiguration;
+	}
+
+	public ServerConfiguration setResponseStoreExtendedConfiguration(
+			ExtendedConfiguration responseStoreExtendedConfiguration) {
+		this.responseStoreExtendedConfiguration = responseStoreExtendedConfiguration;
+		return this;
+	}
+
+	public ExtendedConfiguration getLoggerExtendedConfiguration() {
+		return loggerExtendedConfiguration;
+	}
+
+	public ServerConfiguration setLoggerExtendedConfiguration(
+			ExtendedConfiguration loggerExtendedConfiguration) {
+		this.loggerExtendedConfiguration = loggerExtendedConfiguration;
+		return this;
+	}
+
+	public ExtendedConfiguration getAccessControllerExtendedConfiguration() {
+		return accessControllerExtendedConfiguration;
+	}
+
+	public ServerConfiguration setAccessControllerExtendedConfiguration(
+			ExtendedConfiguration accessControllerExtendedConfiguration) {
+		this.accessControllerExtendedConfiguration = accessControllerExtendedConfiguration;
 		return this;
 	}
 

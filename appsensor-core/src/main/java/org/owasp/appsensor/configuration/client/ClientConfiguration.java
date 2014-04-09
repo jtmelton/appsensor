@@ -3,6 +3,7 @@ package org.owasp.appsensor.configuration.client;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 
 /**
  * Represents the configuration for client-side components. 
@@ -14,11 +15,20 @@ public class ClientConfiguration {
 	/** Event manager for client-code to interact with appsensor */
 	private String eventManagerImplementation;
 
+	/** Extended configuration for event manager */
+	private ExtendedConfiguration eventManagerExtendedConfiguration;
+	
 	/** Response handler */
 	private String responseHandlerImplementation;
 	
+	/** Extended configuration for response handler */
+	private ExtendedConfiguration responseHandlerExtendedConfiguration;
+	
 	/** User manager for performing responses on users */
 	private String userManagerImplementation;
+	
+	/** Extended configuration for user manager */
+	private ExtendedConfiguration userManagerExtendedConfiguration;
 	
 	/** Server connection with configuration info for rest/soap connections */
 	private ServerConnection serverConnection;
@@ -32,6 +42,15 @@ public class ClientConfiguration {
 		return this;
 	}
 	
+	public ExtendedConfiguration getEventManagerExtendedConfiguration() {
+		return eventManagerExtendedConfiguration;
+	}
+
+	public ClientConfiguration setEventManagerExtendedConfiguration(ExtendedConfiguration eventManagerExtendedConfiguration) {
+		this.eventManagerExtendedConfiguration = eventManagerExtendedConfiguration;
+		return this;
+	}
+
 	public String getResponseHandlerImplementation() {
 		return responseHandlerImplementation;
 	}
@@ -41,12 +60,30 @@ public class ClientConfiguration {
 		return this;
 	}
 	
+	public ExtendedConfiguration getResponseHandlerExtendedConfiguration() {
+		return responseHandlerExtendedConfiguration;
+	}
+
+	public ClientConfiguration setResponseHandlerExtendedConfiguration(ExtendedConfiguration responseHandlerExtendedConfiguration) {
+		this.responseHandlerExtendedConfiguration = responseHandlerExtendedConfiguration;
+		return this;
+	}
+	
 	public String getUserManagerImplementation() {
 		return userManagerImplementation;
 	}
 
 	public ClientConfiguration setUserManagerImplementation(String userManagerImplementation) {
 		this.userManagerImplementation = userManagerImplementation;
+		return this;
+	}
+
+	public ExtendedConfiguration getUserManagerExtendedConfiguration() {
+		return userManagerExtendedConfiguration;
+	}
+
+	public ClientConfiguration setUserManagerExtendedConfiguration(ExtendedConfiguration userManagerExtendedConfiguration) {
+		this.userManagerExtendedConfiguration = userManagerExtendedConfiguration;
 		return this;
 	}
 
