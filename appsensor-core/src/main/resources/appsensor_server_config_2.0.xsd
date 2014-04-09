@@ -37,13 +37,29 @@
 		</xsd:sequence>
 	</xsd:complexType>
 	
-	<xsd:complexType name="class-attributed-empty-element">
+	<xsd:complexType name="configuration-parameter">
+		<xsd:sequence>
+			<xsd:element name="key" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="value" type="xsd:string" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="extended-configuration">
+		<xsd:sequence>
+			<xsd:element name="configuration-parameter" type="asconfig:configuration-parameter" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="extendable-component">
+		<xsd:sequence>
+			<xsd:element name="extended-configuration" type="asconfig:extended-configuration" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
 		<xsd:attribute name="class" type="xsd:string" use="required" />
 	</xsd:complexType>
 	
 	<xsd:complexType name="store-observers">
 		<xsd:sequence>
-			<xsd:element name="observer" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="unbounded" />
+			<xsd:element name="observer" type="asconfig:extendable-component" minOccurs="1" maxOccurs="unbounded" />
 		</xsd:sequence>
 	</xsd:complexType>
 
@@ -107,17 +123,17 @@
 	    	
 	    	<xsd:element name="correlation-config" type="asconfig:correlation-config" minOccurs="0" maxOccurs="1" />
 	    	
-			<xsd:element name="event-analyzer" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
-	    	<xsd:element name="attack-analyzer" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
-	    	<xsd:element name="response-analyzer" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="event-analyzer" type="asconfig:extendable-component" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="attack-analyzer" type="asconfig:extendable-component" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="response-analyzer" type="asconfig:extendable-component" minOccurs="1" maxOccurs="1" />
 	    	
-	    	<xsd:element name="event-store" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
-	    	<xsd:element name="attack-store" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
-	    	<xsd:element name="response-store" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="event-store" type="asconfig:extendable-component" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="attack-store" type="asconfig:extendable-component" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="response-store" type="asconfig:extendable-component" minOccurs="1" maxOccurs="1" />
 	    	
-	    	<xsd:element name="logger" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="logger" type="asconfig:extendable-component" minOccurs="1" maxOccurs="1" />
 	    
-	    	<xsd:element name="access-controller" type="asconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="access-controller" type="asconfig:extendable-component" minOccurs="1" maxOccurs="1" />
 	    	
 	    	<xsd:element name="event-store-observers" type="asconfig:store-observers" minOccurs="1" maxOccurs="1" />
 	    	<xsd:element name="attack-store-observers" type="asconfig:store-observers" minOccurs="1" maxOccurs="1" />

@@ -6,7 +6,23 @@
 		xmlns:asclientconfig="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_client_config_2.0.xsd" 
 		elementFormDefault="qualified" >
 		
-	<xsd:complexType name="class-attributed-empty-element">
+	<xsd:complexType name="configuration-parameter">
+		<xsd:sequence>
+			<xsd:element name="key" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="value" type="xsd:string" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="extended-configuration">
+		<xsd:sequence>
+			<xsd:element name="configuration-parameter" type="asclientconfig:configuration-parameter" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="extendable-component">
+		<xsd:sequence>
+			<xsd:element name="extended-configuration" type="asclientconfig:extended-configuration" minOccurs="0" maxOccurs="1" />
+		</xsd:sequence>
 		<xsd:attribute name="class" type="xsd:string" use="required" />
 	</xsd:complexType>
 	
@@ -53,9 +69,9 @@
 	<xsd:element name="appsensor-client-config">
 	  <xsd:complexType>
 	    <xsd:sequence>
-	    	<xsd:element name="event-manager" type="asclientconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
-	    	<xsd:element name="response-handler" type="asclientconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
-	    	<xsd:element name="user-manager" type="asclientconfig:class-attributed-empty-element" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="event-manager" type="asclientconfig:extendable-component" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="response-handler" type="asclientconfig:extendable-component" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="user-manager" type="asclientconfig:extendable-component" minOccurs="1" maxOccurs="1" />
 	    	<xsd:element name="server-connection" type="asclientconfig:server-connection" minOccurs="1" maxOccurs="1" />
 	    </xsd:sequence>
 	  </xsd:complexType>
