@@ -1,6 +1,7 @@
 package org.owasp.appsensor.listener;
 
 import org.owasp.appsensor.Event;
+import org.owasp.appsensor.configuration.Configurable;
 import org.owasp.appsensor.storage.EventStore;
 
 /**
@@ -9,7 +10,7 @@ import org.owasp.appsensor.storage.EventStore;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public interface EventListener {
+public interface EventListener extends Configurable {
 	
 	/**
 	 * Listener method to handle when a new 

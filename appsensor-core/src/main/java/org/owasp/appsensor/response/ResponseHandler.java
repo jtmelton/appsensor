@@ -1,6 +1,7 @@
 package org.owasp.appsensor.response;
 
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.configuration.Configurable;
 
 /**
  * The ResponseHandler is executed when a {@link Response} needs to be executed. 
@@ -9,7 +10,7 @@ import org.owasp.appsensor.Response;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public interface ResponseHandler {
+public interface ResponseHandler extends Configurable {
 	
 	/** provide increased logging for this specific user */
 	public final static String LOG = "log";

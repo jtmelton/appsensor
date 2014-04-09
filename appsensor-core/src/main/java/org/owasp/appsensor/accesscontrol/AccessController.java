@@ -1,6 +1,7 @@
 package org.owasp.appsensor.accesscontrol;
 
 import org.owasp.appsensor.ClientApplication;
+import org.owasp.appsensor.configuration.Configurable;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
 /**
@@ -9,7 +10,7 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public interface AccessController {
+public interface AccessController extends Configurable {
 
 	public boolean isAuthorized(ClientApplication clientApplication, Action action, Context context);
 	

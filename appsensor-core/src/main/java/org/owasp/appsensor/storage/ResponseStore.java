@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.configuration.Configurable;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.ResponseListener;
 
@@ -16,9 +18,11 @@ import org.owasp.appsensor.listener.ResponseListener;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public abstract class ResponseStore {
+public abstract class ResponseStore implements Configurable {
 	
 	private static Collection<ResponseListener> listeners = new CopyOnWriteArrayList<>();
+	
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	/**
 	 * Add a response to the ResponseStore
@@ -55,5 +59,17 @@ public abstract class ResponseStore {
 		for (ResponseListener listener : listeners) {
 			listener.onAdd(response);
 		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
 	}
 }

@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.owasp.appsensor.Attack;
+import org.owasp.appsensor.configuration.Configurable;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.AttackListener;
 
@@ -16,9 +18,11 @@ import org.owasp.appsensor.listener.AttackListener;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public abstract class AttackStore {
+public abstract class AttackStore implements Configurable {
 	
 	private static Collection<AttackListener> listeners = new CopyOnWriteArrayList<>();
+	
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	/**
 	 * Add an attack to the AttackStore
@@ -55,5 +59,17 @@ public abstract class AttackStore {
 		for (AttackListener listener : listeners) {
 			listener.onAdd(attack);
 		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
 	}
 }

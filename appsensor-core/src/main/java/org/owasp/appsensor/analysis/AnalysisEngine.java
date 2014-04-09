@@ -1,5 +1,7 @@
 package org.owasp.appsensor.analysis;
 
+import org.owasp.appsensor.configuration.Configurable;
+
 
 /**
  * An analysis engine is an implementation of the Observer pattern. 
@@ -13,6 +15,6 @@ package org.owasp.appsensor.analysis;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public interface AnalysisEngine {
+public interface AnalysisEngine extends Configurable {
 
 }

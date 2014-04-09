@@ -1,12 +1,14 @@
 package org.owasp.appsensor.logging;
 
+import org.owasp.appsensor.configuration.Configurable;
+
 /**
  * This interface is meant to be implemented by a compliant logger implementation. 
  * There will be reference implementations for the popular loggers. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public interface Logger {
+public interface Logger extends Configurable {
 
 	/**
 	 * Set the name for meaningful class names in log messages

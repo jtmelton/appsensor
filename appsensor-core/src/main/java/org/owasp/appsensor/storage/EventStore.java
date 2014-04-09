@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.owasp.appsensor.Event;
+import org.owasp.appsensor.configuration.Configurable;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.EventListener;
 
@@ -16,9 +18,11 @@ import org.owasp.appsensor.listener.EventListener;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public abstract class EventStore {
+public abstract class EventStore implements Configurable {
 
 	private static Collection<EventListener> listeners = new CopyOnWriteArrayList<>();
+	
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	/**
 	 * Add an {@link org.owasp.appsensor.Event} to the EventStore
@@ -55,5 +59,17 @@ public abstract class EventStore {
 		for (EventListener listener : listeners) {
 			listener.onAdd(event);
 		}
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
 	}
 }
