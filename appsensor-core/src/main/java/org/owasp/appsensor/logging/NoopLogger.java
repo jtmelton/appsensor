@@ -1,5 +1,7 @@
 package org.owasp.appsensor.logging;
 
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
+
 /**
  * A simple no-op {@link Logger} implementation for those that need it. 
  * 
@@ -7,6 +9,7 @@ package org.owasp.appsensor.logging;
  */
 public class NoopLogger implements org.owasp.appsensor.logging.Logger {
 
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	/**
 	 * {@inheritDoc}
 	 */
@@ -83,4 +86,15 @@ public class NoopLogger implements org.owasp.appsensor.logging.Logger {
 	@Override
 	public void debug(String message, Throwable throwable) { }
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
+	}
 }

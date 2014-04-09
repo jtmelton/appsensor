@@ -2,6 +2,7 @@ package org.owasp.appsensor.response;
 
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.logging.Logger;
 
 /**
@@ -14,6 +15,8 @@ public class NoopResponseHandler implements ResponseHandler {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(NoopResponseHandler.class);
 	
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -22,4 +25,15 @@ public class NoopResponseHandler implements ResponseHandler {
 		logger.debug("NO-OP response handler invoked for action: " + response.getAction());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
+	}
 }
