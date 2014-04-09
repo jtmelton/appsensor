@@ -1,6 +1,7 @@
 package org.owasp.appsensor.accesscontrol;
 
 import org.owasp.appsensor.ClientApplication;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
 /**
@@ -11,6 +12,8 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 public class ReferenceAccessController implements AccessController {
+	
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	/**
 	 * {@inheritDoc}
@@ -46,4 +49,17 @@ public class ReferenceAccessController implements AccessController {
 					" using context: " + context);
 		}
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
+	}
+	
 }
