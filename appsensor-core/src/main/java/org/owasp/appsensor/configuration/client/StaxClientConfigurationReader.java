@@ -13,6 +13,9 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.commons.lang3.StringUtils;
+import org.owasp.appsensor.configuration.ConfigurationParameter;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.exceptions.ConfigurationException;
 import org.owasp.appsensor.util.XmlUtils;
 import org.xml.sax.SAXException;
@@ -100,7 +103,7 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 	private ClientConfiguration readClientConfiguration(XMLStreamReader xmlReader) throws XMLStreamException {
 		ClientConfiguration configuration = new ClientConfiguration();
 		boolean finished = false;
-		
+
 		while(!finished && xmlReader.hasNext()) {
 			int event = xmlReader.next();
 			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
@@ -110,11 +113,11 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 					if("config:appsensor-client-config".equals(name)) {
 						//
 					} else if("config:event-manager".equals(name)) {
-						configuration.setEventManagerImplementation(xmlReader.getAttributeValue(null, "class"));
+						readEventManager(configuration, xmlReader);
 					} else if("config:response-handler".equals(name)) {
-						configuration.setResponseHandlerImplementation(xmlReader.getAttributeValue(null, "class"));
+						readResponseHandler(configuration, xmlReader);
 					} else if("config:user-manager".equals(name)) {
-						configuration.setUserManagerImplementation(xmlReader.getAttributeValue(null, "class"));
+						readUserManager(configuration, xmlReader);
 					} else if("config:server-connection".equals(name)) {
 						configuration.setServerConnection(readServerConnection(xmlReader));
 					} else {
@@ -177,6 +180,140 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 		}
 		
 		return serverConnection;
+	}
+	
+	private void readEventManager(ClientConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
+		boolean finished = false;
+		
+		configuration.setEventManagerImplementation(xmlReader.getAttributeValue(null, "class"));
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {			
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:extended-configuration".equals(name)) {
+						configuration.setEventManagerExtendedConfiguration(readExtendedConfiguration(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:event-manager".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+	}
+	
+	private void readResponseHandler(ClientConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
+		boolean finished = false;
+		
+		configuration.setResponseHandlerImplementation(xmlReader.getAttributeValue(null, "class"));
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {			
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:extended-configuration".equals(name)) {
+						configuration.setResponseHandlerExtendedConfiguration(readExtendedConfiguration(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:response-handler".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+	}
+	
+	private void readUserManager(ClientConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
+		boolean finished = false;
+		
+		configuration.setUserManagerImplementation(xmlReader.getAttributeValue(null, "class"));
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {			
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:extended-configuration".equals(name)) {
+						configuration.setUserManagerExtendedConfiguration(readExtendedConfiguration(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:user-manager".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+	}
+	
+	private ExtendedConfiguration readExtendedConfiguration(XMLStreamReader xmlReader) throws XMLStreamException {
+		ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+		boolean finished = false;
+		
+		String key = null;
+		String value = null;
+
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:key".equals(name)) {
+						key = xmlReader.getElementText().trim();
+					} else if("config:value".equals(name)) {
+						value = xmlReader.getElementText().trim();
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:configuration-parameter".equals(name)) {
+						if (! StringUtils.isEmpty(key) && ! StringUtils.isEmpty(value)) {
+							extendedConfiguration.getConfigurationParameters().add(new ConfigurationParameter(key, value));
+						}
+					} else if("config:extended-configuration".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+		
+		return extendedConfiguration;
 	}
 	
 }

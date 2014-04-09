@@ -15,12 +15,15 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.commons.lang3.StringUtils;
 import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.accesscontrol.Role;
+import org.owasp.appsensor.configuration.ConfigurationParameter;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.correlation.CorrelationSet;
 import org.owasp.appsensor.exceptions.ConfigurationException;
 import org.owasp.appsensor.util.XmlUtils;
@@ -125,21 +128,21 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 					} else if("config:correlation-config".equals(name)) {
 						configuration.getCorrelationSets().addAll(readCorrelationSets(xmlReader));
 					} else if("config:event-analyzer".equals(name)) {
-						configuration.setEventAnalysisEngineImplementation(xmlReader.getAttributeValue(null, "class"));
+						readEventAnalyzer(configuration, xmlReader);
 					} else if("config:attack-analyzer".equals(name)) {
-						configuration.setAttackAnalysisEngineImplementation(xmlReader.getAttributeValue(null, "class"));
+						readAttackAnalyzer(configuration, xmlReader);
 					} else if("config:response-analyzer".equals(name)) {
-						configuration.setResponseAnalysisEngineImplementation(xmlReader.getAttributeValue(null, "class"));
+						readResponseAnalyzer(configuration, xmlReader);
 					} else if("config:event-store".equals(name)) {
-						configuration.setEventStoreImplementation(xmlReader.getAttributeValue(null, "class"));
+						readEventStore(configuration, xmlReader);
 					} else if("config:attack-store".equals(name)) {
-						configuration.setAttackStoreImplementation(xmlReader.getAttributeValue(null, "class"));
+						readAttackStore(configuration, xmlReader);
 					} else if("config:response-store".equals(name)) {
-						configuration.setResponseStoreImplementation(xmlReader.getAttributeValue(null, "class"));
+						readResponseStore(configuration, xmlReader);
 					} else if("config:logger".equals(name)) {
-						configuration.setLoggerImplementation(xmlReader.getAttributeValue(null, "class"));
+						readLogger(configuration, xmlReader);
 					} else if("config:access-controller".equals(name)) {
-						configuration.setAccessControllerImplementation(xmlReader.getAttributeValue(null, "class"));
+						readAccessController(configuration, xmlReader);
 					} else if("config:event-store-observers".equals(name)) {
 						configuration.getEventStoreObserverImplementations().addAll(readObservers(xmlReader, "config:event-store-observers"));
 					} else if("config:attack-store-observers".equals(name)) {
@@ -387,6 +390,297 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 		
 		return response;
 	}
+	
+	private void readEventAnalyzer(ServerConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
+		boolean finished = false;
+		
+		configuration.setEventAnalysisEngineImplementation(xmlReader.getAttributeValue(null, "class"));
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {			
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:extended-configuration".equals(name)) {
+						configuration.setEventAnalysisEngineExtendedConfiguration(readExtendedConfiguration(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:event-analyzer".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+		
+	}
+	
+	private void readAttackAnalyzer(ServerConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
+		boolean finished = false;
+		
+		configuration.setAttackAnalysisEngineImplementation(xmlReader.getAttributeValue(null, "class"));
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {			
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:extended-configuration".equals(name)) {
+						configuration.setAttackAnalysisEngineExtendedConfiguration(readExtendedConfiguration(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:attack-analyzer".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+	}
+	
+	private void readResponseAnalyzer(ServerConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
+		boolean finished = false;
+		
+		configuration.setResponseAnalysisEngineImplementation(xmlReader.getAttributeValue(null, "class"));
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {			
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:extended-configuration".equals(name)) {
+						configuration.setResponseAnalysisEngineExtendedConfiguration(readExtendedConfiguration(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:response-analyzer".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+	}
+	
+	private void readEventStore(ServerConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
+		boolean finished = false;
+		
+		configuration.setEventStoreImplementation(xmlReader.getAttributeValue(null, "class"));
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {			
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:extended-configuration".equals(name)) {
+						configuration.setEventStoreExtendedConfiguration(readExtendedConfiguration(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:event-store".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+	}
+	
+	private void readAttackStore(ServerConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
+		boolean finished = false;
+		
+		configuration.setAttackStoreImplementation(xmlReader.getAttributeValue(null, "class"));
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {			
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:extended-configuration".equals(name)) {
+						configuration.setAttackStoreExtendedConfiguration(readExtendedConfiguration(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:attack-store".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+	}
+	
+	private void readResponseStore(ServerConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
+		boolean finished = false;
+		
+		configuration.setResponseStoreImplementation(xmlReader.getAttributeValue(null, "class"));
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {			
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:extended-configuration".equals(name)) {
+						configuration.setResponseStoreExtendedConfiguration(readExtendedConfiguration(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:response-store".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+	}
+	
+	private void readLogger(ServerConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
+		boolean finished = false;
+		
+		configuration.setLoggerImplementation(xmlReader.getAttributeValue(null, "class"));
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {			
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:extended-configuration".equals(name)) {
+						configuration.setLoggerExtendedConfiguration(readExtendedConfiguration(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:logger".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+	}
+	
+	private void readAccessController(ServerConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
+		boolean finished = false;
+		
+		configuration.setAccessControllerImplementation(xmlReader.getAttributeValue(null, "class"));
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {			
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:extended-configuration".equals(name)) {
+						configuration.setAccessControllerExtendedConfiguration(readExtendedConfiguration(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:access-controller".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+	}
+	
+	private ExtendedConfiguration readExtendedConfiguration(XMLStreamReader xmlReader) throws XMLStreamException {
+		ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+		boolean finished = false;
+		
+		String key = null;
+		String value = null;
+
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			
+			switch(event) {
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:key".equals(name)) {
+						key = xmlReader.getElementText().trim();
+					} else if("config:value".equals(name)) {
+						value = xmlReader.getElementText().trim();
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:configuration-parameter".equals(name)) {
+						if (! StringUtils.isEmpty(key) && ! StringUtils.isEmpty(value)) {
+							extendedConfiguration.getConfigurationParameters().add(new ConfigurationParameter(key, value));
+						}
+					} else if("config:extended-configuration".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+		
+		return extendedConfiguration;
+	}
+	
 }
 
 
