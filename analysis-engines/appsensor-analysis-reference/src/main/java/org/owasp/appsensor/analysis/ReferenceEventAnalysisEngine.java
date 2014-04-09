@@ -9,6 +9,7 @@ import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.User;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.EventListener;
 import org.owasp.appsensor.logging.Logger;
@@ -34,6 +35,8 @@ import org.owasp.appsensor.util.DateUtils;
 public class ReferenceEventAnalysisEngine implements AnalysisEngine, EventListener {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceEventAnalysisEngine.class);
+	
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	/**
 	 * This method analyzes statistical {@link Event}s that are added to the system and 
@@ -130,6 +133,18 @@ public class ReferenceEventAnalysisEngine implements AnalysisEngine, EventListen
 		}
 		
 		return newest;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
 	}
 	
 }

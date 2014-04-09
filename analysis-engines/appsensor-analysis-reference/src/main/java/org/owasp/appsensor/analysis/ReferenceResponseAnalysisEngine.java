@@ -5,6 +5,7 @@ import java.util.Observer;
 import org.owasp.appsensor.AppSensorClient;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.listener.ResponseListener;
 import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.response.ResponseHandler;
@@ -28,6 +29,8 @@ public class ReferenceResponseAnalysisEngine implements AnalysisEngine, Response
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceResponseAnalysisEngine.class);
 	
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	
 	/**
 	 * This method simply catches responses and calls the 
 	 * configured {@link ResponseHandler} to process them. 
@@ -41,6 +44,18 @@ public class ReferenceResponseAnalysisEngine implements AnalysisEngine, Response
 			
 			AppSensorClient.getInstance().getResponseHandler().handle(response);
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
 	}
 	
 }
