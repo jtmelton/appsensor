@@ -19,6 +19,7 @@ import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.logging.Logger;
 
 import com.google.gson.Gson;
@@ -34,8 +35,9 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	
 	private Gson gson = new Gson();
 	
-	public WebSocketReportingEngine() {
-	}
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	
+	public WebSocketReportingEngine() { }
 	
 	/**
 	 * {@inheritDoc}
@@ -135,4 +137,16 @@ public class WebSocketReportingEngine implements ReportingEngine {
 		}
 	}
     
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
+	}
+	
 }

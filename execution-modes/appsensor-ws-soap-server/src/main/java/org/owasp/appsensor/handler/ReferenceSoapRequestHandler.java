@@ -17,6 +17,7 @@ import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.accesscontrol.Action;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 import org.owasp.appsensor.util.StringUtils;
@@ -36,6 +37,8 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 
 	@Resource 
 	private WebServiceContext wsContext;
+	
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	/**
 	 * {@inheritDoc}
@@ -104,4 +107,16 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 		return clientApplicationName;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
+	}
+	
 }

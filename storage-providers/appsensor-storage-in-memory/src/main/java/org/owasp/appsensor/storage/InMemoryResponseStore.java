@@ -7,6 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.User;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.ResponseListener;
 import org.owasp.appsensor.logging.Logger;
@@ -24,6 +25,8 @@ import org.owasp.appsensor.logging.Logger;
 public class InMemoryResponseStore extends ResponseStore {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(InMemoryResponseStore.class);
+
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	/** maintain a collection of {@link Response}s as an in-memory list */
 	private static Collection<Response> responses = new CopyOnWriteArrayList<Response>();
@@ -71,6 +74,18 @@ public class InMemoryResponseStore extends ResponseStore {
 		}
 		
 		return matches;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
 	}
 	
 }

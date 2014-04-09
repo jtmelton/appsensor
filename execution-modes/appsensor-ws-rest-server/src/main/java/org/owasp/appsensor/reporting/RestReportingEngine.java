@@ -15,6 +15,7 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.accesscontrol.Action;
+import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 import org.owasp.appsensor.rest.AccessControlUtils;
@@ -31,6 +32,8 @@ import org.owasp.appsensor.rest.AccessControlUtils;
 @Produces(MediaType.APPLICATION_JSON)
 public class RestReportingEngine implements ReportingEngine {
 
+	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	
 	@Context
 	private ContainerRequestContext requestContext;
 	
@@ -95,6 +98,18 @@ public class RestReportingEngine implements ReportingEngine {
 		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest);
 		
 		return AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ExtendedConfiguration getExtendedConfiguration() {
+		return extendedConfiguration;
+	}
+	
+	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
+		this.extendedConfiguration = extendedConfiguration;
 	}
 	
 }
