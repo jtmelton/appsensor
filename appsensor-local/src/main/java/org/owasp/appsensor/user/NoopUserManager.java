@@ -1,10 +1,11 @@
 package org.owasp.appsensor.user;
 
-import org.owasp.appsensor.AppSensorServer;
+import javax.inject.Named;
+
 import org.owasp.appsensor.User;
-import org.owasp.appsensor.event.LocalEventManager;
-import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.logging.Loggable;
 import org.owasp.appsensor.response.UserManager;
+import org.slf4j.Logger;
 
 /**
  * No-op user manager that is used most likely in test configurations. 
@@ -14,9 +15,11 @@ import org.owasp.appsensor.response.UserManager;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  *
  */
+@Named
+@Loggable
 public class NoopUserManager implements UserManager {
 
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(LocalEventManager.class);
+	private Logger logger;
 	
 	/**
 	 * {@inheritDoc}
@@ -33,5 +36,4 @@ public class NoopUserManager implements UserManager {
 	public void disable(User user) {
 		logger.info("The no-op user manager did not disable the user as requested.");
 	}
-
 }

@@ -2,6 +2,9 @@ package org.owasp.appsensor.handler;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
@@ -23,9 +26,14 @@ import org.owasp.appsensor.util.StringUtils;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
 public class LocalRequestHandler implements RequestHandler {
 
 	private static String detectionSystemId = null;	//start with blank
+
+	@Inject
+	private AppSensorServer appSensorServer;
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -35,7 +43,7 @@ public class LocalRequestHandler implements RequestHandler {
 			detectionSystemId = event.getDetectionSystemId();
 		}
 		
-		AppSensorServer.getInstance().getEventStore().addEvent(event);
+		appSensorServer.getEventStore().addEvent(event);
 	}
 
 	/**
@@ -47,7 +55,7 @@ public class LocalRequestHandler implements RequestHandler {
 			detectionSystemId = attack.getDetectionSystemId();
 		}
 		
-		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
+		appSensorServer.getAttackStore().addAttack(attack);
 	}
 
 	/**
@@ -59,6 +67,6 @@ public class LocalRequestHandler implements RequestHandler {
 				setDetectionSystemIds(StringUtils.toCollection(detectionSystemId != null ? detectionSystemId : "")).
 				setEarliest(earliest);
 		
-		return AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
+		return appSensorServer.getResponseStore().findResponses(criteria);
 	}
 }

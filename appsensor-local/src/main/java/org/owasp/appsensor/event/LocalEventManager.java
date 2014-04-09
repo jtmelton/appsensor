@@ -2,6 +2,9 @@ package org.owasp.appsensor.event;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
@@ -15,9 +18,11 @@ import org.owasp.appsensor.util.DateUtils;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  *
  */
+@Named
 public class LocalEventManager implements EventManager {
 
-	private static LocalRequestHandler requestHandler = new LocalRequestHandler();
+	@Inject
+	private LocalRequestHandler requestHandler;
 	
 	private long responsesLastChecked = DateUtils.getCurrentTime();
 	
