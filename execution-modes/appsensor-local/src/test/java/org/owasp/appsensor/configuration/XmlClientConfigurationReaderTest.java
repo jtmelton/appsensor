@@ -21,7 +21,7 @@ public class XmlClientConfigurationReaderTest {
 		
 		assertTrue("org.owasp.appsensor.event.LocalEventManager".equals(configuration.getEventManagerImplementation()));
 		assertTrue("org.owasp.appsensor.response.LocalResponseHandler".equals(configuration.getResponseHandlerImplementation()));
-		assertTrue("org.owasp.appsensor.user.NoopUserManager".equals(configuration.getUserManagerImplementation()));
+		assertTrue("org.owasp.appsensor.response.NoopUserManager".equals(configuration.getUserManagerImplementation()));
 		assertTrue("rest".equals(configuration.getServerConnection().getType()));
 		assertTrue("https".equals(configuration.getServerConnection().getProtocol()));
 		assertTrue("www.owasp.org".equals(configuration.getServerConnection().getHost()));
