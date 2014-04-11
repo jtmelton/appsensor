@@ -5,6 +5,12 @@ import java.util.HashSet;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Represents the extended configuration for custom components 
+ * to allow additional configuration settings. 
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ExtendedConfiguration {
 
 	public Collection<ConfigurationParameter> configurationParameters = new HashSet<>();
