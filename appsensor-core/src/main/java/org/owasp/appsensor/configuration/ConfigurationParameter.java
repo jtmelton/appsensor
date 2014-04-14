@@ -8,8 +8,10 @@ package org.owasp.appsensor.configuration;
  */
 public class ConfigurationParameter {
 	
+	/** Name (key) of {@link ConfigurationParameter} */
 	private String key;
 	
+	/** Value of {@link ConfigurationParameter} */
 	private String value;
 	
 	public ConfigurationParameter() { }
