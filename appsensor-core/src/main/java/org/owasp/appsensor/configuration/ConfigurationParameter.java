@@ -1,5 +1,11 @@
 package org.owasp.appsensor.configuration;
 
+/**
+ * Represents the key-value pair for a configuration parameter for 
+ * custom components to allow additional configuration settings. 
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class ConfigurationParameter {
 	
 	private String key;
