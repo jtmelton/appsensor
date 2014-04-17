@@ -1,8 +1,8 @@
 package org.owasp.appsensor.util;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.MutableDateTime;
 
 /**
  * Helper class for Date/time related utility methods
@@ -11,18 +11,29 @@ import java.util.TimeZone;
  */
 public class DateUtils {
 
-	/**
-	 * Helper method to grab current time. Returns current 
-	 * timestamp used for events/attacks, etc. 
-	 * 
-	 * @return current time represented as long (unix timestamp)
-	 */
-	public static long getCurrentTime() {
-		TimeZone tz = TimeZone.getDefault();
-		Calendar cal = Calendar.getInstance(tz);
-		Date date = cal.getTime();
-		long currentTime = date.getTime();
-		return currentTime;
+	public static DateTime getCurrentTimestamp() {
+		return new DateTime(DateTimeZone.UTC);
 	}
 	
+	public static String getCurrentTimestampAsString() {
+		return getCurrentTimestamp().toString();
+	}
+	
+	public static DateTime fromString(String rfc3339Timestamp) {
+		if (rfc3339Timestamp == null) {
+			return null;
+		}
+		
+		DateTime dateTime = new DateTime(rfc3339Timestamp, DateTimeZone.UTC);
+		return dateTime;
+	}
+	
+	public static DateTime epoch() {
+		 MutableDateTime epoch = new MutableDateTime();
+		 
+	     epoch.setDate(0); 
+	     epoch.setTime(0);
+	        
+	     return epoch.toDateTime();
+	}
 }
