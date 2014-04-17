@@ -2,7 +2,6 @@ package org.owasp.appsensor.handler;
 
 import java.net.URI;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -12,11 +11,13 @@ import javax.ws.rs.core.GenericType;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.util.DateUtils;
 
 /**
  * Test basic rest request handling. 
@@ -62,11 +63,13 @@ public class RestRequestHandlerTest {
         
         GenericType<Collection<Response>> responseType = new GenericType<Collection<Response>>() {};
         
+        DateTime twoHoursAgo = DateUtils.getCurrentTimestamp().minusHours(2);
+        
         Collection<Response> responses = target
 		.path("api")
 		.path("v1.0")
 		.path("responses")
-		.queryParam("earliest", (new GregorianCalendar().getTimeInMillis()) - (1000 * 60 * 60 * 2))	//2 hrs ago
+		.queryParam("earliest", twoHoursAgo.toString())	//2 hrs ago
 		.request()
 		.header("X-Appsensor-Client-Application-Name2",  "myclientapp")
 		.get(responseType);
