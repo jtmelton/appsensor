@@ -1,13 +1,11 @@
 package org.owasp.appsensor;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.Calendar;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.owasp.appsensor.util.DateUtils;
 
 /**
  * After an {@link Attack} has been determined to have occurred, a Response
@@ -26,7 +24,7 @@ public class Response implements Serializable {
 	private User user;
 	
 	/** When the event occurred */
-	private long timestamp;
+	private String timestamp;
 	
 	/** String representing response action name */
 	private String action;
@@ -40,39 +38,23 @@ public class Response implements Serializable {
 	public Response() {}
 	
 	public Response (User user, String action, String detectionSystemId) {
-		this(user, action, Calendar.getInstance().getTimeInMillis(), detectionSystemId, null);
+		this(user, action, DateUtils.getCurrentTimestampAsString(), detectionSystemId, null);
 	}
 	
-	public Response (User user, String action, long timestamp, String detectionSystemId) {
+	public Response (User user, String action, String timestamp, String detectionSystemId) {
 		this(user, action, timestamp, detectionSystemId, null);
 	}
 	
-	public Response (User user, String action, Date timestamp, String detectionSystemId) {
-		this(user, action, timestamp.getTime(), detectionSystemId, null);
-	}
-	
-	public Response (User user, String action, Timestamp timestamp, String detectionSystemId) {
-		this(user, action, timestamp.getTime(), detectionSystemId, null);
-	}
-	
 	public Response (User user, String action, String detectionSystemId, Interval interval) {
-		this(user, action, Calendar.getInstance().getTimeInMillis(), detectionSystemId, interval);
+		this(user, action, DateUtils.getCurrentTimestampAsString(), detectionSystemId, interval);
 	}
 	
-	public Response (User user, String action, long timestamp, String detectionSystemId, Interval interval) {
+	public Response (User user, String action, String timestamp, String detectionSystemId, Interval interval) {
 		setUser(user);
 		setAction(action);
 		setTimestamp(timestamp);
 		setDetectionSystemId(detectionSystemId);
 		setInterval(interval);
-	}
-	
-	public Response (User user, String action, Date timestamp, String detectionSystemId, Interval interval) {
-		this(user, action, timestamp.getTime(), detectionSystemId, interval);
-	}
-	
-	public Response (User user, String action, Timestamp timestamp, String detectionSystemId, Interval interval) {
-		this(user, action, timestamp.getTime(), detectionSystemId, interval);
 	}
 	
 	public User getUser() {
@@ -84,11 +66,11 @@ public class Response implements Serializable {
 		return this;
 	}
 
-	public long getTimestamp() {
+	public String getTimestamp() {
 		return timestamp;
 	}
 
-	public Response setTimestamp(long timestamp) {
+	public Response setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
 		return this;
 	}

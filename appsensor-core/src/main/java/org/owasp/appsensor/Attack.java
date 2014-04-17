@@ -1,13 +1,11 @@
 package org.owasp.appsensor;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.owasp.appsensor.util.DateUtils;
 
 /**
  * An attack can be added to the system in one of two ways: 
@@ -32,7 +30,7 @@ public class Attack implements Serializable {
 	private DetectionPoint detectionPoint;
 	
 	/** When the attack occurred */
-	private long timestamp;
+	private String timestamp;
 
 	/** 
 	 * Identifier label for the system that detected the attack. 
@@ -49,22 +47,14 @@ public class Attack implements Serializable {
     public Attack () { }
 
     public Attack (User user, DetectionPoint detectionPoint, String detectionSystemId) {
-		this(user, detectionPoint, Calendar.getInstance().getTimeInMillis(), detectionSystemId);
+		this(user, detectionPoint, DateUtils.getCurrentTimestampAsString(), detectionSystemId);
 	}
 	
-	public Attack (User user, DetectionPoint detectionPoint, long timestamp, String detectionSystemId) {
+	public Attack (User user, DetectionPoint detectionPoint, String timestamp, String detectionSystemId) {
 		setUser(user);
 		setDetectionPoint(detectionPoint);
 		setTimestamp(timestamp);
 		setDetectionSystemId(detectionSystemId);
-	}
-	
-	public Attack (User user, DetectionPoint detectionPoint, Date timestamp, String detectionSystemId) {
-		this(user, detectionPoint, timestamp.getTime(), detectionSystemId);
-	}
-	
-	public Attack (User user, DetectionPoint detectionPoint, Timestamp timestamp, String detectionSystemId) {
-		this(user, detectionPoint, timestamp.getTime(), detectionSystemId);
 	}
 	
 	public Attack (Event event) {
@@ -93,11 +83,11 @@ public class Attack implements Serializable {
 		return this;
 	}
 
-	public long getTimestamp() {
+	public String getTimestamp() {
 		return timestamp;
 	}
 
-	public Attack setTimestamp(long timestamp) {
+	public Attack setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
 		return this;
 	}

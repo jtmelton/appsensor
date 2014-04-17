@@ -1,13 +1,11 @@
 package org.owasp.appsensor;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.owasp.appsensor.util.DateUtils;
 
 /**
  * Event is a specific instance that a sensor has detected that 
@@ -34,7 +32,7 @@ public class Event implements Serializable {
 	private DetectionPoint detectionPoint;
 	
 	/** When the event occurred */
-	private long timestamp;
+	private String timestamp;
 
 	/** 
 	 * Identifier label for the system that detected the event. 
@@ -51,18 +49,10 @@ public class Event implements Serializable {
     public Event () {}
     
 	public Event (User user, DetectionPoint detectionPoint, String detectionSystemId) {
-		this(user, detectionPoint, Calendar.getInstance().getTimeInMillis(), detectionSystemId);
+		this(user, detectionPoint, DateUtils.getCurrentTimestampAsString(), detectionSystemId);
 	}
 	
-	public Event (User user, DetectionPoint detectionPoint, Date timestamp, String detectionSystemId) {
-		this(user, detectionPoint, timestamp.getTime(), detectionSystemId);
-	}
-	
-	public Event (User user, DetectionPoint detectionPoint, Timestamp timestamp, String detectionSystemId) {
-		this(user, detectionPoint, timestamp.getTime(), detectionSystemId);
-	}
-	
-	public Event (User user, DetectionPoint detectionPoint, long timestamp, String detectionSystemId) {
+	public Event (User user, DetectionPoint detectionPoint, String timestamp, String detectionSystemId) {
 		setUser(user);
 		setDetectionPoint(detectionPoint);
 		setTimestamp(timestamp);
@@ -87,11 +77,11 @@ public class Event implements Serializable {
 		return this;
 	}
 
-	public long getTimestamp() {
+	public String getTimestamp() {
 		return timestamp;
 	}
 
-	public Event setTimestamp(long timestamp) {
+	public Event setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
 		return this;
 	}

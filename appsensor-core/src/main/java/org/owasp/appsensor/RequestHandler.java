@@ -32,8 +32,9 @@ public interface RequestHandler extends Configurable {
 	 * Retrieve any responses generated that apply to this client application 
 	 * since the last time the client application called this method.
 	 *  
+	 * @param earliest Timestamp in the http://tools.ietf.org/html/rfc3339 format
 	 * @return a Collection of Response objects 
 	 */
-	public Collection<Response> getResponses(Long earliest) throws NotAuthorizedException;
+	public Collection<Response> getResponses(String earliest) throws NotAuthorizedException;
 	
 }
