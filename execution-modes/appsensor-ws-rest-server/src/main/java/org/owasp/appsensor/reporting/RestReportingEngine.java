@@ -64,7 +64,7 @@ public class RestReportingEngine implements ReportingEngine {
 	@Override
 	@GET
 	@Path("/events")
-	public Collection<Event> findEvents(@QueryParam("earliest") Long earliest) throws NotAuthorizedException {
+	public Collection<Event> findEvents(@QueryParam("earliest") String earliest) throws NotAuthorizedException {
 		AccessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
 		
 		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest);
@@ -78,7 +78,7 @@ public class RestReportingEngine implements ReportingEngine {
 	@Override
 	@GET
 	@Path("/attacks")
-	public Collection<Attack> findAttacks(@QueryParam("earliest") Long earliest) {
+	public Collection<Attack> findAttacks(@QueryParam("earliest") String earliest) {
 		AccessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
 		
 		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest);
@@ -92,7 +92,7 @@ public class RestReportingEngine implements ReportingEngine {
 	@Override
 	@GET
 	@Path("/responses")
-	public Collection<Response> findResponses(@QueryParam("earliest") Long earliest) {
+	public Collection<Response> findResponses(@QueryParam("earliest") String earliest) {
 		AccessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
 		
 		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest);
