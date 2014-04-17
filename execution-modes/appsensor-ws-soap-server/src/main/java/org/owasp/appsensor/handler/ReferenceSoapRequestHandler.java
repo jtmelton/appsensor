@@ -71,7 +71,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	 */
 	@WebMethod
 	@Override
-	public Collection<Response> getResponses(Long earliest) throws NotAuthorizedException {
+	public Collection<Response> getResponses(String earliest) throws NotAuthorizedException {
 		checkAuthorization(Action.GET_RESPONSES);
 		
 		SearchCriteria criteria = new SearchCriteria().

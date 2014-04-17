@@ -34,6 +34,6 @@ public interface SoapRequestHandler extends RequestHandler {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Response> getResponses(Long earliest) throws NotAuthorizedException;
+	public Collection<Response> getResponses(String earliest) throws NotAuthorizedException;
 
 }
