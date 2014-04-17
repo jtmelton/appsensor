@@ -58,7 +58,7 @@ public class LocalRequestHandler implements RequestHandler {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Response> getResponses(Long earliest) throws NotAuthorizedException {
+	public Collection<Response> getResponses(String earliest) throws NotAuthorizedException {
 		SearchCriteria criteria = new SearchCriteria().
 				setDetectionSystemIds(StringUtils.toCollection(detectionSystemId != null ? detectionSystemId : "")).
 				setEarliest(earliest);

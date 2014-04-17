@@ -2,6 +2,7 @@ package org.owasp.appsensor.event;
 
 import java.util.Collection;
 
+import org.joda.time.DateTime;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
@@ -22,7 +23,7 @@ public class LocalEventManager implements EventManager {
 	
 	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
-	private long responsesLastChecked = DateUtils.getCurrentTime();
+	private DateTime responsesLastChecked = DateUtils.getCurrentTimestamp();
 	
 	/**
 	 * {@inheritDoc}
@@ -45,10 +46,10 @@ public class LocalEventManager implements EventManager {
 	 */
 	@Override
 	public Collection<Response> getResponses() {
-		Collection<Response> responses = requestHandler.getResponses(responsesLastChecked);
+		Collection<Response> responses = requestHandler.getResponses(responsesLastChecked.toString());
 		
 		//now update last checked
-		responsesLastChecked = DateUtils.getCurrentTime();
+		responsesLastChecked = DateUtils.getCurrentTimestamp();
 		
 		return responses;
 	}
