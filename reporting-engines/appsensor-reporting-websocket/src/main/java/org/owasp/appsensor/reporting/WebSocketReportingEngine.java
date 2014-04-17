@@ -73,7 +73,7 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Event> findEvents(Long earliest) {
+	public Collection<Event> findEvents(String earliest) {
 		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
 	}
 
@@ -81,7 +81,7 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Attack> findAttacks(Long earliest) {
+	public Collection<Attack> findAttacks(String earliest) {
 		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
 	}
 
@@ -89,7 +89,7 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Response> findResponses(Long earliest) {
+	public Collection<Response> findResponses(String earliest) {
 		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
 	}
 	
