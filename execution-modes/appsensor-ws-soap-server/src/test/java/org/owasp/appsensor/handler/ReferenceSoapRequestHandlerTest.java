@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -15,11 +14,13 @@ import javax.xml.ws.Endpoint;
 import javax.xml.ws.Service;
 import javax.xml.ws.handler.Handler;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.User;
+import org.owasp.appsensor.util.DateUtils;
 
 /**
  * Test basic soap event handling. Add a number of events matching 
@@ -61,9 +62,11 @@ public class ReferenceSoapRequestHandlerTest {
         handlerChain.add(new RegisterClientApplicationIdentificationHandler());
         binding.setHandlerChain(handlerChain);
         
-        long startMillis = new Date().getTime() - 1000;	//current time - 1 second - account for clock drift
+        DateTime currentTimestamp = DateUtils.getCurrentTimestamp();
+        currentTimestamp = currentTimestamp.minusSeconds(1);
+        String timestamp = currentTimestamp.toString();
         
-        assertEquals(0, requestHandler.getResponses(startMillis).size());
+        assertEquals(0, requestHandler.getResponses(timestamp).size());
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
@@ -75,10 +78,10 @@ public class ReferenceSoapRequestHandlerTest {
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         
-        assertEquals(0, requestHandler.getResponses(startMillis).size());
+        assertEquals(0, requestHandler.getResponses(timestamp).size());
         //this is 11th
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        assertEquals(1, requestHandler.getResponses(startMillis).size());
+        assertEquals(1, requestHandler.getResponses(timestamp).size());
         
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
@@ -91,16 +94,16 @@ public class ReferenceSoapRequestHandlerTest {
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         
-        assertEquals(1, requestHandler.getResponses(startMillis).size());
+        assertEquals(1, requestHandler.getResponses(timestamp).size());
         //this is 22nd
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        assertEquals(2, requestHandler.getResponses(startMillis).size());
+        assertEquals(2, requestHandler.getResponses(timestamp).size());
         
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         
-        assertEquals(2, requestHandler.getResponses(startMillis).size());
+        assertEquals(2, requestHandler.getResponses(timestamp).size());
         
         endpoint.stop();
         System.err.println("Stopped service");
