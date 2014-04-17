@@ -28,28 +28,28 @@ public interface ReportingEngine extends EventListener, AttackListener, Response
 	/**
 	 * Find {@link Event}s starting from specified time (unix timestamp)
 	 * 
-	 * @param earliest long representing start time to use to find {@link Event}s
+	 * @param earliest String representing start time to use to find {@link Event}s (RFC-3339)
 	 * @return Collection of {@link Event}s from starting time
 	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
 	 */
-	public Collection<Event> findEvents(Long earliest) throws NotAuthorizedException;
+	public Collection<Event> findEvents(String earliest) throws NotAuthorizedException;
 	
 	/**
 	 * Find {@link Attack}s starting from specified time (unix timestamp)
 	 * 
-	 * @param earliest long representing start time to use to find {@link Attack}s
+	 * @param earliest String representing start time to use to find {@link Attack}s (RFC-3339)
 	 * @return Collection of {@link Attack}s from starting time
 	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
 	 */
-	public Collection<Attack> findAttacks(Long earliest) throws NotAuthorizedException;
+	public Collection<Attack> findAttacks(String earliest) throws NotAuthorizedException;
 	
 	/**
 	 * Find {@link Response}s starting from specified time (unix timestamp)
 	 * 
-	 * @param earliest long representing start time to use to find {@link Response}s
+	 * @param earliest String representing start time to use to find {@link Response}s (RFC-3339)
 	 * @return Collection of {@link Response}s from starting time
 	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
 	 */
-	public Collection<Response> findResponses(Long earliest) throws NotAuthorizedException;
+	public Collection<Response> findResponses(String earliest) throws NotAuthorizedException;
 	
 }

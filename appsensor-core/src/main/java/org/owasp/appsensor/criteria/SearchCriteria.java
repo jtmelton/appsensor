@@ -13,7 +13,7 @@ public class SearchCriteria {
 	
 	private Collection<String> detectionSystemIds;
 	
-	private Long earliest;
+	private String earliest;
 	
 	public User getUser() {
 		return user;
@@ -45,11 +45,11 @@ public class SearchCriteria {
 		return this;
 	}
 
-	public Long getEarliest() {
+	public String getEarliest() {
 		return earliest;
 	}
 
-	public SearchCriteria setEarliest(Long earliest) {
+	public SearchCriteria setEarliest(String earliest) {
 		this.earliest = earliest;
 		
 		return this;
