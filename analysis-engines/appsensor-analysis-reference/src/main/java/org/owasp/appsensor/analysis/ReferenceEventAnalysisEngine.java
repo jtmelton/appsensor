@@ -2,6 +2,7 @@ package org.owasp.appsensor.analysis;
 
 import java.util.Collection;
 
+import org.joda.time.DateTime;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
@@ -84,16 +85,17 @@ public class ReferenceEventAnalysisEngine implements AnalysisEngine, EventListen
 		int count = 0;
 		
 		//grab the startTime to begin counting from based on the current time - interval
-		long startTime = DateUtils.getCurrentTime() - intervalInMillis;
+		DateTime startTime = DateUtils.getCurrentTimestamp().minusMillis((int)intervalInMillis);
 		
 		//count events after most recent attack.
-		long mostRecentAttackTime = findMostRecentAttackTime(triggeringEvent);
+		DateTime mostRecentAttackTime = findMostRecentAttackTime(triggeringEvent);
 		
 		for (Event event : existingEvents) {
+			DateTime eventTimestamp = DateUtils.fromString(event.getTimestamp());
 			//ensure only events that have occurred since the last attack are considered
-			if (event.getTimestamp() > mostRecentAttackTime) {
+			if (eventTimestamp.isAfter(mostRecentAttackTime)) {
 				if (intervalInMillis > 0) {
-					if (event.getTimestamp() > startTime) {
+					if (DateUtils.fromString(event.getTimestamp()).isAfter(startTime)) {
 						//only increment when event occurs within specified interval
 						count++;
 					}
@@ -116,8 +118,8 @@ public class ReferenceEventAnalysisEngine implements AnalysisEngine, EventListen
 	 * @param event {@link Event} to use to find matching {@link Attack}s
 	 * @return timestamp representing last matching {@link Attack}, or -1L if not found
 	 */
-	protected long findMostRecentAttackTime(Event event) {
-		long newest = -1L;
+	protected DateTime findMostRecentAttackTime(Event event) {
+		DateTime newest = DateUtils.epoch();
 		
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(event.getUser()).
@@ -127,8 +129,8 @@ public class ReferenceEventAnalysisEngine implements AnalysisEngine, EventListen
 		Collection<Attack> attacks = AppSensorServer.getInstance().getAttackStore().findAttacks(criteria);
 		
 		for (Attack attack : attacks) {
-			if (attack.getTimestamp() > newest) {
-				newest = attack.getTimestamp();
+			if (DateUtils.fromString(attack.getTimestamp()).isAfter(newest)) {
+				newest = DateUtils.fromString(attack.getTimestamp());
 			}
 		}
 		
