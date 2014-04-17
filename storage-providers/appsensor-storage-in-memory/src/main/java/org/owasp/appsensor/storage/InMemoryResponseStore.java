@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.joda.time.DateTime;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.User;
@@ -11,6 +12,7 @@ import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.ResponseListener;
 import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.util.DateUtils;
 
 /**
  * This is a reference implementation of the {@link ResponseStore}.
@@ -56,7 +58,7 @@ public class InMemoryResponseStore extends ResponseStore {
 		
 		User user = criteria.getUser();
 		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
-		Long earliest = criteria.getEarliest();
+		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 		
 		for (Response response : responses) {
 			//check user match if user specified
@@ -66,8 +68,8 @@ public class InMemoryResponseStore extends ResponseStore {
 			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
 					detectionSystemIds.contains(response.getDetectionSystemId()) : true;
 			
-			boolean earliestMatch = (earliest != null) ? earliest.longValue() < response.getTimestamp() : true;
-			
+			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(response.getTimestamp())) : true;
+					
 			if (userMatch && detectionSystemMatch && earliestMatch) {
 				matches.add(response);
 			}

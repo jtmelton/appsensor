@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.joda.time.DateTime;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
@@ -12,6 +13,7 @@ import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.AttackListener;
 import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.util.DateUtils;
 
 /**
  * This is a reference implementation of the {@link AttackStore}.
@@ -58,7 +60,7 @@ public class InMemoryAttackStore extends AttackStore {
 		User user = criteria.getUser();
 		DetectionPoint detectionPoint = criteria.getDetectionPoint();
 		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
-		Long earliest = criteria.getEarliest();
+		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 		
 		for (Attack attack : attacks) {
 			//check user match if user specified
@@ -72,8 +74,9 @@ public class InMemoryAttackStore extends AttackStore {
 			boolean detectionPointMatch = (detectionPoint != null) ? 
 					detectionPoint.getId().equals(attack.getDetectionPoint().getId()) : true;
 			
-			boolean earliestMatch = (earliest != null) ? earliest.longValue() < attack.getTimestamp() : true;
-			
+			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(attack.getTimestamp())) : true;
+					
+					
 			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
 				matches.add(attack);
 			}

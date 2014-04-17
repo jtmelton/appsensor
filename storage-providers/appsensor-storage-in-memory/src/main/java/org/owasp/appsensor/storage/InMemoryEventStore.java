@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.joda.time.DateTime;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
@@ -12,6 +13,7 @@ import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.EventListener;
 import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.util.DateUtils;
 
 /**
  * This is a reference implementation of the {@link EventStore}.
@@ -58,7 +60,7 @@ public class InMemoryEventStore extends EventStore {
 		User user = criteria.getUser();
 		DetectionPoint detectionPoint = criteria.getDetectionPoint();
 		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
-		Long earliest = criteria.getEarliest();
+		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 		
 		for (Event event : events) {
 			//check user match if user specified
@@ -72,8 +74,8 @@ public class InMemoryEventStore extends EventStore {
 			boolean detectionPointMatch = (detectionPoint != null) ? 
 					detectionPoint.getId().equals(event.getDetectionPoint().getId()) : true;
 			
-			boolean earliestMatch = (earliest != null) ? earliest.longValue() < event.getTimestamp() : true;
-			
+			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(event.getTimestamp())) : true;
+					
 			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
 				matches.add(event);
 			}

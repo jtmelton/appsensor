@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.joda.time.DateTime;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
@@ -18,6 +19,7 @@ import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.AttackListener;
 import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.util.DateUtils;
 import org.owasp.appsensor.util.FileUtils;
 
 import com.google.gson.Gson;
@@ -77,7 +79,7 @@ public class FileBasedAttackStore extends AttackStore {
 		User user = criteria.getUser();
 		DetectionPoint detectionPoint = criteria.getDetectionPoint();
 		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
-		Long earliest = criteria.getEarliest();
+		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 		
 		Collection<Attack> attacks = loadAttacks();
 		
@@ -93,8 +95,8 @@ public class FileBasedAttackStore extends AttackStore {
 			boolean detectionPointMatch = (detectionPoint != null) ? 
 					detectionPoint.getId().equals(attack.getDetectionPoint().getId()) : true;
 			
-			boolean earliestMatch = (earliest != null) ? earliest.longValue() < attack.getTimestamp() : true;
-			
+			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(attack.getTimestamp())) : true;
+					
 			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
 				matches.add(attack);
 			}
