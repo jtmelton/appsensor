@@ -74,7 +74,7 @@ public class RestRequestHandler implements RequestHandler {
 	@GET
 	@Path("/responses")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Response> getResponses(@QueryParam("earliest") Long earliest) throws NotAuthorizedException {
+	public Collection<Response> getResponses(@QueryParam("earliest") String earliest) throws NotAuthorizedException {
 		AccessControlUtils.checkAuthorization(Action.GET_RESPONSES, requestContext);
 
 		SearchCriteria criteria = new SearchCriteria().
