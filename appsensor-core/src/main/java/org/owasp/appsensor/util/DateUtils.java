@@ -11,6 +11,10 @@ import org.joda.time.MutableDateTime;
  */
 public class DateUtils {
 
+	/** 
+	 * Helper for returning current timestamp in UTC zone
+	 * @return current timestamp
+	 */
 	public static DateTime getCurrentTimestamp() {
 		return new DateTime(DateTimeZone.UTC);
 	}
