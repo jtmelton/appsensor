@@ -19,6 +19,10 @@ public class DateUtils {
 		return new DateTime(DateTimeZone.UTC);
 	}
 	
+	/** 
+	 * Helper for returning current timestamp in UTC zone as a string
+	 * @return current timestamp as string
+	 */
 	public static String getCurrentTimestampAsString() {
 		return getCurrentTimestamp().toString();
 	}
