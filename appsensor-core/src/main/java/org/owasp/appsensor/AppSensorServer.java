@@ -17,6 +17,8 @@ import org.owasp.appsensor.storage.AttackStore;
 import org.owasp.appsensor.storage.EventStore;
 import org.owasp.appsensor.storage.ResponseStore;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * AppSensor locator class is provided to make it easy to gain access to the 
@@ -51,35 +53,24 @@ public class AppSensorServer {
 	/** accessor for {@link org.owasp.appsensor.accesscontrol.AccessController} */
 	private AccessController accessController;
 	
-	private Logger logger;
-	
-	private Collection<CorrelationSet> correlationSets = new HashSet<>();
+	private Collection<CorrelationSet> correlationSets;
 	
 	private String clientApplicationIdentificationHeaderName;
 	
-	private Map<String, DetectionPoint> detectionPoints = Collections.synchronizedMap(new HashMap<String, DetectionPoint>());
+	private Map<String, DetectionPoint> detectionPoints;
 
-	private Map<String, ClientApplication> clientApplications = Collections.synchronizedMap(new HashMap<String, ClientApplication>());
+	private Map<String, ClientApplication> clientApplications;
 	
-	public String getClientApplicationIdentificationHeaderName() {
-		return clientApplicationIdentificationHeaderName;
-	}
-
-	public void setClientApplicationIdentificationHeaderName(
-			String clientApplicationIdentificationHeaderName) {
-		this.clientApplicationIdentificationHeaderName = clientApplicationIdentificationHeaderName;
-	}
-
-	public Collection<DetectionPoint> getDetectionPoints() {
-		return detectionPoints.values();
-	}
-
+	private Logger logger;
+	
+	private AppSensorServer() { }
+	
 	public DetectionPoint findDetectionPoint(String detectionPointId) {
 		return detectionPoints != null ? detectionPoints.get(detectionPointId) : null;
 	}
 
-	public ClientApplication findClientApplication(String search) {
-		return clientApplications != null ? clientApplications.get(search) : null;
+	public ClientApplication findClientApplication(String clientApplicationName) {
+		return clientApplications != null ? clientApplications.get(clientApplicationName) : null;
 	}
 	
 	public Collection<String> getRelatedDetectionSystems(String detectionSystemId) {
@@ -100,7 +91,29 @@ public class AppSensorServer {
 		return relatedDetectionSystems;
 	}
 
-	private AppSensorServer() { }
+	/**
+	 * Accessor for EventStore object
+	 * @return EventStore object
+	 */
+	public EventStore getEventStore() {
+		return eventStore; 
+	}
+	
+	/**
+	 * Accessor for AttackStore object
+	 * @return AttackStore object
+	 */
+	public AttackStore getAttackStore() {
+		return attackStore;
+	}
+	
+	/**
+	 * Accessor for ResponseStore object
+	 * @return ResponseStore object
+	 */
+	public ResponseStore getResponseStore() {
+		return responseStore;
+	}
 	
 	/**
 	 * Accessor for Event AnalysisEngine object
@@ -127,29 +140,21 @@ public class AppSensorServer {
 	}
 	
 	/**
-	 * Accessor for EventStore object
-	 * @return EventStore object
+	 * Accessor for AccessController object. 
+	 * @return AccessController object
 	 */
-	public EventStore getEventStore() {
-		return eventStore; 
+	public AccessController getAccessController() {
+		return accessController;
 	}
 	
-	/**
-	 * Accessor for AttackStore object
-	 * @return AttackStore object
-	 */
-	public AttackStore getAttackStore() {
-		return attackStore;
+	public String getClientApplicationIdentificationHeaderName() {
+		return clientApplicationIdentificationHeaderName;
 	}
-	
-	/**
-	 * Accessor for ResponseStore object
-	 * @return ResponseStore object
-	 */
-	public ResponseStore getResponseStore() {
-		return responseStore;
+
+	public Collection<DetectionPoint> getDetectionPoints() {
+		return detectionPoints == null ? Collections.<DetectionPoint>emptyList() : detectionPoints.values();
 	}
-	
+
 	/**
 	 * Accessor for Logger object
 	 * @return Logger object
@@ -158,22 +163,6 @@ public class AppSensorServer {
 		return logger;
 	}
 	
-	/**
-	 * Accessor for AccessController object. 
-	 * @return AccessController object
-	 */
-	public AccessController getAccessController() {
-		return accessController;
-	}
-	
-	public void setDetectionPoints(Collection<DetectionPoint> detectionPoints) {
-		Map<String, DetectionPoint> mappedDetectionPoints = Collections.synchronizedMap(new HashMap<String, DetectionPoint>());
-		for (DetectionPoint detectionPoint : detectionPoints == null ? Collections.<DetectionPoint>emptyList() : detectionPoints) {
-			mappedDetectionPoints.put(detectionPoint.getId(), detectionPoint);
-		}
-		this.detectionPoints = mappedDetectionPoints;
-	}
-
 	@Inject
 	public void setEventStore(EventStore eventStore) {
 		this.eventStore = eventStore;
@@ -202,5 +191,34 @@ public class AppSensorServer {
 	@Inject
 	public void setAccessController(AccessController accessController) {
 		this.accessController = accessController;
+	}
+	
+	@Autowired(required=false)
+	public void setCorrelationSets(Collection<CorrelationSet> correlationSets) {
+		this.correlationSets = correlationSets;
+	}
+	
+	@Value("#{systemProperties[clientApplicationIdentificationHeaderName] ?: 'X-Appsensor-Client-Application-Name'}")
+	public void setClientApplicationIdentificationHeaderName(
+			String clientApplicationIdentificationHeaderName) {
+		this.clientApplicationIdentificationHeaderName = clientApplicationIdentificationHeaderName;
+	}
+
+	@Autowired(required=false)
+	public void setDetectionPoints(Collection<DetectionPoint> detectionPoints) {
+		Map<String, DetectionPoint> mappedDetectionPoints = Collections.synchronizedMap(new HashMap<String, DetectionPoint>());
+		for (DetectionPoint detectionPoint : detectionPoints == null ? Collections.<DetectionPoint>emptyList() : detectionPoints) {
+			mappedDetectionPoints.put(detectionPoint.getId(), detectionPoint);
+		}
+		this.detectionPoints = mappedDetectionPoints;
+	}
+
+	@Autowired(required=false)
+	public void setClientApplications(Collection<ClientApplication> clientApplications) {
+		Map<String, ClientApplication> mappedClientApplications = Collections.synchronizedMap(new HashMap<String, ClientApplication>());
+		for (ClientApplication clientApplication : clientApplications == null ? Collections.<ClientApplication>emptyList() : clientApplications) {
+			mappedClientApplications.put(clientApplication.getName(), clientApplication);
+		}
+		this.clientApplications = mappedClientApplications;
 	}
 }
