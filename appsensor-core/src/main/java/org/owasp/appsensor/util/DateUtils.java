@@ -42,6 +42,11 @@ public class DateUtils {
 		return dateTime;
 	}
 	
+	/** 
+	 * Helper for getting epoch {@link DateTime} object
+	 * 
+	 * @return {@link DateTime} representing epoch
+	 */
 	public static DateTime epoch() {
 		 MutableDateTime epoch = new MutableDateTime();
 		 
