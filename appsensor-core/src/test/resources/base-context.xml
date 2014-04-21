@@ -8,6 +8,16 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
     <context:component-scan base-package="org.owasp.appsensor" />
  
+ 	<bean id="myclientapp" class="org.owasp.appsensor.ClientApplication">
+ 		<property name="name" value="myclientapp"/>
+ 		<property name="roles">
+ 			<list>
+ 				<value type="org.owasp.appsensor.accesscontrol.Role">ADD_EVENT</value>
+ 				<value type="org.owasp.appsensor.accesscontrol.Role">ADD_ATTACK</value>
+ 			</list>
+ 		</property>
+ 	</bean>
+ 	
  	<bean id="ie1" class="org.owasp.appsensor.DetectionPoint">
  		<property name="id" value="IE1"/>
  		<property name="threshold">

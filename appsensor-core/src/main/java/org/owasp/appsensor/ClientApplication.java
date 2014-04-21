@@ -17,7 +17,7 @@ public class ClientApplication {
 	private String name;
 	
 	/** The collection of {@link Role}s associated with this client application */
-	private Collection<Role> roles = new ArrayList<Role>();
+	private Collection<Role> roles;
 
 	public String getName() {
 		return name;
@@ -32,4 +32,7 @@ public class ClientApplication {
 		return roles;
 	}
 
+	public void setRoles(Collection<Role> roles) {
+		this.roles = roles;
+	}
 }
