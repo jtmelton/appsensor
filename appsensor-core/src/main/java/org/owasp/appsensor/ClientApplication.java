@@ -1,6 +1,5 @@
 package org.owasp.appsensor;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.owasp.appsensor.accesscontrol.Role;
