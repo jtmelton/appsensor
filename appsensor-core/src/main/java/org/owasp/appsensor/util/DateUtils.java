@@ -27,6 +27,12 @@ public class DateUtils {
 		return getCurrentTimestamp().toString();
 	}
 	
+	/** 
+	 * Helper for parsing rfc3339 compliant timestamp from string 
+	 * 
+	 * @param rfc3339Timestamp timestamp as string in rfc3339 format
+	 * @return {@link DateTime} representing rfc3339 compliant timestamp from parameter
+	 */
 	public static DateTime fromString(String rfc3339Timestamp) {
 		if (rfc3339Timestamp == null) {
 			return null;
