@@ -1,5 +1,8 @@
 package org.owasp.appsensor;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.owasp.appsensor.accesscontrol.AccessController;
 import org.owasp.appsensor.analysis.AnalysisEngine;
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
@@ -229,6 +232,36 @@ public class AppSensorServer extends ObjectFactory {
 		}
 		
 		return accessController;
+	}
+	
+	@Inject
+	public void setEventStore(EventStore eventStore) {
+		this.eventStore = eventStore;
+	}
+
+	@Inject
+	public void setAttackStore(AttackStore attackStore) {
+		this.attackStore = attackStore;
+	}
+
+	@Inject
+	public void setResponseStore(ResponseStore responseStore) {
+		this.responseStore = responseStore;
+	}
+
+	@Inject @Named("EventAnalysisEngine")
+	public void setEventAnalysisEngine(AnalysisEngine eventAnalysisEngine) {
+		this.eventAnalysisEngine = eventAnalysisEngine;
+	}
+
+	@Inject @Named("AttackAnalysisEngine")
+	public void setAttackAnalysisEngine(AnalysisEngine attackAnalysisEngine) {
+		this.attackAnalysisEngine = attackAnalysisEngine;
+	}
+
+	@Inject
+	public void setAccessController(AccessController accessController) {
+		this.accessController = accessController;
 	}
 	
 }
