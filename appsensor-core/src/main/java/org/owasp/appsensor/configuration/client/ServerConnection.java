@@ -1,5 +1,7 @@
 package org.owasp.appsensor.configuration.client;
 
+import javax.inject.Named;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,6 +12,7 @@ import org.owasp.appsensor.ClientApplication;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
 public class ServerConnection {
 	
 	/** type of server connection: rest/soap */
