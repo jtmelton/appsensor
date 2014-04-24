@@ -3,6 +3,8 @@ package org.owasp.appsensor.storage;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.inject.Inject;
+
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.configuration.Configurable;
 import org.owasp.appsensor.configuration.ExtendedConfiguration;
@@ -58,6 +60,20 @@ public abstract class EventStore implements Configurable {
 	public void notifyListeners(Event event) {
 		for (EventListener listener : listeners) {
 			listener.onAdd(event);
+		}
+	}
+	
+	/**
+	 * Automatically inject any {@link @EventStoreListener}s, which are implementations of 
+	 * {@link EventListener} so they can be notified of changes.
+	 * 
+	 * @param collection of {@link EventListener}s that are injected to be 
+	 * 			listeners on the {@link @EventStore}
+	 */
+	@Inject @EventStoreListener
+	public void setListeners(Collection<EventListener> listeners) {
+		for (EventListener listener : listeners) {
+			registerListener(listener);	
 		}
 	}
 	

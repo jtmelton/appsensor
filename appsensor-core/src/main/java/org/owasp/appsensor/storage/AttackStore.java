@@ -3,6 +3,8 @@ package org.owasp.appsensor.storage;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.inject.Inject;
+
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.configuration.Configurable;
 import org.owasp.appsensor.configuration.ExtendedConfiguration;
@@ -58,6 +60,20 @@ public abstract class AttackStore implements Configurable {
 	public void notifyListeners(Attack attack) {
 		for (AttackListener listener : listeners) {
 			listener.onAdd(attack);
+		}
+	}
+	
+	/**
+	 * Automatically inject any {@link @AttackStoreListener}s, which are implementations of 
+	 * {@link AttackListener} so they can be notified of changes.
+	 * 
+	 * @param collection of {@link AttackListener}s that are injected to be 
+	 * 			listeners on the {@link @AttackStore}
+	 */
+	@Inject @AttackStoreListener
+	public void setListeners(Collection<AttackListener> listeners) {
+		for (AttackListener listener : listeners) {
+			registerListener(listener);	
 		}
 	}
 	
