@@ -3,6 +3,7 @@ package org.owasp.appsensor.listener;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.configuration.Configurable;
 import org.owasp.appsensor.storage.ResponseStore;
+import org.owasp.appsensor.storage.ResponseStoreListener;
 
 /**
  * This interface is implemented by classes that want to be notified
@@ -10,6 +11,7 @@ import org.owasp.appsensor.storage.ResponseStore;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@ResponseStoreListener
 public interface ResponseListener extends Configurable {
 	
 	/**
