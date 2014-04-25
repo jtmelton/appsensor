@@ -2,6 +2,8 @@ package org.owasp.appsensor.analysis;
 
 import java.util.Collection;
 
+import javax.inject.Named;
+
 import org.joda.time.DateTime;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
@@ -13,9 +15,11 @@ import org.owasp.appsensor.User;
 import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.EventListener;
+import org.owasp.appsensor.logging.Loggable;
 import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.storage.AttackStore;
 import org.owasp.appsensor.storage.EventStore;
+import org.owasp.appsensor.storage.EventStoreListener;
 import org.owasp.appsensor.util.DateUtils;
 
 /**
@@ -33,6 +37,9 @@ import org.owasp.appsensor.util.DateUtils;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named("EventAnalysisEngine")
+@EventStoreListener
+@Loggable
 public class ReferenceEventAnalysisEngine implements AnalysisEngine, EventListener {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceEventAnalysisEngine.class);
