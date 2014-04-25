@@ -12,6 +12,7 @@ import org.owasp.appsensor.exceptions.ConfigurationException;
 import org.owasp.appsensor.listener.AttackListener;
 import org.owasp.appsensor.listener.EventListener;
 import org.owasp.appsensor.listener.ResponseListener;
+import org.owasp.appsensor.logging.Loggable;
 import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.storage.AttackStore;
 import org.owasp.appsensor.storage.EventStore;
@@ -25,6 +26,7 @@ import org.owasp.appsensor.storage.ResponseStore;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Loggable
 public class AppSensorServer extends ObjectFactory {
 	
 	/** accessor for {@link org.owasp.appsensor.configuration.server.ServerConfiguration} */
