@@ -2,12 +2,18 @@ package org.owasp.appsensor.reporting;
 
 import java.util.Collection;
 
+import javax.inject.Named;
+
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.configuration.ExtendedConfiguration;
+import org.owasp.appsensor.logging.Loggable;
 import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.storage.AttackStoreListener;
+import org.owasp.appsensor.storage.EventStoreListener;
+import org.owasp.appsensor.storage.ResponseStoreListener;
 
 /**
  * This is the reference reporting engine, and is an implementation of the observer pattern. 
@@ -22,6 +28,11 @@ import org.owasp.appsensor.logging.Logger;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
+@EventStoreListener
+@AttackStoreListener
+@ResponseStoreListener
+@Loggable
 public class SimpleLoggingReportingEngine implements ReportingEngine {
 	
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(SimpleLoggingReportingEngine.class);
