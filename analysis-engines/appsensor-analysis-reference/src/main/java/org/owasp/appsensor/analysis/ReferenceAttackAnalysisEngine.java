@@ -3,6 +3,8 @@ package org.owasp.appsensor.analysis;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.inject.Named;
+
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
@@ -11,8 +13,10 @@ import org.owasp.appsensor.Response;
 import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.AttackListener;
+import org.owasp.appsensor.logging.Loggable;
 import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.storage.AttackStore;
+import org.owasp.appsensor.storage.AttackStoreListener;
 import org.owasp.appsensor.storage.ResponseStore;
 
 /**
@@ -29,6 +33,9 @@ import org.owasp.appsensor.storage.ResponseStore;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named("AttackAnalysisEngine")
+@AttackStoreListener
+@Loggable
 public class ReferenceAttackAnalysisEngine implements AnalysisEngine, AttackListener {
 
 	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceAttackAnalysisEngine.class);
