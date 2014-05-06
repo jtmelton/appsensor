@@ -9,6 +9,7 @@
 
 	<properties>
 		<gson.version>2.2.4</gson.version>
+		<spring.version>4.0.3.RELEASE</spring.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -41,12 +42,12 @@
 			<version>${project.version}</version>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-storage-in-memory</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.owasp.appsensor</groupId> -->
+<!-- 			<artifactId>appsensor-storage-in-memory</artifactId> -->
+<!-- 			<version>${project.version}</version> -->
+<!-- 			<scope>test</scope> -->
+<!-- 		</dependency> -->
 		
 		<dependency>
 			<groupId>org.owasp.appsensor</groupId>
@@ -75,6 +76,13 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency> 
 	</dependencies>
 
 	<parent>
