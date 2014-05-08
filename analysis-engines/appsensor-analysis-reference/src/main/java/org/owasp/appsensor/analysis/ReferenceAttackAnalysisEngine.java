@@ -3,6 +3,7 @@ package org.owasp.appsensor.analysis;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.owasp.appsensor.AppSensorServer;
@@ -10,14 +11,11 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
-import org.owasp.appsensor.listener.AttackListener;
 import org.owasp.appsensor.logging.Loggable;
-import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.storage.AttackStore;
-import org.owasp.appsensor.storage.AttackStoreListener;
 import org.owasp.appsensor.storage.ResponseStore;
+import org.slf4j.Logger;
 
 /**
  * This is the reference {@link Attack} analysis engine, and is an implementation of the Observer pattern. 
@@ -33,14 +31,14 @@ import org.owasp.appsensor.storage.ResponseStore;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-@Named("AttackAnalysisEngine")
-@AttackStoreListener
+@Named
 @Loggable
-public class ReferenceAttackAnalysisEngine implements AnalysisEngine, AttackListener {
+public class ReferenceAttackAnalysisEngine extends AttackAnalysisEngine {
 
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceAttackAnalysisEngine.class);
+	private Logger logger;
 
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	@Inject
+	private AppSensorServer appSensorServer;
 	
 	/**
 	 * This method analyzes {@link Attack} objects that are added 
@@ -51,13 +49,13 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine, AttackList
 	 * @param event the {@link Attack} that was added to the {@link AttackStore}
 	 */
 	@Override
-	public void onAdd(Attack attack) {
+	public void analyze(Attack attack) {
 		if (attack != null) {
 			Response response = findAppropriateResponse(attack);
 			
 			if (response != null) {
 				logger.info("Response set for user <" + attack.getUser().getUsername() + "> - storing response action " + response.getAction());
-				AppSensorServer.getInstance().getResponseStore().addResponse(response);
+				appSensorServer.getResponseStore().addResponse(response);
 			}
 		}
 	}
@@ -74,10 +72,10 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine, AttackList
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(attack.getUser()).
 				setDetectionPoint(triggeringDetectionPoint).
-				setDetectionSystemIds(AppSensorServer.getInstance().getConfiguration().getRelatedDetectionSystems(attack.getDetectionSystemId()));
+				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(attack.getDetectionSystemId()));
 		
 		//grab any existing responses
-		Collection<Response> existingResponses = AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
+		Collection<Response> existingResponses = appSensorServer.getResponseStore().findResponses(criteria);
 		
 		String responseAction = null;
 		Interval interval = null;
@@ -127,7 +125,7 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine, AttackList
 	protected Collection<Response> findPossibleResponses(DetectionPoint triggeringDetectionPoint) {
 		Collection<Response> possibleResponses = new ArrayList<Response>();
 		
-		for (DetectionPoint configuredDetectionPoint : AppSensorServer.getInstance().getConfiguration().getDetectionPoints()) {
+		for (DetectionPoint configuredDetectionPoint : appSensorServer.getConfiguration().getDetectionPoints()) {
 			if (configuredDetectionPoint.getId().equals(triggeringDetectionPoint.getId())) {
 				possibleResponses = configuredDetectionPoint.getResponses();
 				break;
@@ -154,18 +152,6 @@ public class ReferenceAttackAnalysisEngine implements AnalysisEngine, AttackList
 		}
 		
 		return previousResponse;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
 	}
 	
 }

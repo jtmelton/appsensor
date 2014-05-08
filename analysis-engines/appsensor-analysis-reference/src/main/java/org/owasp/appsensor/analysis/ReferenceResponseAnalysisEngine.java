@@ -2,14 +2,15 @@ package org.owasp.appsensor.analysis;
 
 import java.util.Observer;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.owasp.appsensor.AppSensorClient;
-import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
-import org.owasp.appsensor.listener.ResponseListener;
-import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.logging.Loggable;
 import org.owasp.appsensor.response.ResponseHandler;
 import org.owasp.appsensor.storage.ResponseStore;
+import org.slf4j.Logger;
 
 /**
  * This is a reference {@link Response} handler, and is an implementation of the {@link Observer} pattern. 
@@ -25,11 +26,14 @@ import org.owasp.appsensor.storage.ResponseStore;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public class ReferenceResponseAnalysisEngine implements AnalysisEngine, ResponseListener {
+@Named
+@Loggable
+public class ReferenceResponseAnalysisEngine extends ResponseAnalysisEngine {
 
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceResponseAnalysisEngine.class);
+	private Logger logger;
 	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	@Inject
+	private AppSensorClient appSensorClient;
 	
 	/**
 	 * This method simply catches responses and calls the 
@@ -38,24 +42,12 @@ public class ReferenceResponseAnalysisEngine implements AnalysisEngine, Response
 	 * @param response {@link Response} that has been added to the {@link ResponseStore}.
 	 */
 	@Override
-	public void onAdd(Response response) {
+	public void analyze(Response response) {
 		if (response != null) {
 			logger.info("Response executed for user <" + response.getUser().getUsername() + "> - executing response action " + response.getAction());
 			
-			AppSensorClient.getInstance().getResponseHandler().handle(response);
+			appSensorClient.getResponseHandler().handle(response);
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
 	}
 	
 }

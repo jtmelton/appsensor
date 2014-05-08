@@ -2,6 +2,7 @@ package org.owasp.appsensor.analysis;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.joda.time.DateTime;
@@ -12,15 +13,12 @@ import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Interval;
 import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.User;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
-import org.owasp.appsensor.listener.EventListener;
 import org.owasp.appsensor.logging.Loggable;
-import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.storage.AttackStore;
 import org.owasp.appsensor.storage.EventStore;
-import org.owasp.appsensor.storage.EventStoreListener;
 import org.owasp.appsensor.util.DateUtils;
+import org.slf4j.Logger;
 
 /**
  * This is a statistical {@link Event} analysis engine, and is an implementation of the Observer pattern. 
@@ -37,14 +35,14 @@ import org.owasp.appsensor.util.DateUtils;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-@Named("EventAnalysisEngine")
-@EventStoreListener
+@Named
 @Loggable
-public class ReferenceEventAnalysisEngine implements AnalysisEngine, EventListener {
+public class ReferenceEventAnalysisEngine extends EventAnalysisEngine {
 
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(ReferenceEventAnalysisEngine.class);
+	private Logger logger;
 	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	@Inject
+	private AppSensorServer appSensorServer;
 	
 	/**
 	 * This method analyzes statistical {@link Event}s that are added to the system and 
@@ -54,15 +52,15 @@ public class ReferenceEventAnalysisEngine implements AnalysisEngine, EventListen
 	 * @param event the {@link Event} that was added to the {@link EventStore}
 	 */
 	@Override
-	public void onAdd(Event event) {
+	public void analyze(Event event) {
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(event.getUser()).
 				setDetectionPoint(event.getDetectionPoint()).
-				setDetectionSystemIds(AppSensorServer.getInstance().getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
+				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
 
-		Collection<Event> existingEvents = AppSensorServer.getInstance().getEventStore().findEvents(criteria);
+		Collection<Event> existingEvents = appSensorServer.getEventStore().findEvents(criteria);
 
-		DetectionPoint configuredDetectionPoint = AppSensorServer.getInstance().getConfiguration().findDetectionPoint(event.getDetectionPoint());
+		DetectionPoint configuredDetectionPoint = appSensorServer.getConfiguration().findDetectionPoint(event.getDetectionPoint());
 		
 		int eventCount = countEvents(configuredDetectionPoint.getThreshold().getInterval().toMillis(), existingEvents, event);
 
@@ -77,7 +75,7 @@ public class ReferenceEventAnalysisEngine implements AnalysisEngine, EventListen
 		if (eventCount % thresholdCount == 0) {
 			logger.info("Violation Observed for user <" + event.getUser().getUsername() + "> - storing attack");
 			//have determined this event triggers attack
-			AppSensorServer.getInstance().getAttackStore().addAttack(new Attack(event));
+			appSensorServer.getAttackStore().addAttack(new Attack(event));
 		}
 	}
 	
@@ -131,9 +129,9 @@ public class ReferenceEventAnalysisEngine implements AnalysisEngine, EventListen
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(event.getUser()).
 				setDetectionPoint(event.getDetectionPoint()).
-				setDetectionSystemIds(AppSensorServer.getInstance().getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
+				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
 		
-		Collection<Attack> attacks = AppSensorServer.getInstance().getAttackStore().findAttacks(criteria);
+		Collection<Attack> attacks = appSensorServer.getAttackStore().findAttacks(criteria);
 		
 		for (Attack attack : attacks) {
 			if (DateUtils.fromString(attack.getTimestamp()).isAfter(newest)) {
@@ -142,18 +140,6 @@ public class ReferenceEventAnalysisEngine implements AnalysisEngine, EventListen
 		}
 		
 		return newest;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
 	}
 	
 }
