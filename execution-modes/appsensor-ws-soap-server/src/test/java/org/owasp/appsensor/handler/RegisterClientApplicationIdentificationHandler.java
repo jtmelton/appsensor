@@ -25,6 +25,8 @@ import org.owasp.appsensor.AppSensorClient;
 public class RegisterClientApplicationIdentificationHandler implements
 		SOAPHandler<SOAPMessageContext> {
 
+	private AppSensorClient appSensorClient;
+	
 	/** default name for client application identification header */
 	private static String HEADER_NAME = "X-Appsensor-Client-Application-Name";
 
@@ -40,11 +42,12 @@ public class RegisterClientApplicationIdentificationHandler implements
 				httpHeaders = new HashMap<String, List<String>>();
 			}
 			
-			String clientApplicationName = AppSensorClient.getInstance().getConfiguration().getServerConnection().getClientApplicationIdentificationHeaderValue();
+			String clientApplicationName = appSensorClient.getConfiguration().getServerConnection().getClientApplicationIdentificationHeaderValue();
 			
 			httpHeaders.put(HEADER_NAME, Collections.singletonList(clientApplicationName));
 			context.put(MessageContext.HTTP_REQUEST_HEADERS, httpHeaders);
 		}
+
 		return true;
 	}
 
@@ -62,5 +65,10 @@ public class RegisterClientApplicationIdentificationHandler implements
 	public Set<QName> getHeaders() {
 		return null;
 	}
-
+	
+	//hack workaround b/c DI doesn't work for jax-ws handlers with base spring
+	public void setAppSensorClient(AppSensorClient appSensorClient) {
+		this.appSensorClient = appSensorClient;
+	}
+	
 }

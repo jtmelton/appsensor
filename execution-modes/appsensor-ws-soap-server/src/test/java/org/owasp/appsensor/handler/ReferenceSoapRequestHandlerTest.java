@@ -7,20 +7,23 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Endpoint;
 import javax.xml.ws.Service;
 import javax.xml.ws.handler.Handler;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
-import org.owasp.appsensor.AppSensorServer;
+import org.junit.runner.RunWith;
+import org.owasp.appsensor.AppSensorClient;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.User;
 import org.owasp.appsensor.util.DateUtils;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Test basic soap event handling. Add a number of events matching 
@@ -30,22 +33,26 @@ import org.owasp.appsensor.util.DateUtils;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations={"classpath:applicationContext.xml"})
 public class ReferenceSoapRequestHandlerTest {
+
+	@Inject
+	private AppSensorClient appSensorClient;
 	
 	private static User bob = new User("bob");
 	
 	private static DetectionPoint detectionPoint1 = new DetectionPoint("IE1");
 	
-	private static String SERVICE_URL = "http://localhost:8080/appsensor/services/SoapRequestHandler";
+	//appsensor/services/
+	private static String SERVICE_URL = "http://localhost:8080/SoapRequestHandlerService";
 	
     @SuppressWarnings("rawtypes")
 	@Test
     public void test() throws Exception {
 		System.err.println("Starting service");
-		AppSensorServer.bootstrap();
-    	Endpoint endpoint = Endpoint.publish(SERVICE_URL, new ReferenceSoapRequestHandler());
-		
-        Service soapHandlerService = Service.create(
+
+		Service soapHandlerService = Service.create(
                 new URL(SERVICE_URL + "?wsdl"),
                 new QName("https://www.owasp.org/index.php/OWASP_AppSensor_Project/wsdl", "SoapRequestHandlerService"));
 
@@ -59,7 +66,12 @@ public class ReferenceSoapRequestHandlerTest {
         if (handlerChain == null) {
         	handlerChain = new ArrayList<Handler>();
         }
-        handlerChain.add(new RegisterClientApplicationIdentificationHandler());
+        
+        RegisterClientApplicationIdentificationHandler handler = 
+        		new RegisterClientApplicationIdentificationHandler();
+        handler.setAppSensorClient(appSensorClient);
+
+        handlerChain.add(handler);
         binding.setHandlerChain(handlerChain);
         
         DateTime currentTimestamp = DateUtils.getCurrentTimestamp();
@@ -104,8 +116,8 @@ public class ReferenceSoapRequestHandlerTest {
         requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
         
         assertEquals(2, requestHandler.getResponses(timestamp).size());
-        
-        endpoint.stop();
+//        
+//        endpoint.stop();
         System.err.println("Stopped service");
     }
 }
