@@ -1,0 +1,60 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:component-scan base-package="org.owasp.appsensor" />
+ 
+ 	<!-- <bean id="myclientapp" class="org.owasp.appsensor.ClientApplication">
+ 		<property name="name" value="myclientapp"/>
+ 		<property name="roles">
+ 			<list>
+ 				<value type="org.owasp.appsensor.accesscontrol.Role">ADD_EVENT</value>
+ 				<value type="org.owasp.appsensor.accesscontrol.Role">ADD_ATTACK</value>
+ 			</list>
+ 		</property>
+ 	</bean>
+ 	
+ 	<bean id="ie1" class="org.owasp.appsensor.DetectionPoint">
+ 		<property name="id" value="IE1"/>
+ 		<property name="threshold">
+ 			<bean class="org.owasp.appsensor.Threshold">
+ 				<property name="count" value="11"/>
+ 				<property name="interval">
+ 					<bean class="org.owasp.appsensor.Interval">
+ 						<constructor-arg><value>4</value></constructor-arg>
+ 						<constructor-arg><value>minutes</value></constructor-arg>
+ 					</bean>
+ 				</property>
+ 			</bean>
+ 		</property>
+	</bean>
+
+ 	<bean id="example1CorrelationSet" class="org.owasp.appsensor.correlation.CorrelationSet">
+ 		<property name="clientApplications">
+    		<list>
+    			<value>server1</value>
+    			<value>server3</value>
+    		</list>
+    	</property>
+ 	</bean>
+ 	<bean id="example2CorrelationSet" class="org.owasp.appsensor.correlation.CorrelationSet">
+ 		<property name="clientApplications">
+    		<list>
+    			<value>server2</value>
+    			<value>server4</value>
+    		</list>
+    	</property>
+ 	</bean>
+ 	<bean id="example3CorrelationSet" class="org.owasp.appsensor.correlation.CorrelationSet">
+ 		<property name="clientApplications">
+    		<list>
+    			<value>server1</value>
+    			<value>server5</value>
+    		</list>
+    	</property>
+ 	</bean>-->
+</beans>
