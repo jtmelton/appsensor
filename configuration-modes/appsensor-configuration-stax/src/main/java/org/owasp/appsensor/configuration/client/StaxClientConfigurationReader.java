@@ -109,12 +109,6 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 				case XMLStreamConstants.START_ELEMENT:
 					if("config:appsensor-client-config".equals(name)) {
 						//
-//					} else if("config:event-manager".equals(name)) {
-//						readEventManager(configuration, xmlReader);
-//					} else if("config:response-handler".equals(name)) {
-//						readResponseHandler(configuration, xmlReader);
-//					} else if("config:user-manager".equals(name)) {
-//						readUserManager(configuration, xmlReader);
 					} else if("config:server-connection".equals(name)) {
 						configuration.setServerConnection(readServerConnection(xmlReader));
 					} else {
@@ -178,84 +172,6 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 		
 		return serverConnection;
 	}
-	
-//	private void readEventManager(ClientConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
-//		boolean finished = false;
-//		
-//		configuration.setEventManagerImplementation(xmlReader.getAttributeValue(null, "class"));
-//		
-//		while(!finished && xmlReader.hasNext()) {
-//			int event = xmlReader.next();
-//			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
-//			
-//			switch(event) {			
-//				case XMLStreamConstants.START_ELEMENT:
-//					break;
-//				case XMLStreamConstants.END_ELEMENT:
-//					if("config:event-manager".equals(name)) {
-//						finished = true;
-//					} else {
-//						/** unexpected end element **/
-//					}
-//					break;
-//				default:
-//					/** unused xml element - nothing to do **/
-//					break;
-//			}
-//		}
-//	}
-//	
-//	private void readResponseHandler(ClientConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
-//		boolean finished = false;
-//		
-//		configuration.setResponseHandlerImplementation(xmlReader.getAttributeValue(null, "class"));
-//		
-//		while(!finished && xmlReader.hasNext()) {
-//			int event = xmlReader.next();
-//			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
-//			
-//			switch(event) {			
-//				case XMLStreamConstants.START_ELEMENT:
-//					break;
-//				case XMLStreamConstants.END_ELEMENT:
-//					if("config:response-handler".equals(name)) {
-//						finished = true;
-//					} else {
-//						/** unexpected end element **/
-//					}
-//					break;
-//				default:
-//					/** unused xml element - nothing to do **/
-//					break;
-//			}
-//		}
-//	}
-//	
-//	private void readUserManager(ClientConfiguration configuration, XMLStreamReader xmlReader) throws XMLStreamException {
-//		boolean finished = false;
-//		
-//		configuration.setUserManagerImplementation(xmlReader.getAttributeValue(null, "class"));
-//		
-//		while(!finished && xmlReader.hasNext()) {
-//			int event = xmlReader.next();
-//			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
-//			
-//			switch(event) {			
-//				case XMLStreamConstants.START_ELEMENT:
-//					break;
-//				case XMLStreamConstants.END_ELEMENT:
-//					if("config:user-manager".equals(name)) {
-//						finished = true;
-//					} else {
-//						/** unexpected end element **/
-//					}
-//					break;
-//				default:
-//					/** unused xml element - nothing to do **/
-//					break;
-//			}
-//		}
-//	}
 	
 }
 
