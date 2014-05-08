@@ -21,6 +21,7 @@ public class LoggerBeanPostProcessor implements BeanPostProcessor {
                 field.setAccessible(true);
                 field.set(bean, LoggerFactory.getLogger(bean.getClass()));
             } catch (Exception e) {
+            	System.err.println("Error processing " + bean.getClass().getCanonicalName() + " for bean " + beanName);
                 e.printStackTrace();
             }
         }
