@@ -6,12 +6,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.logging.Loggable;
+import org.slf4j.Logger;
 
+@Loggable
 public class FileUtils {
 
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(FileUtils.class);
+	private static Logger logger;
 	
 	public static Path getOrCreateFile(String filePath, String fileName) {
 		Path path = null;
