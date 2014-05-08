@@ -83,8 +83,8 @@
 		<module>appsensor-core</module>
 		<module>storage-providers/appsensor-storage-in-memory</module>
 		<module>analysis-engines/appsensor-analysis-reference</module>
-		<module>loggers/appsensor-logging-slf4j</module>
 		<module>access-controllers/appsensor-access-control-reference</module>
+		<module>configuration-modes/appsensor-configuration-stax</module>
 		<module>execution-modes/appsensor-local</module>
 		<module>execution-modes/appsensor-ws-rest-client</module>
 		<module>execution-modes/appsensor-ws-rest-server</module>
