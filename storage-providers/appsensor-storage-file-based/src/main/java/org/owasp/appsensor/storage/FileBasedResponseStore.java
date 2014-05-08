@@ -10,16 +10,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.joda.time.DateTime;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.User;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.listener.ResponseListener;
-import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.logging.Loggable;
 import org.owasp.appsensor.util.DateUtils;
 import org.owasp.appsensor.util.FileUtils;
+import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 
@@ -34,9 +37,15 @@ import com.google.gson.Gson;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
+@Loggable
 public class FileBasedResponseStore extends ResponseStore {
 
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(FileBasedResponseStore.class);
+	private Logger logger;
+	
+	@SuppressWarnings("unused")
+	@Inject
+	private AppSensorServer appSensorServer;
 	
 	public static final String DEFAULT_FILE_PATH = File.separator + "tmp";
 	
@@ -50,14 +59,12 @@ public class FileBasedResponseStore extends ResponseStore {
 	
 	private Path path = null;
 	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
-	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void addResponse(Response response) {
-		logger.warning("Security response " + response + " triggered for user: " + response.getUser().getUsername());
+		logger.warn("Security response " + response + " triggered for user: " + response.getUser().getUsername());
 
 		writeResponse(response);
 		
@@ -138,26 +145,11 @@ public class FileBasedResponseStore extends ResponseStore {
 	}
 	
 	protected String lookupFilePath() {
-		ExtendedConfiguration configuration = AppSensorServer.getInstance().getResponseStore().getExtendedConfiguration();
-		
-		return configuration.findValue(FILE_PATH_CONFIGURATION_KEY, DEFAULT_FILE_PATH);
+		return DEFAULT_FILE_PATH;
 	}
 	
 	protected String lookupFileName() {
-		ExtendedConfiguration configuration = AppSensorServer.getInstance().getResponseStore().getExtendedConfiguration();
-		
-		return configuration.findValue(FILE_NAME_CONFIGURATION_KEY, DEFAULT_FILE_NAME);
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
+		return DEFAULT_FILE_NAME;
 	}
 	
 }

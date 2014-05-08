@@ -38,6 +38,13 @@
 		
 		<dependency>
 			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-configuration-stax</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
 			<artifactId>appsensor-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
