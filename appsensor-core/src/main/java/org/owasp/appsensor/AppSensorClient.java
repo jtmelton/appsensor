@@ -1,109 +1,77 @@
 package org.owasp.appsensor;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.owasp.appsensor.configuration.client.ClientConfiguration;
-import org.owasp.appsensor.configuration.client.ClientConfigurationReader;
-import org.owasp.appsensor.configuration.client.StaxClientConfigurationReader;
 import org.owasp.appsensor.event.EventManager;
-import org.owasp.appsensor.exceptions.ConfigurationException;
+import org.owasp.appsensor.logging.Loggable;
 import org.owasp.appsensor.response.ResponseHandler;
 import org.owasp.appsensor.response.UserManager;
+import org.slf4j.Logger;
 
 /**
- * This class exposes the main interfaces expected to be available 
- * to the client application. 
+ * AppSensor core class for accessing client-side components. Most components
+ * are discoverd via DI. However, the configuration portions are setup in 
+ * the appsensor-client-config.xml file.
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public class AppSensorClient extends ObjectFactory {
+@Named
+@Loggable
+public class AppSensorClient {
+	
+	@SuppressWarnings("unused")
+	private Logger logger;
 	
 	/** accessor for {@link org.owasp.appsensor.configuration.client.ClientConfiguration} */
-	private static ClientConfiguration configuration;
+	private ClientConfiguration configuration;
 	
 	/** accessor for {@link org.owasp.appsensor.event.EventManager} */
-	private static EventManager eventManager; 
+	private EventManager eventManager; 
 
 	/** accessor for {@link org.owasp.appsensor.response.ResponseHandler} */
-	private static ResponseHandler responseHandler;
+	private ResponseHandler responseHandler;
 	
 	/** accessor for {@link org.owasp.appsensor.response.UserManager} */
-	private static UserManager userManager;
+	private UserManager userManager;
 	
-	/**
-	 * Bootstrap mechanism that loads the configuration for the client object based 
-	 * on the default configuration reading mechanism. 
-	 * 
-	 * The reference implementation of the configuration is XML-based and a schema is 
-	 * available in the appsensor_client_config_VERSION.xsd.
-	 */
-	public static synchronized void bootstrap() {
-		bootstrap(new StaxClientConfigurationReader());
-	}
-	
-	/**
-	 * Bootstrap mechanism that loads the configuration for the client object based 
-	 * on the specified configuration reading mechanism. 
-	 * 
-	 * The reference implementation of the configuration is XML-based, but this interface 
-	 * allows for whatever mechanism is desired
-	 * 
-	 * @param configurationReader desired configuration reader 
-	 */
-	public static synchronized void bootstrap(ClientConfigurationReader configurationReader) {
-		if (configuration != null) {
-			throw new IllegalStateException("Bootstrapping the AppSensorClient should only occur 1 time per JVM instance.");
-		}
-		
-		try {
-			configuration = configurationReader.read();
-		} catch(ConfigurationException pe) {
-			throw new RuntimeException(pe);
-		}
-	}
-	
-	public static AppSensorClient getInstance() {
-		if (configuration == null) {
-			//if getInstance is called without the bootstrap having been run, just execute the default bootstrapping
-			bootstrap();
-		}
-		
-		return SingletonHolder.instance;
-	}
-	
-	private static final class SingletonHolder {
-		static final AppSensorClient instance = new AppSensorClient();
-	}
-	
-	//singleton
-	private AppSensorClient() { }
+	public AppSensorClient() { }
 	
 	public ClientConfiguration getConfiguration() {
 		return configuration;
 	}
 	
+	@Inject
+	public void setConfiguration(ClientConfiguration updatedConfiguration) {
+		configuration = updatedConfiguration;
+	}
+
 	public EventManager getEventManager() {
-		if (eventManager == null) {
-			eventManager = make(getConfiguration().getEventManagerImplementation(), "EventManager");
-			eventManager.setExtendedConfiguration(configuration.getEventManagerExtendedConfiguration());
-		}
-		
 		return eventManager;
 	}
-	
+
+	@Inject
+	public void setEventManager(EventManager eventManager) {
+		this.eventManager = eventManager;
+	}
+
 	public ResponseHandler getResponseHandler() {
-		if (responseHandler == null) {
-			responseHandler = make(getConfiguration().getResponseHandlerImplementation(), "ResponseHandler");
-			responseHandler.setExtendedConfiguration(configuration.getResponseHandlerExtendedConfiguration());
-		}
-		
 		return responseHandler;
 	}
-	
+
+	@Inject
+	public void setResponseHandler(ResponseHandler responseHandler) {
+		this.responseHandler = responseHandler;
+	}
+
 	public UserManager getUserManager() {
-		if (userManager == null) {
-			userManager = make(getConfiguration().getUserManagerImplementation(), "UserManager");
-			userManager.setExtendedConfiguration(configuration.getUserManagerExtendedConfiguration());
-		}
-		
 		return userManager;
 	}
+
+	@Inject
+	public void setUserManager(UserManager userManager) {
+		this.userManager = userManager;
+	}
+	
 }
