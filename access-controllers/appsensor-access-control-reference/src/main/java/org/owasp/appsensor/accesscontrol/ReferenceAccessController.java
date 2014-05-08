@@ -1,8 +1,11 @@
 package org.owasp.appsensor.accesscontrol;
 
+import javax.inject.Named;
+
 import org.owasp.appsensor.ClientApplication;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.logging.Loggable;
+import org.slf4j.Logger;
 
 /**
  * This particular {@link AccessController} implementation simply checks the {@link ClientApplication}s 
@@ -11,9 +14,12 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
+@Loggable
 public class ReferenceAccessController implements AccessController {
 	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	@SuppressWarnings("unused")
+	private Logger logger;
 	
 	/**
 	 * {@inheritDoc}
@@ -48,18 +54,6 @@ public class ReferenceAccessController implements AccessController {
 					" when trying to perform action : " + action + 
 					" using context: " + context);
 		}
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
 	}
 	
 }
