@@ -1,7 +1,6 @@
 package org.owasp.appsensor.listener;
 
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.configuration.Configurable;
 import org.owasp.appsensor.storage.ResponseStore;
 import org.owasp.appsensor.storage.ResponseStoreListener;
 
@@ -12,7 +11,7 @@ import org.owasp.appsensor.storage.ResponseStoreListener;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @ResponseStoreListener
-public interface ResponseListener extends Configurable {
+public interface ResponseListener {
 	
 	/**
 	 * Listener method to handle when a new 

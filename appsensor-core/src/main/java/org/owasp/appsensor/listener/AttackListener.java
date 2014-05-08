@@ -1,7 +1,6 @@
 package org.owasp.appsensor.listener;
 
 import org.owasp.appsensor.Attack;
-import org.owasp.appsensor.configuration.Configurable;
 import org.owasp.appsensor.storage.AttackStore;
 import org.owasp.appsensor.storage.AttackStoreListener;
 
@@ -12,7 +11,7 @@ import org.owasp.appsensor.storage.AttackStoreListener;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @AttackStoreListener
-public interface AttackListener extends Configurable {
+public interface AttackListener {
 	
 	/**
 	 * Listener method to handle when a new 
