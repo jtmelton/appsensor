@@ -64,6 +64,14 @@
 			<organization>OWASP</organization>
 			<organizationUrl>http://www.owasp.org</organizationUrl>
 		</developer>
+		
+		<developer>
+			<id>rtaban</id>
+			<name>Raphaël Taban</name>
+			<email>rtaban31@yahoo.fr</email>
+			<organization>OWASP</organization>
+			<organizationUrl>http://www.owasp.org</organizationUrl>
+		</developer>
 	</developers>
 	
 	<licenses>
