@@ -2,10 +2,11 @@ package org.owasp.appsensor.event;
 
 import java.util.Collection;
 
+import javax.inject.Named;
+
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
 
 /**
  * This event manager should perform soap style requests since it functions
@@ -13,11 +14,10 @@ import org.owasp.appsensor.configuration.ExtendedConfiguration;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
 public class SoapEventManager implements EventManager {
 
 	//TODO: do a soap request based on configuration 
-	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	/**
 	 * {@inheritDoc}
@@ -42,18 +42,6 @@ public class SoapEventManager implements EventManager {
 	public Collection<Response> getResponses() {
 		//make request
 		return null;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
 	}
 
 }
