@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+import javax.inject.Named;
+
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
@@ -12,13 +14,18 @@ import org.owasp.appsensor.Response;
 import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.User;
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Provide demo data for websockets test web app.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
 public class DemoDataMultiUserPopulator {
+	
+	@Autowired
+	private AppSensorServer appSensorServer;
 	
 	private static User bob = new User("bob");
 	
@@ -32,18 +39,16 @@ public class DemoDataMultiUserPopulator {
 		int delay = 50;
 		int maxEvents = 80;
 		
-		generateData(delay, maxEvents);
+		new DemoDataMultiUserPopulator().generateData(delay, maxEvents);
 	}
 	
-	public static void generateData(int delay, int maxEvents) {
+	public void generateData(int delay, int maxEvents) {
 		detectionPoint1.setId("IE1");
 		detectionSystems1.add(detectionSystem1);
 		
-		AppSensorServer.bootstrap();
-		
-		ServerConfiguration updatedConfiguration = AppSensorServer.getInstance().getConfiguration();
+		ServerConfiguration updatedConfiguration = appSensorServer.getConfiguration();
 		updatedConfiguration.setDetectionPoints(loadMockedDetectionPoints());
-		AppSensorServer.getInstance().setConfiguration(updatedConfiguration);
+		appSensorServer.setConfiguration(updatedConfiguration);
 		
 		int i = 0;
 		
@@ -55,11 +60,11 @@ public class DemoDataMultiUserPopulator {
 			}
 			
 			if(i % 2 == 0) {
-				AppSensorServer.getInstance().getEventStore().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+				appSensorServer.getEventStore().addEvent(new Event(bob, detectionPoint1, "localhostme"));
 			} else {
 				int randomNumber = new Random().nextInt() % 99;
 				User user = new User("otherUser" + randomNumber);
-				AppSensorServer.getInstance().getEventStore().addEvent(new Event(user, detectionPoint1, "localhostme"));
+				appSensorServer.getEventStore().addEvent(new Event(user, detectionPoint1, "localhostme"));
 			}
 			
 			i++;

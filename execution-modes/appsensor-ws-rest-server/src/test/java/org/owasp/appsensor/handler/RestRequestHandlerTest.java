@@ -15,15 +15,19 @@ import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.owasp.appsensor.AppSensorServer;
+import org.junit.runner.RunWith;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.util.DateUtils;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Test basic rest request handling. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations={"classpath:applicationContext.xml"})
 public class RestRequestHandlerTest {
 
 	// Base URI the Grizzly HTTP server will listen on
@@ -51,7 +55,9 @@ public class RestRequestHandlerTest {
     @SuppressWarnings("deprecation")
 	@After
     public void tearDown() throws Exception {
-        server.stop();
+    	if(server != null && server.isStarted()) {
+    		server.stop();
+    	}
     }
 
     /**
@@ -59,13 +65,12 @@ public class RestRequestHandlerTest {
      */
     @Test
     public void testGetIt() {
-    	AppSensorServer.bootstrap();
-        
         GenericType<Collection<Response>> responseType = new GenericType<Collection<Response>>() {};
         
         DateTime twoHoursAgo = DateUtils.getCurrentTimestamp().minusHours(2);
-        
-        Collection<Response> responses = target
+
+        Collection<Response> responses = 
+        target
 		.path("api")
 		.path("v1.0")
 		.path("responses")
