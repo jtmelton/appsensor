@@ -4,16 +4,14 @@ import java.util.Collection;
 
 import javax.inject.Named;
 
-import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.logging.Loggable;
-import org.owasp.appsensor.logging.Logger;
 import org.owasp.appsensor.storage.AttackStoreListener;
 import org.owasp.appsensor.storage.EventStoreListener;
 import org.owasp.appsensor.storage.ResponseStoreListener;
+import org.slf4j.Logger;
 
 /**
  * This is the reference reporting engine, and is an implementation of the observer pattern. 
@@ -35,9 +33,7 @@ import org.owasp.appsensor.storage.ResponseStoreListener;
 @Loggable
 public class SimpleLoggingReportingEngine implements ReportingEngine {
 	
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(SimpleLoggingReportingEngine.class);
-	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	private Logger logger;
 	
 	/**
 	 * {@inheritDoc}
@@ -87,16 +83,4 @@ public class SimpleLoggingReportingEngine implements ReportingEngine {
 		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
-	}
-	
 }

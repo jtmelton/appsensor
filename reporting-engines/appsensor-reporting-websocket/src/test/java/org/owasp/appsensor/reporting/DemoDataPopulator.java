@@ -3,6 +3,8 @@ package org.owasp.appsensor.reporting;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.inject.Inject;
+
 import org.owasp.appsensor.AppSensorClient;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.DetectionPoint;
@@ -20,6 +22,12 @@ import org.owasp.appsensor.configuration.server.ServerConfiguration;
  */
 public class DemoDataPopulator {
 	
+	@Inject
+	private static AppSensorClient appSensorClient;
+	
+	@Inject
+	private AppSensorServer appSensorServer;
+	
 	private static User bob = new User("bob");
 	
 	private static DetectionPoint detectionPoint1 = new DetectionPoint();
@@ -29,35 +37,36 @@ public class DemoDataPopulator {
 	private static String detectionSystem1 = "localhostme";
 	
 	public static void main(String[] args) throws Exception {
+		new DemoDataPopulator().populateData();
+	}
+	
+	private void populateData() throws Exception {
 		int delay = 500;
 		detectionPoint1.setId("IE1");
 		detectionSystems1.add(detectionSystem1);
 		
-		AppSensorServer.bootstrap();
-		AppSensorClient.bootstrap();
-		
-		ServerConfiguration updatedConfiguration = AppSensorServer.getInstance().getConfiguration();
+		ServerConfiguration updatedConfiguration = appSensorServer.getConfiguration();
 		updatedConfiguration.setDetectionPoints(loadMockedDetectionPoints());
-		AppSensorServer.getInstance().setConfiguration(updatedConfiguration);
+		appSensorServer.setConfiguration(updatedConfiguration);
 		
 		Thread.sleep(delay);
-		AppSensorClient.getInstance().getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
 		Thread.sleep(delay);
-		AppSensorClient.getInstance().getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
 		Thread.sleep(delay);
-		AppSensorClient.getInstance().getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
 		Thread.sleep(delay);
-		AppSensorClient.getInstance().getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
 		Thread.sleep(delay);
-		AppSensorClient.getInstance().getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
 		Thread.sleep(delay);
-		AppSensorClient.getInstance().getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
 		Thread.sleep(delay);
-		AppSensorClient.getInstance().getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
 		Thread.sleep(delay);
 	}
 	
-	private static Collection<DetectionPoint> loadMockedDetectionPoints() {
+	private Collection<DetectionPoint> loadMockedDetectionPoints() {
 		final Collection<DetectionPoint> configuredDetectionPoints = new ArrayList<DetectionPoint>();
 
 		Interval minutes5 = new Interval(5, Interval.MINUTES);

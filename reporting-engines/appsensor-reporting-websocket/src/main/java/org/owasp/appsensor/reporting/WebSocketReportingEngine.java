@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
+import javax.inject.Named;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
 import javax.websocket.ContainerProvider;
@@ -15,27 +16,26 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 
-import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
-import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.logging.Loggable;
+import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 
+@Named
+@Loggable
 @ClientEndpoint
 public class WebSocketReportingEngine implements ReportingEngine {
 	
 	private Session localSession = null;
 	
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(WebSocketReportingEngine.class);
+	private Logger logger;
 	
 	private boolean webSocketInitialized = false;
 	
 	private Gson gson = new Gson();
-	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	public WebSocketReportingEngine() { }
 	
@@ -135,18 +135,6 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	        }
 	    	System.err.println("started and connected");
 		}
-	}
-    
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
 	}
 	
 }
