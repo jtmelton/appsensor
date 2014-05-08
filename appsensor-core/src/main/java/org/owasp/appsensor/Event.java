@@ -20,9 +20,6 @@ import org.owasp.appsensor.util.DateUtils;
  */
 public class Event implements Serializable {
 	
-	/** Event type representing policy-based statistical event, default event type for appsensor */
-	public static final String STATISTICAL = "STATISTICAL";
-	
 	private static final long serialVersionUID = -3235111340901139594L;
 
 	/** User who triggered the event, could be anonymous user */

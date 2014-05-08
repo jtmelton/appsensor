@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Resource represents a generic component of an application. In many cases, 
  * it would represent a URL, but it could also presumably be used for something 
- * else, such as a specific object, function, or even a subsection of an appliction, etc.
+ * else, such as a specific object, function, or even a subsection of an application, etc.
  * 
  * @see java.io.Serializable
  *

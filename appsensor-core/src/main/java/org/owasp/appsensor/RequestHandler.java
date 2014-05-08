@@ -2,7 +2,6 @@ package org.owasp.appsensor;
 
 import java.util.Collection;
 
-import org.owasp.appsensor.configuration.Configurable;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
 /**
@@ -11,7 +10,7 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public interface RequestHandler extends Configurable {
+public interface RequestHandler {
 	
 	public static String APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR = "APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR";
 	
