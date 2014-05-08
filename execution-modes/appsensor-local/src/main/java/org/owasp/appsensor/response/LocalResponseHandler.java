@@ -1,10 +1,12 @@
 package org.owasp.appsensor.response;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.owasp.appsensor.AppSensorClient;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
-import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.logging.Loggable;
+import org.slf4j.Logger;
 
 /**
  * This class should only be used as the server-side response handler
@@ -14,11 +16,15 @@ import org.owasp.appsensor.logging.Logger;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  *
  */
+@Named
+@Loggable
 public class LocalResponseHandler implements ResponseHandler {
 
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(LocalResponseHandler.class);
+	/** Logger */
+	private Logger logger;
 	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	@Inject
+	private AppSensorClient appSensorClient;
 	
 	/**
 	 * {@inheritDoc}
@@ -27,25 +33,25 @@ public class LocalResponseHandler implements ResponseHandler {
 	public void handle(Response response) {
 		
 		if (LOG.equals(response.getAction())) {
-			logger.fatal("Response executed for user:" + response.getUser().getUsername() + 
+			logger.error("Response executed for user:" + response.getUser().getUsername() + 
 					", Action: Increased Logging");
 		} else if (LOGOUT.equals(response.getAction())) {
-			logger.fatal("Response executed for user:" + response.getUser().getUsername() + 
+			logger.error("Response executed for user:" + response.getUser().getUsername() + 
 					", Action: Logging out malicious account");
 			
-			AppSensorClient.getInstance().getUserManager().logout(response.getUser());
+			appSensorClient.getUserManager().logout(response.getUser());
 		} else if (DISABLE_USER.equals(response.getAction())) {
-			logger.fatal("Response executed for user:" + response.getUser().getUsername() + 
+			logger.error("Response executed for user:" + response.getUser().getUsername() + 
 					", Action: Disabling malicious account");
 			
-			AppSensorClient.getInstance().getUserManager().logout(response.getUser());
+			appSensorClient.getUserManager().logout(response.getUser());
 		} else if (DISABLE_COMPONENT_FOR_SPECIFIC_USER.equals(response.getAction())) {
-			logger.fatal("Response executed for user:" + response.getUser().getUsername() + 
+			logger.error("Response executed for user:" + response.getUser().getUsername() + 
 					", Action: Disabling Component for Specific User");
 			
 			//TODO: fill in real code for disabling component for specific user
 		} else if (DISABLE_COMPONENT_FOR_ALL_USERS.equals(response.getAction())) {
-			logger.fatal("Response executed for user:" + response.getUser().getUsername() + 
+			logger.error("Response executed for user:" + response.getUser().getUsername() + 
 					", Action: Disabling Component for All Users");
 			
 			//TODO: fill in real code for disabling component for all users
@@ -54,18 +60,6 @@ public class LocalResponseHandler implements ResponseHandler {
 					"that is not supported by this response handler.  The requested action is: " + response.getAction());
 		}
 		
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
 	}
 	
 }

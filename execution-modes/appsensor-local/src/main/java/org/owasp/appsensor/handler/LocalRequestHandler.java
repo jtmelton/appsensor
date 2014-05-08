@@ -2,15 +2,19 @@ package org.owasp.appsensor.handler;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.RequestHandler;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.logging.Loggable;
 import org.owasp.appsensor.util.StringUtils;
+import org.slf4j.Logger;
 
 /**
  * This is the local endpoint that handles requests on the server-side.
@@ -24,11 +28,17 @@ import org.owasp.appsensor.util.StringUtils;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
+@Loggable
 public class LocalRequestHandler implements RequestHandler {
 
-	private static String detectionSystemId = null;	//start with blank
+	@SuppressWarnings("unused")
+	private Logger logger;
 	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	@Inject
+	private AppSensorServer appSensorServer;
+	
+	private static String detectionSystemId = null;	//start with blank
 	
 	/**
 	 * {@inheritDoc}
@@ -39,7 +49,7 @@ public class LocalRequestHandler implements RequestHandler {
 			detectionSystemId = event.getDetectionSystemId();
 		}
 		
-		AppSensorServer.getInstance().getEventStore().addEvent(event);
+		appSensorServer.getEventStore().addEvent(event);
 	}
 
 	/**
@@ -51,7 +61,7 @@ public class LocalRequestHandler implements RequestHandler {
 			detectionSystemId = attack.getDetectionSystemId();
 		}
 		
-		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
+		appSensorServer.getAttackStore().addAttack(attack);
 	}
 
 	/**
@@ -63,19 +73,7 @@ public class LocalRequestHandler implements RequestHandler {
 				setDetectionSystemIds(StringUtils.toCollection(detectionSystemId != null ? detectionSystemId : "")).
 				setEarliest(earliest);
 		
-		return AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
+		return appSensorServer.getResponseStore().findResponses(criteria);
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
-	}
-	
+
 }

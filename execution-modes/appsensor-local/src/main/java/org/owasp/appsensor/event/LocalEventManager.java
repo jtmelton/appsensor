@@ -2,13 +2,17 @@ package org.owasp.appsensor.event;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.joda.time.DateTime;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.handler.LocalRequestHandler;
+import org.owasp.appsensor.logging.Loggable;
 import org.owasp.appsensor.util.DateUtils;
+import org.slf4j.Logger;
 
 /**
  * Local {@link EventManager} that is used when the application is configured
@@ -17,11 +21,15 @@ import org.owasp.appsensor.util.DateUtils;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  *
  */
+@Named
+@Loggable
 public class LocalEventManager implements EventManager {
-
-	private static LocalRequestHandler requestHandler = new LocalRequestHandler();
 	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	@SuppressWarnings("unused")
+	private Logger logger;
+	
+	@Inject
+	private LocalRequestHandler requestHandler;
 	
 	private DateTime responsesLastChecked = DateUtils.getCurrentTimestamp();
 	
@@ -52,18 +60,6 @@ public class LocalEventManager implements EventManager {
 		responsesLastChecked = DateUtils.getCurrentTimestamp();
 		
 		return responses;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
 	}
 	
 }
