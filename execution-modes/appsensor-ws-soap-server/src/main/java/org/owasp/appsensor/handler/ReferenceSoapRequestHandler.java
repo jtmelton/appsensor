@@ -4,7 +4,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jws.HandlerChain;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -17,7 +20,6 @@ import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.accesscontrol.Action;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 import org.owasp.appsensor.util.StringUtils;
@@ -27,18 +29,22 @@ import org.owasp.appsensor.util.StringUtils;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+//@Service("appsensorEndpoint")
 @WebService(
         portName = "SoapRequestHandlerPort",
         serviceName = "SoapRequestHandlerService",
         targetNamespace = "https://www.owasp.org/index.php/OWASP_AppSensor_Project/wsdl",
-        endpointInterface = "org.owasp.appsensor.handler.SoapRequestHandler")
+        endpointInterface = "org.owasp.appsensor.handler.SoapRequestHandler"
+        )
 @HandlerChain(file="handler-chain.xml")
-public class ReferenceSoapRequestHandler implements SoapRequestHandler {
-
+@Named
+public class ReferenceSoapRequestHandler implements SoapRequestHandler  {//extends SpringBeanAutowiringSupport 
+	
 	@Resource 
 	private WebServiceContext wsContext;
 	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	@Inject
+	private AppSensorServer appSensorServer;
 	
 	/**
 	 * {@inheritDoc}
@@ -50,7 +56,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 		
 		event.setDetectionSystemId(getClientApplicationName());
 		
-		AppSensorServer.getInstance().getEventStore().addEvent(event);
+		appSensorServer.getEventStore().addEvent(event);
 	}
 
 	/**
@@ -63,7 +69,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 		
 		attack.setDetectionSystemId(getClientApplicationName());
 		
-		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
+		appSensorServer.getAttackStore().addAttack(attack);
 	}
 
 	/**
@@ -78,7 +84,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 				setDetectionSystemIds(StringUtils.toCollection(getClientApplicationName())).
 				setEarliest(earliest);
 		
-		return AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
+		return appSensorServer.getResponseStore().findResponses(criteria);
 	}
 	
 	/**
@@ -91,11 +97,11 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 		Map<String, List<String>> httpHeaders = (Map<String, List<String>>) wsContext.getMessageContext().get(MessageContext.HTTP_REQUEST_HEADERS);
 		String clientApplicationName = httpHeaders.get(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR).get(0);
 
-		ClientApplication clientApplication = AppSensorServer.getInstance().getConfiguration().findClientApplication(clientApplicationName);
+		ClientApplication clientApplication = appSensorServer.getConfiguration().findClientApplication(clientApplicationName);
 		
 		org.owasp.appsensor.accesscontrol.Context context = new org.owasp.appsensor.accesscontrol.Context();
 		
-		AppSensorServer.getInstance().getAccessController().assertAuthorized(clientApplication, action, context);
+		appSensorServer.getAccessController().assertAuthorized(clientApplication, action, context);
 	}
 	
 	private String getClientApplicationName() {
@@ -107,16 +113,10 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 		return clientApplicationName;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
+	//hack workaround b/c DI doesn't work for jax-ws handlers with base spring
+	@PostConstruct
+	public void init() {
+		ClientApplicationIdentificationHandler.setAppSensorServer(appSensorServer);
 	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
-	}
-	
+
 }

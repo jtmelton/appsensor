@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Named;
 import javax.xml.namespace.QName;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
@@ -11,6 +12,7 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.exceptions.NotAuthenticatedException;
+import org.springframework.stereotype.Service;
 
 /**
  * This is the jax-ws soap handler that performs
@@ -31,12 +33,16 @@ import org.owasp.appsensor.exceptions.NotAuthenticatedException;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
+@Service
 public class ClientApplicationIdentificationHandler implements SOAPHandler<SOAPMessageContext> {
 	
 	/** default name for client application identification header */
 	private static String HEADER_NAME = "X-Appsensor-Client-Application-Name";
 	
 	private static boolean checkedConfigurationHeaderName = false;
+	
+	private static AppSensorServer appSensorServer;
 	
 	@Override
 	public boolean handleMessage(SOAPMessageContext context) {
@@ -66,7 +72,7 @@ public class ClientApplicationIdentificationHandler implements SOAPHandler<SOAPM
 	}
 
 	private void updateHeaderFromConfiguration() {
-		String configuredHeaderName = AppSensorServer.getInstance().getConfiguration().getClientApplicationIdentificationHeaderName();
+		String configuredHeaderName = appSensorServer.getConfiguration().getClientApplicationIdentificationHeaderName();
 		
 		if (configuredHeaderName != null && configuredHeaderName.trim().length() > 0) {
 			HEADER_NAME = configuredHeaderName;
@@ -88,5 +94,9 @@ public class ClientApplicationIdentificationHandler implements SOAPHandler<SOAPM
 		return null;
 	}
 	
+	//hack workaround b/c DI doesn't work for jax-ws handlers with base spring
+	public static void setAppSensorServer(AppSensorServer appSensorServer) {
+		ClientApplicationIdentificationHandler.appSensorServer = appSensorServer;
+	}
 	
 }
