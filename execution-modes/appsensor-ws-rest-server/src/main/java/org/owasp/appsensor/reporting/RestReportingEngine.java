@@ -2,6 +2,8 @@ package org.owasp.appsensor.reporting;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -15,7 +17,6 @@ import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.accesscontrol.Action;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 import org.owasp.appsensor.rest.AccessControlUtils;
@@ -30,9 +31,14 @@ import org.owasp.appsensor.rest.AccessControlUtils;
  */
 @Path("/api/v1.0/reports")
 @Produces(MediaType.APPLICATION_JSON)
+@Named
 public class RestReportingEngine implements ReportingEngine {
 
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	@Inject
+	private AppSensorServer appSensorServer;
+	
+	@Inject
+	private AccessControlUtils accessControlUtils;
 	
 	@Context
 	private ContainerRequestContext requestContext;
@@ -41,22 +47,19 @@ public class RestReportingEngine implements ReportingEngine {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onAdd(Event event) {
-	}
+	public void onAdd(Event event) { }
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onAdd(Attack attack) {
-	}
+	public void onAdd(Attack attack) { }
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onAdd(Response response) {
-	}
+	public void onAdd(Response response) { }
 	
 	/**
 	 * {@inheritDoc}
@@ -65,11 +68,11 @@ public class RestReportingEngine implements ReportingEngine {
 	@GET
 	@Path("/events")
 	public Collection<Event> findEvents(@QueryParam("earliest") String earliest) throws NotAuthorizedException {
-		AccessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
+		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
 		
 		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest);
 		
-		return AppSensorServer.getInstance().getEventStore().findEvents(criteria);
+		return appSensorServer.getEventStore().findEvents(criteria);
 	}
 	
 	/**
@@ -79,11 +82,11 @@ public class RestReportingEngine implements ReportingEngine {
 	@GET
 	@Path("/attacks")
 	public Collection<Attack> findAttacks(@QueryParam("earliest") String earliest) {
-		AccessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
+		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
 		
 		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest);
 		
-		return AppSensorServer.getInstance().getAttackStore().findAttacks(criteria);
+		return appSensorServer.getAttackStore().findAttacks(criteria);
 	}
 	
 	/**
@@ -93,23 +96,11 @@ public class RestReportingEngine implements ReportingEngine {
 	@GET
 	@Path("/responses")
 	public Collection<Response> findResponses(@QueryParam("earliest") String earliest) {
-		AccessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
+		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
 		
 		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest);
 		
-		return AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
+		return appSensorServer.getResponseStore().findResponses(criteria);
 	}
 	
 }

@@ -1,5 +1,7 @@
 package org.owasp.appsensor.rest.filter;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -30,6 +32,7 @@ import org.owasp.appsensor.handler.RestRequestHandler;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Provider
+@Named
 public class ClientApplicationIdentificationFilter implements ContainerRequestFilter {
 	
 	private final static WebApplicationException unauthorized =
@@ -42,9 +45,11 @@ public class ClientApplicationIdentificationFilter implements ContainerRequestFi
 	
 	private static boolean checkedConfigurationHeaderName = false;
 	
+	@Inject
+	private AppSensorServer appSensorServer;
+	
 	@Override
 	public void filter(ContainerRequestContext context) throws WebApplicationException {
-
 		//should only run on first request
 		if (! checkedConfigurationHeaderName) {
 			updateHeaderFromConfiguration();
@@ -62,7 +67,7 @@ public class ClientApplicationIdentificationFilter implements ContainerRequestFi
 	}
 	
 	private void updateHeaderFromConfiguration() {
-		String configuredHeaderName = AppSensorServer.getInstance().getConfiguration().getClientApplicationIdentificationHeaderName();
+		String configuredHeaderName = appSensorServer.getConfiguration().getClientApplicationIdentificationHeaderName();
 		
 		if (configuredHeaderName != null && configuredHeaderName.trim().length() > 0) {
 			HEADER_NAME = configuredHeaderName;

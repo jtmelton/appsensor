@@ -2,6 +2,8 @@ package org.owasp.appsensor.handler;
 
 import java.util.Collection;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -18,7 +20,6 @@ import org.owasp.appsensor.Event;
 import org.owasp.appsensor.RequestHandler;
 import org.owasp.appsensor.Response;
 import org.owasp.appsensor.accesscontrol.Action;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 import org.owasp.appsensor.rest.AccessControlUtils;
@@ -32,12 +33,17 @@ import org.owasp.appsensor.util.StringUtils;
 @Path("/api/v1.0")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Named
 public class RestRequestHandler implements RequestHandler {
 
+	@Inject
+	private AppSensorServer appSensorServer;
+	
+	@Inject
+	private AccessControlUtils accessControlUtils;
+	
 	@Context
 	private ContainerRequestContext requestContext;
-	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
 	
 	/**
 	 * {@inheritDoc}
@@ -46,11 +52,11 @@ public class RestRequestHandler implements RequestHandler {
 	@POST
 	@Path("/events")
 	public void addEvent(Event event) throws NotAuthorizedException {
-		AccessControlUtils.checkAuthorization(Action.ADD_EVENT, requestContext);
+		accessControlUtils.checkAuthorization(Action.ADD_EVENT, requestContext);
 		
 		event.setDetectionSystemId(getClientApplicationName());
 		
-		AppSensorServer.getInstance().getEventStore().addEvent(event);
+		appSensorServer.getEventStore().addEvent(event);
 	}
 
 	/**
@@ -60,11 +66,11 @@ public class RestRequestHandler implements RequestHandler {
 	@POST
 	@Path("/attacks")
 	public void addAttack(Attack attack) throws NotAuthorizedException {
-		AccessControlUtils.checkAuthorization(Action.ADD_ATTACK, requestContext);
+		accessControlUtils.checkAuthorization(Action.ADD_ATTACK, requestContext);
 		
 		attack.setDetectionSystemId(getClientApplicationName());
 		
-		AppSensorServer.getInstance().getAttackStore().addAttack(attack);
+		appSensorServer.getAttackStore().addAttack(attack);
 	}
 
 	/**
@@ -75,31 +81,19 @@ public class RestRequestHandler implements RequestHandler {
 	@Path("/responses")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Response> getResponses(@QueryParam("earliest") String earliest) throws NotAuthorizedException {
-		AccessControlUtils.checkAuthorization(Action.GET_RESPONSES, requestContext);
+		accessControlUtils.checkAuthorization(Action.GET_RESPONSES, requestContext);
 
 		SearchCriteria criteria = new SearchCriteria().
 				setDetectionSystemIds(StringUtils.toCollection(getClientApplicationName())).
 				setEarliest(earliest);
-		
-		return AppSensorServer.getInstance().getResponseStore().findResponses(criteria);
+
+		return appSensorServer.getResponseStore().findResponses(criteria);
 	}
 	
 	private String getClientApplicationName() {
 		String clientApplicationName = (String)requestContext.getProperty(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR);
 		
 		return clientApplicationName;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
 	}
 	
 }

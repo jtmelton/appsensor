@@ -1,5 +1,7 @@
 package org.owasp.appsensor.rest;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.container.ContainerRequestContext;
 
 import org.owasp.appsensor.AppSensorServer;
@@ -13,21 +15,25 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Named
 public class AccessControlUtils {
 
+	@Inject
+	private AppSensorServer appSensorServer;
+	
 	/**
 	 * Check authz before performing action.
 	 * @param action desired action
 	 * @throws NotAuthorizedException thrown if user does not have role.
 	 */
-	public static void checkAuthorization(Action action, ContainerRequestContext requestContext) throws NotAuthorizedException {
+	public void checkAuthorization(Action action, ContainerRequestContext requestContext) throws NotAuthorizedException {
 		String clientApplicationName = (String)requestContext.getProperty(RequestHandler.APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR);
 
-		ClientApplication clientApplication = AppSensorServer.getInstance().getConfiguration().findClientApplication(clientApplicationName);
+		ClientApplication clientApplication = appSensorServer.getConfiguration().findClientApplication(clientApplicationName);
 		
 		org.owasp.appsensor.accesscontrol.Context context = new org.owasp.appsensor.accesscontrol.Context();
 		
-		AppSensorServer.getInstance().getAccessController().assertAuthorized(clientApplication, action, context);
+		appSensorServer.getAccessController().assertAuthorized(clientApplication, action, context);
 	}
 	
 }
