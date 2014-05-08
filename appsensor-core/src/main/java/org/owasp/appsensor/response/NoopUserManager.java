@@ -1,9 +1,10 @@
 package org.owasp.appsensor.response;
 
-import org.owasp.appsensor.AppSensorServer;
+import javax.inject.Named;
+
 import org.owasp.appsensor.User;
-import org.owasp.appsensor.configuration.ExtendedConfiguration;
-import org.owasp.appsensor.logging.Logger;
+import org.owasp.appsensor.logging.Loggable;
+import org.slf4j.Logger;
 
 /**
  * No-op user manager that is used most likely in test configurations. 
@@ -13,11 +14,11 @@ import org.owasp.appsensor.logging.Logger;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  *
  */
+@Named
+@Loggable
 public class NoopUserManager implements UserManager {
 
-	private static Logger logger = AppSensorServer.getInstance().getLogger().setLoggerClass(NoopUserManager.class);
-	
-	private ExtendedConfiguration extendedConfiguration = new ExtendedConfiguration();
+	private Logger logger;
 	
 	/**
 	 * {@inheritDoc}
@@ -35,16 +36,4 @@ public class NoopUserManager implements UserManager {
 		logger.info("The no-op user manager did not disable the user as requested.");
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public ExtendedConfiguration getExtendedConfiguration() {
-		return extendedConfiguration;
-	}
-	
-	public void setExtendedConfiguration(ExtendedConfiguration extendedConfiguration) {
-		this.extendedConfiguration = extendedConfiguration;
-	}
-	
 }

@@ -1,7 +1,6 @@
 package org.owasp.appsensor.response;
 
 import org.owasp.appsensor.User;
-import org.owasp.appsensor.configuration.Configurable;
 
 /**
  * The UserManager is used by the client application as an interface that must
@@ -9,7 +8,7 @@ import org.owasp.appsensor.configuration.Configurable;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public interface UserManager extends Configurable {
+public interface UserManager {
 	
 	/**
 	 * Logout the {@link org.owasp.appsensor.User}
