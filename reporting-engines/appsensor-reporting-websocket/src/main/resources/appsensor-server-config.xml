@@ -191,15 +191,6 @@
 				</response>
 			</responses>
 		</detection-point>
-		<!-- <detection-point><id></id></detection-point>
-		<detection-point><id>RE1</id></detection-point>
-		<detection-point><id>RE2</id></detection-point>
-		<detection-point><id>RE3</id></detection-point>-->
-		<!-- <detection-point>IE1</detection-point>
-		<detection-point>IE2</detection-point>
-		<detection-point>RE1</detection-point>
-		<detection-point>RE2</detection-point>
-		<detection-point>RE3</detection-point>-->
 	</detection-points>
 
 </appsensor-server-config>
