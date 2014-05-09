@@ -1,6 +1,10 @@
 package org.owasp.appsensor.reporting;
 
-
+/**
+ * Simple bean representing a generic key-value pair for json data.
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 public class WebSocketJsonObject {
 	
 	private String dataType;

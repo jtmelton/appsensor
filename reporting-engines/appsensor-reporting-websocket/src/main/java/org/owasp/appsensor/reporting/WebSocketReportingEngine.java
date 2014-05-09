@@ -24,6 +24,19 @@ import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 
+/**
+ * This is the websocket-based reporting engine, and is an implementation of the observer pattern. 
+ * 
+ * It is notified with implementations of the *Listener interfaces and is 
+ * passed the observed objects. In this case, we are concerned with {@link Event},
+ *  {@link Attack} and {@link Response}
+ * implementations. 
+ * 
+ * The implementation simply converts the object to json and sends it out on the websocket.
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
+ */
 @Named
 @Loggable
 @ClientEndpoint
