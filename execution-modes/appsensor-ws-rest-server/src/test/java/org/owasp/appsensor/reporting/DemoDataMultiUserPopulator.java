@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.owasp.appsensor.AppSensorServer;
@@ -14,7 +15,6 @@ import org.owasp.appsensor.Response;
 import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.User;
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Provide demo data for websockets test web app.
@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Named
 public class DemoDataMultiUserPopulator {
 	
-	@Autowired
+	@Inject
 	private AppSensorServer appSensorServer;
 	
 	private static User bob = new User("bob");
