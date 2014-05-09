@@ -8,6 +8,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
+/**
+ * This class is a Spring post-processor to use reflection to set
+ * the logger fields of all classes marked as {@link Loggable}. 
+ * The logger is marked with the appropriate class. This prevents us 
+ * from having to set the class for the logger in each individual class.
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
+ */
 @Named
 public class LoggerBeanPostProcessor implements BeanPostProcessor {
 
@@ -21,7 +30,7 @@ public class LoggerBeanPostProcessor implements BeanPostProcessor {
                 field.setAccessible(true);
                 field.set(bean, LoggerFactory.getLogger(bean.getClass()));
             } catch (Exception e) {
-            	System.err.println("Error processing " + bean.getClass().getCanonicalName() + " for bean " + beanName);
+            	System.err.println("Error processing logger for " + bean.getClass().getCanonicalName() + " for bean " + beanName);
                 e.printStackTrace();
             }
         }
