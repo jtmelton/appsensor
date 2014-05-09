@@ -9,6 +9,11 @@ import java.nio.file.Paths;
 import org.owasp.appsensor.logging.Loggable;
 import org.slf4j.Logger;
 
+/**
+ * Helper class for file utilities.
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 @Loggable
 public class FileUtils {
 
