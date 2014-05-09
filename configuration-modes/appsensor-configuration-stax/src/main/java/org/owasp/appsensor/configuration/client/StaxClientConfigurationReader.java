@@ -21,7 +21,7 @@ import org.xml.sax.SAXException;
  * This implementation parses the {@link ClientConfiguration} objects 
  * from the specified XML file via the StAX API.
  * 
- * @author johnmelton
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 public class StaxClientConfigurationReader implements ClientConfigurationReader {
 	

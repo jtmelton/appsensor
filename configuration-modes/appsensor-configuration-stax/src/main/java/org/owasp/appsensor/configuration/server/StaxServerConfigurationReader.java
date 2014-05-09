@@ -30,7 +30,7 @@ import org.xml.sax.SAXException;
  * This implementation parses the {@link ServerConfiguration} objects 
  * from the specified XML file via the StAX API.
  * 
- * @author johnmelton
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 public class StaxServerConfigurationReader implements ServerConfigurationReader {
 	
