@@ -18,7 +18,8 @@ import org.owasp.appsensor.util.XmlUtils;
 import org.xml.sax.SAXException;
 
 /**
- * This implementation parses the {@link ClientConfiguration} objects from the specified XML file via the StAX API.
+ * This implementation parses the {@link ClientConfiguration} objects 
+ * from the specified XML file via the StAX API.
  * 
  * @author johnmelton
  */
