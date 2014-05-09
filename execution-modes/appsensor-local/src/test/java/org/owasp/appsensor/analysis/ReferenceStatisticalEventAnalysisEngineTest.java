@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.inject.Inject;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +21,6 @@ import org.owasp.appsensor.Threshold;
 import org.owasp.appsensor.User;
 import org.owasp.appsensor.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.criteria.SearchCriteria;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -29,6 +30,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * the appropriate points.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:base-context.xml"})
@@ -42,10 +44,10 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	
 	private static String detectionSystem1 = "localhostme";
 	
-	@Autowired
+	@Inject
 	AppSensorServer appSensorServer;
 	
-	@Autowired
+	@Inject
 	AppSensorClient appSensorClient;
 	
 	@BeforeClass
