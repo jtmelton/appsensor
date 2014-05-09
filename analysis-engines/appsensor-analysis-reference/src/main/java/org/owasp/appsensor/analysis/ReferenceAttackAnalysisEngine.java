@@ -18,17 +18,14 @@ import org.owasp.appsensor.storage.ResponseStore;
 import org.slf4j.Logger;
 
 /**
- * This is the reference {@link Attack} analysis engine, and is an implementation of the Observer pattern. 
+ * This is the reference {@link Attack} analysis engine, 
+ * and is an implementation of the Observer pattern. 
  * 
- * It is notified with implementations of the {@link java.util.Observable} interface and is 
- * passed the observed object. In this case, we are only concerned with {@link Attack}
- * implementations. 
+ * It is notified with implementations of the {@link Attack} class. 
  * 
  * The implementation performs a simple analysis that checks the created attack against any created {@link Response}s. 
  * It then creates a {@link Response} and adds it to the {@link ResponseStore}. 
  * 
- * @see java.util.Observer
- *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Named

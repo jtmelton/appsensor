@@ -21,18 +21,15 @@ import org.owasp.appsensor.util.DateUtils;
 import org.slf4j.Logger;
 
 /**
- * This is a statistical {@link Event} analysis engine, and is an implementation of the Observer pattern. 
+ * This is a statistical {@link Event} analysis engine, 
+ * and is an implementation of the Observer pattern. 
  * 
- * It is notified with implementations of the {@link java.util.Observable} interface and is 
- * passed the observed object. In this case, we are only concerned with {@link StatisticalEvent}
- * implementations. 
+ * It is notified with implementations of the {@link Event} class.
  * 
  * The implementation performs a simple analysis that watches the configured {@link Threshold} and 
  * determines if it has been crossed. If so, an {@link Attack} is created and added to the 
  * {@link AttackStore}. 
  * 
- * @see java.util.Observer
- *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Named
