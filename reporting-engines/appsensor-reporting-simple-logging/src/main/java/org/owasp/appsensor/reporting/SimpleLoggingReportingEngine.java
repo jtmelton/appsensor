@@ -18,8 +18,7 @@ import org.slf4j.Logger;
  * 
  * It is notified with implementations of the *Listener interfaces and is 
  * passed the observed objects. In this case, we are concerned with {@link Event},
- *  {@link Attack} and {@link Response}
- * implementations. 
+ *  {@link Attack} and {@link Response} implementations. 
  * 
  * The implementation simply logs the action. Other implementations are expected to create 
  * some manner of visualization.
