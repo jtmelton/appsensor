@@ -8,6 +8,7 @@ import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.ClientApplication;
 import org.owasp.appsensor.RequestHandler;
 import org.owasp.appsensor.accesscontrol.Action;
+import org.owasp.appsensor.accesscontrol.Context;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 
 /**
@@ -24,6 +25,7 @@ public class AccessControlUtils {
 	
 	/**
 	 * Check authz before performing action.
+	 * 
 	 * @param action desired action
 	 * @throws NotAuthorizedException thrown if user does not have role.
 	 */
@@ -32,9 +34,7 @@ public class AccessControlUtils {
 
 		ClientApplication clientApplication = appSensorServer.getConfiguration().findClientApplication(clientApplicationName);
 		
-		org.owasp.appsensor.accesscontrol.Context context = new org.owasp.appsensor.accesscontrol.Context();
-		
-		appSensorServer.getAccessController().assertAuthorized(clientApplication, action, context);
+		appSensorServer.getAccessController().assertAuthorized(clientApplication, action, new Context());
 	}
 	
 }
