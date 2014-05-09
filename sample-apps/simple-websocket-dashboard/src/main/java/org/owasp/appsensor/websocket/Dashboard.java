@@ -9,6 +9,11 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+/**
+ * A simple dashboard for the websocket implementation.
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 @ServerEndpoint(value = "/dashboard")
 public class Dashboard {
     
