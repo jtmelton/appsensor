@@ -19,6 +19,7 @@ import org.owasp.appsensor.configuration.server.ServerConfiguration;
  * Provide demo data for websockets test web app.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 public class DemoDataPopulator {
 	
