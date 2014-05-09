@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * based stores instead of the memory based stores.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 public class FileBasedEventStorageTest extends ReferenceStatisticalEventAnalysisEngineTest {
 
