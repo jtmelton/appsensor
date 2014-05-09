@@ -23,6 +23,7 @@ import org.owasp.appsensor.accesscontrol.Action;
 import org.owasp.appsensor.criteria.SearchCriteria;
 import org.owasp.appsensor.exceptions.NotAuthorizedException;
 import org.owasp.appsensor.rest.AccessControlUtils;
+import org.owasp.appsensor.rest.filter.ClientApplicationIdentificationFilter;
 import org.owasp.appsensor.util.StringUtils;
 
 /**
@@ -91,6 +92,12 @@ public class RestRequestHandler implements RequestHandler {
 		return appSensorServer.getResponseStore().findResponses(criteria);
 	}
 	
+	/**
+	 * Helper method to retrieve client application name.
+	 * This is set by the {@link ClientApplicationIdentificationFilter} 
+	 * 
+	 * @return client application name
+	 */
 	private String getClientApplicationName() {
 		String clientApplicationName = (String)requestContext.getProperty(APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR);
 		
