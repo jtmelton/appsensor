@@ -12,6 +12,16 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
+import org.owasp.appsensor.Event;
+
+/**
+ * Annotation for Listener for {@link EventStore}. If applied 
+ * to a class, then it is registered as a listener and notified 
+ * if a new {@link Event} is added to the {@link EventStore}.
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
+ */
 @Qualifier
 @Retention(RUNTIME)
 @Target({TYPE, METHOD, FIELD, PARAMETER})
