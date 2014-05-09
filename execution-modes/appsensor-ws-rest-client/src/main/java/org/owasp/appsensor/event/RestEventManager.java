@@ -13,6 +13,7 @@ import org.owasp.appsensor.Response;
  * as the reference rest client.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @Named
 public class RestEventManager implements EventManager {

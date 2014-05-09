@@ -25,6 +25,7 @@ import org.slf4j.Logger;
  * The implementation is trivial and simply stores the {@link Event} in an in-memory collection.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @Named
 @Loggable

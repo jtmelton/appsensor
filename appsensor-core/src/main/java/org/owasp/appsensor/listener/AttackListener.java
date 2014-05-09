@@ -9,6 +9,7 @@ import org.owasp.appsensor.storage.AttackStoreListener;
  * when a new {@link Attack} is created and stored in the AppSensor system. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @AttackStoreListener
 public interface AttackListener {

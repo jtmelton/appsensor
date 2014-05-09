@@ -27,6 +27,7 @@ import org.slf4j.Logger;
  * lets us use the same pattern here. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @Named
 @Loggable

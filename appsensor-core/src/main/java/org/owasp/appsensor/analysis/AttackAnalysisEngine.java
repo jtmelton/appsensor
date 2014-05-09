@@ -14,6 +14,7 @@ import org.owasp.appsensor.storage.AttackStoreListener;
  * constitute the "brain" of the system. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @AttackStoreListener
 public abstract class AttackAnalysisEngine implements AttackListener {

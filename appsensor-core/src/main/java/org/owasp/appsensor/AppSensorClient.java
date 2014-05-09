@@ -16,6 +16,7 @@ import org.slf4j.Logger;
  * the appsensor-client-config.xml file.
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @Named
 @Loggable

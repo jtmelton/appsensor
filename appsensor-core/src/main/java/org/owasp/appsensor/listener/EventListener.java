@@ -9,6 +9,7 @@ import org.owasp.appsensor.storage.EventStoreListener;
  * when a new {@link Event} is created and stored in the AppSensor system. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @EventStoreListener
 public interface EventListener {

@@ -19,7 +19,7 @@ import org.slf4j.Logger;
  * to run within the same JVM as the Analysis Engine.  
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
- *
+ * @author Raphaël Taban
  */
 @Named
 @Loggable

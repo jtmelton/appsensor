@@ -17,6 +17,7 @@ import org.owasp.appsensor.listener.EventListener;
  * In this case the analysis engines watch the *Store interfaces of AppSensor.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 public abstract class EventStore {
 

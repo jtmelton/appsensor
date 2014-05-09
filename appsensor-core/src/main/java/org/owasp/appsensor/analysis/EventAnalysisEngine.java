@@ -14,6 +14,7 @@ import org.owasp.appsensor.storage.EventStoreListener;
  * constitute the "brain" of the system. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @EventStoreListener
 public abstract class EventAnalysisEngine implements EventListener {

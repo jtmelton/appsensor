@@ -14,7 +14,7 @@ import org.slf4j.Logger;
  * on the server-side.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
- *
+ * @author Raphaël Taban
  */
 @Named
 @Loggable

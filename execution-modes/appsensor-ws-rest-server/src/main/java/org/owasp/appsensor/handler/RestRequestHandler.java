@@ -29,6 +29,7 @@ import org.owasp.appsensor.util.StringUtils;
  * This is the restful endpoint that handles requests on the server-side. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @Path("/api/v1.0")
 @Produces(MediaType.APPLICATION_JSON)

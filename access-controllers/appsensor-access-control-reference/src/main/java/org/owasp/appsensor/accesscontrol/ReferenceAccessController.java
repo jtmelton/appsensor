@@ -13,6 +13,7 @@ import org.slf4j.Logger;
  * then the access is considered valid.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @Named
 @Loggable

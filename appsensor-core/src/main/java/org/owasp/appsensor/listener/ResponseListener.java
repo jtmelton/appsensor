@@ -9,6 +9,7 @@ import org.owasp.appsensor.storage.ResponseStoreListener;
  * when a new {@link Response} is created and stored in the AppSensor system. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @ResponseStoreListener
 public interface ResponseListener {

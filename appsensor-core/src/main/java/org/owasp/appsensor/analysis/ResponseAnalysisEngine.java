@@ -14,6 +14,7 @@ import org.owasp.appsensor.storage.ResponseStoreListener;
  * constitute the "brain" of the system. 
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @ResponseStoreListener
 public abstract class ResponseAnalysisEngine implements ResponseListener {

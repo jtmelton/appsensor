@@ -17,7 +17,7 @@ import org.slf4j.Logger;
  * This is the reference reporting engine, and is an implementation of the observer pattern. 
  * 
  * It is notified with implementations of the *Listener interfaces and is 
- * passed the observed objects. In this case, we are concerned with, {@link Event},
+ * passed the observed objects. In this case, we are concerned with {@link Event},
  *  {@link Attack} and {@link Response}
  * implementations. 
  * 
@@ -25,6 +25,7 @@ import org.slf4j.Logger;
  * some manner of visualization.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @Named
 @EventStoreListener

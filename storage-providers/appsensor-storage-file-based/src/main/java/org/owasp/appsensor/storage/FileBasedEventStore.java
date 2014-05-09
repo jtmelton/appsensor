@@ -37,6 +37,7 @@ import com.google.gson.Gson;
  * {@link Event}s if configured to do so.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @Named
 @Loggable

@@ -29,7 +29,6 @@ import org.owasp.appsensor.util.StringUtils;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-//@Service("appsensorEndpoint")
 @WebService(
         portName = "SoapRequestHandlerPort",
         serviceName = "SoapRequestHandlerService",

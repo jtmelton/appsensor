@@ -28,6 +28,7 @@ import org.owasp.appsensor.rest.AccessControlUtils;
  * for matching entities.
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Raphaël Taban
  */
 @Path("/api/v1.0/reports")
 @Produces(MediaType.APPLICATION_JSON)
