@@ -2,10 +2,11 @@ package org.owasp.appsensor.storage;
 
 import java.nio.file.Files;
 
+import javax.inject.Inject;
+
 import org.junit.Before;
 import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.analysis.ReferenceStatisticalEventAnalysisEngineTest;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -18,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class FileBasedEventStorageTest extends ReferenceStatisticalEventAnalysisEngineTest {
 
-	@Autowired
+	@Inject
 	private AppSensorServer appSensorServer;
 	
 	@Before
