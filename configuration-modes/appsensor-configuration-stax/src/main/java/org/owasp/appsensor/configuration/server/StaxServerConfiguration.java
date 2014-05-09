@@ -5,6 +5,11 @@ import javax.inject.Named;
 import org.owasp.appsensor.exceptions.ConfigurationException;
 import org.springframework.beans.BeanUtils;
 
+/**
+ * Represents the configuration for server-side components. 
+ * 
+ * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ */
 @Named
 public class StaxServerConfiguration extends ServerConfiguration {
 
