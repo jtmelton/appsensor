@@ -8,7 +8,7 @@
 	<name>appsensor-ws-rest-server</name>
 
 	<properties>
-		<jersey.version>2.8-SNAPSHOT</jersey.version>
+		<jersey.version>2.8</jersey.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>4.0.3.RELEASE</spring.version>
 	</properties>
@@ -25,14 +25,6 @@
 		</dependencies>
 	</dependencyManagement>
 	
-	<repositories>
-	    <repository>
-	      <id>java-net-maven-repo</id>
-	      <name>java net maven repo</name>
-	      <url>https://maven.java.net/content/repositories/snapshots/</url>
-	    </repository>
-	</repositories>
-  
 	<dependencies>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
@@ -63,14 +55,6 @@
 		    <scope>test</scope>
 		</dependency>
 
-		<!-- <dependency>
-		    <groupId>org.glassfish.jersey.ext</groupId>
-		    <artifactId>jersey-spring3</artifactId>
-		</dependency>
-		-->
-		
-		
-		
 		<dependency>
 		    <groupId>org.glassfish.jersey.ext</groupId>
 		    <artifactId>jersey-spring3</artifactId>
