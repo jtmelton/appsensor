@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appsensor-server-config xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd">
+	
+	<client-application-identification-header-name>X-Appsensor-Client-Application-Name2</client-application-identification-header-name>
+	
+	<client-applications>
+		<client-application>
+			<name>myclientapp</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+		</client-application>
+	</client-applications>
+	
+	<correlation-config>
+		<correlated-client-set>
+			<client-application-name>server1</client-application-name>
+			<client-application-name>server3</client-application-name>
+		</correlated-client-set>
+		<correlated-client-set>
+			<client-application-name>server2</client-application-name>
+			<client-application-name>server4</client-application-name>
+		</correlated-client-set>
+		<correlated-client-set>
+			<client-application-name>server1</client-application-name>
+			<client-application-name>server5</client-application-name>
+		</correlated-client-set>
+	</correlation-config>
+
+	<event-analyzer class="org.owasp.appsensor.analysis.ReferenceEventAnalysisEngine" />
+	<attack-analyzer class="org.owasp.appsensor.analysis.ReferenceAttackAnalysisEngine" ></attack-analyzer>
+	<response-analyzer class="org.owasp.appsensor.analysis.ReferenceResponseAnalysisEngine" />
+	
+	<event-store class="org.owasp.appsensor.storage.FileBasedEventStore">
+		<extended-configuration>
+			<configuration-parameter>
+				<key>filePath</key>
+				<value>/tmp</value>
+			</configuration-parameter>
+			<configuration-parameter>
+				<key>fileName</key>
+				<value>events_testing.txt</value>
+			</configuration-parameter>
+		</extended-configuration>
+	</event-store>
+	<attack-store class="org.owasp.appsensor.storage.FileBasedAttackStore">
+		<extended-configuration>
+			<configuration-parameter>
+				<key>filePath</key>
+				<value>/tmp</value>
+			</configuration-parameter>
+			<configuration-parameter>
+				<key>fileName</key>
+				<value>attacks_testing.txt</value>
+			</configuration-parameter>
+		</extended-configuration>
+	</attack-store>
+	<response-store class="org.owasp.appsensor.storage.FileBasedResponseStore">
+		<extended-configuration>
+			<configuration-parameter>
+				<key>filePath</key>
+				<value>/tmp</value>
+			</configuration-parameter>
+			<configuration-parameter>
+				<key>fileName</key>
+				<value>responses_testing.txt</value>
+			</configuration-parameter>
+		</extended-configuration>
+	</response-store>
+	
+	<logger class="org.owasp.appsensor.logging.Slf4jLogger" />
+	
+	<access-controller class="org.owasp.appsensor.accesscontrol.ReferenceAccessController"/>
+	
+	<event-store-observers>
+		<observer class="org.owasp.appsensor.analysis.ReferenceEventAnalysisEngine" />
+		<observer class="org.owasp.appsensor.reporting.SimpleLoggingReportingEngine" />
+	</event-store-observers>
+	
+	<attack-store-observers>
+		<observer class="org.owasp.appsensor.analysis.ReferenceAttackAnalysisEngine" />
+		<observer class="org.owasp.appsensor.reporting.SimpleLoggingReportingEngine" />
+	</attack-store-observers>
+	
+	<response-store-observers>
+		<observer class="org.owasp.appsensor.analysis.ReferenceResponseAnalysisEngine" />
+		<observer class="org.owasp.appsensor.reporting.SimpleLoggingReportingEngine" />
+	</response-store-observers>
+
+	<detection-points>
+		<detection-point>
+			<id>IE1</id>
+			<threshold>
+				<count>11</count>
+				<interval unit="minutes">4</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">31</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">11</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<id>IE2</id>
+			<threshold>
+				<count>12</count>
+				<interval unit="minutes">5</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">32</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">12</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<id>RE3</id>
+			<threshold>
+				<count>13</count>
+				<interval unit="minutes">6</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">33</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">13</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<id>RE4</id>
+			<threshold>
+				<count>14</count>
+				<interval unit="minutes">7</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">34</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">14</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<id>RE5</id>
+			<threshold>
+				<count>15</count>
+				<interval unit="minutes">8</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">35</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">15</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<!-- <detection-point><id></id></detection-point>
+		<detection-point><id>RE1</id></detection-point>
+		<detection-point><id>RE2</id></detection-point>
+		<detection-point><id>RE3</id></detection-point>-->
+		<!-- <detection-point>IE1</detection-point>
+		<detection-point>IE2</detection-point>
+		<detection-point>RE1</detection-point>
+		<detection-point>RE2</detection-point>
+		<detection-point>RE3</detection-point>-->
+	</detection-points>
+
+</appsensor-server-config>

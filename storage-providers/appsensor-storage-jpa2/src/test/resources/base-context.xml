@@ -1,0 +1,52 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:p="http://www.springframework.org/schema/p" 
+xmlns:tx="http://www.springframework.org/schema/tx"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <!-- <context:component-scan base-package="org.owasp.appsensor" /> -->
+ 
+ 	<context:component-scan base-package="org.owasp.appsensor">
+        <context:include-filter type="annotation"
+            expression="org.springframework.stereotype.Repository" />
+    </context:component-scan>
+    
+ 	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+        p:driverClassName="com.mysql.jdbc.Driver" p:url="jdbc:mysql://localhost/test"
+        p:username="root" p:password="" p:initialSize="5" p:maxActive="10">
+    </bean> -->
+    
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+        p:driverClassName="org.hsqldb.jdbcDriver" p:url="jdbc:hsqldb:mem:test"
+        p:username="sa" p:password="" p:initialSize="5" p:maxActive="10">
+    </bean>
+ 
+    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan" value="org.owasp.appsensor" />
+	    <property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+			</props>
+		</property>
+    </bean>
+    
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+    
+    <tx:annotation-driven transaction-manager="transactionManager" />
+ 
+    <context:spring-configured />
+    <context:annotation-config />
+</beans>
