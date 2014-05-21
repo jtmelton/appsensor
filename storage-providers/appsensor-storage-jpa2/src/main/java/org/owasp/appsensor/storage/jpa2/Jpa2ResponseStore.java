@@ -65,6 +65,7 @@ public class Jpa2ResponseStore extends ResponseStore {
 		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
 		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 		
+		// TODO: instead of findAll every time (inefficient), update this to do actual query
 		for (Response response : responseRepository.findAll()) {
 			//check user match if user specified
 			boolean userMatch = (user != null) ? user.equals(response.getUser()) : true;

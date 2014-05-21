@@ -67,6 +67,7 @@ public class Jpa2AttackStore extends AttackStore {
 		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
 		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 		
+		// TODO: instead of findAll every time (inefficient), update this to do actual query
 		for (Attack attack : attackRepository.findAll()) {
 			//check user match if user specified
 			boolean userMatch = (user != null) ? user.equals(attack.getUser()) : true;

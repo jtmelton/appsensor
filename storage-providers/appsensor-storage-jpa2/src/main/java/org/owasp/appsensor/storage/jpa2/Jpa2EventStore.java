@@ -66,6 +66,7 @@ public class Jpa2EventStore extends EventStore {
 		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
 		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 		
+		// TODO: instead of findAll every time (inefficient), update this to do actual query
 		for (Event event : eventRepository.findAll()) {
 			//check user match if user specified
 			boolean userMatch = (user != null) ? user.equals(event.getUser()) : true;
