@@ -43,7 +43,7 @@ public class DemoDataMultiUserPopulator {
 	}
 	
 	public void generateData(int delay, int maxEvents) {
-		detectionPoint1.setId("IE1");
+		detectionPoint1.setLabel("IE1");
 		detectionSystems1.add(detectionSystem1);
 		
 		ServerConfiguration updatedConfiguration = appSensorServer.getConfiguration();
