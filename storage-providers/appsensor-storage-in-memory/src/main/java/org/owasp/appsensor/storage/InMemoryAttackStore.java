@@ -41,7 +41,7 @@ public class InMemoryAttackStore extends AttackStore {
 	 */
 	@Override
 	public void addAttack(Attack attack) {
-		logger.warn("Security attack " + attack.getDetectionPoint().getId() + " triggered by user: " + attack.getUser().getUsername());
+		logger.warn("Security attack " + attack.getDetectionPoint().getLabel() + " triggered by user: " + attack.getUser().getUsername());
 	       
 		attacks.add(attack);
 		
@@ -74,7 +74,7 @@ public class InMemoryAttackStore extends AttackStore {
 			
 			//check detection point match if detection point specified
 			boolean detectionPointMatch = (detectionPoint != null) ? 
-					detectionPoint.getId().equals(attack.getDetectionPoint().getId()) : true;
+					detectionPoint.getLabel().equals(attack.getDetectionPoint().getLabel()) : true;
 			
 			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(attack.getTimestamp())) : true;
 					

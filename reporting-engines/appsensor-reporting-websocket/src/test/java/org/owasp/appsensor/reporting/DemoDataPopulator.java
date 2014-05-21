@@ -43,7 +43,7 @@ public class DemoDataPopulator {
 	
 	private void populateData() throws Exception {
 		int delay = 500;
-		detectionPoint1.setId("IE1");
+		detectionPoint1.setLabel("IE1");
 		detectionSystems1.add(detectionSystem1);
 		
 		ServerConfiguration updatedConfiguration = appSensorServer.getConfiguration();

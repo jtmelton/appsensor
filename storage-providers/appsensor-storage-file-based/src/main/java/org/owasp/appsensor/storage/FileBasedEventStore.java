@@ -66,7 +66,7 @@ public class FileBasedEventStore extends EventStore {
 	 */
 	@Override
 	public void addEvent(Event event) {
-		logger.warn("Security event " + event.getDetectionPoint().getId() + " triggered by user: " + event.getUser().getUsername());
+		logger.warn("Security event " + event.getDetectionPoint().getLabel() + " triggered by user: " + event.getUser().getUsername());
 		
 		writeEvent(event);
 		
@@ -101,7 +101,7 @@ public class FileBasedEventStore extends EventStore {
 			
 			//check detection point match if detection point specified
 			boolean detectionPointMatch = (detectionPoint != null) ? 
-					detectionPoint.getId().equals(event.getDetectionPoint().getId()) : true;
+					detectionPoint.getLabel().equals(event.getDetectionPoint().getLabel()) : true;
 			
 			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(event.getTimestamp())) : true;
 			
