@@ -107,15 +107,15 @@ public abstract class ServerConfiguration {
 	public DetectionPoint findDetectionPoint(DetectionPoint search) {
 		DetectionPoint detectionPoint = null;
 		
-		detectionPoint = detectionPointCache.get(search.getId());
+		detectionPoint = detectionPointCache.get(search.getLabel());
 
 		if (detectionPoint == null) {
 			for (DetectionPoint configuredDetectionPoint : getDetectionPoints()) {
-				if (configuredDetectionPoint.getId().equals(search.getId())) {
+				if (configuredDetectionPoint.getLabel().equals(search.getLabel())) {
 					detectionPoint = configuredDetectionPoint;
 					
 					//cache
-					detectionPointCache.put(detectionPoint.getId(), detectionPoint);
+					detectionPointCache.put(detectionPoint.getLabel(), detectionPoint);
 					
 					break;
 				}
