@@ -52,7 +52,7 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	
 	@BeforeClass
 	public static void doSetup() {
-		detectionPoint1.setId("IE1");
+		detectionPoint1.setLabel("IE1");
 		
 		detectionSystems1.add(detectionSystem1);
 	}
