@@ -2,6 +2,11 @@ package org.owasp.appsensor;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,6 +23,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Entity
 public class Interval implements Serializable {
 
 	/** Constant representing seconds unit of time */
@@ -34,6 +40,11 @@ public class Interval implements Serializable {
 	
 	private static final long serialVersionUID = 6660305744465650539L;
 
+	@Id
+	@Column
+	@GeneratedValue
+	private Integer id;
+	
 	/** 
 	 * Duration portion of interval, ie. '3' if you wanted 
 	 * to represent an interval of '3 minutes' 

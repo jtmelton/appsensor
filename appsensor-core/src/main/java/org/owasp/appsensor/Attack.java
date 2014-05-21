@@ -2,6 +2,13 @@ package org.owasp.appsensor;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -19,29 +26,40 @@ import org.owasp.appsensor.util.DateUtils;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Entity
 public class Attack implements Serializable {
 
 	private static final long serialVersionUID = 7231666413877649836L;
 
+	@Id
+	@Column
+	@GeneratedValue
+	private Integer id;
+	
 	/** User who triggered the attack, could be anonymous user */
+	@ManyToOne(cascade = CascadeType.ALL)
 	private User user;
 	
 	/** Detection Point that was triggered */
+	@ManyToOne(cascade = CascadeType.ALL)
 	private DetectionPoint detectionPoint;
 	
 	/** When the attack occurred */
+	@Column
 	private String timestamp;
 
 	/** 
 	 * Identifier label for the system that detected the attack. 
 	 * This will be either the client application, or possibly an external 
 	 * detection system, such as syslog, a WAF, network IDS, etc.  */
+	@Column
 	private String detectionSystemId; 
 	
 	/** 
 	 * The resource being requested when the attack was triggered, which can be used 
      * later to block requests to a given function. 
      */
+	@ManyToOne(cascade = CascadeType.ALL)
     private Resource resource;
 	
     public Attack () { }
@@ -65,6 +83,14 @@ public class Attack implements Serializable {
 		setResource(event.getResource());
 	}
 	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public User getUser() {
 		return user;
 	}

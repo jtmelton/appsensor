@@ -2,6 +2,11 @@ package org.owasp.appsensor;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,10 +23,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Entity
 public class Threshold implements Serializable {
 
 	private static final long serialVersionUID = -9033433180585877243L;
 
+	@Id
+	@Column
+	@GeneratedValue
+	private Integer id;
+	
 	/** The count at which this threshold is triggered. */
 	private int count = 0;
 	

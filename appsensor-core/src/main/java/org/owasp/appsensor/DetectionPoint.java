@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -19,14 +24,20 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Entity
 public class DetectionPoint implements Serializable {
 	
 	private static final long serialVersionUID = -6294211676275622809L;
 
+	@Id
+	@Column
+	@GeneratedValue
+	private Integer id;
+	
 	/**
 	 * Identifier for the detection point. (ex. "IE1", "RE2")
 	 */
-	private String id;
+	private String label;
 	
 	/**
 	 * {@link Threshold} for determining whether given detection point (associated {@link Event}) 
@@ -37,31 +48,32 @@ public class DetectionPoint implements Serializable {
 	/**
 	 * Set of {@link Response}s associated with given detection point.
 	 */
+	@Transient
 	private Collection<Response> responses = new ArrayList<Response>();
 	
 	public DetectionPoint() {}
 	
-	public DetectionPoint(String id) {
-		setId(id);
+	public DetectionPoint(String label) {
+		setLabel(label);
 	}
 	
-	public DetectionPoint(String id, Threshold threshold) {
-		setId(id);
+	public DetectionPoint(String label, Threshold threshold) {
+		setLabel(label);
 		setThreshold(threshold);
 	}
 	
-	public DetectionPoint(String id, Threshold threshold, Collection<Response> responses) {
-		setId(id);
+	public DetectionPoint(String label, Threshold threshold, Collection<Response> responses) {
+		setLabel(label);
 		setThreshold(threshold);
 		setResponses(responses);
 	}
 	
-	public String getId() {
-		return id;
+	public String getLabel() {
+		return label;
 	}
 
-	public DetectionPoint setId(String id) {
-		this.id = id;
+	public DetectionPoint setLabel(String label) {
+		this.label = label;
 		return this;
 	} 
 	
@@ -88,7 +100,7 @@ public class DetectionPoint implements Serializable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).
-				append(id).
+				append(label).
 				append(threshold).
 				append(responses).
 				toHashCode();
@@ -106,7 +118,7 @@ public class DetectionPoint implements Serializable {
 		DetectionPoint other = (DetectionPoint) obj;
 		
 		return new EqualsBuilder().
-				append(id, other.getId()).
+				append(label, other.getLabel()).
 				append(threshold, other.getThreshold()).
 				append(responses, other.getResponses()).
 				isEquals();
@@ -115,7 +127,7 @@ public class DetectionPoint implements Serializable {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).
-			       append("id", id).
+			       append("label", label).
 			       append("threshold", threshold).
 			       append("responses", responses).
 			       toString();

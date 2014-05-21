@@ -2,6 +2,13 @@ package org.owasp.appsensor;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -16,23 +23,34 @@ import org.owasp.appsensor.util.DateUtils;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Entity
 public class Response implements Serializable {
 	
 	private static final long serialVersionUID = -4183973779552497656L;
 
+	@Id
+	@Column
+	@GeneratedValue
+	private Integer id;
+	
 	/** User the response is for */
+	@ManyToOne(cascade = CascadeType.ALL)
 	private User user;
 	
 	/** When the event occurred */
+	@Column
 	private String timestamp;
 	
 	/** String representing response action name */
+	@Column
 	private String action;
 	
 	/** Interval response should last for, if applicable. Ie. block access for 30 minutes */
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Interval interval;
 
 	/** Client application name that response applies to. */
+	@Column
 	private String detectionSystemId; 
 	
 	public Response() {}
@@ -57,6 +75,14 @@ public class Response implements Serializable {
 		setInterval(interval);
 	}
 	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public User getUser() {
 		return user;
 	}

@@ -2,6 +2,13 @@ package org.owasp.appsensor;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,29 +25,40 @@ import org.owasp.appsensor.util.DateUtils;
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@Entity
 public class Event implements Serializable {
+	
+	@Id
+	@Column
+	@GeneratedValue
+	private Integer id;
 	
 	private static final long serialVersionUID = -3235111340901139594L;
 
 	/** User who triggered the event, could be anonymous user */
+	@ManyToOne(cascade = CascadeType.ALL)
 	private User user;
 	
 	/** Detection Point that was triggered */
+	@ManyToOne(cascade = CascadeType.ALL)
 	private DetectionPoint detectionPoint;
 	
 	/** When the event occurred */
+	@Column
 	private String timestamp;
 
 	/** 
 	 * Identifier label for the system that detected the event. 
 	 * This will be either the client application, or possibly an external 
 	 * detection system, such as syslog, a WAF, network IDS, etc.  */
+	@Column
 	private String detectionSystemId; 
 	
 	/** 
 	 * The resource being requested when the event was triggered, which can be used 
      * later to block requests to a given function. 
      */
+	@ManyToOne(cascade = CascadeType.ALL)
     private Resource resource;
     
     public Event () {}
@@ -56,6 +74,14 @@ public class Event implements Serializable {
 		setDetectionSystemId(detectionSystemId);
 	}
 	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public User getUser() {
 		return user;
 	}
