@@ -15,6 +15,7 @@
 		<slf4j.version>1.7.7</slf4j.version>
  		<logback.version>1.1.2</logback.version>
  		<spring.version>4.0.3.RELEASE</spring.version>
+ 		<hibernate.jpa.version>4.3.5.Final</hibernate.jpa.version>
 	</properties>
 
 	<dependencies>
@@ -72,6 +73,14 @@
 			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+		
+		<!-- JPA dependency -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.jpa.version}</version>
+		</dependency>
+            
 	</dependencies>
 
 	<parent>
