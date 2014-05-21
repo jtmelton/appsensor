@@ -46,7 +46,7 @@ public class StaxServerConfigurationReaderTest {
 //		assertEquals("org.owasp.appsensor.analysis.ReferenceResponseAnalysisEngine", configuration.getResponseStoreObserverImplementations().iterator().next());
 		
 		assertEquals(5, configuration.getDetectionPoints().size());
-		assertEquals("IE1", configuration.getDetectionPoints().iterator().next().getId());
+		assertEquals("IE1", configuration.getDetectionPoints().iterator().next().getLabel());
 		assertEquals(4, configuration.getDetectionPoints().iterator().next().getThreshold().getInterval().getDuration());
 		assertEquals("minutes", configuration.getDetectionPoints().iterator().next().getThreshold().getInterval().getUnit());
 		

@@ -100,7 +100,7 @@ public class ReferenceAttackAnalysisEngine extends AttackAnalysisEngine {
 		}
 		
 		if(responseAction == null) {
-			throw new IllegalArgumentException("No appropriate response was configured for this detection point: " + triggeringDetectionPoint.getId());
+			throw new IllegalArgumentException("No appropriate response was configured for this detection point: " + triggeringDetectionPoint.getLabel());
 		}
 		
 		Response response = new Response();
@@ -123,7 +123,7 @@ public class ReferenceAttackAnalysisEngine extends AttackAnalysisEngine {
 		Collection<Response> possibleResponses = new ArrayList<Response>();
 		
 		for (DetectionPoint configuredDetectionPoint : appSensorServer.getConfiguration().getDetectionPoints()) {
-			if (configuredDetectionPoint.getId().equals(triggeringDetectionPoint.getId())) {
+			if (configuredDetectionPoint.getLabel().equals(triggeringDetectionPoint.getLabel())) {
 				possibleResponses = configuredDetectionPoint.getResponses();
 				break;
 			}

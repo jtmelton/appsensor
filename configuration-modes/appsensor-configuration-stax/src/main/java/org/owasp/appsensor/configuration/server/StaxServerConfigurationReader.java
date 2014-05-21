@@ -236,7 +236,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			switch(event) {
 				case XMLStreamConstants.START_ELEMENT:
 					if("config:id".equals(name)) {
-						detectionPoint.setId(xmlReader.getElementText().trim());
+						detectionPoint.setLabel(xmlReader.getElementText().trim());
 					} else if("config:threshold".equals(name)) {
 						detectionPoint.setThreshold(readThreshold(xmlReader));
 					} else if("config:response".equals(name)) {
