@@ -141,7 +141,7 @@ public class FileBasedAttackStore extends AttackStore {
 		return attacks;
 	}
 	
-	protected Path getPath() {
+	public Path getPath() {
 		if (path != null && Files.exists(path)) {
 			return path;
 		}

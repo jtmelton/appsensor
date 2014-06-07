@@ -135,7 +135,7 @@ public class FileBasedResponseStore extends ResponseStore {
 		return responses;
 	}
 	
-	protected Path getPath() {
+	public Path getPath() {
 		if (path != null && Files.exists(path)) {
 			return path;
 		}

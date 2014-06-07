@@ -141,7 +141,7 @@ public class FileBasedEventStore extends EventStore {
 		return events;
 	}
 	
-	protected Path getPath() {
+	public Path getPath() {
 		if (path != null && Files.exists(path)) {
 			return path;
 		}
