@@ -22,9 +22,6 @@ public class XmlClientConfigurationReaderTest {
 //		assertTrue("org.owasp.appsensor.response.LocalResponseHandler".equals(configuration.getResponseHandlerImplementation()));
 //		assertTrue("org.owasp.appsensor.response.NoopUserManager".equals(configuration.getUserManagerImplementation()));
 		assertTrue("rest".equals(configuration.getServerConnection().getType()));
-		assertTrue("https".equals(configuration.getServerConnection().getProtocol()));
-		assertTrue("www.owasp.org".equals(configuration.getServerConnection().getHost()));
-		assertTrue(5000 == configuration.getServerConnection().getPort());
-		assertTrue("/appsensor/v2/api/".equals(configuration.getServerConnection().getPath()));
+		assertTrue("http://localhost:9000/myapp/".equals(configuration.getServerConnection().getUrl()));
 	}
 }

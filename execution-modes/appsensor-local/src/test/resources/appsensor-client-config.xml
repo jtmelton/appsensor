@@ -9,10 +9,7 @@
 	
 	<server-connection type="rest">
 		<server-connection-config>
-			<protocol>https</protocol>
-			<host>www.owasp.org</host>
-			<port>5000</port>
-			<path>/appsensor/v2/api/</path>
+			<url>http://localhost:9000/myapp/</url>
 			<client-application-identification-header-value>my-sample-client</client-application-identification-header-value>
 		</server-connection-config>
 	</server-connection>
