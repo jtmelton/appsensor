@@ -15,20 +15,16 @@ import org.owasp.appsensor.ClientApplication;
 @Named
 public class ServerConnection {
 	
+	private static String DEFAULT_HEADER_NAME = "X-Appsensor-Client-Application-Name";
+	
 	/** type of server connection: rest/soap */
 	private String type;
 	
-	/** The protocol that should be used: http or https */
-	private String protocol;
+	/** The url to connect to  */
+	private String url;
 	
-	/** The host to connect to: IP or hostname */
-	private String host;
-	
-	/** The port to connect to  */
-	private int port;
-	
-	/** The path used: essentially the prefix where the webapp is deployed, eg. "/appsensor-ws-rest-server/api/v1" */
-	private String path;
+	/** The client application identifier header name, optionally overridden */
+	private String clientApplicationIdentificationHeaderName;
 	
 	/** The client application identifier header value */
 	private String clientApplicationIdentificationHeaderValue;
@@ -42,46 +38,35 @@ public class ServerConnection {
 		return this;
 	}
 	
-	public String getProtocol() {
-		return protocol;
+	public String getUrl() {
+		return url;
 	}
-	
-	public ServerConnection setProtocol(String protocol) {
-		this.protocol = protocol;
+
+	public ServerConnection setUrl(String url) {
+		this.url = url;
+		
 		return this;
 	}
 	
-	public String getHost() {
-		return host;
+	public String getClientApplicationIdentificationHeaderName() {
+		return clientApplicationIdentificationHeaderName;
 	}
 	
-	public ServerConnection setHost(String host) {
-		this.host = host;
+	public String getClientApplicationIdentificationHeaderNameOrDefault() {
+		return (clientApplicationIdentificationHeaderName != null) ? clientApplicationIdentificationHeaderName : DEFAULT_HEADER_NAME;
+	}
+
+	public ServerConnection setClientApplicationIdentificationHeaderName(
+			String clientApplicationIdentificationHeaderName) {
+		this.clientApplicationIdentificationHeaderName = clientApplicationIdentificationHeaderName;
+		
 		return this;
 	}
-	
-	public int getPort() {
-		return port;
-	}
-	
-	public ServerConnection setPort(int port) {
-		this.port = port;
-		return this;
-	}
-	
-	public String getPath() {
-		return path;
-	}
-	
-	public ServerConnection setPath(String path) {
-		this.path = path;
-		return this;
-	}
-	
+
 	public String getClientApplicationIdentificationHeaderValue() {
 		return clientApplicationIdentificationHeaderValue;
 	}
-
+	
 	public ServerConnection setClientApplicationIdentificationHeaderValue(
 			String clientApplicationIdentificationHeaderValue) {
 		this.clientApplicationIdentificationHeaderValue = clientApplicationIdentificationHeaderValue;
@@ -93,10 +78,8 @@ public class ServerConnection {
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).
 				append(type).
-				append(protocol).
-				append(host).
-				append(port).
-				append(path).
+				append(url).
+				append(clientApplicationIdentificationHeaderName).
 				append(clientApplicationIdentificationHeaderValue).
 				toHashCode();
 	}
@@ -114,10 +97,8 @@ public class ServerConnection {
 		
 		return new EqualsBuilder().
 				append(type, other.getType()).
-				append(protocol, other.getProtocol()).
-				append(host, other.getHost()).
-				append(port, other.getPort()).
-				append(path, other.getPath()).
+				append(url, other.getUrl()).
+				append(clientApplicationIdentificationHeaderName, other.getClientApplicationIdentificationHeaderName()).
 				append(clientApplicationIdentificationHeaderValue, other.getClientApplicationIdentificationHeaderValue()).
 				isEquals();
 	}
@@ -126,11 +107,9 @@ public class ServerConnection {
 	public String toString() {
 		return new ToStringBuilder(this).
 				append("type", type).
-				append("protocol", protocol).
-				append("host", host).
-				append("port", port).
-				append("path", path).
-				append("clientApplicationIdentificationHeaderValue", clientApplicationIdentificationHeaderValue).
+				append("url", url).
+				append("clientApplicationIdentificationHeaderName", clientApplicationIdentificationHeaderName).
+			    append("clientApplicationIdentificationHeaderValue", clientApplicationIdentificationHeaderValue).
 			    toString();
 	}
 	

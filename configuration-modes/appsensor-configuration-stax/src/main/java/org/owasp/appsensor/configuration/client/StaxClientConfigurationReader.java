@@ -144,14 +144,10 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 			
 			switch(event) {
 				case XMLStreamConstants.START_ELEMENT:
-					if("config:protocol".equals(name)) {
-						serverConnection.setProtocol(xmlReader.getElementText().trim());
-					} else if("config:host".equals(name)) {
-						serverConnection.setHost(xmlReader.getElementText().trim());
-					} else if("config:port".equals(name)) {
-						serverConnection.setPort(Integer.parseInt(xmlReader.getElementText().trim()));
-					} else if("config:path".equals(name)) {
-						serverConnection.setPath(xmlReader.getElementText().trim());
+					if("config:url".equals(name)) {
+						serverConnection.setUrl(xmlReader.getElementText().trim());
+					} else if("config:client-application-identification-header-name".equals(name)) {
+						serverConnection.setClientApplicationIdentificationHeaderName(xmlReader.getElementText().trim());
 					} else if("config:client-application-identification-header-value".equals(name)) {
 						serverConnection.setClientApplicationIdentificationHeaderValue(xmlReader.getElementText().trim());
 					} else {
