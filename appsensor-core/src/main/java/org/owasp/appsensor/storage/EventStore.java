@@ -45,7 +45,18 @@ public abstract class EventStore {
 	 */
 	public void registerListener(EventListener listener) {
 		if (! listeners.contains(listener)) {
-			listeners.add(listener);
+			boolean unique = true;
+			
+			for (EventListener existing : listeners) {
+				if (existing.getClass().equals(listener.getClass())) {
+					unique = false;
+					break;
+				}
+			}
+			
+			if (unique) {
+				listeners.add(listener);
+			}
 		}
 	}
 	

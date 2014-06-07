@@ -45,7 +45,18 @@ public abstract class AttackStore {
 	 */
 	public void registerListener(AttackListener listener) {
 		if (! listeners.contains(listener)) {
-			listeners.add(listener);
+			boolean unique = true;
+			
+			for (AttackListener existing : listeners) {
+				if (existing.getClass().equals(listener.getClass())) {
+					unique = false;
+					break;
+				}
+			}
+			
+			if (unique) {
+				listeners.add(listener);
+			}
 		}
 	}
 	

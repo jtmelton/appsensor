@@ -45,7 +45,18 @@ public abstract class ResponseStore {
 	 */
 	public void registerListener(ResponseListener listener) {
 		if (! listeners.contains(listener)) {
-			listeners.add(listener);
+			boolean unique = true;
+			
+			for (ResponseListener existing : listeners) {
+				if (existing.getClass().equals(listener.getClass())) {
+					unique = false;
+					break;
+				}
+			}
+			
+			if (unique) {
+				listeners.add(listener);
+			}
 		}
 	}
 	
