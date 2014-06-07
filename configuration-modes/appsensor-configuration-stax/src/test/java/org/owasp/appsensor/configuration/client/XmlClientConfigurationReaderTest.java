@@ -17,10 +17,7 @@ public class XmlClientConfigurationReaderTest {
 	public void testConfigLoad() throws Exception {
 		ClientConfigurationReader reader = new StaxClientConfigurationReader();
 		ClientConfiguration configuration = reader.read("/appsensor-client-config.xml", "/appsensor_client_config_2.0.xsd");
-		
-//		assertTrue("org.owasp.appsensor.event.LocalEventManager".equals(configuration.getEventManagerImplementation()));
-//		assertTrue("org.owasp.appsensor.response.LocalResponseHandler".equals(configuration.getResponseHandlerImplementation()));
-//		assertTrue("org.owasp.appsensor.response.NoopUserManager".equals(configuration.getUserManagerImplementation()));
+
 		assertTrue("rest".equals(configuration.getServerConnection().getType()));
 		assertTrue("http://localhost:9000/myapp/".equals(configuration.getServerConnection().getUrl()));
 	}

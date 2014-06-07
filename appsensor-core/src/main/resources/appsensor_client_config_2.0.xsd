@@ -6,26 +6,6 @@
 		xmlns:asclientconfig="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_client_config_2.0.xsd" 
 		elementFormDefault="qualified" >
 		
-	<xsd:complexType name="configuration-parameter">
-		<xsd:sequence>
-			<xsd:element name="key" type="xsd:string" minOccurs="1" maxOccurs="1" />
-			<xsd:element name="value" type="xsd:string" minOccurs="1" maxOccurs="1" />
-		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="extended-configuration">
-		<xsd:sequence>
-			<xsd:element name="configuration-parameter" type="asclientconfig:configuration-parameter" minOccurs="1" maxOccurs="unbounded" />
-		</xsd:sequence>
-	</xsd:complexType>
-	
-	<xsd:complexType name="extendable-component">
-		<xsd:sequence>
-			<xsd:element name="extended-configuration" type="asclientconfig:extended-configuration" minOccurs="0" maxOccurs="1" />
-		</xsd:sequence>
-		<xsd:attribute name="class" type="xsd:string" use="required" />
-	</xsd:complexType>
-	
 	<xsd:simpleType name="server-type">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="local" />
@@ -34,26 +14,8 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 	
-	<xsd:simpleType name="server-protocol">
-		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="http" />
-			<xsd:enumeration value="https" />
-		</xsd:restriction>
-	</xsd:simpleType>
-	
-	<xsd:simpleType name="server-port">
-      <xsd:restriction base="xsd:integer">
-         <xsd:minInclusive value="0"/>
-         <xsd:maxInclusive value="65536"/>
-      </xsd:restriction>
-   </xsd:simpleType>
-	
 	<xsd:complexType name="server-connection-config">
 		<xsd:sequence>
-<!-- 	    	<xsd:element name="protocol" type="asclientconfig:server-protocol" minOccurs="1" maxOccurs="1" /> -->
-<!-- 	    	<xsd:element name="host" type="xsd:string" minOccurs="1" maxOccurs="1" /> -->
-<!-- 	    	<xsd:element name="port" type="asclientconfig:server-port" minOccurs="1" maxOccurs="1" /> -->
-<!-- 	    	<xsd:element name="path" type="xsd:string" minOccurs="1" maxOccurs="1" /> -->
 			<xsd:element name="url" type="xsd:string" minOccurs="1" maxOccurs="1" />
 	    	<xsd:element name="client-application-identification-header-name" type="xsd:string" minOccurs="0" maxOccurs="1" />
 	    	<xsd:element name="client-application-identification-header-value" type="xsd:string" minOccurs="1" maxOccurs="1" />
@@ -70,9 +32,6 @@
 	<xsd:element name="appsensor-client-config">
 	  <xsd:complexType>
 	    <xsd:sequence>
-	    	<xsd:element name="event-manager" type="asclientconfig:extendable-component" minOccurs="1" maxOccurs="1" />
-	    	<xsd:element name="response-handler" type="asclientconfig:extendable-component" minOccurs="1" maxOccurs="1" />
-	    	<xsd:element name="user-manager" type="asclientconfig:extendable-component" minOccurs="1" maxOccurs="1" />
 	    	<xsd:element name="server-connection" type="asclientconfig:server-connection" minOccurs="1" maxOccurs="1" />
 	    </xsd:sequence>
 	  </xsd:complexType>

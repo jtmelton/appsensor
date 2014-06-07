@@ -16,36 +16,6 @@
 		</correlated-client-set>
 	</correlation-config>
 
-	<event-analyzer class="org.owasp.appsensor.analysis.ReferenceEventAnalysisEngine" />
-	<attack-analyzer class="org.owasp.appsensor.analysis.ReferenceAttackAnalysisEngine" />
-	<response-analyzer class="org.owasp.appsensor.analysis.ReferenceResponseAnalysisEngine" />
-	
-	<event-store class="org.owasp.appsensor.storage.InMemoryEventStore" />
-	<attack-store class="org.owasp.appsensor.storage.InMemoryAttackStore" />
-	<response-store class="org.owasp.appsensor.storage.InMemoryResponseStore" />
-	
-	<logger class="org.owasp.appsensor.logging.Slf4jLogger" />
-	
-	<access-controller class="org.owasp.appsensor.accesscontrol.ReferenceAccessController"/>
-	
-	<event-store-observers>
-		<observer class="org.owasp.appsensor.analysis.ReferenceEventAnalysisEngine" />
-		<observer class="org.owasp.appsensor.reporting.SimpleLoggingReportingEngine" />
-		<observer class="org.owasp.appsensor.reporting.WebSocketReportingEngine" />
-	</event-store-observers>
-	
-	<attack-store-observers>
-		<observer class="org.owasp.appsensor.analysis.ReferenceAttackAnalysisEngine" />
-		<observer class="org.owasp.appsensor.reporting.SimpleLoggingReportingEngine" />
-		<observer class="org.owasp.appsensor.reporting.WebSocketReportingEngine" />
-	</attack-store-observers>
-	
-	<response-store-observers>
-		<observer class="org.owasp.appsensor.analysis.ReferenceResponseAnalysisEngine" />
-		<observer class="org.owasp.appsensor.reporting.SimpleLoggingReportingEngine" />
-		<observer class="org.owasp.appsensor.reporting.WebSocketReportingEngine" />
-	</response-store-observers>
-
 	<detection-points>
 		<detection-point>
 			<id>IE1</id>
