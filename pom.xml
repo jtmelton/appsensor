@@ -96,6 +96,7 @@
 		<module>execution-modes/appsensor-local</module>
 		<module>execution-modes/appsensor-ws-rest-client</module>
 		<module>execution-modes/appsensor-ws-rest-server</module>
+		<module>execution-modes/appsensor-ws-soap-core</module>
 		<module>execution-modes/appsensor-ws-soap-client</module>
 		<module>execution-modes/appsensor-ws-soap-server</module>
 		<module>reporting-engines/appsensor-reporting-simple-logging</module>
