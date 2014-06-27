@@ -8,7 +8,7 @@ package org.owasp.appsensor.exceptions;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
-public class ConfigurationException extends RuntimeException  {
+public class ConfigurationException extends Exception  {
 
 	private static final long serialVersionUID = 538520201225584981L;
 
