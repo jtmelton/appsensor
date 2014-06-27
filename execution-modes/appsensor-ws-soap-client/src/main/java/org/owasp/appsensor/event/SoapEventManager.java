@@ -1,12 +1,26 @@
 package org.owasp.appsensor.event;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.ws.Binding;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Service;
+import javax.xml.ws.handler.Handler;
 
+import org.owasp.appsensor.AppSensorClient;
 import org.owasp.appsensor.Attack;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.Response;
+import org.owasp.appsensor.handler.RegisterClientApplicationIdentificationHandler;
+import org.owasp.appsensor.handler.SoapRequestHandler;
+import org.owasp.appsensor.util.DateUtils;
+import org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean;
 
 /**
  * This event manager should perform soap style requests since it functions
@@ -18,14 +32,19 @@ import org.owasp.appsensor.Response;
 @Named
 public class SoapEventManager implements EventManager {
 
-	//TODO: do a soap request based on configuration 
+	private SoapRequestHandler soapService;
+	
+	@Inject
+	private AppSensorClient appSensorClient;
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void addEvent(Event event) {
-		//make request
+		initializeService();
+		
+		soapService.addEvent(event);
 	}
 	
 	/**
@@ -33,7 +52,9 @@ public class SoapEventManager implements EventManager {
 	 */
 	@Override
 	public void addAttack(Attack attack) {
-		//make request
+		initializeService();
+		
+		soapService.addAttack(attack);
 	}
 	
 	/**
@@ -41,8 +62,49 @@ public class SoapEventManager implements EventManager {
 	 */
 	@Override
 	public Collection<Response> getResponses() {
-		//make request
-		return null;
+		initializeService();
+		
+		Collection<Response> responses = soapService.getResponses(DateUtils.getCurrentTimestamp().minusHours(10).toString());
+		return responses;
 	}
+	
+	private void initializeService() {
+		if(soapService == null) {
+			String url = appSensorClient.getConfiguration().getServerConnection().getUrl();
+			
+			try {
+				JaxWsPortProxyFactoryBean proxy = new JaxWsPortProxyFactoryBean();
+				
+				proxy.setServiceInterface(org.owasp.appsensor.handler.SoapRequestHandler.class);
+				proxy.setWsdlDocumentUrl(new URL(url + "?wsdl"));
+				proxy.setNamespaceUri("https://www.owasp.org/index.php/OWASP_AppSensor_Project/wsdl");
+				proxy.setServiceName("SoapRequestHandlerService");
+				proxy.setEndpointAddress(url);
+				
+				Service result = proxy.createJaxWsService();
+				
+				soapService = result.getPort(SoapRequestHandler.class);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		bindHeaders();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private void bindHeaders() {
+		Binding binding = ((BindingProvider) soapService).getBinding();
+		List<Handler> handlerChain = binding.getHandlerChain();
+		if (handlerChain == null) {
+			handlerChain = new ArrayList<Handler>();
+		}
+		
+		RegisterClientApplicationIdentificationHandler handler = new RegisterClientApplicationIdentificationHandler();
+		handler.setAppSensorClient(appSensorClient);
 
+		handlerChain.add(handler);
+		binding.setHandlerChain(handlerChain);
+	}
+	
 }
