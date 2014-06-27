@@ -23,8 +23,15 @@
 		
 		<dependency>
 			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-ws-soap-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
 			<artifactId>appsensor-local</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 		
 		<dependency>
@@ -58,14 +65,6 @@
 		<dependency>
 			<groupId>org.owasp.appsensor</groupId>
 			<artifactId>appsensor-configuration-stax</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<!-- need this to add http header handler for test -->
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-ws-soap-client</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
