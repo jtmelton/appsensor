@@ -67,8 +67,8 @@ public class ReferenceSoapRequestHandlerTest {
         	handlerChain = new ArrayList<Handler>();
         }
         
-        RegisterClientApplicationIdentificationHandler handler = 
-        		new RegisterClientApplicationIdentificationHandler();
+        RegisterClientApplicationIdentificationHandlerHelper handler = 
+        		new RegisterClientApplicationIdentificationHandlerHelper();
         handler.setAppSensorClient(appSensorClient);
 
         handlerChain.add(handler);

@@ -3,7 +3,7 @@
 
 	<server-connection type="rest">
 		<server-connection-config>
-			<url>http://localhost:9000/myapp/</url>
+			<url>http://localhost:8088/SoapRequestHandlerService</url>
 			<client-application-identification-header-value>localhostme</client-application-identification-header-value>
 		</server-connection-config>
 	</server-connection>
