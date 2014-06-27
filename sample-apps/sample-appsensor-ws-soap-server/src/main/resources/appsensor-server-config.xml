@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <appsensor-server-config xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd">
 	
-	<client-application-identification-header-name>X-Appsensor-Client-Application-Name2</client-application-identification-header-name>
+	<client-application-identification-header-name>X-Appsensor-Client-Application-Name</client-application-identification-header-name>
 	
 	<client-applications>
 		<client-application>
-			<name>myclientapp</name>
+			<name>my-sample-client</name>
 			<roles>
 				<role>ADD_EVENT</role>
 				<role>ADD_ATTACK</role>
@@ -34,7 +34,7 @@
 		<detection-point>
 			<id>IE1</id>
 			<threshold>
-				<count>11</count>
+				<count>3</count>
 				<interval unit="minutes">4</interval>
 			</threshold>
 			<responses>

@@ -3,7 +3,7 @@
   
   <endpoint
       name="SoapRequestHandlerService"
-      implementation="org.owasp.appsensor.handler.impl.ReferenceSoapRequestHandler"
+      implementation="org.owasp.appsensor.handler.ReferenceSoapRequestHandler"
       url-pattern="/appsensor/services/SoapRequestHandler"/>
       
 </endpoints>
