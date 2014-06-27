@@ -51,7 +51,7 @@ public class ClientApplicationIdentificationHandler implements SOAPHandler<SOAPM
 			updateHeaderFromConfiguration();
 			checkedConfigurationHeaderName = true;
 		}
-				
+		
 	    //check inbound headers
 		if (! (Boolean)context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY)) {
 			

@@ -37,7 +37,7 @@ import org.owasp.appsensor.util.StringUtils;
         )
 @HandlerChain(file="handler-chain.xml")
 @Named
-public class ReferenceSoapRequestHandler implements SoapRequestHandler  {//extends SpringBeanAutowiringSupport 
+public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	
 	@Resource 
 	private WebServiceContext wsContext;
