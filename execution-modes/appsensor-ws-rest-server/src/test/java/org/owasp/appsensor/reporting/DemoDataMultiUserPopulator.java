@@ -43,6 +43,7 @@ public class DemoDataMultiUserPopulator {
 	}
 	
 	public void generateData(int delay, int maxEvents) {
+		detectionPoint1.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
 		detectionPoint1.setLabel("IE1");
 		detectionSystems1.add(detectionSystem1);
 		
@@ -104,7 +105,7 @@ public class DemoDataMultiUserPopulator {
 		point1Responses.add(disableComponentForSpecificUser31);
 		point1Responses.add(disableComponentForAllUsers11);
 		
-		DetectionPoint point1 = new DetectionPoint("IE1", events3minutes5, point1Responses);
+		DetectionPoint point1 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1", events3minutes5, point1Responses);
 		
 		configuredDetectionPoints.add(point1);
 

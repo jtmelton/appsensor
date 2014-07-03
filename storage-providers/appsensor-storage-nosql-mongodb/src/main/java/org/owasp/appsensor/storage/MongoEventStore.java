@@ -90,7 +90,7 @@ public class MongoEventStore extends EventStore {
 
 				// check detection point match if detection point specified
 				boolean detectionPointMatch = (detectionPoint != null) ? 
-						detectionPoint.getLabel().equals(event.getDetectionPoint().getLabel()) : true;
+						detectionPoint.typeMatches(event.getDetectionPoint()) : true;
 
 				boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(event.getTimestamp())): true;
 

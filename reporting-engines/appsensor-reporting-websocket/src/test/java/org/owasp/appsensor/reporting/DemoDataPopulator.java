@@ -43,6 +43,7 @@ public class DemoDataPopulator {
 	
 	private void populateData() throws Exception {
 		int delay = 500;
+		detectionPoint1.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
 		detectionPoint1.setLabel("IE1");
 		detectionSystems1.add(detectionSystem1);
 		
@@ -147,7 +148,7 @@ public class DemoDataPopulator {
 		point1Responses.add(disableComponentForSpecificUser31);
 		point1Responses.add(disableComponentForAllUsers11);
 		
-		DetectionPoint point1 = new DetectionPoint("IE1", events3minutes5, point1Responses);
+		DetectionPoint point1 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1", events3minutes5, point1Responses);
 		
 		Collection<Response> point2Responses = new ArrayList<Response>();
 		point2Responses.add(log);
@@ -156,7 +157,7 @@ public class DemoDataPopulator {
 		point2Responses.add(disableComponentForSpecificUser32);
 		point2Responses.add(disableComponentForAllUsers12);
 		
-		DetectionPoint point2 = new DetectionPoint("IE2", events12minutes5, point2Responses);
+		DetectionPoint point2 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE2", events12minutes5, point2Responses);
 		
 		Collection<Response> point3Responses = new ArrayList<Response>();
 		point3Responses.add(log);
@@ -165,7 +166,7 @@ public class DemoDataPopulator {
 		point3Responses.add(disableComponentForSpecificUser33);
 		point3Responses.add(disableComponentForAllUsers13);
 		
-		DetectionPoint point3 = new DetectionPoint("IE3", events13minutes6, point3Responses);
+		DetectionPoint point3 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE3", events13minutes6, point3Responses);
 		
 		Collection<Response> point4Responses = new ArrayList<Response>();
 		point4Responses.add(log);
@@ -174,7 +175,7 @@ public class DemoDataPopulator {
 		point4Responses.add(disableComponentForSpecificUser34);
 		point4Responses.add(disableComponentForAllUsers14);
 		
-		DetectionPoint point4 = new DetectionPoint("IE4", events14minutes7, point4Responses);
+		DetectionPoint point4 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE4", events14minutes7, point4Responses);
 		
 		Collection<Response> point5Responses = new ArrayList<Response>();
 		point5Responses.add(log);
@@ -183,7 +184,7 @@ public class DemoDataPopulator {
 		point5Responses.add(disableComponentForSpecificUser35);
 		point5Responses.add(disableComponentForAllUsers15);
 		
-		DetectionPoint point5 = new DetectionPoint("IE5", events15minutes8, point5Responses);
+		DetectionPoint point5 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE5", events15minutes8, point5Responses);
 		
 		configuredDetectionPoints.add(point1);
 		configuredDetectionPoints.add(point2);

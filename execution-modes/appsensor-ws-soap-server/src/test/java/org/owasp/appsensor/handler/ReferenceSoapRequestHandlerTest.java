@@ -42,7 +42,7 @@ public class ReferenceSoapRequestHandlerTest {
 	
 	private static User bob = new User("bob");
 	
-	private static DetectionPoint detectionPoint1 = new DetectionPoint("IE1");
+	private static DetectionPoint detectionPoint1 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1");
 	
 	//appsensor/services/
 	private static String SERVICE_URL = "http://localhost:8080/SoapRequestHandlerService";

@@ -58,7 +58,7 @@ public class ReferenceEventAnalysisEngine extends EventAnalysisEngine {
 		Collection<Event> existingEvents = appSensorServer.getEventStore().findEvents(criteria);
 
 		DetectionPoint configuredDetectionPoint = appSensorServer.getConfiguration().findDetectionPoint(event.getDetectionPoint());
-		
+
 		int eventCount = countEvents(configuredDetectionPoint.getThreshold().getInterval().toMillis(), existingEvents, event);
 
 		//4 examples for the below code

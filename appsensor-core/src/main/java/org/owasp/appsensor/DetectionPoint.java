@@ -34,6 +34,26 @@ public class DetectionPoint implements Serializable {
 	@GeneratedValue
 	private Integer id;
 	
+	public class Category {
+		public static final String REQUEST 				= "Request";
+		public static final String AUTHENTICATION 		= "Authentication";
+		public static final String SESSION_MANAGEMENT 	= "Session Management";
+		public static final String ACCESS_CONTROL 		= "Access Control";
+		public static final String INPUT_VALIDATION 	= "Input Validation";
+		public static final String OUTPUT_ENCODING 		= "Output Encoding";
+		public static final String COMMAND_INJECTION 	= "Command Injection";
+		public static final String FILE_IO 				= "File IO";
+		public static final String HONEY_TRAP 			= "Honey Trap";
+		public static final String USER_TREND 			= "User Trend";
+		public static final String SYSTEM_TREND 		= "System Trend";
+		public static final String REPUTATION 			= "Reputation";
+	}
+	
+	/**
+	 * Category identifier for the detection point. (ex. "Request", "AccessControl", "SessionManagement")
+	 */
+	private String category;
+	
 	/**
 	 * Identifier for the detection point. (ex. "IE1", "RE2")
 	 */
@@ -53,19 +73,31 @@ public class DetectionPoint implements Serializable {
 	
 	public DetectionPoint() {}
 	
-	public DetectionPoint(String label) {
+	public DetectionPoint(String category, String label) {
+		setCategory(category);
 		setLabel(label);
 	}
 	
-	public DetectionPoint(String label, Threshold threshold) {
+	public DetectionPoint(String category, String label, Threshold threshold) {
+		setCategory(category);
 		setLabel(label);
 		setThreshold(threshold);
 	}
 	
-	public DetectionPoint(String label, Threshold threshold, Collection<Response> responses) {
+	public DetectionPoint(String category, String label, Threshold threshold, Collection<Response> responses) {
+		setCategory(category);
 		setLabel(label);
 		setThreshold(threshold);
 		setResponses(responses);
+	}
+	
+	public String getCategory() {
+		return category;
+	}
+
+	public DetectionPoint setCategory(String category) {
+		this.category = category;
+		return this;
 	}
 	
 	public String getLabel() {
@@ -75,7 +107,7 @@ public class DetectionPoint implements Serializable {
 	public DetectionPoint setLabel(String label) {
 		this.label = label;
 		return this;
-	} 
+	}
 	
 	@XmlTransient
 	public Threshold getThreshold() {
@@ -100,10 +132,24 @@ public class DetectionPoint implements Serializable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).
+				append(category).
 				append(label).
 				append(threshold).
 				append(responses).
 				toHashCode();
+	}
+	
+	public boolean typeMatches(DetectionPoint other) {
+		if (other == null) {
+			throw new IllegalArgumentException("other must be non-null");
+		}
+		
+		boolean matches = true;
+		
+		matches &= (category != null) ? category.equals(other.getCategory()) : true;
+		matches &= (label != null) ? label.equals(other.getLabel()) : true;
+		
+		return matches;
 	}
 	
 	@Override
@@ -118,6 +164,7 @@ public class DetectionPoint implements Serializable {
 		DetectionPoint other = (DetectionPoint) obj;
 		
 		return new EqualsBuilder().
+				append(category, other.getCategory()).
 				append(label, other.getLabel()).
 				append(threshold, other.getThreshold()).
 				append(responses, other.getResponses()).
@@ -127,6 +174,7 @@ public class DetectionPoint implements Serializable {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).
+				   append("category", category).
 			       append("label", label).
 			       append("threshold", threshold).
 			       append("responses", responses).

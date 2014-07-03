@@ -111,7 +111,7 @@ public abstract class ServerConfiguration {
 
 		if (detectionPoint == null) {
 			for (DetectionPoint configuredDetectionPoint : getDetectionPoints()) {
-				if (configuredDetectionPoint.getLabel().equals(search.getLabel())) {
+				if (configuredDetectionPoint.typeMatches(search)) {
 					detectionPoint = configuredDetectionPoint;
 					
 					//cache

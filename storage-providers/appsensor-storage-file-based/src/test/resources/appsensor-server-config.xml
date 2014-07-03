@@ -32,6 +32,7 @@
 
 	<detection-points>
 		<detection-point>
+			<category>Input Validation</category>
 			<id>IE1</id>
 			<threshold>
 				<count>11</count>
@@ -58,6 +59,7 @@
 			</responses>
 		</detection-point>
 		<detection-point>
+			<category>Input Validation</category>
 			<id>IE2</id>
 			<threshold>
 				<count>12</count>
@@ -84,6 +86,7 @@
 			</responses>
 		</detection-point>
 		<detection-point>
+			<category>Request</category>
 			<id>RE3</id>
 			<threshold>
 				<count>13</count>
@@ -110,6 +113,7 @@
 			</responses>
 		</detection-point>
 		<detection-point>
+			<category>Request</category>
 			<id>RE4</id>
 			<threshold>
 				<count>14</count>
@@ -136,6 +140,7 @@
 			</responses>
 		</detection-point>
 		<detection-point>
+			<category>Request</category>
 			<id>RE5</id>
 			<threshold>
 				<count>15</count>

@@ -90,8 +90,8 @@ public class MongoAttackStore extends AttackStore {
 				
 				//check detection point match if detection point specified
 				boolean detectionPointMatch = (detectionPoint != null) ? 
-						detectionPoint.getLabel().equals(attack.getDetectionPoint().getLabel()) : true;
-				
+						detectionPoint.typeMatches(attack.getDetectionPoint()) : true;
+								
 				boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(attack.getTimestamp())) : true;
 						
 						

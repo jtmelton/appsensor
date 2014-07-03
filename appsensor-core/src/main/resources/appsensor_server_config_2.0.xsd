@@ -53,6 +53,7 @@
 	
 	<xsd:complexType name="detection-point">
 		<xsd:sequence>
+			<xsd:element name="category" type="xsd:string" minOccurs="1" maxOccurs="1" />
 			<xsd:element name="id" type="xsd:string" minOccurs="1" maxOccurs="1" />
 			<xsd:element name="threshold" type="asconfig:threshold" minOccurs="1" maxOccurs="1" />
 			<xsd:element name="responses" type="asconfig:responses" minOccurs="1" maxOccurs="1" />

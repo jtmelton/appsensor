@@ -20,7 +20,6 @@ public class AppSensorServerWiringTest {
 	public void testInstantiation() {
 		assertNotNull("Server instance is null", appSensorServer);
 		assertNotNull("Event store cannot is null", appSensorServer.getEventStore());
-		System.err.println(appSensorServer.getEventStore().getClass());
 		assertNotNull("Attack store cannot is null", appSensorServer.getAttackStore());
 		assertNotNull("Response store cannot is null", appSensorServer.getResponseStore());
 		assertNotNull("EventAnalysisEngine store cannot is null", appSensorServer.getEventAnalysisEngine());

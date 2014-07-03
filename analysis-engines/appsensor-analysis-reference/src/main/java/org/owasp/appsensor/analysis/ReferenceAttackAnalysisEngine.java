@@ -123,7 +123,7 @@ public class ReferenceAttackAnalysisEngine extends AttackAnalysisEngine {
 		Collection<Response> possibleResponses = new ArrayList<Response>();
 		
 		for (DetectionPoint configuredDetectionPoint : appSensorServer.getConfiguration().getDetectionPoints()) {
-			if (configuredDetectionPoint.getLabel().equals(triggeringDetectionPoint.getLabel())) {
+			if (configuredDetectionPoint.typeMatches(triggeringDetectionPoint)) {
 				possibleResponses = configuredDetectionPoint.getResponses();
 				break;
 			}
