@@ -11,7 +11,6 @@ import javax.inject.Inject;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.After;
 import org.junit.Before;
@@ -282,7 +281,7 @@ public class RestEventManagerTest {
         // in com.example package
         final ResourceConfig rc = new ResourceConfig().packages("org.owasp.appsensor");
 
-        rc.register(MoxyJsonFeature.class);
+//        rc.register(MoxyJsonFeature.class);
         
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
