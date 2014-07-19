@@ -1,5 +1,7 @@
 package org.owasp.appsensor.configuration.client;
 
+import java.io.InputStream;
+
 import javax.inject.Named;
 
 import org.owasp.appsensor.exceptions.ConfigurationException;
@@ -32,7 +34,16 @@ public class StaxClientConfiguration extends ClientConfiguration {
 					BeanUtils.copyProperties(configuration, this);
 				}
 			} catch (ConfigurationException e) {
-				logger.warn("Could not load appsensor client configuration file.", e);
+				InputStream inputStream = this.getClass().getClassLoader()
+                        .getResourceAsStream("appsensor-server-config.xml");
+				if (inputStream != null) {
+					//report quiet error if we find the server config on the filesystem
+					logger.warn("Could not load appsensor client configuration file. "
+							+ "This error is fine if you are running a server.");
+				} else {
+					//report noisy error if we can't find the server config on the filesystem
+					logger.warn("Could not load appsensor client configuration file.", e);
+				}
 			}
 		}
 	}
