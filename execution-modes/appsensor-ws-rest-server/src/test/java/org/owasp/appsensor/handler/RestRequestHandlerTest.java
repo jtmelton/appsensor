@@ -95,8 +95,6 @@ public class RestRequestHandlerTest {
         // in com.example package
         final ResourceConfig rc = new ResourceConfig().packages("org.owasp.appsensor");
 
-//        rc.register(MoxyJsonFeature.class);
-        
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
