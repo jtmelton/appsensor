@@ -127,7 +127,7 @@ public class FileBasedEventStore extends EventStore {
 		Collection<Event> events = new ArrayList<>();
 		
 		try {
-			Collection<String> lines = Files.readAllLines(getPath());
+			Collection<String> lines = Files.readAllLines(getPath(), StandardCharsets.UTF_8);
 			
 			for (String line : lines) {
 				Event event = gson.fromJson(line, Event.class);

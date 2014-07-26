@@ -121,7 +121,7 @@ public class FileBasedResponseStore extends ResponseStore {
 		Collection<Response> responses = new ArrayList<>();
 		
 		try {
-			Collection<String> lines = Files.readAllLines(getPath());
+			Collection<String> lines = Files.readAllLines(getPath(), StandardCharsets.UTF_8);
 			
 			for (String line : lines) {
 				Response response = gson.fromJson(line, Response.class);

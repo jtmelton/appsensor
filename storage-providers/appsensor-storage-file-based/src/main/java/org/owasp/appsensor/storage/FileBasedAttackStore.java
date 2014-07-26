@@ -127,7 +127,7 @@ public class FileBasedAttackStore extends AttackStore {
 		Collection<Attack> attacks = new ArrayList<>();
 		
 		try {
-			Collection<String> lines = Files.readAllLines(getPath());
+			Collection<String> lines = Files.readAllLines(getPath(), StandardCharsets.UTF_8);
 			
 			for (String line : lines) {
 				Attack attack = gson.fromJson(line, Attack.class);
