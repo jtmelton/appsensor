@@ -59,20 +59,24 @@ public class ReferenceEventAnalysisEngine extends EventAnalysisEngine {
 
 		DetectionPoint configuredDetectionPoint = appSensorServer.getConfiguration().findDetectionPoint(event.getDetectionPoint());
 
-		int eventCount = countEvents(configuredDetectionPoint.getThreshold().getInterval().toMillis(), existingEvents, event);
-
-		//4 examples for the below code
-		//1. count is 5, t.count is 10 (5%10 = 5, No Violation)
-		//2. count is 45, t.count is 10 (45%10 = 5, No Violation) 
-		//3. count is 10, t.count is 10 (10%10 = 0, Violation Observed)
-		//4. count is 30, t.count is 10 (30%10 = 0, Violation Observed)
-
-		int thresholdCount = configuredDetectionPoint.getThreshold().getCount();
-
-		if (eventCount % thresholdCount == 0) {
-			logger.info("Violation Observed for user <" + event.getUser().getUsername() + "> - storing attack");
-			//have determined this event triggers attack
-			appSensorServer.getAttackStore().addAttack(new Attack(event));
+		if (configuredDetectionPoint != null) {
+			int eventCount = countEvents(configuredDetectionPoint.getThreshold().getInterval().toMillis(), existingEvents, event);
+	
+			//4 examples for the below code
+			//1. count is 5, t.count is 10 (5%10 = 5, No Violation)
+			//2. count is 45, t.count is 10 (45%10 = 5, No Violation) 
+			//3. count is 10, t.count is 10 (10%10 = 0, Violation Observed)
+			//4. count is 30, t.count is 10 (30%10 = 0, Violation Observed)
+	
+			int thresholdCount = configuredDetectionPoint.getThreshold().getCount();
+	
+			if (eventCount % thresholdCount == 0) {
+				logger.info("Violation Observed for user <" + event.getUser().getUsername() + "> - storing attack");
+				//have determined this event triggers attack
+				appSensorServer.getAttackStore().addAttack(new Attack(event));
+			}
+		} else {
+			logger.error("Could not find detection point configured for this type: " + event.getDetectionPoint().getLabel());
 		}
 	}
 	
