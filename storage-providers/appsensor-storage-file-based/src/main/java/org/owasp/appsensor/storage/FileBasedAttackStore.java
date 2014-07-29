@@ -147,6 +147,8 @@ public class FileBasedAttackStore extends AttackStore {
 		
 		path = FileUtils.getOrCreateFile(lookupFilePath(), lookupFileName());
 		
+		logger.info("AppSensor attack file store is located at: " + path.toAbsolutePath().toString());
+		
 		return path;
 	}
 	

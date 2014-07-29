@@ -141,6 +141,8 @@ public class FileBasedResponseStore extends ResponseStore {
 		
 		path = FileUtils.getOrCreateFile(lookupFilePath(), lookupFileName());
 		
+		logger.info("AppSensor response file store is located at: " + path.toAbsolutePath().toString());
+		
 		return path;
 	}
 	

@@ -147,6 +147,8 @@ public class FileBasedEventStore extends EventStore {
 		
 		path = FileUtils.getOrCreateFile(lookupFilePath(), lookupFileName());
 		
+		logger.info("AppSensor event file store is located at: " + path.toAbsolutePath().toString());
+		
 		return path;
 	}
 	
