@@ -5,6 +5,16 @@
       
 	<display-name>Restful Web Application</display-name>
  
+ 	<!-- Demo data populator -->
+ 	<servlet>
+	    <servlet-name>DemoDataPopulator</servlet-name>
+	    <jsp-file>/demoDataPopulator.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>DemoDataPopulator</servlet-name>
+	    <url-pattern>/data</url-pattern>   
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>jersey-servlet</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>

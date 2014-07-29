@@ -107,7 +107,7 @@
     		var should_run = true;
     		
 	        function addRecord(name){
-	        	var jsonStr = '{"user":{"username":"' + name + '"},"detectionPoint":{"id":"IE1"},"timestamp":' + Date.now() + '}';
+	        	var jsonStr = '{"user":{"username":"' + name + '"},"detectionPoint":{"label":"IE1"},"timestamp":' + Date.now() + '}';
 	        	
 	            $.ajax({
 	            	type: "POST",
