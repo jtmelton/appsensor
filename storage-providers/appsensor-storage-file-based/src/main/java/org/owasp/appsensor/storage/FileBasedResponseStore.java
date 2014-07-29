@@ -1,6 +1,5 @@
 package org.owasp.appsensor.storage;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -48,7 +47,7 @@ public class FileBasedResponseStore extends ResponseStore {
 	@Inject
 	private AppSensorServer appSensorServer;
 	
-	public static final String DEFAULT_FILE_PATH = File.separator + "tmp";
+	public static final String DEFAULT_FILE_PATH = System.getProperty("java.io.tmpdir");
 	
 	public static final String DEFAULT_FILE_NAME = "responses.txt";
 	
