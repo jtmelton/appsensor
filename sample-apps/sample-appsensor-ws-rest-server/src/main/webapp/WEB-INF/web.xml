@@ -7,12 +7,21 @@
  
  	<!-- Demo data populator -->
  	<servlet>
-	    <servlet-name>DemoDataPopulator</servlet-name>
-	    <jsp-file>/demoDataPopulator.jsp</jsp-file>
+	    <servlet-name>DemoDataPopulatorServlet</servlet-name>
+	    <servlet-class>org.owasp.appsensor.servlet.DemoDataPopulatorServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-	    <servlet-name>DemoDataPopulator</servlet-name>
+	    <servlet-name>DemoDataPopulatorServlet</servlet-name>
 	    <url-pattern>/data</url-pattern>   
+	</servlet-mapping>
+	
+	<servlet>
+	    <servlet-name>DemoDataPopulatorJsp</servlet-name>
+	    <jsp-file>/WEB-INF/demoDataPopulator.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>DemoDataPopulatorJsp</servlet-name>
+	    <url-pattern>/populatorJsp</url-pattern>   
 	</servlet-mapping>
 	
 	<servlet>

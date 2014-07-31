@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -40,8 +41,18 @@
         <div class="wrapper">
 	        <h1>AppSensor Data Input For Dashboard</h1>
 	        <div>
-	        	<input type="button" id="addBobRecordButton" name="addBobRecordButton" value="Add Data (Bob)"  />
-	        	<input type="button" id="addOtherRecordButton" name="addOtherRecordButton" value="Add Data (Somebody Else)"  />
+	        	User:  <input id="entered_user" type="text" placeholder="Enter the username to associate to the event" /><br />
+	        	
+	        	Event: 
+	        	 <select id="selected_detection_point">
+	        	 	<c:forEach var="configuredDetectionPoint" items="${configuredDetectionPoints}">
+			   			<option value="<c:out value="${configuredDetectionPoint.label}"/>:<c:out value="${configuredDetectionPoint.category}"/>"><c:out value="${configuredDetectionPoint.category}"/> : <c:out value="${configuredDetectionPoint.label}"/></option>
+			   		</c:forEach>
+		        </select>
+	        	<br /><br />
+	        	
+	        	<input type="button" id="addRecordButton" name="addRecordButton" value="Add Data"  />
+	        	<br />
 	        </div>
 	        <div>
 	        	<br />
@@ -63,11 +74,17 @@
 				      + pad(d.getUTCMinutes())+':'
 				      + pad(d.getUTCSeconds())+'Z';
 			}
-			
-	        function addRecord(name){
-	        	//TODO: change this so we can make it different labels and categories
+
+    		function addRecord(){
 	        	var dateStr = ISODateString(new Date());
-	        	var jsonStr = '{"user":{"username":"' + name + '"},"detectionPoint":{"label":"IE1", "category":"Input Validation"},"timestamp":"' + dateStr + '"}';
+	        	var nameStr = $("#entered_user").val();
+	        	var detectionPoint = $("#selected_detection_point").val();
+	        	var labelStr = detectionPoint.split(':')[0];
+	        	var categoryStr = detectionPoint.split(':')[1];
+	        	var detectionPointStr = '{"label":"' + labelStr + '", "category":"' + categoryStr + '"}';
+	        	
+	        	var jsonStr = '{"user":{"username":"' + nameStr + '"},"detectionPoint":' + detectionPointStr + ',"timestamp":"' + dateStr + '"}';
+	        	
 	            $.ajax({
 	            	type: "POST",
 	                url: apiUrl + "/events",
@@ -75,20 +92,18 @@
 	                headers: { 'X-Appsensor-Client-Application-Name2': 'myclientapp' },
 	                contentType:"application/json; charset=utf-8",
 	                success:function(result){
-	                	$("#results").text('added data for : ' + name + ' at ' + dateStr);
+	                	$("#results").text('Added [' + categoryStr + '(' + labelStr + ')] event for [' + nameStr + '] at [' + dateStr + ']');
 	                },
 		            error:function(result){
 		            	$("#results").text('had an error : ' + JSON.stringify(result));
 		            	console.log('had an error: ' + JSON.stringify(result));
 	                }
-	            }); 
+	            });
 	        }
 	        
-	        //var apiUrl = $(location).attr('protocol') + "://" + $(location).attr('host') + "/sample-appsensor-ws-rest-server/api/v1.0";
-	        var apiUrl = "http://localhost:8080/sample-appsensor-ws-rest-server/api/v1.0";
-	        
-	        $("#addBobRecordButton").click(function() {addRecord('bob');});
-	       	$("#addOtherRecordButton").click(function() {addRecord('somebody_else');});
+	        var apiUrl = $(location).attr('protocol') + "//" + $(location).attr('host') + "/sample-appsensor-ws-rest-server/api/v1.0";
+			
+	        $("#addRecordButton").click(function() {addRecord();});
 	        
         </script>
 </html>
