@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.joda.time.DateTime;
-import org.owasp.appsensor.AppSensorServer;
 import org.owasp.appsensor.DetectionPoint;
 import org.owasp.appsensor.Event;
 import org.owasp.appsensor.User;
@@ -44,9 +42,9 @@ public class FileBasedEventStore extends EventStore {
 	
 	private Logger logger;
 	
-	@SuppressWarnings("unused")
-	@Inject
-	private AppSensorServer appSensorServer;
+	private String filePath;
+	
+	private String fileName; 
 	
 	public static final String DEFAULT_FILE_PATH = System.getProperty("java.io.tmpdir");
 	
@@ -153,11 +151,19 @@ public class FileBasedEventStore extends EventStore {
 	}
 	
 	protected String lookupFilePath() {
-		return DEFAULT_FILE_PATH;
+		return (filePath != null) ? filePath : DEFAULT_FILE_PATH;
 	}
 	
 	protected String lookupFileName() {
-		return DEFAULT_FILE_NAME;
+		return (fileName != null) ? fileName : DEFAULT_FILE_NAME;
+	}
+	
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	
 }
