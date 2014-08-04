@@ -102,15 +102,37 @@ public class MongoResponseStore extends ResponseStore {
 	
 	@PostConstruct
 	private void initializeMongo() {
+		responses = initializeCollection();
+		
+		if(responses == null) {
+			responses = defaultInitialize();
+		}
+	}
+	
+	private DBCollection defaultInitialize() {
+		DBCollection collection = null;
+		
 		try {
 			Mongo mongoClient = new Mongo();
 			DB db = mongoClient.getDB("appsensor_db");
-			responses = db.getCollection("responses");
+			collection = db.getCollection("responses");
 		} catch (UnknownHostException e) {
 			if(logger != null) {
 				logger.error("Mongo connection could not be made", e);
 			}
 			e.printStackTrace();
 		}
+		
+		return collection;
 	}
+	
+	/**
+	 * Default implementation - override if you want a custom initializer.
+	 * 
+	 * @return DBCollection you want to write to.
+	 */
+	public DBCollection initializeCollection() {
+		return null;
+	}
+	
 }

@@ -108,16 +108,37 @@ public class MongoAttackStore extends AttackStore {
 	
 	@PostConstruct
 	private void initializeMongo() {
+		attacks = initializeCollection();
+		
+		if(attacks == null) {
+			attacks = defaultInitialize();
+		}
+	}
+	
+	private DBCollection defaultInitialize() {
+		DBCollection collection = null;
+		
 		try {
 			Mongo mongoClient = new Mongo();
 			DB db = mongoClient.getDB("appsensor_db");
-			attacks = db.getCollection("attacks");
+			collection = db.getCollection("attacks");
 		} catch (UnknownHostException e) {
 			if(logger != null) {
 				logger.error("Mongo connection could not be made", e);
 			}
 			e.printStackTrace();
 		}
+		
+		return collection;
+	}
+	
+	/**
+	 * Default implementation - override if you want a custom initializer.
+	 * 
+	 * @return DBCollection you want to write to.
+	 */
+	public DBCollection initializeCollection() {
+		return null;
 	}
 	
 }
