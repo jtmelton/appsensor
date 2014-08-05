@@ -76,10 +76,9 @@
 	
 	<licenses>
 		<license>
-			<name>BSD</name>
-			<url>http://www.opensource.org/licenses/bsd-license.html</url>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.html</url>
 			<distribution>repo</distribution>
-			<comments>Open Source License</comments>
 		</license>
 	</licenses>
 
