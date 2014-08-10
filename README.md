@@ -5,6 +5,8 @@ This is the repository for the latest version (v2) of AppSensor.
 
 [AppSensor](https://www.owasp.org/index.php/AppSensor) is a framework that provides application layer intrusion detection.
 
+The project requires Java version 7 or higher.
+
 This code is under active development and is to be considered alpha at this point. 
 
 Contributing
