@@ -25,6 +25,8 @@ import org.owasp.appsensor.exceptions.NotAuthorizedException;
 import org.owasp.appsensor.rest.AccessControlUtils;
 import org.owasp.appsensor.rest.filter.ClientApplicationIdentificationFilter;
 import org.owasp.appsensor.util.StringUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * This is the restful endpoint that handles requests on the server-side. 
@@ -53,6 +55,7 @@ public class RestRequestHandler implements RequestHandler {
 	@Override
 	@POST
 	@Path("/events")
+	@ResponseStatus( HttpStatus.CREATED )
 	public void addEvent(Event event) throws NotAuthorizedException {
 		accessControlUtils.checkAuthorization(Action.ADD_EVENT, requestContext);
 		
@@ -67,6 +70,7 @@ public class RestRequestHandler implements RequestHandler {
 	@Override
 	@POST
 	@Path("/attacks")
+	@ResponseStatus( HttpStatus.CREATED )
 	public void addAttack(Attack attack) throws NotAuthorizedException {
 		accessControlUtils.checkAuthorization(Action.ADD_ATTACK, requestContext);
 		
@@ -81,7 +85,6 @@ public class RestRequestHandler implements RequestHandler {
 	@Override
 	@GET
 	@Path("/responses")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Response> getResponses(@QueryParam("earliest") String earliest) throws NotAuthorizedException {
 		accessControlUtils.checkAuthorization(Action.GET_RESPONSES, requestContext);
 
