@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="ico/favicon.ico">
+
+    <title>AppSensor - Application Intrusion Detection and Response</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">  
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <link href="css/jumbotron.css" rel="stylesheet">
+    <!-- <link href="css/carousel.css" rel="stylesheet"> -->
+    <link href="css/appsensor.css" rel="stylesheet">
+
+    <script>
+      $(function() {
+        $( "#tabs" ).tabs();
+      });
+    </script>
+
+  </head>
+  
+  <!-- NAVBAR
+================================================== -->
+  <body>
+    <a href="https://github.com/jtmelton/appsensor"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 100" src="img/gh_fork.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+    <div class="navbar-wrapper">
+      <div class="container">
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation"> <!-- navbar-inverse -->
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">AppSensor</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="overview.html">Overview</a></li>
+                <li class="active"><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="user-guide.html">User Guide</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="https://www.owasp.org/index.php/OWASP_AppSensor_Project" target="_blank"><i class="fa fa-globe fa-lg"></i> OWASP</a></li>
+                <li><a href="#"></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- page header -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="pageheader">Getting Started</h1>
+        <hr class="bluehr" />
+      </div>
+    </div>
+
+    <div class="container">
+
+      <p class="lead">
+        This guide will lead you through the steps required to get AppSensor 
+        configured on your system. You'll have the server-side analysis components
+        ready so you can start doing <strong>real-time application intrusion detection</strong>. 
+      </p>
+      <p class="lead">
+        At the end of this process, you'll be ready to move on to 
+        the <a href="user-guide.html">user guide</a> in order to prepare your application(s) 
+        to interact with the AppSensor system.
+      </p>
+
+      <p>&nbsp;</p>
+
+      <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#download">
+                <h2><i class="fa fa-download fa-lg"></i>&nbsp;&nbsp;&nbsp; Download</h2>
+              </a>
+            </h4>
+          </div>
+          <div id="download" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <div class="row alert alert-info">
+                <div class="col-md-1 text-center">
+                  <i class="fa fa-info-circle fa-lg glyph3"></i>
+                </div>
+                <div class="col-md-11">
+                  If you want to try out a working application, start with one of the  <a href="https://github.com/jtmelton/appsensor/tree/master/sample-apps" target="_blank">sample applications</a> available on GitHub. You should be able to drop them into a servlet container and start them up. 
+                </div>
+              </div>
+
+              <div class="row alert alert-danger">
+                <div class="col-md-1 text-center">
+                  <i class="fa fa-times-circle fa-lg glyph3"></i>
+                </div>
+                <div class="col-md-11">
+                  Note: The download step is not currently implemented. 
+                  AppSensor needs to be deployed to maven central to be accessible in this way.
+                </div>
+              </div>
+
+              <p>
+                The first step is to download AppSensor. You can conveniently get access through 
+                any of the following mechanisms.
+              </p>
+              
+              <h3>Maven</h3>
+
+              <script src="https://gist.github.com/jtmelton/ae05a707825aabd13238.js"></script>
+
+              <h3>Gradle</h3>
+
+              <script src="https://gist.github.com/jtmelton/24d75c594294db3d9c4f.js"></script>
+
+              <h3>Binary</h3>
+
+              <p class="bg-danger">TODO: In order to retrieve the binary jar files, you can use the ...</p>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#chooseDeploymentModel">
+                <h2><i class="fa fa-gears fa-lg"></i>&nbsp;&nbsp;&nbsp; Choose Deployment Model</h2>
+              </a>
+            </h4>
+          </div>
+          <div id="chooseDeploymentModel" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p>
+                The reference implementation currently supports 3 execution modes and we'll discuss each in turn.
+              </p>
+
+              <p>&nbsp;</p><h3>REST Web Service</h3>
+
+              <p>
+                The REST model is the most common model for APIs today, and it is easy to understand why. The model is simple, lightweight and effective, while still allowing for flexibility. It's also supported by almost every networking framework available, making integration effort much easier.
+              </p>
+
+              <p>&nbsp;</p><h4>Use when:</h4>
+              <p>
+                Choose this model if any/all of the following are true:
+              </p>
+              <ul>
+                <li>You are using a non-Java language for your application</li>
+                <li>You need to support multiple applications</li>
+                <li>You are in a clustered environment (1 application over multiple servers)</li>
+              </ul>
+              
+              <p>&nbsp;</p><h4>Avoid when:</h4>
+              <p>
+                Avoid this model if any/all of the following are true:
+              </p>
+              <ul>
+                <li>You only have 1 application</li>
+                <li>Your 1 application is Java</li>
+                <li>You do not want the network overhead, and would rather make local JVM calls</li>
+              </ul>
+
+              <p>&nbsp;</p><h3>SOAP Web Service</h3>
+
+              <p>
+                The SOAP model is still in heavy use, but more often within the enterprise. There is significant tooling available. It's a well-known and well understood protocol. Integration points are often available, and there are a fair number of supporting frameworks. 
+              </p>
+
+              <p>&nbsp;</p><h4>Use when:</h4>
+              <p>
+                Choose this model if any/all of the following are true:
+              </p>
+              <ul>
+                <li>You are using a non-Java language for your application</li>
+                <li>You need to support multiple applications</li>
+                <li>You are in a clustered environment (1 application over multiple servers)</li>
+                <li>Your enterprise requires SOAP or SOAP provides better integration points in your organization</li>
+              </ul>
+              
+              <p>&nbsp;</p><h4>Avoid when:</h4>
+              <p>
+                Avoid this model if any/all of the following are true:
+              </p>
+              <ul>
+                <li>You only have 1 application</li>
+                <li>Your 1 application is Java</li>
+                <li>You do not want the network overhead, and would rather make local JVM calls</li>
+                <li>You would rather use a simpler network model, like REST</li>
+              </ul>
+
+              <p>&nbsp;</p><h3>Local (Embedded Java)</h3>
+
+              <p>
+                The local model simply means that the client and server portions of appsensor are "embedded" within a single application. When an event is triggered, all of the communication occurs within the JVM as native calls, as opposed to network requests. This model was the only one available in AppSensor version 1. There are drawbacks to this approach, but it is still a good model for some. 
+              </p>
+
+              <p>&nbsp;</p><h4>Use when:</h4>
+              <p>
+                Choose this model if any/all of the following are true:
+              </p>
+              <ul>
+                <li>You only have 1 application</li>
+                <li>Your 1 application is Java</li>
+                <li>You do not want the network overhead, and would rather make local JVM calls</li>
+              </ul>
+              
+              <p>&nbsp;</p><h4>Avoid when:</h4>
+              <p>
+                Avoid this model if any/all of the following are true:
+              </p>
+              <ul>
+                <li>You are using a non-Java language for your application</li>
+                <li>You need to support multiple applications</li>
+                <li>You are in a clustered environment (1 application over multiple servers)</li>
+              </ul>
+                
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#choosePluggableComponents">
+                <h2><i class="fa fa-puzzle-piece fa-lg"></i>&nbsp;&nbsp;&nbsp; Choose Pluggable Components</h2>
+              </a>
+            </h4>
+          </div>
+          <div id="choosePluggableComponents" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p>
+                AppSensor v2 has been built with pluggability in mind. Ever major component of the system can be swapped out, including the analysis engines themselves. While this allows for great flexibility, it comes with the cost that you have to perform some up-front configuration in order to get going. For most situations, this will be a trivial one-time step. 
+              </p>
+
+              <p>
+                The following section describes each of the components you'll interact with in order to get your system setup: 
+              </p>
+
+              <p>&nbsp;</p><h3>AppSensor Core (Required)</h3>
+
+              <p>
+                Core represents the central domain and interface specifications for the system. You'll need this, but you often don't have to specify it as an explicit dependency, since pretty much every other part of the system depends on this component as well.  
+              </p>
+
+              <p>&nbsp;</p><h3>Analysis Engine (Required)</h3>
+
+              <p>
+                The analysis engines are the core implementation components. These components decide when an event becomes an attack and how to respond accordingly. 
+              </p>
+
+              <p>
+                There is currently only the reference implementation (policy driven), but there could be more in the future. 
+              </p>
+
+              <p>&nbsp;</p><h3>Storage (Required)</h3>
+
+              <p>
+                The storage component does what you'd expect: stores the data for the system. 
+              </p>
+
+              <p>
+                There are several implementations, including in-memory, file-based, and sql/no-sql databases. You'll need to select a storage implementation based on your needs. 
+              </p>
+
+              <p>&nbsp;</p><h3>Configuration (Required)</h3>
+
+              <p>
+                The configuration component of the system represents your client (connect to server) and server (client info, detection points) configurations. While there are other possible implementations, the only current implementation is XML (Stax). You'll need to include this component in order to allow your configuration information to be processed properly. 
+              </p>
+
+              <p>&nbsp;</p><h3>Access Controller (Required if using REST or SOAP)</h3>
+
+              <p>
+                The access controller component simply ensures that the client that is making requests has permission to do so. 
+              </p>
+
+              <p>
+                There is currently only a single access controller implementation (reference), which implements a simple role-based access control check. 
+              </p>
+
+              <p>
+                This component is necessary if you are using either the REST or SOAP configurations.
+              </p>
+
+              <p>&nbsp;</p><h3>Reporting (Optional)</h3>
+
+              <p>
+                Reporting is an important part of the AppSensor capability. The analysis engine on the server interacts with the client to allow responses to be sent and processed by the client, but that's the extent of data provided. In order to get any other information about the system, you'll want to use the reporting subsystem. 
+              </p>
+
+              <p>
+                There are multiple implementations of the reporting component (logging, websocket, REST/SOAP), and you can select one appropriate to your environment.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#configureNecessaryComponents">
+                <h2><i class="fa fa-wrench fa-lg"></i>&nbsp;&nbsp;&nbsp; Configure Necessary Components</h2>
+              </a>
+            </h4>
+          </div>
+          <div id="configureNecessaryComponents" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p>
+                While many of the implementations available in AppSensor do not require further configuration, some will. 
+              </p>
+              <p>
+                Some require configuration and for others, configuration is optional. An example is in the storage component:
+                <ul>
+                  <li>If you use the in-memory data store, no further configuration is necessary.</li>
+                  <li>If you use the file-based data store, you can optionally configure where the file is stored (default is in a temporary directory, so configuration is recommended).</li>
+                  <li>If you are using the JPA (SQL) data store, then you must provide a configuration to access the appropriate database as well as your credentials. In this case, the configuration is done via Spring configuration.</li>
+                </ul>
+              </p>
+              <p>
+                There are various components that have configuration options. The necessary specific information regarding these components can be found in the documentation on <a href="https://github.com/jtmelton/appsensor">GitHub</a> or in the JavaDoc for that component.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#configureReporting">
+                <h2><i class="fa fa-bar-chart-o fa-lg"></i>&nbsp;&nbsp;&nbsp; Configure Reporting</h2>
+              </a>
+            </h4>
+          </div>
+          <div id="configureReporting" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p>
+                While reporting is technically just another component of AppSensor, it's a common need, so I'll call it out separately here. 
+              </p>
+              <p>
+                There are various implementations of the reporting subsystem, such as:
+                <ul>
+                  <li>Simple Logging (logs to whatever logger you have configured) [executes as events occur, does not support queries]</li>
+                  <li>WebSockets (sends data to all connected WebSocket clients) [executes as events occur, does not support queries]</li>
+                  <li>REST API (/reports/*) [does nothing as events occur, does support queries] </li>
+                </ul>
+              </p>
+              <p>
+                Setting up reporting is an important part of a complete AppSensor system. The reporting components as well as sample dashboards are included in the source at <a href="https://github.com/jtmelton/appsensor">GitHub</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#nextSteps">
+                <h2><i class="fa fa-arrow-circle-right fa-lg"></i>&nbsp;&nbsp;&nbsp; Next Steps</h2>
+              </a>
+            </h4>
+          </div>
+          <div id="nextSteps" class="panel-collapse collapse">
+            <div class="panel-body">
+              
+              <p>
+                Congratulations ... If you've finished this guide, you've got AppSensor setup! 
+                Now, you'll want to get your application configured to use AppSensor. Have a look at the 
+                user guide to start that process.
+              </p>
+              <a class="btn btn-primary" role="button" href="user-guide.html">See the User Guide &raquo;</a>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 OWASP &middot; <a href="https://lists.owasp.org/listinfo/owasp-appsensor-project">Contact the Mailing List</a> &middot; <a href="https://www.owasp.org/index.php/OWASP_AppSensor_Project">AppSensor at OWASP</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="js/appsensor.js"></script>
+  </body>
+</html>

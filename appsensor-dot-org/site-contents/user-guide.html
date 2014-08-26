@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="ico/favicon.ico">
+
+    <title>AppSensor - Application Intrusion Detection and Response</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">  
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <link href="css/jumbotron.css" rel="stylesheet">
+    <!-- <link href="css/carousel.css" rel="stylesheet"> -->
+    <link href="css/appsensor.css" rel="stylesheet">
+
+    <script>
+      $(function() {
+        $( "#tabs" ).tabs();
+      });
+    </script>
+  </head>
+  
+  <!-- NAVBAR
+================================================== -->
+  <body>
+    <a href="https://github.com/jtmelton/appsensor"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 100" src="img/gh_fork.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+    <div class="navbar-wrapper">
+      <div class="container">
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation"> <!-- navbar-inverse -->
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">AppSensor</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="overview.html">Overview</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li class="active"><a href="user-guide.html">User Guide</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="https://www.owasp.org/index.php/OWASP_AppSensor_Project" target="_blank"><i class="fa fa-globe fa-lg"></i> OWASP</a></li>
+                <li><a href="#"></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- page header -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="pageheader">User Guide</h1>
+        <hr class="bluehr" />
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row alert alert-info">
+        <div class="col-md-1 text-center">
+          <i class="fa fa-info-circle fa-lg glyph3"></i>
+        </div>
+        <div class="col-md-11">
+          The user guide helps guide you through using AppSensor once it's been setup. 
+          If you're not setup yet, have a look at the <a href="getting-started.html">getting started guide</a> first.
+        </div>
+      </div>
+
+      <p>&nbsp;</p>
+
+      <p class="lead">
+        This guide will help you get AppSensor into your application and get you on your way to detecting and responding to events.
+      </p>
+      <p class="lead">
+        The <a href="getting-started.html">getting started guide</a> helped you get your back-end analysis system setup. This guide leads you through the front-end detection setup as well as discusses some long term issues such as monitoring and maintenance.
+      </p>
+
+      <p>&nbsp;</p>
+
+      <div class="panel-group" id="accordion">
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#instrument">
+                <h2><i class="fa fa-sliders fa-lg"></i>&nbsp;&nbsp;&nbsp; Instrument Your Application</h2>
+              </a>
+            </h4>
+          </div>
+          <div id="instrument" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <p>
+                After getting your environment setup properly (see <a href="getting-started.html">getting started</a>), the next step is to have your application start sending events to AppSensor. There are a few standard ways of doing this. 
+                <ul>
+                  <li>A detection point is added to your application in a single location</li>
+                  <li>A detection point is added to your application in multiple locations (usually via AOP)</li>
+                  <li>External System (WAF, SSO system, SIEM, etc.) detects events (or even attacks) and sends them to AppSensor on behalf of your application</li>
+                </ul>
+              </p>
+
+              <p>
+                Let's cover each of these in turn:
+              </p>
+
+              <p>&nbsp;</p><h3><i class="fa fa-cog fa-lg"></i>&nbsp;&nbsp;&nbsp; Single Location</h3>
+              <p>
+                This is the simplest concept and the most logical case. This will likely be how most of your detection points are added to your application. In this case, you simply modify existing code to additionally report an event to AppSensor.
+              </p>
+              <p>
+                An example here would be a user entering too many characters in the username field (<a href="https://www.owasp.org/index.php/AppSensor_DetectionPoints#AE4:_Unexpected_Quantity_of_Characters_in_Username">reference</a>). If the username is intended to have a limit, say, of 30 characters, and the user enters a username with 200 characters, that could be a sign that the user is attempting to attack the application. In this case, a simple modification of existing code would suffice to insert the detection point. 
+              </p>
+              <p>
+                Some pseudocode for this example would look like: 
+              </p>
+              <pre>
+if ( username.length > 30 )
+{
+    screen_errors.add ( "The username entered is too long." )
+
+    # -----------------------------
+    #  start new code for AppSensor
+
+    # "AE4" is the identifier for this specific detection point
+    appSensor.addEvent ( logged_in_user, "AE4" )
+
+    #  end new code for AppSensor
+    # -----------------------------
+}</pre>
+              
+              <p>
+                As you can see, supporting the detection point is really a matter of adding a single line of code. However, the real work is in identifying which detection points to use and where to put them. 
+              </p>
+
+              <p>&nbsp;</p><h3><i class="fa fa-cogs fa-lg"></i>&nbsp;&nbsp;&nbsp; Multiple Locations (AOP)</h3>
+              <p>
+                Another option would be to have a single detection point instrumented into the code in multiple locations. This would typically be handled through Aspect-Oriented Programming (AOP) or a similar mechanism. AOP gives you the constructs necessary to apply a given set of code in multiple locations via convention or configuration as opposed to having to do it manually. This is a desirable strategy for many detection points. 
+              </p>
+              <p>
+                Consider the <a href="https://www.owasp.org/index.php/AppSensor_DetectionPoints#ACE1:_Modifying_URL_Argument_Within_a_GET_for_Direct_Object_Access_Attempt">ACE1 detection point</a> for example, which is "Modifying a URL argument within a GET request for a direct object access attempt". This would be when an attacker tries to change <code>/accounts/1234</code> to <code>/accounts/1235</code> in order to access another account. This is a very typical attack, and a very common issue to have to prevent in applications. Many applications will solve this problem in a single method that is applied to multiple locations using AOP. 
+              </p>
+              <p>
+                Using AOP or similar techniques provides a powerful capability as you can apply detection and response more easily to a larger portion of your application.
+              </p>
+
+              <p>&nbsp;</p><h3><i class="fa fa-share-alt fa-lg"></i>&nbsp;&nbsp;&nbsp; External System</h3>
+              <p>
+                Many organizations already have powerful security tools setup that they use to protect their applications. AppSensor provides the flexibility to use the intelligence produced by these tools to feed into your detection and response system. 
+              </p>
+              <p>
+                External tools can notify AppSensor of new events just as your normal application code would, assuming you are using a remote deployment option (REST/SOAP/etc.). If your tool provides attack-detection itself, it can even signal AppSensor and notify it of attacks, circumventing the attack detection process, and going straight to attack storage and response. 
+              </p>
+              <p>
+                A significant note here is that the <a href="https://www.owasp.org/index.php/Category:OWASP_ModSecurity_Core_Rule_Set_Project">ModSecurity Core Rule Set project</a> has spent a significant amount of time integrating with AppSensor. There are cross-references from the rules in the rule set to our <a href="https://www.owasp.org/index.php/AppSensor_DetectionPoints">detection points</a> and there are some attack detection capabilities built into the core rule set. Also, the project is open-source as an OWASP project as well. This is definitely a project you should consider when evaluating external tools for AppSensor integration. 
+              </p>
+              <p>
+                This is just another way to leverage your security investment and create a holistic approach to detection and response. 
+              </p>
+
+<!-- 
+              <p>&nbsp;</p><h3><i class="fa fa-code fa-lg"></i>&nbsp;&nbsp;&nbsp; Sample Code</h3>
+              <p>&nbsp;</p>
+
+
+              <!- - Nav tabs - ->
+              <ul class="nav nav-tabs">
+                <li class="bluebg active"><a href="#java" data-toggle="tab">Java</a></li>
+                <li class="bluebg"><a href="#csharp" data-toggle="tab">C#</a></li>
+                <li class="bluebg"><a href="#python" data-toggle="tab">Python</a></li>
+                <li class="bluebg"><a href="#javascript" data-toggle="tab">JavaScript</a></li>
+                <li class="bluebg"><a href="#cobol" data-toggle="tab">Cobol</a></li>
+                <li class="bluebg"><a href="#node" data-toggle="tab">Node</a></li>
+              </ul>
+
+              <!- - Tab panes - ->
+              <div class="tab-content bluebg">
+                <div class="tab-pane active" id="java">            
+                  <div class="panel panel-default">
+                    <div class="panel-body bluebg">
+                      <pre>
+                        this is some java code
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane" id="csharp">
+                  <div class="panel panel-default">
+                    <div class="panel-body bluebg">
+                      <pre>
+                        this is some c# code
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane" id="python">
+                  <div class="panel panel-default">
+                    <div class="panel-body bluebg">
+                      <pre>
+                        this is some python code
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane" id="javascript">
+                  <div class="panel panel-default">
+                    <div class="panel-body bluebg">
+                      <pre>
+                        this is some javascript code
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane" id="cobol">
+                  <div class="panel panel-default">
+                    <div class="panel-body bluebg">
+                      <pre>
+                        this is some cobol code
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane" id="node">
+                  <div class="panel panel-default">
+                    <div class="panel-body bluebg">
+                      <pre>
+                        this is some node code
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+ -->
+              <p>&nbsp;</p>
+                
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#testDeploy">
+                <h2><i class="fa fa-sitemap fa-lg"></i>&nbsp;&nbsp;&nbsp; Test and Deploy the System</h2>
+              </a>
+            </h4>
+          </div>
+          <div id="testDeploy" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p>
+                This is a standard part of application development, but it should be mentioned here that AppSensor does have the possibility of changing the functionality and/or performance of your application depending upon the way you implement it. For that reason, you should thoroughly test your application both before and after implementing AppSensor to ensure any impacts are acceptable.
+              </p>
+
+              <p>&nbsp;</p><h3><i class="fa fa-tachometer fa-lg"></i>&nbsp;&nbsp;&nbsp; Performance</h3>
+              <p>
+                By design, AppSensor detection points are meant to capture exceptional conditions, conditions that you believe may represent abnormal or malicious behaviour. By that definition, you should not be detecting events on every request for a normal user. (An exception to this general rule would be automated attacks of high-volume ... someone scans you with OWASP ZAP for instance)
+              </p>
+              <p>
+                Though AppSensor is not meant to cause a large performance impact, you should verify that through performance testing the application thoroughly, particularly with tests that exercise AppSensor alert generation, and ensure performance is acceptable. 
+              </p>
+              <p>
+                Another specific issue to validate is the performance impact of polling for responses in a remote configuration. Every poll is a network request. The polling frequency is configurable and should be configured specifically for your environment. 
+              </p>
+              <p>
+                One side note: by deploying AppSensor, you should be able to detect malicious users. One common side effect of attacking an application is denial-of-service for legitimate users. By detecting and containing/responding to the malicious activity, you might find the peformance increase in normal usage since attackers are no longer impacting the application. This caveat applies to a subset of attackers and a subset of attacks. However, large internet-facing applications often have to deal with this type of issues, so AppSensor can be beneficial in that specific regard.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#monitor">
+                <h2><i class="fa fa-eye fa-lg"></i>&nbsp;&nbsp;&nbsp; Monitor</h2>
+              </a>
+            </h4>
+          </div>
+          <div id="monitor" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p>
+                AppSensor is a system that can be managed in various ways. You can perform real-time detection AND response (it's even recommended), which is great since you can set the policy and then not necessarily require a human in the loop to perform an action. However, you may have some actions that you want a human to perform, or you may have an out of band process you would like to do. Also, you may choose to simply report events as opposed to responding to them with some specific action. 
+              </p>
+              <p>
+                No matter your particular setup, it is highly desirable to be able to view the state of your system. AppSensor produces data that is of interest to security, and should be monitored. Here are a few ideas for how to do that: 
+                <ul>
+                  <li>Use the provided AppSensor admin application and dashboard</li>
+                  <li>Use the API to retrieve stored data and send it to a 
+                    <ul>
+                      <li>log file</li>
+                      <li>custom viewer application</li>
+                      <li>log analysis tool</li>
+                      <li>SIEM tool</li>
+                    </ul>
+                  </li>
+                </ul> 
+              </p>
+              <p>
+                As you can see you have options when it comes to monitoring your data, the important thing is that you actually do monitor your system. The AppSensor concept involves gaining visibility into the security posture of your application at runtime, but that comes with it the responsibility to actually manage the application over time. Don't put in the effort to get AppSensor working and then ignore the data it produces. 
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#tweak">
+                <h2><i class="fa fa-repeat fa-lg"></i>&nbsp;&nbsp;&nbsp; Tweak as Necessary</h2>
+              </a>
+            </h4>
+          </div>
+          <div id="tweak" class="panel-collapse collapse">
+            <div class="panel-body">
+              <p>
+                As mentioned in the "Monitor" section above, part of the AppSensor concept is managing your application, and specifically AppSensor, over the long term. As time goes by, your application will change and attackers will change. As such your AppSensor configuration and detection points should change as well. Here are a few ideas for things you should be considering over time:
+                <ul>
+                  <li>AppSensor Configuration</li>
+                  <ul>
+                    <li>Detection Points
+                      <ul>
+                        <li>Add new detection points as the application gets new functionality</li>
+                        <li>Add new detection points as new attacks or attack patterns are discovered or realized</li>
+                        <li>Evaluate existing detection points for effectiveness</li>
+                      </ul>
+                    </li>
+                    <li>Thresholds
+                      <ul>
+                         <li>I never see certain detection points trigger attacks. Are the thresholds too high or is the detection point invalid?</li>
+                         <li>Certain detection points are too noisy</li>
+                      </ul>
+                    </li>
+                  </ul>
+                  <li>Monitoring system (new ways to visualize/use information)</li>
+                  <li>New application protections based on AppSensor feedback - what are people attacking?</li>
+                </ul>
+              </p>
+              <p>
+                These are just some of the things you can do to optimize your AppSensor system. The list is by no means exhaustive. The key takeaway is that you should be monitoring your system over time and adjusting your configuration as your application changes and as you learn more about your attackers and what AppSensor can do to help you improve the security posture of your applications.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#nextSteps">
+                <h2><i class="fa fa-arrow-circle-right fa-lg"></i>&nbsp;&nbsp;&nbsp; Next Steps</h2>
+              </a>
+            </h4>
+          </div>
+          <div id="nextSteps" class="panel-collapse collapse">
+            <div class="panel-body">
+              
+              <p>
+                Congratulations ... If you've finished this guide, you've got AppSensor setup and your application configured to use it! 
+                At this point, you'll want to go have a look at the rest of our documentation to cover specific topics you might be interested in.
+              </p>
+              <a class="btn btn-primary" role="button" href="documentation.html">See more Documentation &raquo;</a>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+        
+
+      </div>
+
+      <hr class="featurette-divider">
+
+      <!-- /END THE FEATURETTES -->
+
+<!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 OWASP &middot; <a href="https://lists.owasp.org/listinfo/owasp-appsensor-project">Contact the Mailing List</a> &middot; <a href="https://www.owasp.org/index.php/OWASP_AppSensor_Project">AppSensor at OWASP</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="js/appsensor.js"></script>
+  </body>
+</html>

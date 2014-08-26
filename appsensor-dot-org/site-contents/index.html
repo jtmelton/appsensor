@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="ico/favicon.ico">
+
+    <title>AppSensor - Application Intrusion Detection and Response</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">  
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <link href="css/jumbotron.css" rel="stylesheet">
+    <!-- <link href="css/carousel.css" rel="stylesheet"> -->
+    <link href="css/appsensor.css" rel="stylesheet">
+
+    <script>
+      $(function() {
+        $( "#tabs" ).tabs();
+      });
+    </script>
+  </head>
+  
+  <!-- NAVBAR
+================================================== -->
+  <body>
+    <a href="https://github.com/jtmelton/appsensor"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 100" src="img/gh_fork.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+    <div class="navbar-wrapper">
+      <div class="container">
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation"> <!-- navbar-inverse -->
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">AppSensor</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="index.html">Home</a></li>
+                <li><a href="overview.html">Overview</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="user-guide.html">User Guide</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="https://www.owasp.org/index.php/OWASP_AppSensor_Project" target="_blank"><i class="fa fa-globe fa-lg"></i> OWASP</a></li>
+                <li><a href="#"></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="jumbotron">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8">
+            <h1>AppSensor</h1>
+          </div>
+          <div class="col-md-4">
+            <div class="pull-right">
+              <a href="https://github.com/jtmelton/appsensor" target="_blank"><i class="fa fa-github fa-lg glyph2 bluefg"></i></a> &nbsp; &nbsp;
+              <a href="https://twitter.com/appsensor" target="_blank"><i class="fa fa-twitter fa-lg glyph2 bluefg"></i></a> &nbsp; &nbsp;
+              <a href="https://lists.owasp.org/listinfo/owasp-appsensor-project" target="_blank"><i class="fa fa-envelope fa-lg glyph2 bluefg"></i></a>
+            </div>
+          </div>
+        </div>
+        <hr class="bluehr" />
+        <div class="row banner-image-row">
+          <div class="col-md-5 text-center">
+            <h2>The Idea</h2><br />
+            <i class="fa fa-lightbulb-o fa-lg glyph7 yellowfg"></i>
+          </div>
+          <div class="col-md-2 text-center">
+            <h2>&nbsp;</h2><br />
+            <i class="fa fa-plus fa-lg glyph7 bluefg"></i>
+          </div>
+          <div class="col-md-5 text-center">
+            <h2>The Tool</h2><br />
+            <i class="fa fa-wrench fa-lg glyph7 bluefg"></i>
+          </div>
+       </div>
+       <div class="row">
+          <div class="col-md-5 text-center">
+            <p>The AppSensor project defines a conceptual framework and methodology that offers prescriptive guidance to implement application intrusion detection and automated response. 
+            </p>
+            <p>
+              <small class="text-muted">(The documentation is under a Creative Commons Attribution-ShareAlike 3.0 open-source license.)</small></p>
+            <p>
+            <a class="btn btn-primary btn-lg" role="button" href="#ideacontent">Learn more &raquo;</a></p>
+          </div>
+          <div class="col-md-2"></div>
+          <div class="col-md-5 text-center">
+            <p>In addition, the project also provides a reference implementation that allows developers to use these powerful concepts in existing applications. 
+            </p>
+            <p>
+              <small class="text-muted">(The tool is under an MIT open-source license.)</small></p>
+            <p>
+            <a class="btn btn-primary btn-lg" role="button" href="getting-started.html">Get Started &raquo;</a></p>
+          </div>
+       </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- START THE FEATURETTES -->
+
+      <div class="row featurette" id="ideacontent">
+        <div class="col-md-8">
+          <h2 class="featurette-heading">Attacks are constant ... <span class="text-muted">And they're not stopping.</span></h2>
+          <p class="lead">
+            The attacks against applications are growing in both volume and complexity. At the same time, we are deploying more complex applications at a faster rate than ever before. The result is that finding a successful attack against an application is almost always possible, and usually doesn't take that long.
+          </p>
+        </div>
+        <div class="col-md-4">
+          <i class="fa fa-users fa-lg glyph14 bluefg featurette-heading pull-right"></i>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-4">
+          <i class="fa fa-shield fa-lg glyph14 bluefg featurette-heading"></i>
+        </div>
+        <div class="col-md-8">
+          <h2 class="featurette-heading">You've implemented defenses ... <span class="text-muted">But is it enough?</span></h2>
+          <p class="lead">
+            Development and security teams have spent a lot of time implementing defenses against a wide array of attacks. Some of these are very effective and others are not. The controls that have been implemented in applications already provide value, but with some minor modifications, they can do even more.
+          </p>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-8">
+          <h2 class="featurette-heading">You don't actually know what's happening ... <span class="text-muted">Because you can't see it.</span></h2>
+          <p class="lead">
+            This is a key realization. If you ask most developers and support teams, there is a shocking lack of visibility when it comes to security inside an application at runtime. There are good solutions for visibility into issues like performance, user analytics, and revenue generation. However, security doesn't have great visibility, yet ...
+          </p>
+        </div>
+        <div class="col-md-4">
+          <i class="fa fa-eye fa-lg glyph14 bluefg featurette-heading pull-right"></i>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-4">
+          <i class="fa fa-life-saver fa-lg glyph14 bluefg featurette-heading"></i>
+        </div>
+        <div class="col-md-8">
+          <h2 class="featurette-heading">It sounds rough ... <span class="text-muted">But there is hope.</span></h2>
+          <p class="lead">
+            The AppSensor project is designed to address these issues directly. We have provided a methodology and prescriptive guidance on how to deal with this unique set of problems. By leveraging existing controls (with slight modifications), and implementing new controls as needed, you can gain much better insight into the security posture of your application. 
+          </p>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-8">
+          <h2 class="featurette-heading">You can go beyond detection ... <span class="text-muted">To response.</span></h2>
+          <p class="lead">
+            In addition to actually seeing what's going on inside your application, you can now define allowable behavior. If activity falls outside the acceptable profile, then the application can <em>automatically</em> respond. This makes your application <em>self-defending</em>. That is a very desirable capability if you're building serious applications.
+          </p>
+        </div>
+        <div class="col-md-4">
+          <i class="fa fa-exchange fa-lg glyph14 bluefg featurette-heading pull-right"></i>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+
+      <!-- /END THE FEATURETTES -->
+
+<!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 OWASP &middot; <a href="https://lists.owasp.org/listinfo/owasp-appsensor-project">Contact the Mailing List</a> &middot; <a href="https://www.owasp.org/index.php/OWASP_AppSensor_Project">AppSensor at OWASP</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="js/appsensor.js"></script>
+  </body>
+</html>

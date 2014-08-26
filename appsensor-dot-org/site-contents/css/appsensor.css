@@ -1,0 +1,109 @@
+.glyph1pt2 {
+	font-size: 1.2em;
+}
+
+.glyph1pt3 {
+	font-size: 1.3em;
+}
+
+.glyph1pt5 {
+	font-size: 1.5em;
+}
+
+.glyph1pt7 {
+	font-size: 1.7em;
+}
+
+.glyph2 {
+	font-size: 2em;
+}
+
+.glyph3 {
+	font-size: 3em;
+}
+
+.glyph4 {
+	font-size: 4em;
+}
+
+.glyph5 {
+	font-size: 5em;
+}
+
+.glyph6 {
+	font-size: 6em;
+}
+
+.glyph7 {
+	font-size: 7em;
+}
+
+.glyph8 {
+	font-size: 8em;
+}
+
+.glyph14 {
+	font-size: 14em;
+}
+
+.bluefg {
+	color: #2C3E50;
+}
+
+.grayfg {
+	color: #5A5A5A;
+}
+
+.bluebg {
+	background-color: #2C3E50;
+}
+
+.yellowfg {
+	color: #AEB404;
+}
+
+.darkgraybg {
+	background-color: #333;
+}
+
+.lightgraybg {
+	background-color: #ecf0f1;
+}
+
+.banner-image-row {
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+.fa-github:hover, .fa-twitter:hover, .fa-envelope:hover {
+	/*color: #1a242f;*/
+	color: #18bc9c;
+}
+
+.bluehr {
+	border-top: 1px solid #2C3E50;
+}
+
+.pageheader {
+	/*font-size: 67.5px;
+	margin-bottom: 10.5px;
+	font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+	margin: 0.67em 0;
+	font-weight: 400;
+	line-height: 1.1;
+	margin-top: 0px;
+	padding-top: 40px;
+	padding-bottom: 40px;
+	-webkit-margin-before: 0.67em;
+	-webkit-margin-after: 0.67em;*/
+	/*-webkit-margin-start: 0px;*/
+	/*-webkit-margin-end: 0px;*/
+}
+
+
+/* Better styles for embedding GitHub Gists */
+.gist{font-size:13px;line-height:18px;margin-bottom:20px;width:100%}
+.gist pre{font-family:Menlo,Monaco,'Bitstream Vera Sans Mono','Courier New',monospace !important}
+.gist-meta{font-family:Helvetica,Arial,sans-serif;font-size:13px !important}
+.gist-meta a{color:#26a !important;text-decoration:none}
+.gist-meta a:hover{color:#0e4071 !important}

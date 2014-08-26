@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="ico/favicon.ico">
+
+    <title>AppSensor - Application Intrusion Detection and Response</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">  
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <link href="css/jumbotron.css" rel="stylesheet">
+    <!-- <link href="css/carousel.css" rel="stylesheet"> -->
+    <link href="css/appsensor.css" rel="stylesheet">
+
+    <script>
+      $(function() {
+        $( "#tabs" ).tabs();
+      });
+    </script>
+  </head>
+  
+  <!-- NAVBAR
+================================================== -->
+  <body>
+    <a href="https://github.com/jtmelton/appsensor"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 100" src="img/gh_fork.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+    <div class="navbar-wrapper">
+      <div class="container">
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation"> <!-- navbar-inverse -->
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">AppSensor</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="overview.html">Overview</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="user-guide.html">User Guide</a></li>
+                <li class="active"><a href="documentation.html">Documentation</a></li>
+                <li><a href="https://www.owasp.org/index.php/OWASP_AppSensor_Project" target="_blank"><i class="fa fa-globe fa-lg"></i> OWASP</a></li>
+                <li><a href="#"></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- page header -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="pageheader">Version 2 Design</h1>
+        <hr class="bluehr" />
+      </div>
+    </div>
+
+    <div class="container">
+
+      <p class="lead">
+        This page describes the design ideas that drove the development of AppSensor version 2.  
+      </p>
+
+      <p>&nbsp;</p><h2><i class="fa fa-times-circle-o fa-lg"></i>&nbsp;&nbsp;&nbsp; V1 Problems</h2><hr /><p>&nbsp;</p>
+
+      <ul>
+        <li>
+          </p><h3>Java-Only</h3>
+          <p>
+            In version 1 ...  
+          </p>
+          <p>&nbsp;</p>
+        </li>
+        <li>
+          <h3>Single Execution Mode - Embedded</h3>
+          <p>
+            In version 1 ...  
+          </p>
+          <p>&nbsp;</p>
+        </li>
+        <li>
+          <h3>Hard Dependency on ESAPI</h3>
+          <p>
+            In version 1 ...  
+          </p>
+          <p>&nbsp;</p>
+        </li>
+        <li>
+          <h3>Reference Implementation Only</h3>
+          <p>
+            In version 1 ... heavily reliant on reference implementations
+          </p>
+          <p>&nbsp;</p>
+        </li>
+      </ul>
+
+      <p>&nbsp;</p><h2><i class="fa fa-check-circle-o fa-lg"></i>&nbsp;&nbsp;&nbsp; V2 Solutions and Major Features</h2><hr /><p>&nbsp;</p>
+      
+      <ul>
+        <li>
+          <h3>Any Client Language</h3>
+          <p>
+            In version 2 ...
+          </p>
+          <p>&nbsp;</p>
+        </li>
+        <li>
+          <h3>Multiple Execution Mode - Embedded / REST / SOAP</h3>
+          <p>
+            In version 2 ...  
+          </p>
+          <p>&nbsp;</p>
+        </li>
+        <li>
+          <h3>No ESAPI Dependency</h3>
+          <p>
+            In version 2 ...  
+          </p>
+          <p>&nbsp;</p>
+        </li>
+        <li>
+          <h3>Pluggable Implementation Model</h3>
+          <p>
+            In version 2 ...  
+          </p>
+          <p>&nbsp;</p>
+        </li>
+        <li>
+          <h3>Dependency Injection</h3>
+          <p>
+            In version 2 ... it's simpler since dependencies are auto-injected, so as long as the implementation is on the classpath, it gets used, as opposed to having everything on the classpath and loading the appropriate classpath via explicit declaration. 
+          </p>
+          <p>&nbsp;</p>
+        </li>
+      </ul>
+
+      <p>&nbsp;</p><h2><i class="fa fa-exchange fa-lg"></i>&nbsp;&nbsp;&nbsp; V2 Trade-Offs</h2><hr /><p>&nbsp;</p>
+
+      <ul>
+        <li>
+          <h3>Client Authentication Punted</h3>
+          <p>
+            In version 2 ...  
+            Trade-off to make user implement authentication, but added flexibility that it can be anything you want 
+            (can do basic auth, client cert auth, even roll your own token system)
+          </p>
+          <p>&nbsp;</p>
+        </li>
+        <li>
+          <h3>Configuration Setup Time</h3>
+          <p>
+            In version 2 ...  
+            Trade-off that there is configuration, but we offer reference implementations and you're basically lego-building the tool you want  
+          </p>
+          <p>&nbsp;</p>
+        </li>
+        <li>
+          <h3>ESAPI Integration Complexity</h3>
+          <p>
+            In version 2 ...  
+            Trade-off that plugging in ESAPI is not as simple as it was
+          </p>
+          <p>&nbsp;</p>
+        </li>
+      </ul>
+
+      <hr />
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 OWASP &middot; <a href="https://lists.owasp.org/listinfo/owasp-appsensor-project">Contact the Mailing List</a> &middot; <a href="https://www.owasp.org/index.php/OWASP_AppSensor_Project">AppSensor at OWASP</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="js/appsensor.js"></script>
+  </body>
+</html>

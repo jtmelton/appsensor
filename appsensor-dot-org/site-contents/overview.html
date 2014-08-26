@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="ico/favicon.ico">
+
+    <title>AppSensor - Application Intrusion Detection and Response</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">  
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <link href="css/jumbotron.css" rel="stylesheet">
+    <!-- <link href="css/carousel.css" rel="stylesheet"> -->
+    <link href="css/appsensor.css" rel="stylesheet">
+
+    <script>
+      $(function() {
+        $( "#tabs" ).tabs();
+      });
+    </script>
+  </head>
+  
+  <!-- NAVBAR
+================================================== -->
+  <body>
+    <a href="https://github.com/jtmelton/appsensor"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 100" src="img/gh_fork.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+    <div class="navbar-wrapper">
+      <div class="container">
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation"> <!-- navbar-inverse -->
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">AppSensor</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="index.html">Home</a></li>
+                <li class="active"><a href="overview.html">Overview</a></li>
+                <li><a href="getting-started.html">Getting Started</a></li>
+                <li><a href="user-guide.html">User Guide</a></li>
+                <li><a href="documentation.html">Documentation</a></li>
+                <li><a href="https://www.owasp.org/index.php/OWASP_AppSensor_Project" target="_blank"><i class="fa fa-globe fa-lg"></i> OWASP</a></li>
+                <li><a href="#"></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- page header -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="pageheader">Overview</h1>
+        <hr class="bluehr" />
+      </div>
+    </div>
+
+    <div class="container">
+      
+      <div class="row alert alert-info">
+        <div class="col-md-1 text-center">
+          <i class="fa fa-info-circle fa-lg glyph3"></i>
+        </div>
+        <div class="col-md-11">
+          While this site primarily discusses the reference implementation of AppSensor, this page describes any AppSensor-like system.
+        </div>
+      </div>
+
+      <p>&nbsp;</p><h2><i class="fa fa-file-text-o fa-lg"></i>&nbsp;&nbsp;&nbsp; Read the Documentation</h2><hr />
+
+      <p>
+        The AppSensor Guide can be found here: [<a href="https://www.owasp.org/index.php/OWASP_AppSensor_Project" title="AppSensor Guide">https://www.owasp.org/index.php/OWASP_AppSensor_Project</a>]. The guide contains extensive discussions of the methodology behind AppSensor. There are various topics covered, including: 
+        <ul>
+          <li>Overview of AppSensor</li>
+          <li>Motivation for AppSensor</li>
+          <li>Benefits of AppSensor</li>
+          <li>Illustrative Case Studies</li>
+          <li>Possible Deployment Models</li>
+          <li>System Design Considerations</li>
+          <li>System Integration Considerations</li>
+          <li>Dashboard Design Concepts</li>
+        </ul>
+      </p>
+
+      <p>
+        The guide is the best resource for comprehensive coverage of the AppSensor concept as well as coverage of design ideas that are not used by the reference implementation.
+      </p>
+
+      <p>&nbsp;</p><h2><i class="fa fa-wrench fa-lg"></i>&nbsp;&nbsp;&nbsp; Configure AppSensor</h2><hr />
+
+      <p>
+        Any AppSensor system will need some measure of configuration and setup. One defining characteristic for any AppSensor system is the methods of analysis that are supported. While the guide describes several (behavioral, model-driven, expert-system, stochastic, etc.), the simplest and that chosen by the reference implementation is a policy-driven analysis solution. This section briefly describes the steps involved in configuring a policy upon which to base your analysis.
+      </p>
+
+      <p>
+        There are a few primary components of policy-based configuration: 
+        <ul>
+          <li>Detection Points</li>
+          <li>Thresholds</li>
+          <li>Responses</li>
+        </ul>
+      </p>
+
+      <p>We'll cover each of these briefly.</p>
+
+      <h4>Detection Points</h4>
+      <p>
+        Detection Points (<a href="https://www.owasp.org/index.php/AppSensor_DetectionPoints" title="Detection Points">examples here</a>) represent the specific concerns you are interested in detecting within your application. These are suspcicious activities that may trigger an attack if detected with a certain frequency (defined by the threshold). Part of policy configuration is defining the detection points that your application should be able to handle. 
+      </p>
+
+      <h4>Thresholds</h4>
+      <p>
+        Thresholds are simple definitions used to determine the acceptable number of events over a given period of time, for a given user or group of users. An example might be: 
+        <pre>3 IE2 events in 5 minutes for an individual user represents an attack.</pre>
+      </p>
+
+      <p>There can be more complex definitions of thresholds, namely trends, but these may or may not be necessary in your system.</p>
+
+      <h4>Responses</h4>
+      <p>
+        Responses (<a href="https://www.owasp.org/index.php/AppSensor_ResponseActions" title="Responses">examples here</a>) are actions taken as the result of detecting that a certain detection point has crossed its' configured threshold, and therefore now represents an attack. Responses allow you to handle an attack in any way you like, given policy and legal requirements. The reference implementation allows for a chained response order, in which several responses can be configured, and executed as subsequent attacks for the same detection point are registered in the system.
+      </p>
+
+      <p>&nbsp;</p><h2><i class="fa fa-sliders fa-lg"></i>&nbsp;&nbsp;&nbsp; Instrument Your System</h2><hr />
+
+      <p>
+        Another key component of a functional AppSensor is the system instrumentation. In order to detect and respond to events, the application and its' surrounding components must be capable of performing the initial event detection. The AppSensor system is responsible for evaluating where an event or series of events constitutes an attack as well as finding the appropriate response for said attack. However, the initial event detection is handled outside AppSensor. There are various ways for this to occur: 
+        <ul>
+          <li>The application itself is augmented to detect events (most common)</li>
+          <li>A WAF or some other security component external to the application detects events and/or attacks and reports them to AppSensor</li>
+          <li>Application frameworks are modified, so the detection code is re-usable across applications (see ESAPI)</li>
+        </ul>
+      </p>
+
+      <p>
+        Whatever mechanism or set of mechanisms you use, instrumentation is critical as detection must happen first before analysis and response can occur within the AppSensor architecture.
+      </p>
+
+      <p>&nbsp;</p><h2><i class="fa fa-eye fa-lg"></i>&nbsp;&nbsp;&nbsp; Deploy and Monitor</h2><hr />
+
+      <p>
+        The last step is deployment and monitoring. As with any production system, you must first test, then deploy your AppSensor system. 
+      </p>
+      <p>
+        However, the AppSensor system is somewhat unique in that it is intended to be a monitored and tweaked system. The detection points, thresholds and responses should be evaluated on a regular basis for their efficacy within your environment. The <a href="https://www.owasp.org/index.php/OWASP_AppSensor_Project" title="AppSensor Guide">AppSensor Guide</a> provides great planning resources and details about how to perform this step effectively. The insights in the guide should allow you to grow AppSensor with your deployed system.
+      </p>
+
+      <p>&nbsp;</p><h2>Summary</h2><hr />
+
+      <p>
+        With proper planning, configuration, deployment and monitoring, AppSensor should be an extremely useful part of your infrastructure and lead to enhanced security awareness and an improved security posture.
+      </p>
+
+      <hr />
+
+      <!-- /END THE FEATURETTES -->
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2014 OWASP &middot; <a href="https://lists.owasp.org/listinfo/owasp-appsensor-project">Contact the Mailing List</a> &middot; <a href="https://www.owasp.org/index.php/OWASP_AppSensor_Project">AppSensor at OWASP</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="js/appsensor.js"></script>
+  </body>
+</html>
