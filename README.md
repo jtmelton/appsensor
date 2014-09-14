@@ -7,7 +7,7 @@ This is the repository for the latest version (v2) of AppSensor.
 
 The project requires Java version 7 or higher.
 
-This code is under active development and is to be considered alpha at this point. 
+This code is under active development and is to be considered BETA at this point. 
 
 Contributing
 ------------
