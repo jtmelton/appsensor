@@ -15,7 +15,7 @@ Each deploy:
 	- from folder w/ app.yaml, run 'python ~/development/google_appengine/appcfg.py --oauth2 update .'
 	
 - for a snapshot deployment: 
-	- ensure all versions end in '-SNAPSHOT' (run 'mvn versions:set -DnewVersion=1.2.3-SNAPSHOT')
+	- ensure all versions end in '-SNAPSHOT' (run 'mvn versions:set -DnewVersion=1.2.3-SNAPSHOT -DgenerateBackupPoms=false')
 	- run 'mvn clean deploy'
 	
 - for a release deployment: 
