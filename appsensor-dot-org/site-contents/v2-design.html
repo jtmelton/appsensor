@@ -162,9 +162,15 @@
         <li>
           <h3>Client Authentication Punted</h3>
           <p>
-            In version 2 ...  
-            Trade-off to make user implement authentication, but added flexibility that it can be anything you want 
-            (can do basic auth, client cert auth, even roll your own token system)
+            In version 2, we decided to take the trade-off to make the developer (you) implement authentication, but this adds the flexibility 
+            that it can be anything you want (can do basic auth, client cert auth, even roll your own token system), whereas we would have likely
+            supported a small number of options. By leveraging existing web server authentication mechanisms, we feel this trade-off lets us rely 
+            on existing systems for authentication and focus our efforts on attack detection and response. 
+          </p>
+          <p>
+          	For those interested, we have posted sample instructions for configuring a web server (apache2 in this case) as a reverse proxy for 
+          	appsensor using HTTP Basic authentication for client applications, which then converts that to the appsensor authentication request header.
+          	The notes are posted <a href="https://github.com/jtmelton/appsensor/blob/master/documentation/apache_reverse_proxy_configuration.txt">here</a>.
           </p>
           <p>&nbsp;</p>
         </li>
