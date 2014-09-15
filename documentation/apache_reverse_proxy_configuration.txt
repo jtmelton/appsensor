@@ -1,0 +1,64 @@
+Setting Up Apache2 as a Reverse Proxy For Authentication
+---------------------------------------------------------
+1. Install Apache2
+
+2. Enable necessary modules: 
+
+a2enmod proxy
+a2enmod proxy_http
+# optional
+a2enmod proxy_ajp
+a2enmod rewrite
+a2enmod deflate
+a2enmod headers
+a2enmod proxy_connect
+a2enmod auth_basic
+a2enmod authn_file
+a2enmod authz_user
+
+3. Create new user/password file: 
+
+# htpasswd -c /etc/apache2/test_appsensor_passwords user1
+New password: xxx
+Re-type new password: xxx	
+Adding password for user user1
+# htpasswd /etc/apache2/test_appsensor_passwords user2
+New password: xxx
+Re-type new password: xxx	
+Adding password for user user2
+
+4. Configure apache2
+
+# Reverse proxy - no need for request proxying
+ProxyRequests Off
+# Setup passthrough
+ProxyPass /appsensor_test1 http://localhost:8080/sample-appsensor-ws-rest-server/data
+
+<Location /appsensor_test1>
+	# Map reverse passthrough
+  	ProxyPassReverse /appsensor_test1
+
+	# HTTP basic auth
+  	AuthType Basic
+  	AuthName "Secure Content"
+	# Credentials are stored in the htpasswd controlled file
+  	AuthBasicProvider file
+	# This is the location of the htpasswd controlled file
+  	AuthUserFile /etc/apache2/test_appsensor_passwords
+	# Must be authenticated to proceed
+  	Require valid-user
+
+	# Lines below add the "X-Appsensor-Client-Application-Name" header 
+	# and set it's value to the currently authenticated user
+    	RewriteEngine On
+    	RewriteCond %{LA-U:REMOTE_USER} (.+)
+    	RewriteRule . - [E=RU:%1]
+    	RequestHeader set X-Appsensor-Client-Application-Name "%{RU}e" env=RU
+</Location>
+
+5. Login. 
+
+http://localhost/appsensor_test1
+
+You will be promted for your basic auth credentials, and then sent on to the passthrough page
+
