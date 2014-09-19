@@ -2,9 +2,10 @@ package org.owasp.appsensor.analysis;
 
 import javax.inject.Named;
 
-import org.owasp.appsensor.Response;
-import org.owasp.appsensor.logging.Loggable;
-import org.owasp.appsensor.storage.ResponseStore;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.analysis.ResponseAnalysisEngine;
+import org.owasp.appsensor.core.logging.Loggable;
+import org.owasp.appsensor.core.storage.ResponseStore;
 import org.slf4j.Logger;
 
 /**

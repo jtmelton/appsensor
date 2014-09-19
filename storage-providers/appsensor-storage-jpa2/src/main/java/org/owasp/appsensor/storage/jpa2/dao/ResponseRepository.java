@@ -5,7 +5,7 @@ import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.owasp.appsensor.Response;
+import org.owasp.appsensor.core.Response;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
-import org.owasp.appsensor.AppSensorServer;
+import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.handler.RestRequestHandler;
 
 /**

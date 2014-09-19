@@ -2,9 +2,13 @@ package org.owasp.appsensor.accesscontrol;
 
 import javax.inject.Named;
 
-import org.owasp.appsensor.ClientApplication;
-import org.owasp.appsensor.exceptions.NotAuthorizedException;
-import org.owasp.appsensor.logging.Loggable;
+import org.owasp.appsensor.core.ClientApplication;
+import org.owasp.appsensor.core.accesscontrol.AccessController;
+import org.owasp.appsensor.core.accesscontrol.Action;
+import org.owasp.appsensor.core.accesscontrol.Context;
+import org.owasp.appsensor.core.accesscontrol.Role;
+import org.owasp.appsensor.core.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.core.logging.Loggable;
 import org.slf4j.Logger;
 
 /**

@@ -4,12 +4,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.container.ContainerRequestContext;
 
-import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.ClientApplication;
-import org.owasp.appsensor.RequestHandler;
-import org.owasp.appsensor.accesscontrol.Action;
-import org.owasp.appsensor.accesscontrol.Context;
-import org.owasp.appsensor.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.core.AppSensorServer;
+import org.owasp.appsensor.core.ClientApplication;
+import org.owasp.appsensor.core.RequestHandler;
+import org.owasp.appsensor.core.accesscontrol.Action;
+import org.owasp.appsensor.core.accesscontrol.Context;
+import org.owasp.appsensor.core.exceptions.NotAuthorizedException;
 
 /**
  * This is a simple helper class for performing access control checks for REST requests.

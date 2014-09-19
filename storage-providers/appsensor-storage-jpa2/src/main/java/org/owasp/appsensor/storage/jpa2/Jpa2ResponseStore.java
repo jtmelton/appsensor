@@ -7,15 +7,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.joda.time.DateTime;
-import org.owasp.appsensor.Event;
-import org.owasp.appsensor.Response;
-import org.owasp.appsensor.User;
-import org.owasp.appsensor.criteria.SearchCriteria;
-import org.owasp.appsensor.listener.ResponseListener;
-import org.owasp.appsensor.logging.Loggable;
-import org.owasp.appsensor.storage.ResponseStore;
+import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.User;
+import org.owasp.appsensor.core.criteria.SearchCriteria;
+import org.owasp.appsensor.core.listener.ResponseListener;
+import org.owasp.appsensor.core.logging.Loggable;
+import org.owasp.appsensor.core.storage.ResponseStore;
+import org.owasp.appsensor.core.util.DateUtils;
 import org.owasp.appsensor.storage.jpa2.dao.ResponseRepository;
-import org.owasp.appsensor.util.DateUtils;
 import org.slf4j.Logger;
 
 /**

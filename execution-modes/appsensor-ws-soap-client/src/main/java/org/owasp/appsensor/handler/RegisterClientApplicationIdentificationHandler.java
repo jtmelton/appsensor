@@ -11,7 +11,7 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
-import org.owasp.appsensor.AppSensorClient;
+import org.owasp.appsensor.core.AppSensorClient;
 
 /**
  * This is the jax-ws SOAP handler that adds authentication info 

@@ -6,15 +6,16 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.Attack;
-import org.owasp.appsensor.DetectionPoint;
-import org.owasp.appsensor.Interval;
-import org.owasp.appsensor.Response;
-import org.owasp.appsensor.criteria.SearchCriteria;
-import org.owasp.appsensor.logging.Loggable;
-import org.owasp.appsensor.storage.AttackStore;
-import org.owasp.appsensor.storage.ResponseStore;
+import org.owasp.appsensor.core.AppSensorServer;
+import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.Interval;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.analysis.AttackAnalysisEngine;
+import org.owasp.appsensor.core.criteria.SearchCriteria;
+import org.owasp.appsensor.core.logging.Loggable;
+import org.owasp.appsensor.core.storage.AttackStore;
+import org.owasp.appsensor.core.storage.ResponseStore;
 import org.slf4j.Logger;
 
 /**

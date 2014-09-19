@@ -10,8 +10,8 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
-import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.exceptions.NotAuthenticatedException;
+import org.owasp.appsensor.core.AppSensorServer;
+import org.owasp.appsensor.core.exceptions.NotAuthenticatedException;
 import org.springframework.stereotype.Service;
 
 /**

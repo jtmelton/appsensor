@@ -12,11 +12,12 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
 import org.joda.time.DateTime;
-import org.owasp.appsensor.AppSensorClient;
-import org.owasp.appsensor.Attack;
-import org.owasp.appsensor.Event;
-import org.owasp.appsensor.Response;
-import org.owasp.appsensor.util.DateUtils;
+import org.owasp.appsensor.core.AppSensorClient;
+import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.event.EventManager;
+import org.owasp.appsensor.core.util.DateUtils;
 
 /**
  * This event manager should perform rest style requests since it functions

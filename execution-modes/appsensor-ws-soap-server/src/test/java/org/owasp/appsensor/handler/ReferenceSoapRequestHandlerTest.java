@@ -17,11 +17,11 @@ import javax.xml.ws.handler.Handler;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.owasp.appsensor.AppSensorClient;
-import org.owasp.appsensor.DetectionPoint;
-import org.owasp.appsensor.Event;
-import org.owasp.appsensor.User;
-import org.owasp.appsensor.util.DateUtils;
+import org.owasp.appsensor.core.AppSensorClient;
+import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.User;
+import org.owasp.appsensor.core.util.DateUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 

@@ -16,10 +16,11 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 
-import org.owasp.appsensor.Attack;
-import org.owasp.appsensor.Event;
-import org.owasp.appsensor.Response;
-import org.owasp.appsensor.logging.Loggable;
+import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.logging.Loggable;
+import org.owasp.appsensor.core.reporting.ReportingEngine;
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;

@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.owasp.appsensor.configuration.server.ServerConfiguration;
-import org.owasp.appsensor.configuration.server.StaxServerConfigurationReader;
-import org.owasp.appsensor.exceptions.ConfigurationException;
+import org.owasp.appsensor.configuration.stax.server.StaxServerConfigurationReader;
+import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
+import org.owasp.appsensor.core.exceptions.ConfigurationException;
 
 public class DemoDataPopulatorServlet extends HttpServlet {
 

@@ -12,13 +12,14 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.Attack;
-import org.owasp.appsensor.Event;
-import org.owasp.appsensor.Response;
-import org.owasp.appsensor.accesscontrol.Action;
-import org.owasp.appsensor.criteria.SearchCriteria;
-import org.owasp.appsensor.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.core.AppSensorServer;
+import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.accesscontrol.Action;
+import org.owasp.appsensor.core.criteria.SearchCriteria;
+import org.owasp.appsensor.core.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.core.reporting.ReportingEngine;
 import org.owasp.appsensor.rest.AccessControlUtils;
 
 /**

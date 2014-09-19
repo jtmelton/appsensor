@@ -4,11 +4,11 @@ import java.util.Collection;
 
 import javax.jws.WebService;
 
-import org.owasp.appsensor.Attack;
-import org.owasp.appsensor.Event;
-import org.owasp.appsensor.RequestHandler;
-import org.owasp.appsensor.Response;
-import org.owasp.appsensor.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.RequestHandler;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.exceptions.NotAuthorizedException;
 
 /**
  * This is the soap endpoint interface for handling requests on the server-side. 

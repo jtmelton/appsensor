@@ -14,17 +14,17 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.Attack;
-import org.owasp.appsensor.Event;
-import org.owasp.appsensor.RequestHandler;
-import org.owasp.appsensor.Response;
-import org.owasp.appsensor.accesscontrol.Action;
-import org.owasp.appsensor.criteria.SearchCriteria;
-import org.owasp.appsensor.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.core.AppSensorServer;
+import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.RequestHandler;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.accesscontrol.Action;
+import org.owasp.appsensor.core.criteria.SearchCriteria;
+import org.owasp.appsensor.core.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.core.util.StringUtils;
 import org.owasp.appsensor.rest.AccessControlUtils;
 import org.owasp.appsensor.rest.filter.ClientApplicationIdentificationFilter;
-import org.owasp.appsensor.util.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

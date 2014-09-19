@@ -14,15 +14,15 @@ import javax.jws.WebService;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
-import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.Attack;
-import org.owasp.appsensor.ClientApplication;
-import org.owasp.appsensor.Event;
-import org.owasp.appsensor.Response;
-import org.owasp.appsensor.accesscontrol.Action;
-import org.owasp.appsensor.criteria.SearchCriteria;
-import org.owasp.appsensor.exceptions.NotAuthorizedException;
-import org.owasp.appsensor.util.StringUtils;
+import org.owasp.appsensor.core.AppSensorServer;
+import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.ClientApplication;
+import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.accesscontrol.Action;
+import org.owasp.appsensor.core.criteria.SearchCriteria;
+import org.owasp.appsensor.core.exceptions.NotAuthorizedException;
+import org.owasp.appsensor.core.util.StringUtils;
 
 /**
  * This is the soap endpoint that handles requests on the server-side. 
@@ -98,7 +98,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 
 		ClientApplication clientApplication = appSensorServer.getConfiguration().findClientApplication(clientApplicationName);
 		
-		org.owasp.appsensor.accesscontrol.Context context = new org.owasp.appsensor.accesscontrol.Context();
+		org.owasp.appsensor.core.accesscontrol.Context context = new org.owasp.appsensor.core.accesscontrol.Context();
 		
 		appSensorServer.getAccessController().assertAuthorized(clientApplication, action, context);
 	}

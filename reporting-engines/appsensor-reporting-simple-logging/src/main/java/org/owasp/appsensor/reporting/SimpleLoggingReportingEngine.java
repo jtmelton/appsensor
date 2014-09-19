@@ -4,13 +4,14 @@ import java.util.Collection;
 
 import javax.inject.Named;
 
-import org.owasp.appsensor.Attack;
-import org.owasp.appsensor.Event;
-import org.owasp.appsensor.Response;
-import org.owasp.appsensor.logging.Loggable;
-import org.owasp.appsensor.storage.AttackStoreListener;
-import org.owasp.appsensor.storage.EventStoreListener;
-import org.owasp.appsensor.storage.ResponseStoreListener;
+import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.logging.Loggable;
+import org.owasp.appsensor.core.reporting.ReportingEngine;
+import org.owasp.appsensor.core.storage.AttackStoreListener;
+import org.owasp.appsensor.core.storage.EventStoreListener;
+import org.owasp.appsensor.core.storage.ResponseStoreListener;
 import org.slf4j.Logger;
 
 /**

@@ -17,8 +17,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.owasp.appsensor.Response;
-import org.owasp.appsensor.util.DateUtils;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.util.DateUtils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 

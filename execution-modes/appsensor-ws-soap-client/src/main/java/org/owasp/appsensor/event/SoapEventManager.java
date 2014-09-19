@@ -13,13 +13,14 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.handler.Handler;
 
-import org.owasp.appsensor.AppSensorClient;
-import org.owasp.appsensor.Attack;
-import org.owasp.appsensor.Event;
-import org.owasp.appsensor.Response;
+import org.owasp.appsensor.core.AppSensorClient;
+import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.event.EventManager;
+import org.owasp.appsensor.core.util.DateUtils;
 import org.owasp.appsensor.handler.RegisterClientApplicationIdentificationHandler;
 import org.owasp.appsensor.handler.SoapRequestHandler;
-import org.owasp.appsensor.util.DateUtils;
 import org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean;
 
 /**

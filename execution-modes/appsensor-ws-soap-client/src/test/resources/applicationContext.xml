@@ -10,7 +10,7 @@ xsi:schemaLocation="
 	</bean>
 
     <context:component-scan base-package="org.owasp.appsensor">
-    	<context:exclude-filter type="regex" expression="org\.owasp\.appsensor\.event\.LocalEventManager"/>
+    	<context:exclude-filter type="regex" expression="org\.owasp\.appsensor\.local\.event\.LocalEventManager"/>
     </context:component-scan>
  
 </beans>

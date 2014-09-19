@@ -5,15 +5,15 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import org.owasp.appsensor.AppSensorClient;
-import org.owasp.appsensor.AppSensorServer;
-import org.owasp.appsensor.DetectionPoint;
-import org.owasp.appsensor.Event;
-import org.owasp.appsensor.Interval;
-import org.owasp.appsensor.Response;
-import org.owasp.appsensor.Threshold;
-import org.owasp.appsensor.User;
-import org.owasp.appsensor.configuration.server.ServerConfiguration;
+import org.owasp.appsensor.core.AppSensorClient;
+import org.owasp.appsensor.core.AppSensorServer;
+import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.Interval;
+import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.Threshold;
+import org.owasp.appsensor.core.User;
+import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
 
 /**
  * Provide demo data for websockets test web app.

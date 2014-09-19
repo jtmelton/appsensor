@@ -6,23 +6,23 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-    <bean class="org.owasp.appsensor.storage.FileBasedEventStore">
+    <bean class="org.owasp.appsensor.storage.file.FileBasedEventStore">
 	    <property name="filePath" value="/tmp"/>
 	    <property name="fileName" value="as_events.txt"/>
 	</bean>
 	
-	<bean class="org.owasp.appsensor.storage.FileBasedAttackStore">
+	<bean class="org.owasp.appsensor.storage.file.FileBasedAttackStore">
 	    <property name="filePath" value="/tmp"/>
 	    <property name="fileName" value="as_attacks.txt"/>
 	</bean>
 	
-	<bean class="org.owasp.appsensor.storage.FileBasedResponseStore">
+	<bean class="org.owasp.appsensor.storage.file.FileBasedResponseStore">
 	    <property name="filePath" value="/tmp"/>
 	    <property name="fileName" value="as_responses.txt"/>
 	</bean>
 
     <context:component-scan base-package="org.owasp.appsensor">
-    	<context:exclude-filter type="regex" expression="org\.owasp\.appsensor\.storage\.FileBased.*"/>
+    	<context:exclude-filter type="regex" expression="org\.owasp\.appsensor\.storage\.file\.FileBased.*"/>
     </context:component-scan>
     
 </beans>
