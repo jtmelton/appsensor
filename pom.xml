@@ -36,12 +36,6 @@
 			<id>ossrh</id>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
-
-		<!-- <repository>
-			<id>sonatype-nexus-releases</id>
-			<name>Sonatype Nexus Releases</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository> -->
 	</distributionManagement>
 
 	<mailingLists>
@@ -124,12 +118,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<!-- <parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent> -->
 
 	<build>
 		<plugins>

@@ -32,13 +32,6 @@
 		</dependency>
             
 	</dependencies>
-
- 	<!-- <parent>
-		<groupId>org.owasp.appsensor</groupId>
-	  	<artifactId>appsensor-parent</artifactId>
-		<version>${project.version}</version>
-		<relativePath>../../appsensor-parent/pom.xml</relativePath>
-	</parent>  -->
 	
 	<build>
 		<plugins>
