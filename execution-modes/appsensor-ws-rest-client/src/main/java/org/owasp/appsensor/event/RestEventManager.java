@@ -11,13 +11,11 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
-import org.joda.time.DateTime;
 import org.owasp.appsensor.core.AppSensorClient;
 import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.event.EventManager;
-import org.owasp.appsensor.core.util.DateUtils;
 
 /**
  * This event manager should perform rest style requests since it functions
@@ -73,17 +71,17 @@ public class RestEventManager implements EventManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Response> getResponses() {
+	public Collection<Response> getResponses(String earliest) {
 		GenericType<Collection<Response>> responseType = new GenericType<Collection<Response>>() {};
         
-        DateTime twoHoursAgo = DateUtils.getCurrentTimestamp().minusHours(2);
+//        DateTime twoHoursAgo = DateUtils.getCurrentTimestamp().minusHours(2);
 
 		Collection<Response> responses = 
 		        target
 				.path("api")
 				.path("v1.0")
 				.path("responses")
-				.queryParam("earliest", twoHoursAgo.toString())	//2 hrs ago
+				.queryParam("earliest", earliest)
 				.request()
 				.header(clientApplicationIdName, clientApplicationIdValue)
 				.get(responseType);

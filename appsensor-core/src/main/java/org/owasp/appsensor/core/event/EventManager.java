@@ -34,5 +34,5 @@ public interface EventManager {
 	 *  
 	 * @return a Collection of {@link Response} objects 
 	 */
-	public Collection<Response> getResponses();
+	public Collection<Response> getResponses(String earliest);
 }

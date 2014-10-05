@@ -33,7 +33,7 @@ public class NoopEventManager implements EventManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Response> getResponses() {
+	public Collection<Response> getResponses(String earliest) {
 		Collection<Response> responses = new ArrayList<Response>();
 		return responses;
 	}

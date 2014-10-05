@@ -18,7 +18,6 @@ import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.event.EventManager;
-import org.owasp.appsensor.core.util.DateUtils;
 import org.owasp.appsensor.handler.RegisterClientApplicationIdentificationHandler;
 import org.owasp.appsensor.handler.SoapRequestHandler;
 import org.springframework.remoting.jaxws.JaxWsPortProxyFactoryBean;
@@ -62,10 +61,10 @@ public class SoapEventManager implements EventManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Response> getResponses() {
+	public Collection<Response> getResponses(String earliest) {
 		initializeService();
 		
-		Collection<Response> responses = soapService.getResponses(DateUtils.getCurrentTimestamp().minusHours(10).toString());
+		Collection<Response> responses = soapService.getResponses(earliest);
 		return responses;
 	}
 	

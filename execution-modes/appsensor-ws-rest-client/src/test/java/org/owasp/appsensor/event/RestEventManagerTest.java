@@ -33,6 +33,8 @@ import org.owasp.appsensor.storage.file.FileBasedResponseStore;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.google.gson.Gson;
+
 /**
  * Test basic rest request handling. 
  * 
@@ -87,6 +89,8 @@ public class RestEventManagerTest {
 				setDetectionPoint(detectionPoint1).
 				setDetectionSystemIds(detectionSystems1);
 		
+		Gson gson = new Gson();
+		System.err.println(gson.toJson(new Event(bob, detectionPoint1, "localhostme")));
 		assertEquals(0, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		

@@ -5,13 +5,11 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.joda.time.DateTime;
 import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.event.EventManager;
 import org.owasp.appsensor.core.logging.Loggable;
-import org.owasp.appsensor.core.util.DateUtils;
 import org.owasp.appsensor.local.handler.LocalRequestHandler;
 import org.slf4j.Logger;
 
@@ -32,7 +30,7 @@ public class LocalEventManager implements EventManager {
 	@Inject
 	private LocalRequestHandler requestHandler;
 	
-	private DateTime responsesLastChecked = DateUtils.getCurrentTimestamp();
+//	private DateTime responsesLastChecked = DateUtils.getCurrentTimestamp();
 	
 	/**
 	 * {@inheritDoc}
@@ -54,13 +52,14 @@ public class LocalEventManager implements EventManager {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Collection<Response> getResponses() {
-		Collection<Response> responses = requestHandler.getResponses(responsesLastChecked.toString());
-		
-		//now update last checked
-		responsesLastChecked = DateUtils.getCurrentTimestamp();
-		
-		return responses;
+	public Collection<Response> getResponses(String earliest) {
+		return requestHandler.getResponses(earliest);
+//		Collection<Response> responses = requestHandler.getResponses(responsesLastChecked.toString());
+//		
+//		//now update last checked
+//		responsesLastChecked = DateUtils.getCurrentTimestamp();
+//		
+//		return responses;
 	}
 	
 }
