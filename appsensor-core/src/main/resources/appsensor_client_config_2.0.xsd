@@ -11,6 +11,7 @@
 			<xsd:enumeration value="local" />
 			<xsd:enumeration value="soap" />
 			<xsd:enumeration value="rest" />
+			<xsd:enumeration value="thrift" />
 		</xsd:restriction>
 	</xsd:simpleType>
 	
@@ -19,6 +20,8 @@
 			<xsd:element name="url" type="xsd:string" minOccurs="1" maxOccurs="1" />
 	    	<xsd:element name="client-application-identification-header-name" type="xsd:string" minOccurs="0" maxOccurs="1" />
 	    	<xsd:element name="client-application-identification-header-value" type="xsd:string" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="port" type="xsd:int" minOccurs="0" maxOccurs="1" />
+	    	<xsd:element name="socket-timeout-ms" type="xsd:int" minOccurs="0" maxOccurs="1" />
 	    </xsd:sequence>
 	</xsd:complexType>
 	 

@@ -29,6 +29,12 @@ public class ServerConnection {
 	/** The client application identifier header value */
 	private String clientApplicationIdentificationHeaderValue;
 	
+	/** The port to connect to - optional and used only in certain protocols (ie. thrift) */
+	private int port;
+	
+	/** The socket timeout for the connection (in milliseconds) - optional and used only in certain protocols (ie. thrift) */
+	private int socketTimeout;
+	
 	public String getType() {
 		return type;
 	}
@@ -73,6 +79,26 @@ public class ServerConnection {
 		
 		return this;
 	}
+	
+	public int getPort() {
+		return port;
+	}
+
+	public ServerConnection setPort(int port) {
+		this.port = port;
+		
+		return this;
+	}
+
+	public int getSocketTimeout() {
+		return socketTimeout;
+	}
+
+	public ServerConnection setSocketTimeout(int socketTimeout) {
+		this.socketTimeout = socketTimeout;
+		
+		return this;
+	}
 
 	@Override
 	public int hashCode() {
@@ -81,6 +107,8 @@ public class ServerConnection {
 				append(url).
 				append(clientApplicationIdentificationHeaderName).
 				append(clientApplicationIdentificationHeaderValue).
+				append(port).
+				append(socketTimeout).
 				toHashCode();
 	}
 	
@@ -100,6 +128,8 @@ public class ServerConnection {
 				append(url, other.getUrl()).
 				append(clientApplicationIdentificationHeaderName, other.getClientApplicationIdentificationHeaderName()).
 				append(clientApplicationIdentificationHeaderValue, other.getClientApplicationIdentificationHeaderValue()).
+				append(port, other.getPort()).
+				append(socketTimeout, other.getSocketTimeout()).
 				isEquals();
 	}
 	
@@ -109,7 +139,9 @@ public class ServerConnection {
 				append("type", type).
 				append("url", url).
 				append("clientApplicationIdentificationHeaderName", clientApplicationIdentificationHeaderName).
-			    append("clientApplicationIdentificationHeaderValue", clientApplicationIdentificationHeaderValue).
+				append("clientApplicationIdentificationHeaderValue", clientApplicationIdentificationHeaderValue).
+				append("port", port).
+				append("socketTimeout", socketTimeout).
 			    toString();
 	}
 	

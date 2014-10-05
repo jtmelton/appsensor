@@ -123,6 +123,12 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 						//
 					} else if("config:client-application-identification-header-name".equals(name)) {
 						configuration.setClientApplicationIdentificationHeaderName(xmlReader.getElementText().trim());
+					} else if("config:server-host-name".equals(name)) {
+						configuration.setServerHostName(xmlReader.getElementText().trim());
+					} else if("config:server-port".equals(name)) {
+						configuration.setServerPort(Integer.parseInt(xmlReader.getElementText().trim()));
+					} else if("config:server-socket-timeout-ms".equals(name)) {
+						configuration.setServerSocketTimeout(Integer.parseInt(xmlReader.getElementText().trim()));
 					} else if("config:client-applications".equals(name)) {
 						configuration.getClientApplications().addAll(readClientApplications(xmlReader));
 					} else if("config:correlation-config".equals(name)) {

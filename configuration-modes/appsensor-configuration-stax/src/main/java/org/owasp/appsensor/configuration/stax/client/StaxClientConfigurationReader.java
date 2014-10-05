@@ -153,6 +153,10 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 						serverConnection.setClientApplicationIdentificationHeaderName(xmlReader.getElementText().trim());
 					} else if("config:client-application-identification-header-value".equals(name)) {
 						serverConnection.setClientApplicationIdentificationHeaderValue(xmlReader.getElementText().trim());
+					} else if("config:port".equals(name)) {
+						serverConnection.setPort(Integer.parseInt(xmlReader.getElementText().trim()));
+					} else if("config:socket-timeout-ms".equals(name)) {
+						serverConnection.setSocketTimeout(Integer.parseInt(xmlReader.getElementText().trim()));
 					} else {
 						/** unexpected start element **/
 					}

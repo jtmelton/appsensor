@@ -31,6 +31,12 @@ public abstract class ServerConfiguration {
 	
 	private Collection<ClientApplication> clientApplications = new HashSet<>();
 	
+	private String serverHostName;
+	
+	private int serverPort;
+	
+	private int serverSocketTimeout;
+	
 	private static transient Map<String, DetectionPoint> detectionPointCache = Collections.synchronizedMap(new HashMap<String, DetectionPoint>());
 	
 	private static transient Map<String, ClientApplication> clientApplicationCache = Collections.synchronizedMap(new HashMap<String, ClientApplication>());
@@ -69,6 +75,36 @@ public abstract class ServerConfiguration {
 
 	public ServerConfiguration setClientApplications(Collection<ClientApplication> clientApplications) {
 		this.clientApplications = clientApplications;
+		return this;
+	}
+
+	public String getServerHostName() {
+		return serverHostName;
+	}
+
+	public ServerConfiguration setServerHostName(String serverHostName) {
+		this.serverHostName = serverHostName;
+		
+		return this;
+	}
+
+	public int getServerPort() {
+		return serverPort;
+	}
+
+	public ServerConfiguration setServerPort(int serverPort) {
+		this.serverPort = serverPort;
+		
+		return this;
+	}
+
+	public int getServerSocketTimeout() {
+		return serverSocketTimeout;
+	}
+
+	public ServerConfiguration setServerSocketTimeout(int serverSocketTimeout) {
+		this.serverSocketTimeout = serverSocketTimeout;
+		
 		return this;
 	}
 
@@ -153,6 +189,9 @@ public abstract class ServerConfiguration {
 				append(correlationSets).
 				append(clientApplicationIdentificationHeaderName).
 				append(clientApplications).
+				append(serverHostName).
+				append(serverPort).
+				append(serverSocketTimeout).
 				toHashCode();
 	}
 	
@@ -172,6 +211,9 @@ public abstract class ServerConfiguration {
 				append(correlationSets, other.getCorrelationSets()).
 				append(clientApplicationIdentificationHeaderName, other.getClientApplicationIdentificationHeaderName()).
 				append(clientApplications, other.getClientApplications()).
+				append(serverHostName, other.getServerHostName()).
+				append(serverPort, other.getServerPort()).
+				append(serverSocketTimeout, other.getServerSocketTimeout()).
 				isEquals();
 	}
 	
@@ -182,6 +224,9 @@ public abstract class ServerConfiguration {
 			    append("correlationSets", correlationSets).
 			    append("clientApplicationIdentificationHeaderName", clientApplicationIdentificationHeaderName).
 			    append("clientApplications", clientApplications).
+			    append("serverHostName", serverHostName).
+			    append("serverPort", serverPort).
+			    append("serverSocketTimeout", serverSocketTimeout).
 			    toString();
 	}
 
