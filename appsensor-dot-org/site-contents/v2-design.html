@@ -81,30 +81,39 @@
 
       <ul>
         <li>
-          </p><h3>Java-Only</h3>
+          <h3>Java-Only</h3>
           <p>
-            In version 1 ...  
+            In version 1 the only language option was to use Java. This was primarily due to the ease of developing for a single language, 
+            particularly with the integration of various components necessary to perform all the steps in AppSensor. In addition, 
+            the Java-only requirement was related to the embedded and ESAPI issues (see below).
           </p>
           <p>&nbsp;</p>
         </li>
         <li>
           <h3>Single Execution Mode - Embedded</h3>
           <p>
-            In version 1 ...  
+            In version 1 the only runtime execution mode was embedded (called "local" in version 2). Embedded mode made sense at the time. 
+            We were building a framework to work inside applications, so it would be a library embedded inside an application. Since 
+            we also were an extension to ESAPI (below) and had a Java-only requirement (above), it made sense to continue to run in embedded
+            only mode and sacrifice the flexibility of deployment models for simplicity of the framework. 
           </p>
           <p>&nbsp;</p>
         </li>
         <li>
           <h3>Hard Dependency on ESAPI</h3>
           <p>
-            In version 1 ...  
+            In version 1 AppSensor started as a drop-in replacement for the ESAPI (v1/v2) intrusion detector. It was a viable replacement and added 
+            new features. While it wasn't a hard requirement that AppSensor work the same way the ESAPI intrusion detector worked, it made sense and 
+            kept things simple.
           </p>
           <p>&nbsp;</p>
         </li>
         <li>
-          <h3>Reference Implementation Only</h3>
+          <h3>Not Extensible</h3>
           <p>
-            In version 1 ... heavily reliant on reference implementations
+            In version 1 AppSensor was essentially a plug-in for another framework (ESAPI v1/v2). From that perspective, it was not crucial 
+            that the framework be particularly extensible. There were mechanisms for dropping in replacement storage providers, but that's about 
+            it. At the time, the simple design made sense and was sufficient.  
           </p>
           <p>&nbsp;</p>
         </li>
@@ -116,35 +125,98 @@
         <li>
           <h3>Any Client Language</h3>
           <p>
-            In version 2 ...
+            One of the primary design goals for v2 was that any application should be able to interact with AppSensor. To do that, there 
+            was a need to support any (ok, almost any) language. There are multiple ways to go about that, but given the current tools and 
+            technology landscape, the most common solution is to build an API and allow any language to talk to AppSensor "as a service".  
           </p>
           <p>&nbsp;</p>
         </li>
         <li>
           <h3>Multiple Execution Mode - Embedded / REST / SOAP</h3>
           <p>
-            In version 2 ...  
+            In order to provide wide language support, a model is needed that separates detection of events and execution of responses 
+            (client application) from the core AppSensor system (analysis engine) which performs analysis and detection of attacks, 
+            and determination of the appropriate response. 
           </p>
+          <p>
+          	In addition to language support, there was also a need for correlation across servers (load balanced) and even applications 
+          	(different applications sharing the same user base). There was also the recognition that the typical load on an AppSensor 
+          	system is pretty small given that suspicious events are not "normal" for an application and generally represent a small 
+          	subset of the requests, particularly in authenticated portions of a website, which is where AppSensor is often used. 
+          </p>
+          <p>
+          	For these primary reasons, AppSensor v2 has been re-architected to function as a client-server style system:
+          	<ul>
+				<li>
+		          	The client's responsibility is to send events that have been detected, and to receive responses, 
+		          	either by polling the server or receiving responses asynchronously (ie. websockets).  
+	          	</li>
+	          	<li>
+		          	The server's responsibility is to receive events and analyze them to determine if an attack has occurred. If so, 
+		          	the server also determines the appropriate response to take. 
+	          	</li>
+          	</ul>  
+          </p>
+          <p>
+          	There are a number of different implementations available for execution "modes". Some examples are:
+          	<ul>
+          		<li>REST (most common)</li>
+          		<li>SOAP (popular in some enterprise settings)</li>
+          		<li>Apache Thrift (speed improvements in many environments)</li>
+          		<li>Embedded (effectively the same as v1 - runs client and server in the same JVM - requires Java on both sides)</li>
+          	</ul>
+          </p>
+          
           <p>&nbsp;</p>
         </li>
         <li>
           <h3>No ESAPI Dependency</h3>
           <p>
-            In version 2 ...  
+            While it's still possible to integrate AppSensor with ESAPI, it's no longer a requirement. AppSensor is a fully standalone
+            framework. You can also integrate AppSensor with other security frameworks as well. When ESAPI 3 is completed to a reasonable 
+            degree, we'll build an integration adapter to allow you to use AppSensor as the intrusion detection component for ESAPI. 
           </p>
           <p>&nbsp;</p>
         </li>
         <li>
           <h3>Pluggable Implementation Model</h3>
           <p>
-            In version 2 ...  
+            The v2 implementation has made a significant amount of the internal structure pluggable. This means you can swap out implementations 
+            much easier for the different components of the system, up to and including the actual analysis engine. Some of the 
+            components that are swappable include:
+            <ul>
+          		<li>Analysis Engine</li>
+          		<li>Configuration</li>
+          		<li>Data Store</li>
+          		<li>Access Control</li>
+          		<li>Execution Mode</li>
+          		<li>Reporting</li>
+          	</ul>
+          </p>
+          <p>
+            While many of the implementations are pluggable, the core of the system is not. The core of the system is essentially the 
+            data model (events, attacks, responses, etc.) and the interfaces for the different pluggable components. The AppSensor core 
+            will select the implementation that you plug in and use it as long as it complies with the contract in the interface.  
           </p>
           <p>&nbsp;</p>
         </li>
         <li>
           <h3>Dependency Injection</h3>
           <p>
-            In version 2 ... it's simpler since dependencies are auto-injected, so as long as the implementation is on the classpath, it gets used, as opposed to having everything on the classpath and loading the appropriate classpath via explicit declaration. 
+          	There was a very limited dependency injection (DI) feature in v1 based on ESAPI's DI mechanism. In essence, you would explicitly 
+          	specify the class you wanted to use in a properties file and that would get constructed and used. There were some limitations, and 
+          	it was not as nice as the DI mechanism in many popular libraries used today. 
+          </p>
+          <p>
+          	To that end, we decided to use the JSR-330 DI spec, with a default implementation provided by Spring. This is a fairly standard 
+          	configuration for Java applications today, and serves our needs fairly well.  
+          </p>
+          <p>
+            In order to use the DI feature, it's actually simpler since dependencies are auto-injected, so as long as the implementation is on 
+            the classpath. In order to do this, you essentially are configuring the DI setup when you setup your dependency management 
+            configuration (maven, gradle, etc.) By specifying only the implementations you want, your system will be ready to use those 
+            implementations. Changing your system is generally as easy as changing a dependency (excluding obvious additional configuration 
+            such as DB credentials, or filesystem paths, etc.) 
           </p>
           <p>&nbsp;</p>
         </li>
@@ -171,16 +243,17 @@
         <li>
           <h3>Configuration Setup Time</h3>
           <p>
-            In version 2 ...  
-            Trade-off that there is configuration, but we offer reference implementations and you're basically lego-building the tool you want  
+            While the pluggability of the system is a desirable feature, users can have issues when trying to setup dependencies. You are 
+            building a system out of different pieces, and if you forget a piece, the system won't start properly. Fortunately there are some 
+            simple mitigations we can put in place to solve many of these issues (good error handling with clear messages, getting started guidance, etc.)  
           </p>
           <p>&nbsp;</p>
         </li>
         <li>
           <h3>ESAPI Integration Complexity</h3>
           <p>
-            In version 2 ...  
-            Trade-off that plugging in ESAPI is not as simple as it was
+            For those using ESAPI, v1 had the nice feature that it was built to be drop-in ready. For v2, that's not the case. However, the configuration 
+            should be minimal once the adapter is built for ESAPI version 3. 
           </p>
           <p>&nbsp;</p>
         </li>
