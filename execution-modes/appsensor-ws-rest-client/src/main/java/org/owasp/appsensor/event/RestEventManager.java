@@ -74,8 +74,6 @@ public class RestEventManager implements EventManager {
 	public Collection<Response> getResponses(String earliest) {
 		GenericType<Collection<Response>> responseType = new GenericType<Collection<Response>>() {};
         
-//        DateTime twoHoursAgo = DateUtils.getCurrentTimestamp().minusHours(2);
-
 		Collection<Response> responses = 
 		        target
 				.path("api")

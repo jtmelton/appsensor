@@ -30,8 +30,6 @@ public class LocalEventManager implements EventManager {
 	@Inject
 	private LocalRequestHandler requestHandler;
 	
-//	private DateTime responsesLastChecked = DateUtils.getCurrentTimestamp();
-	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -54,12 +52,6 @@ public class LocalEventManager implements EventManager {
 	@Override
 	public Collection<Response> getResponses(String earliest) {
 		return requestHandler.getResponses(earliest);
-//		Collection<Response> responses = requestHandler.getResponses(responsesLastChecked.toString());
-//		
-//		//now update last checked
-//		responsesLastChecked = DateUtils.getCurrentTimestamp();
-//		
-//		return responses;
 	}
 	
 }
