@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appsensor-server-config xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd">
+	
+	<client-application-identification-header-name>X-Appsensor-Client-Application-Name2</client-application-identification-header-name>
+	
+	<client-applications>
+		<client-application>
+			<name>myclientapp</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+		</client-application>
+	</client-applications>
+	
+	<correlation-config>
+		<correlated-client-set>
+			<client-application-name>server1</client-application-name>
+			<client-application-name>server3</client-application-name>
+		</correlated-client-set>
+		<correlated-client-set>
+			<client-application-name>server2</client-application-name>
+			<client-application-name>server4</client-application-name>
+		</correlated-client-set>
+		<correlated-client-set>
+			<client-application-name>server1</client-application-name>
+			<client-application-name>server5</client-application-name>
+		</correlated-client-set>
+	</correlation-config>
+	
+	<detection-points>
+		<detection-point>
+			<category>Input Validation</category>
+			<id>IE1</id>
+			<threshold>
+				<count>11</count>
+				<interval unit="minutes">4</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">31</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">11</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Input Validation</category>
+			<id>IE2</id>
+			<threshold>
+				<count>12</count>
+				<interval unit="minutes">5</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">32</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">12</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Request</category>
+			<id>RE3</id>
+			<threshold>
+				<count>13</count>
+				<interval unit="minutes">6</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">33</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">13</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Request</category>
+			<id>RE4</id>
+			<threshold>
+				<count>14</count>
+				<interval unit="minutes">7</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">34</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">14</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Request</category>
+			<id>RE5</id>
+			<threshold>
+				<count>15</count>
+				<interval unit="minutes">8</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">35</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">15</interval>
+				</response>
+			</responses>
+		</detection-point>
+
+	</detection-points>
+
+</appsensor-server-config>

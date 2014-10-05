@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appsensor-client-config xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_client_config_2.0.xsd">
+
+	<server-connection type="thrift">
+		<server-connection-config>
+			<url>localhost</url>
+			<client-application-identification-header-value>my-sample-client</client-application-identification-header-value>
+			<port>9190</port>
+			<socket-timeout-ms>300</socket-timeout-ms>
+		</server-connection-config>
+	</server-connection>
+
+</appsensor-client-config>
