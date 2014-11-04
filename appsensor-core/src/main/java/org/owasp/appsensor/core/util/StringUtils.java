@@ -14,6 +14,10 @@ public class StringUtils {
 	public static final String EMPTY = "";
 	
 	public static Collection<String> toCollection(String value) {
+		if(value == null) {
+			throw new IllegalArgumentException("Cannot add null value to collection.");
+		}
+		
 		Collection<String> collection = new ArrayList<String>();
 		
 		collection.add(value);
