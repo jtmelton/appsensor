@@ -24,6 +24,7 @@ Each deploy:
 	- run 'mvn clean deploy -P release'
 		- need to deploy and activate release profile (-P release)
 		- this is needed to execute the gpg/javadoc/source plugins
-		- tag the github repo with the appropriate tag (gpg signed) (run "git tag -u 'jtmelton@gmail.com' -s v1.2.3 -m 'appsensor release version 1.2.3'")
-		- push tags (run 'git push origin --tags')
-		- create a release (https://help.github.com/articles/creating-releases - use the pre-release flag if this is an alpha, beta or RC release)
+	- commit code
+	- tag the github repo with the appropriate tag (gpg signed) (run "git tag -u 'jtmelton@gmail.com' -s v1.2.3 -m 'appsensor release version 1.2.3'")
+	- push tags (run 'git push origin --tags')
+	- create a release (https://help.github.com/articles/creating-releases - use the pre-release flag if this is an alpha, beta or RC release)
