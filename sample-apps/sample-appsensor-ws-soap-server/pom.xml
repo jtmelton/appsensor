@@ -16,6 +16,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<cxf.version>3.0.3</cxf.version>
+		<spring.version>4.0.3.RELEASE</spring.version>
 	</properties>
 
 	<dependencies>
@@ -26,11 +28,186 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-ws-soap-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-local</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-storage-in-memory</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-analysis-reference</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-reporting-simple-logging</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-access-control-reference</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-configuration-stax</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!-- <dependency>
 			<groupId>com.sun.xml.ws</groupId>
 			<artifactId>jaxws-rt</artifactId>
 			<version>2.2.8</version>
+		</dependency>-->
+		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>${cxf.version}</version>
+			<exclusions>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-core</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-beans</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-context</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-aop</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-web</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-webmvc</artifactId>
+		        </exclusion>
+		    </exclusions>
 		</dependency>
-            
+		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-bundle</artifactId>
+			<version>2.7.14</version>
+			<exclusions>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-core</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-beans</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-context</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-aop</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-asm</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-expression</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-jms</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-tx</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>com.sun.xml.bind</groupId>
+		            <artifactId>jaxb-xjc</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>com.sun.xml.bind</groupId>
+		            <artifactId>jaxb-impl</artifactId>
+		        </exclusion>
+		    </exclusions>
+		</dependency>
+		
+		<!-- <dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-bindings-soap</artifactId>
+			<version>${cxf.version}</version>
+			<exclusions>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-core</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-beans</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-context</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-aop</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-web</artifactId>
+		        </exclusion>
+		        <exclusion>
+		            <groupId>org.springframework</groupId>
+		            <artifactId>spring-webmvc</artifactId>
+		        </exclusion>
+		    </exclusions>
+		</dependency>-->
+		
+		<!-- <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+        <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>-->
 	</dependencies>
 	
 	<build>
