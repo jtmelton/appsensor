@@ -96,6 +96,11 @@ public class ClientApplicationIdentificationHandler implements SOAPHandler<SOAPM
 	
 	//hack workaround b/c DI doesn't work for jax-ws handlers with base spring
 	public static void setAppSensorServer(AppSensorServer appSensorServer) {
+		//adding fast failure mode if DI doesn't happen at startup
+		if(appSensorServer == null) {
+			throw new IllegalArgumentException("Can't use a null appsensor server. It is likely dependency injection is broken.");
+		}
+		
 		ClientApplicationIdentificationHandler.appSensorServer = appSensorServer;
 	}
 	
