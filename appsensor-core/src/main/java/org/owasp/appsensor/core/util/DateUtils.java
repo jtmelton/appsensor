@@ -55,4 +55,8 @@ public class DateUtils {
 	        
 	     return epoch.toDateTime();
 	}
+	
+	public static void main(String[] args) {
+		System.out.println("Debugging: current time is: " + getCurrentTimestampAsString());
+	}
 }
