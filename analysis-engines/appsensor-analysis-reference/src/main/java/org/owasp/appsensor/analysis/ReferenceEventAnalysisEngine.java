@@ -63,11 +63,17 @@ public class ReferenceEventAnalysisEngine extends EventAnalysisEngine {
 		if (configuredDetectionPoint != null) {
 			int eventCount = countEvents(configuredDetectionPoint.getThreshold().getInterval().toMillis(), existingEvents, event);
 	
-			//4 examples for the below code
-			//1. count is 5, t.count is 10 (5%10 = 5, No Violation)
-			//2. count is 45, t.count is 10 (45%10 = 5, No Violation) 
-			//3. count is 10, t.count is 10 (10%10 = 0, Violation Observed)
-			//4. count is 30, t.count is 10 (30%10 = 0, Violation Observed)
+			// if the event count is 0, reset to 1 -> we know at least 1 event has occurred (the one we're considering)
+			// this can occur sometimes when testing with dates out of the given range or due to clock drift
+			if (eventCount == 0) {
+				eventCount = 1;
+			}
+			
+			// examples for the below code
+			// 1. count is 5, t.count is 10 (5%10 = 5, No Violation)
+			// 2. count is 45, t.count is 10 (45%10 = 5, No Violation) 
+			// 3. count is 10, t.count is 10 (10%10 = 0, Violation Observed)
+			// 4. count is 30, t.count is 10 (30%10 = 0, Violation Observed)
 	
 			int thresholdCount = configuredDetectionPoint.getThreshold().getCount();
 	
