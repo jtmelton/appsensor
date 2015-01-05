@@ -35,7 +35,7 @@ public class InMemoryEventStore extends EventStore {
 	private Logger logger;
 	
 	/** maintain a collection of {@link Event}s as an in-memory list */
-	private Collection<Event> events = new CopyOnWriteArrayList<Event>();
+	private static Collection<Event> events = new CopyOnWriteArrayList<Event>();
 	
 	/**
 	 * {@inheritDoc}
