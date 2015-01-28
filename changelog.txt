@@ -1,0 +1,56 @@
+AppSensor CHANGELOG
+=====================
+https://www.owasp.org/index.php/Projects/OWASP_AppSensor_Project
+http://appsensor.org/
+https://github.com/jtmelton/appsensor
+
+
+Changes in version 2.0 (2015/01/27)
+--------------------------------------
+* AppSensor has gone through a complete re-write, 
+  and the current feature set is listed below.
+  
+* Client-server architecture supporting multiple 
+  execution "modes" including: 
+	- REST 
+	- SOAP
+	- Thrift
+	- local (shared JVM, java-only)
+  
+* Any language can be used on the client application. 
+  The only requirement is that the language selected 
+  must support the communication protocol of the execution
+  mode that is configured (ie. if using REST as the 
+  execution mode, the language must be capable of making 
+  HTTP requests.) 
+  The server-side components are Java, but this places
+  no restriction on the client applications themselves.
+
+* There is no longer a dependency on ESAPI. AppSensor
+  is a standalone project, though it can be used to 
+  integrate with projects that also use ESAPI if 
+  desired.
+  
+* The major subsystems are all modular and extensible, 
+  including: 
+  	- access control
+  	- analysis engine
+  	- configuration
+  	- reporting
+  	- storage
+
+* While extensible, all major subsystems have at least
+  one reference implementation.
+
+* The core components of the system have been renamed 
+  and now follow the appsensor v2 book naming conventions, 
+  which is based on standard IDS terminology for clarity.
+
+* Basic user correlation is supported so that client 
+  applications that share a user base can share attack information.
+  
+* A website for the project has been built (appsensor.org).
+
+Changes in version 0.1.x (Legacy)
+--------------------------------------
+* changelog not maintained
