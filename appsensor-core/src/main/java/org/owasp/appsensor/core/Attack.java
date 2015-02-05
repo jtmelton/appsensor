@@ -75,6 +75,14 @@ public class Attack implements Serializable {
 		setDetectionSystemId(detectionSystemId);
 	}
 	
+	public Attack (User user, DetectionPoint detectionPoint, String timestamp, String detectionSystemId, Resource resource) {
+		setUser(user);
+		setDetectionPoint(detectionPoint);
+		setTimestamp(timestamp);
+		setDetectionSystemId(detectionSystemId);
+		setResource(resource);
+	}
+	
 	public Attack (Event event) {
 		setUser(event.getUser());
 		setDetectionPoint(event.getDetectionPoint());

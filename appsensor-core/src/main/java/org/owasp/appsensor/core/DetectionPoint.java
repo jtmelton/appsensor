@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -52,17 +54,20 @@ public class DetectionPoint implements Serializable {
 	/**
 	 * Category identifier for the detection point. (ex. "Request", "AccessControl", "SessionManagement")
 	 */
+	@Column
 	private String category;
 	
 	/**
 	 * Identifier for the detection point. (ex. "IE1", "RE2")
 	 */
+	@Column
 	private String label;
 	
 	/**
 	 * {@link Threshold} for determining whether given detection point (associated {@link Event}) 
 	 * should be considered an {@link Attack}.
 	 */
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Threshold threshold;
 	
 	/**
@@ -148,6 +153,20 @@ public class DetectionPoint implements Serializable {
 		
 		matches &= (category != null) ? category.equals(other.getCategory()) : true;
 		matches &= (label != null) ? label.equals(other.getLabel()) : true;
+		
+		return matches;
+	}
+	
+	public boolean typeAndThresholdMatches(DetectionPoint other) {
+		if (other == null) {
+			throw new IllegalArgumentException("other must be non-null");
+		}
+		
+		boolean matches = true;
+		
+		matches &= (category != null) ? category.equals(other.getCategory()) : true;
+		matches &= (label != null) ? label.equals(other.getLabel()) : true;
+		matches &= (threshold != null) ? threshold.equals(other.getThreshold()) : true;
 		
 		return matches;
 	}

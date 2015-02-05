@@ -31,6 +31,7 @@ public class Resource implements Serializable {
      * later to block requests to a given function.  In this implementation, 
      * the current request URI is used.
      */
+	@Column
 	private String location;
 
 	public String getLocation() {
