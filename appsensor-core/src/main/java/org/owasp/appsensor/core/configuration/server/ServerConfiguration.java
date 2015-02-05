@@ -37,8 +37,6 @@ public abstract class ServerConfiguration {
 	
 	private int serverSocketTimeout;
 	
-	private static transient Map<String, DetectionPoint> detectionPointCache = Collections.synchronizedMap(new HashMap<String, DetectionPoint>());
-	
 	private static transient Map<String, ClientApplication> clientApplicationCache = Collections.synchronizedMap(new HashMap<String, ClientApplication>());
 	
 	public Collection<DetectionPoint> getDetectionPoints() {
@@ -135,30 +133,21 @@ public abstract class ServerConfiguration {
 	}
 	
 	/**
-	 * Locate detection point configuration from server-side config file. 
+	 * Locate matching detection points configuration from server-side config file. 
 	 * 
 	 * @param search detection point that has been added to the system
 	 * @return DetectionPoint populated with configuration information from server-side config
 	 */
-	public DetectionPoint findDetectionPoint(DetectionPoint search) {
-		DetectionPoint detectionPoint = null;
+	public Collection<DetectionPoint> findDetectionPoints(DetectionPoint search) {
+		Collection<DetectionPoint> matches = new ArrayList<>();
 		
-		detectionPoint = detectionPointCache.get(search.getLabel());
-
-		if (detectionPoint == null) {
-			for (DetectionPoint configuredDetectionPoint : getDetectionPoints()) {
-				if (configuredDetectionPoint.typeMatches(search)) {
-					detectionPoint = configuredDetectionPoint;
-					
-					//cache
-					detectionPointCache.put(detectionPoint.getLabel(), detectionPoint);
-					
-					break;
-				}
+		for (DetectionPoint configuredDetectionPoint : getDetectionPoints()) {
+			if (configuredDetectionPoint.typeMatches(search)) {
+				matches.add(configuredDetectionPoint);
 			}
 		}
 		
-		return detectionPoint;
+		return matches;
 	}
 	
 	public ClientApplication findClientApplication(String clientApplicationName) {
