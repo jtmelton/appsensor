@@ -166,15 +166,33 @@
 				</response>
 			</responses>
 		</detection-point>
-		<!-- <detection-point><id></id></detection-point>
-		<detection-point><id>RE1</id></detection-point>
-		<detection-point><id>RE2</id></detection-point>
-		<detection-point><id>RE3</id></detection-point>-->
-		<!-- <detection-point>IE1</detection-point>
-		<detection-point>IE2</detection-point>
-		<detection-point>RE1</detection-point>
-		<detection-point>RE2</detection-point>
-		<detection-point>RE3</detection-point>-->
+		<detection-point>
+			<category>Request</category>
+			<id>RE7</id>
+			<threshold>
+				<count>2</count>
+				<interval unit="minutes">8</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Request</category>
+			<id>RE7</id>
+			<threshold>
+				<count>5</count>
+				<interval unit="minutes">5</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>logout</action>
+				</response>
+			</responses>
+		</detection-point>
+		
 	</detection-points>
 
 </appsensor-server-config>
