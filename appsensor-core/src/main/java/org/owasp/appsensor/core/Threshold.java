@@ -2,10 +2,12 @@ package org.owasp.appsensor.core;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -34,12 +36,14 @@ public class Threshold implements Serializable {
 	private Integer id;
 	
 	/** The count at which this threshold is triggered. */
+	@Column(name="t_count")
 	private int count = 0;
 	
 	/** 
 	 * The time frame within which 'count' number of actions has to be detected in order to
 	 * trigger this threshold.
 	 */
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Interval interval;
 
 	public Threshold() {}

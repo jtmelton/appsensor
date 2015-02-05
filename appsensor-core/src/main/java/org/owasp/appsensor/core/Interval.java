@@ -49,6 +49,7 @@ public class Interval implements Serializable {
 	 * Duration portion of interval, ie. '3' if you wanted 
 	 * to represent an interval of '3 minutes' 
 	 */
+	@Column
 	private int duration;
 	
 	/** 
@@ -58,6 +59,7 @@ public class Interval implements Serializable {
 	 * units supported by the reference implementation, ie.
 	 * SECONDS, MINUTES, HOURS, DAYS.
 	 */
+	@Column
 	private String unit;
 
 	public Interval() {}
