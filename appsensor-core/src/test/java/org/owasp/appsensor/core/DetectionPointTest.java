@@ -8,7 +8,7 @@ public class DetectionPointTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void testTypeMatchesNull() {
 		DetectionPoint point1 = new DetectionPoint();
-		point1.typeMatches(null);
+		point1.typeAndThresholdMatches(null);
 	}
 	
 	@Test
@@ -16,7 +16,7 @@ public class DetectionPointTest {
 		DetectionPoint point1 = new DetectionPoint();
 		DetectionPoint point2 = new DetectionPoint();
 		
-		Assert.assertTrue(point1.typeMatches(point2));
+		Assert.assertTrue(point1.typeAndThresholdMatches(point2));
 	}
 	
 	@Test
@@ -26,7 +26,7 @@ public class DetectionPointTest {
 		DetectionPoint point2 = new DetectionPoint("b", "b1", 
 				new Threshold(5, new Interval(2, Interval.SECONDS)));
 		
-		Assert.assertFalse(point1.typeMatches(point2));
+		Assert.assertFalse(point1.typeAndThresholdMatches(point2));
 	}
 	
 	@Test
@@ -36,7 +36,7 @@ public class DetectionPointTest {
 		DetectionPoint point2 = new DetectionPoint("a", "b1", 
 				new Threshold(5, new Interval(2, Interval.SECONDS)));
 		
-		Assert.assertFalse(point1.typeMatches(point2));
+		Assert.assertFalse(point1.typeAndThresholdMatches(point2));
 	}
 	
 	@Test
@@ -46,7 +46,7 @@ public class DetectionPointTest {
 		DetectionPoint point2 = new DetectionPoint("b", "a1", 
 				new Threshold(5, new Interval(2, Interval.SECONDS)));
 		
-		Assert.assertFalse(point1.typeMatches(point2));
+		Assert.assertFalse(point1.typeAndThresholdMatches(point2));
 	}
 	
 	@Test
@@ -56,7 +56,7 @@ public class DetectionPointTest {
 		DetectionPoint point2 = new DetectionPoint("a", "a1", 
 				new Threshold(5, new Interval(2, Interval.SECONDS)));
 		
-		Assert.assertTrue(point1.typeMatches(point2));
+		Assert.assertFalse(point1.typeAndThresholdMatches(point2));
 	}
 	
 	@Test
@@ -66,7 +66,7 @@ public class DetectionPointTest {
 		DetectionPoint point2 = new DetectionPoint("a", "a1", 
 				new Threshold(5, new Interval(1, Interval.SECONDS)));
 		
-		Assert.assertTrue(point1.typeMatches(point2));
+		Assert.assertTrue(point1.typeAndThresholdMatches(point2));
 	}
 	
 	
