@@ -1,13 +1,18 @@
 package org.owasp.appsensor.core.storage;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
 import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.AttackListener;
+import org.owasp.appsensor.core.util.DateUtils;
 
 /**
  * A store is an observable object. 
@@ -83,6 +88,83 @@ public abstract class AttackStore {
 		for (AttackListener listener : listeners) {
 			registerListener(listener);	
 		}
+	}
+	
+	/**
+	 * Finder for attacks in the AttackStore. 
+	 * 
+	 * @param criteria the {@link org.owasp.appsensor.core.criteria.SearchCriteria} object to search by
+	 * @param attacks the {@link Attack} objects to match on - supplied by subclasses
+	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.core.Attack} objects matching the search criteria.
+	 */
+	protected Collection<Attack> findAttacks(SearchCriteria criteria, Collection<Attack> attacks) {
+		if (criteria == null) {
+			throw new IllegalArgumentException("criteria must be non-null");
+		}
+		
+		Collection<Attack> matches = new HashSet<Attack>();
+		
+		User user = criteria.getUser();
+		DetectionPoint detectionPoint = criteria.getDetectionPoint();
+		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
+		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
+		
+		for (Attack attack : attacks) {
+			//check user match if user specified
+			boolean userMatch = (user != null) ? user.equals(attack.getUser()) : true;
+			
+			//check detection system match if detection systems specified
+			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
+					detectionSystemIds.contains(attack.getDetectionSystemId()) : true;
+			
+			//check detection point match if detection point specified
+			boolean detectionPointMatch = (detectionPoint != null) ? 
+					detectionPoint.typeAndThresholdMatches(attack.getDetectionPoint()) : true;
+							
+			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(attack.getTimestamp())) : true;
+					
+					
+			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
+				matches.add(attack);
+			}
+		}
+		
+		return matches;
+	}
+	
+	/**
+	 * Finder for attacks in the AttackStore. 
+	 * 
+	 * @param criteria the {@link org.owasp.appsensor.core.criteria.SearchCriteria} object to search by
+	 * @param attack the {@link Attack} object to match on
+	 * @return true or false depending on the matching of the search criteria to the {@link Attack}
+	 */
+	protected boolean isMatchingAttack(SearchCriteria criteria, Attack attack) {
+		boolean match = false;
+		
+		User user = criteria.getUser();
+		DetectionPoint detectionPoint = criteria.getDetectionPoint();
+		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
+		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
+		
+		// check user match if user specified
+		boolean userMatch = (user != null) ? user.equals(attack.getUser()) : true;
+
+		// check detection system match if detection systems specified
+		boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
+				detectionSystemIds.contains(attack.getDetectionSystemId()) : true;
+
+		// check detection point match if detection point specified
+		boolean detectionPointMatch = (detectionPoint != null) ? 
+				detectionPoint.typeAndThresholdMatches(attack.getDetectionPoint()) : true;
+
+		boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(attack.getTimestamp())): true;
+
+		if (userMatch && detectionSystemMatch && detectionPointMatch&& earliestMatch) {
+			match = true;
+		}
+		
+		return match;
 	}
 	
 }

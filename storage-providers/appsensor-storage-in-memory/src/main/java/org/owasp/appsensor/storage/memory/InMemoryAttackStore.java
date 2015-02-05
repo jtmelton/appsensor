@@ -1,20 +1,15 @@
 package org.owasp.appsensor.storage.memory;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.inject.Named;
 
-import org.joda.time.DateTime;
 import org.owasp.appsensor.core.Attack;
-import org.owasp.appsensor.core.DetectionPoint;
-import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.AttackListener;
 import org.owasp.appsensor.core.logging.Loggable;
 import org.owasp.appsensor.core.storage.AttackStore;
-import org.owasp.appsensor.core.util.DateUtils;
 import org.slf4j.Logger;
 
 /**
@@ -54,38 +49,7 @@ public class InMemoryAttackStore extends AttackStore {
 	 */
 	@Override
 	public Collection<Attack> findAttacks(SearchCriteria criteria) {
-		if (criteria == null) {
-			throw new IllegalArgumentException("criteria must be non-null");
-		}
-		
-		Collection<Attack> matches = new ArrayList<Attack>();
-		
-		User user = criteria.getUser();
-		DetectionPoint detectionPoint = criteria.getDetectionPoint();
-		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
-		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
-		
-		for (Attack attack : attacks) {
-			//check user match if user specified
-			boolean userMatch = (user != null) ? user.equals(attack.getUser()) : true;
-			
-			//check detection system match if detection systems specified
-			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
-					detectionSystemIds.contains(attack.getDetectionSystemId()) : true;
-			
-			//check detection point match if detection point specified
-			boolean detectionPointMatch = (detectionPoint != null) ? 
-					detectionPoint.typeMatches(attack.getDetectionPoint()) : true;
-							
-			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(attack.getTimestamp())) : true;
-					
-					
-			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
-				matches.add(attack);
-			}
-		}
-		
-		return matches;
+		return findAttacks(criteria, attacks);
 	}
 	
 }

@@ -23,7 +23,7 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd">
     </bean> -->
     
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-        p:driverClassName="org.hsqldb.jdbcDriver" p:url="jdbc:hsqldb:mem:test"
+        p:driverClassName="org.hsqldb.jdbcDriver" p:url="jdbc:hsqldb:mem:test2"
         p:username="sa" p:password="" p:initialSize="5" p:maxActive="10">
     </bean>
  
@@ -37,6 +37,7 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 			<props>
 				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
 				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
 			</props>
 		</property>
     </bean>

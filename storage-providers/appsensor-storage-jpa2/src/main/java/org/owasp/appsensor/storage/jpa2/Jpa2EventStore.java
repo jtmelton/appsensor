@@ -1,20 +1,15 @@
 package org.owasp.appsensor.storage.jpa2;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.joda.time.DateTime;
-import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Event;
-import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.EventListener;
 import org.owasp.appsensor.core.logging.Loggable;
 import org.owasp.appsensor.core.storage.EventStore;
-import org.owasp.appsensor.core.util.DateUtils;
 import org.owasp.appsensor.storage.jpa2.dao.EventRepository;
 import org.slf4j.Logger;
 
@@ -55,38 +50,8 @@ public class Jpa2EventStore extends EventStore {
 	 */
 	@Override
 	public Collection<Event> findEvents(SearchCriteria criteria) {
-		if (criteria == null) {
-			throw new IllegalArgumentException("criteria must be non-null");
-		}
-		
-		Collection<Event> matches = new ArrayList<Event>();
-		
-		User user = criteria.getUser();
-		DetectionPoint detectionPoint = criteria.getDetectionPoint();
-		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
-		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
-		
 		// TODO: instead of findAll every time (inefficient), update this to do actual query
-		for (Event event : eventRepository.findAll()) {
-			//check user match if user specified
-			boolean userMatch = (user != null) ? user.equals(event.getUser()) : true;
-			
-			//check detection system match if detection systems specified
-			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
-					detectionSystemIds.contains(event.getDetectionSystemId()) : true;
-			
-			//check detection point match if detection point specified
-			boolean detectionPointMatch = (detectionPoint != null) ? 
-					detectionPoint.typeMatches(event.getDetectionPoint()) : true;
-			
-			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(event.getTimestamp())) : true;
-					
-			if (userMatch && detectionSystemMatch && detectionPointMatch && earliestMatch) {
-				matches.add(event);
-			}
-		}
-		
-		return matches;
+		return findEvents(criteria, eventRepository.findAll());
 	}
 	
 }

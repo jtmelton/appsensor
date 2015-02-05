@@ -51,36 +51,54 @@ public class ReferenceEventAnalysisEngine extends EventAnalysisEngine {
 	 */
 	@Override
 	public void analyze(Event event) {
+		
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(event.getUser()).
 				setDetectionPoint(event.getDetectionPoint()).
 				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
 
+		// find all events matching this event for this user 
 		Collection<Event> existingEvents = appSensorServer.getEventStore().findEvents(criteria);
 
-		DetectionPoint configuredDetectionPoint = appSensorServer.getConfiguration().findDetectionPoint(event.getDetectionPoint());
+		Collection<DetectionPoint> configuredDetectionPoints = appSensorServer.getConfiguration().findDetectionPoints(event.getDetectionPoint());
 
-		if (configuredDetectionPoint != null) {
-			int eventCount = countEvents(configuredDetectionPoint.getThreshold().getInterval().toMillis(), existingEvents, event);
-	
-			// if the event count is 0, reset to 1 -> we know at least 1 event has occurred (the one we're considering)
-			// this can occur sometimes when testing with dates out of the given range or due to clock drift
-			if (eventCount == 0) {
-				eventCount = 1;
-			}
+		if (configuredDetectionPoints.size() > 0) {
 			
-			// examples for the below code
-			// 1. count is 5, t.count is 10 (5%10 = 5, No Violation)
-			// 2. count is 45, t.count is 10 (45%10 = 5, No Violation) 
-			// 3. count is 10, t.count is 10 (10%10 = 0, Violation Observed)
-			// 4. count is 30, t.count is 10 (30%10 = 0, Violation Observed)
-	
-			int thresholdCount = configuredDetectionPoint.getThreshold().getCount();
-	
-			if (eventCount % thresholdCount == 0) {
-				logger.info("Violation Observed for user <" + event.getUser().getUsername() + "> - storing attack");
-				//have determined this event triggers attack
-				appSensorServer.getAttackStore().addAttack(new Attack(event));
+			for(DetectionPoint configuredDetectionPoint : configuredDetectionPoints) {
+				
+				// filter and count events that match this detection point (filtering by threshold) 
+				// and that are after the most recent attack (filter by timestamp)
+				int eventCount = countEvents(existingEvents, event, configuredDetectionPoint);
+				
+				// if the event count is 0, reset to 1 -> we know at least 1 event has occurred (the one we're considering)
+				// this can occur sometimes when testing with dates out of the given range or due to clock drift
+				if (eventCount == 0) {
+					eventCount = 1;
+				}
+				
+				// examples for the below code
+				// 1. count is 5, t.count is 10 (5%10 = 5, No Violation)
+				// 2. count is 45, t.count is 10 (45%10 = 5, No Violation) 
+				// 3. count is 10, t.count is 10 (10%10 = 0, Violation Observed)
+				// 4. count is 30, t.count is 10 (30%10 = 0, Violation Observed)
+		
+				int thresholdCount = configuredDetectionPoint.getThreshold().getCount();
+		
+				if (eventCount % thresholdCount == 0) {
+					logger.info("Violation Observed for user <" + event.getUser().getUsername() + "> - storing attack");
+					
+					//have determined this event triggers attack
+					//ensure appropriate detection point is being used (associated responses, etc.)
+					Attack attack = new Attack(
+							event.getUser(),
+							configuredDetectionPoint,
+							event.getTimestamp(),
+							event.getDetectionSystemId(),
+							event.getResource()
+							);
+					
+					appSensorServer.getAttackStore().addAttack(attack);
+				}
 			}
 		} else {
 			logger.error("Could not find detection point configured for this type: " + event.getDetectionPoint().getLabel());
@@ -90,18 +108,21 @@ public class ReferenceEventAnalysisEngine extends EventAnalysisEngine {
 	/**
 	 * Count the number of {@link Event}s over a time {@link Interval} specified in milliseconds.
 	 * 
-	 * @param intervalInMillis {@link Interval} as measured in milliseconds
 	 * @param existingEvents set of {@link Event}s matching triggering {@link Event} id/user pulled from {@link Event} storage
-	 * @return number of {@link Event}s matching time {@link Interval}
+	 * @param triggeringEvent the {@link Event} that triggered analysis
+	 * @param configuredDetectionPoint the {@link DetectionPoint} we are currently considering
+	 * @return number of {@link Event}s matching time {@link Interval} and configured {@link DetectionPoint}
 	 */
-	protected int countEvents(long intervalInMillis, Collection<Event> existingEvents, Event triggeringEvent) {
+	protected int countEvents(Collection<Event> existingEvents, Event triggeringEvent, DetectionPoint configuredDetectionPoint) {
 		int count = 0;
+		
+		long intervalInMillis = configuredDetectionPoint.getThreshold().getInterval().toMillis();
 		
 		//grab the startTime to begin counting from based on the current time - interval
 		DateTime startTime = DateUtils.getCurrentTimestamp().minusMillis((int)intervalInMillis);
 		
 		//count events after most recent attack.
-		DateTime mostRecentAttackTime = findMostRecentAttackTime(triggeringEvent);
+		DateTime mostRecentAttackTime = findMostRecentAttackTime(triggeringEvent, configuredDetectionPoint);
 		
 		for (Event event : existingEvents) {
 			DateTime eventTimestamp = DateUtils.fromString(event.getTimestamp());
@@ -123,20 +144,22 @@ public class ReferenceEventAnalysisEngine extends EventAnalysisEngine {
 	}
 	
 	/**
-	 * Find most recent {@link Attack} matching the given {@link Event} ({@link User}, {@link DetectionPoint}, detection system)
-	 * and find it's timestamp. 
+	 * Find most recent {@link Attack} matching the given {@link Event} {@link User}, {@link DetectionPoint} 
+	 * matching the currently configured detection point (supporting multiple detection points per label), 
+	 * detection system and find it's timestamp. 
 	 * 
 	 * The {@link Event} should only be counted if they've occurred after the most recent {@link Attack}.
 	 * 
 	 * @param event {@link Event} to use to find matching {@link Attack}s
+	 * @param configuredDetectionPoint {@link DetectionPoint} to use to find matching {@link Attack}s
 	 * @return timestamp representing last matching {@link Attack}, or -1L if not found
 	 */
-	protected DateTime findMostRecentAttackTime(Event event) {
+	protected DateTime findMostRecentAttackTime(Event event, DetectionPoint configuredDetectionPoint) {
 		DateTime newest = DateUtils.epoch();
 		
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(event.getUser()).
-				setDetectionPoint(event.getDetectionPoint()).
+				setDetectionPoint(configuredDetectionPoint).
 				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
 		
 		Collection<Attack> attacks = appSensorServer.getAttackStore().findAttacks(criteria);

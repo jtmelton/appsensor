@@ -1,13 +1,18 @@
 package org.owasp.appsensor.core.storage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
+import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.EventListener;
+import org.owasp.appsensor.core.util.DateUtils;
 
 /**
  * A store is an observable object. 
@@ -83,6 +88,64 @@ public abstract class EventStore {
 		for (EventListener listener : listeners) {
 			registerListener(listener);	
 		}
+	}
+	
+	/**
+	 * A finder for Event objects in the EventStore
+	 * 
+	 * @param criteria the {@link org.owasp.appsensor.core.criteria.SearchCriteria} object to search by
+	 * @param events the {@link Event} objects to match on - supplied by subclasses
+	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.core.Event} objects matching the search criteria.
+	 */
+	public Collection<Event> findEvents(SearchCriteria criteria, Collection<Event> events) {
+		if (criteria == null) {
+			throw new IllegalArgumentException("criteria must be non-null");
+		}
+		
+		Collection<Event> matches = new ArrayList<Event>();
+		
+		for (Event event : events) {
+			if (isMatchingEvent(criteria, event)) {
+				matches.add(event);
+			}
+		}
+		
+		return matches;
+	}
+	
+	/**
+	 * A finder for Event objects in the EventStore
+	 * 
+	 * @param criteria the {@link org.owasp.appsensor.core.criteria.SearchCriteria} object to search by
+	 * @param event the {@link Event} object to match on
+	 * @return true or false depending on the matching of the search criteria to the event
+	 */
+	protected boolean isMatchingEvent(SearchCriteria criteria, Event event) {
+		boolean match = false;
+		
+		User user = criteria.getUser();
+		DetectionPoint detectionPoint = criteria.getDetectionPoint();
+		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
+		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
+		
+		// check user match if user specified
+		boolean userMatch = (user != null) ? user.equals(event.getUser()) : true;
+
+		// check detection system match if detection systems specified
+		boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
+				detectionSystemIds.contains(event.getDetectionSystemId()) : true;
+
+		// check detection point match if detection point specified
+		boolean detectionPointMatch = (detectionPoint != null) ? 
+				detectionPoint.typeAndThresholdMatches(event.getDetectionPoint()) : true;
+
+		boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(event.getTimestamp())): true;
+
+		if (userMatch && detectionSystemMatch && detectionPointMatch&& earliestMatch) {
+			match = true;
+		}
+		
+		return match;
 	}
 	
 }
