@@ -12,6 +12,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.owasp.appsensor.core.ClientApplication;
 import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.DetectionSystem;
 import org.owasp.appsensor.core.correlation.CorrelationSet;
 
 /**
@@ -36,6 +37,10 @@ public abstract class ServerConfiguration {
 	private int serverPort;
 	
 	private int serverSocketTimeout;
+	
+	private boolean geolocateIpAddresses = false;
+	
+	private String geolocationDatabasePath;
 	
 	private static transient Map<String, ClientApplication> clientApplicationCache = Collections.synchronizedMap(new HashMap<String, ClientApplication>());
 	
@@ -106,6 +111,26 @@ public abstract class ServerConfiguration {
 		return this;
 	}
 
+	public boolean isGeolocateIpAddresses() {
+		return geolocateIpAddresses;
+	}
+
+	public ServerConfiguration setGeolocateIpAddresses(boolean geolocateIpAddresses) {
+		this.geolocateIpAddresses = geolocateIpAddresses;
+		
+		return this;
+	}
+	
+	public String getGeolocationDatabasePath() {
+		return geolocationDatabasePath;
+	}
+
+	public ServerConfiguration setGeolocationDatabasePath(String geolocationDatabasePath) {
+		this.geolocationDatabasePath = geolocationDatabasePath;
+		
+		return this;
+	}
+	
 	/**
 	 * Find related detection systems based on a given detection system. 
 	 * This simply means those systems that have been configured along with the 
@@ -114,15 +139,15 @@ public abstract class ServerConfiguration {
 	 * @param detectionSystemId system ID to evaluate and find correlated systems
 	 * @return collection of strings representing correlation set, INCLUDING specified system ID
 	 */
-	public Collection<String> getRelatedDetectionSystems(String detectionSystemId) {
+	public Collection<String> getRelatedDetectionSystems(DetectionSystem detectionSystem) {
 		Collection<String> relatedDetectionSystems = new HashSet<String>();
 		
-		relatedDetectionSystems.add(detectionSystemId);
+		relatedDetectionSystems.add(detectionSystem.getDetectionSystemId());
 	
 		if(correlationSets != null) {
 			for(CorrelationSet correlationSet : correlationSets) {
 				if(correlationSet.getClientApplications() != null) {
-					if(correlationSet.getClientApplications().contains(detectionSystemId)) {
+					if(correlationSet.getClientApplications().contains(detectionSystem.getDetectionSystemId())) {
 						relatedDetectionSystems.addAll(correlationSet.getClientApplications());
 					}
 				}
@@ -181,9 +206,11 @@ public abstract class ServerConfiguration {
 				append(serverHostName).
 				append(serverPort).
 				append(serverSocketTimeout).
+				append(geolocateIpAddresses).
+				append(geolocationDatabasePath).
 				toHashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -203,6 +230,8 @@ public abstract class ServerConfiguration {
 				append(serverHostName, other.getServerHostName()).
 				append(serverPort, other.getServerPort()).
 				append(serverSocketTimeout, other.getServerSocketTimeout()).
+				append(geolocateIpAddresses, other.isGeolocateIpAddresses()).
+				append(geolocationDatabasePath, other.getGeolocationDatabasePath()).
 				isEquals();
 	}
 	
@@ -216,6 +245,8 @@ public abstract class ServerConfiguration {
 			    append("serverHostName", serverHostName).
 			    append("serverPort", serverPort).
 			    append("serverSocketTimeout", serverSocketTimeout).
+			    append("geolocateIpAddresses", geolocateIpAddresses).
+			    append("geolocationDatabasePath", geolocationDatabasePath).
 			    toString();
 	}
 
