@@ -93,7 +93,7 @@ public class FileBasedResponseStore extends ResponseStore {
 			
 			//check detection system match if detection systems specified
 			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
-					detectionSystemIds.contains(response.getDetectionSystemId()) : true;
+					detectionSystemIds.contains(response.getDetectionSystem().getDetectionSystemId()) : true;
 			
 			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(response.getTimestamp())) : true;
 					

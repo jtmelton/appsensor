@@ -12,6 +12,7 @@ import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.core.ClientApplication;
+import org.owasp.appsensor.core.DetectionSystem;
 import org.owasp.appsensor.core.accesscontrol.Action;
 import org.owasp.appsensor.core.accesscontrol.Context;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
@@ -47,7 +48,7 @@ public class AppSensorApiHandler implements AppSensorApi.Iface {
 		try {
 			org.owasp.appsensor.core.Event appSensorEvent = mapper.map(event, org.owasp.appsensor.core.Event.class);
 			
-			appSensorEvent.setDetectionSystemId(clientApplicationName);
+			appSensorEvent.setDetectionSystem(new DetectionSystem(clientApplicationName));
 			
 			appSensorServer.getEventStore().addEvent(appSensorEvent);
 		} catch (Exception e) {
@@ -65,7 +66,7 @@ public class AppSensorApiHandler implements AppSensorApi.Iface {
 		try {
 			org.owasp.appsensor.core.Attack appSensorAttack = mapper.map(attack, org.owasp.appsensor.core.Attack.class);
 			
-			appSensorAttack.setDetectionSystemId(clientApplicationName);
+			appSensorAttack.setDetectionSystem(new DetectionSystem(clientApplicationName));
 			
 			appSensorServer.getAttackStore().addAttack(appSensorAttack);
 		} catch (Exception e) {

@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.owasp.appsensor.core.AppSensorClient;
 import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.DetectionSystem;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.util.DateUtils;
@@ -79,41 +80,41 @@ public class ReferenceSoapRequestHandlerTest {
         String timestamp = currentTimestamp.toString();
         
         assertEquals(0, requestHandler.getResponses(timestamp).size());
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
         
         assertEquals(0, requestHandler.getResponses(timestamp).size());
         //this is 11th
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
         assertEquals(1, requestHandler.getResponses(timestamp).size());
         
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
         
         assertEquals(1, requestHandler.getResponses(timestamp).size());
         //this is 22nd
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
         assertEquals(2, requestHandler.getResponses(timestamp).size());
         
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
-        requestHandler.addEvent(new Event(bob, detectionPoint1, "localhostme"));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+        requestHandler.addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
         
         assertEquals(2, requestHandler.getResponses(timestamp).size());
 //        

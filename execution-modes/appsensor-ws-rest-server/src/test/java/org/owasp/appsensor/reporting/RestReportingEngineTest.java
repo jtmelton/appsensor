@@ -85,7 +85,7 @@ public class RestReportingEngineTest {
         
         System.err.println("responses: " + responses);
         for(Response resp : responses) {
-        	System.err.println(resp.getAction() + " / " + resp.getDetectionSystemId() + " / " + resp.getTimestamp());
+        	System.err.println(resp.getAction() + " / " + resp.getDetectionSystem().getDetectionSystemId() + " / " + resp.getTimestamp());
         }
     }
     
