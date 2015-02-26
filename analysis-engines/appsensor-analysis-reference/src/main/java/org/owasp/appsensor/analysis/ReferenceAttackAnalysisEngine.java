@@ -70,7 +70,7 @@ public class ReferenceAttackAnalysisEngine extends AttackAnalysisEngine {
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(attack.getUser()).
 				setDetectionPoint(triggeringDetectionPoint).
-				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(attack.getDetectionSystemId()));
+				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(attack.getDetectionSystem()));
 		
 		//grab any existing responses
 		Collection<Response> existingResponses = appSensorServer.getResponseStore().findResponses(criteria);
@@ -109,7 +109,7 @@ public class ReferenceAttackAnalysisEngine extends AttackAnalysisEngine {
 		response.setTimestamp(attack.getTimestamp());
 		response.setAction(responseAction);
 		response.setInterval(interval);
-		response.setDetectionSystemId(attack.getDetectionSystemId());
+		response.setDetectionSystem(attack.getDetectionSystem());
 		
 		return response;
 	}

@@ -55,7 +55,7 @@ public class ReferenceEventAnalysisEngine extends EventAnalysisEngine {
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(event.getUser()).
 				setDetectionPoint(event.getDetectionPoint()).
-				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
+				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystem()));
 
 		// find all events matching this event for this user 
 		Collection<Event> existingEvents = appSensorServer.getEventStore().findEvents(criteria);
@@ -93,7 +93,7 @@ public class ReferenceEventAnalysisEngine extends EventAnalysisEngine {
 							event.getUser(),
 							configuredDetectionPoint,
 							event.getTimestamp(),
-							event.getDetectionSystemId(),
+							event.getDetectionSystem(),
 							event.getResource()
 							);
 					
@@ -160,7 +160,7 @@ public class ReferenceEventAnalysisEngine extends EventAnalysisEngine {
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(event.getUser()).
 				setDetectionPoint(configuredDetectionPoint).
-				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystemId()));
+				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystem()));
 		
 		Collection<Attack> attacks = appSensorServer.getAttackStore().findAttacks(criteria);
 		
