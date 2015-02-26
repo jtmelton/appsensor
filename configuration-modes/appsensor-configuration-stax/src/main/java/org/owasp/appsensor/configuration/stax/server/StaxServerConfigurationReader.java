@@ -129,6 +129,14 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 						configuration.setServerPort(Integer.parseInt(xmlReader.getElementText().trim()));
 					} else if("config:server-socket-timeout-ms".equals(name)) {
 						configuration.setServerSocketTimeout(Integer.parseInt(xmlReader.getElementText().trim()));
+					} else if("config:geolocation".equals(name)) {
+						boolean useGeolocation = "true".equalsIgnoreCase(xmlReader.getAttributeValue(null, "enabled").trim()) ? true : false;
+						
+						String databasePath = xmlReader.getAttributeValue(null, "databasePath");
+						databasePath = databasePath != null ? databasePath.trim() : databasePath;
+						
+						configuration.setGeolocateIpAddresses(useGeolocation);
+						configuration.setGeolocationDatabasePath(databasePath);
 					} else if("config:client-applications".equals(name)) {
 						configuration.getClientApplications().addAll(readClientApplications(xmlReader));
 					} else if("config:correlation-config".equals(name)) {
