@@ -38,7 +38,7 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
   private static final org.apache.thrift.protocol.TField TIMESTAMP_FIELD_DESC = new org.apache.thrift.protocol.TField("timestamp", org.apache.thrift.protocol.TType.STRING, (short)3);
   private static final org.apache.thrift.protocol.TField ACTION_FIELD_DESC = new org.apache.thrift.protocol.TField("action", org.apache.thrift.protocol.TType.STRING, (short)4);
   private static final org.apache.thrift.protocol.TField INTERVAL_FIELD_DESC = new org.apache.thrift.protocol.TField("interval", org.apache.thrift.protocol.TType.STRUCT, (short)5);
-  private static final org.apache.thrift.protocol.TField DETECTION_SYSTEM_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("detectionSystemId", org.apache.thrift.protocol.TType.STRING, (short)6);
+  private static final org.apache.thrift.protocol.TField DETECTION_SYSTEM_FIELD_DESC = new org.apache.thrift.protocol.TField("detectionSystem", org.apache.thrift.protocol.TType.STRUCT, (short)6);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -51,7 +51,7 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
   public String timestamp; // required
   public String action; // required
   public Interval interval; // required
-  public String detectionSystemId; // required
+  public DetectionSystem detectionSystem; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -60,7 +60,7 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
     TIMESTAMP((short)3, "timestamp"),
     ACTION((short)4, "action"),
     INTERVAL((short)5, "interval"),
-    DETECTION_SYSTEM_ID((short)6, "detectionSystemId");
+    DETECTION_SYSTEM((short)6, "detectionSystem");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -85,8 +85,8 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
           return ACTION;
         case 5: // INTERVAL
           return INTERVAL;
-        case 6: // DETECTION_SYSTEM_ID
-          return DETECTION_SYSTEM_ID;
+        case 6: // DETECTION_SYSTEM
+          return DETECTION_SYSTEM;
         default:
           return null;
       }
@@ -142,8 +142,8 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.INTERVAL, new org.apache.thrift.meta_data.FieldMetaData("interval", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, Interval.class)));
-    tmpMap.put(_Fields.DETECTION_SYSTEM_ID, new org.apache.thrift.meta_data.FieldMetaData("detectionSystemId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.DETECTION_SYSTEM, new org.apache.thrift.meta_data.FieldMetaData("detectionSystem", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, DetectionSystem.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(Response.class, metaDataMap);
   }
@@ -157,7 +157,7 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
     String timestamp,
     String action,
     Interval interval,
-    String detectionSystemId)
+    DetectionSystem detectionSystem)
   {
     this();
     this.id = id;
@@ -166,7 +166,7 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
     this.timestamp = timestamp;
     this.action = action;
     this.interval = interval;
-    this.detectionSystemId = detectionSystemId;
+    this.detectionSystem = detectionSystem;
   }
 
   /**
@@ -187,8 +187,8 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
     if (other.isSetInterval()) {
       this.interval = new Interval(other.interval);
     }
-    if (other.isSetDetectionSystemId()) {
-      this.detectionSystemId = other.detectionSystemId;
+    if (other.isSetDetectionSystem()) {
+      this.detectionSystem = new DetectionSystem(other.detectionSystem);
     }
   }
 
@@ -204,7 +204,7 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
     this.timestamp = null;
     this.action = null;
     this.interval = null;
-    this.detectionSystemId = null;
+    this.detectionSystem = null;
   }
 
   public int getId() {
@@ -326,27 +326,27 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
     }
   }
 
-  public String getDetectionSystemId() {
-    return this.detectionSystemId;
+  public DetectionSystem getDetectionSystem() {
+    return this.detectionSystem;
   }
 
-  public Response setDetectionSystemId(String detectionSystemId) {
-    this.detectionSystemId = detectionSystemId;
+  public Response setDetectionSystem(DetectionSystem detectionSystem) {
+    this.detectionSystem = detectionSystem;
     return this;
   }
 
-  public void unsetDetectionSystemId() {
-    this.detectionSystemId = null;
+  public void unsetDetectionSystem() {
+    this.detectionSystem = null;
   }
 
-  /** Returns true if field detectionSystemId is set (has been assigned a value) and false otherwise */
-  public boolean isSetDetectionSystemId() {
-    return this.detectionSystemId != null;
+  /** Returns true if field detectionSystem is set (has been assigned a value) and false otherwise */
+  public boolean isSetDetectionSystem() {
+    return this.detectionSystem != null;
   }
 
-  public void setDetectionSystemIdIsSet(boolean value) {
+  public void setDetectionSystemIsSet(boolean value) {
     if (!value) {
-      this.detectionSystemId = null;
+      this.detectionSystem = null;
     }
   }
 
@@ -392,11 +392,11 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
       }
       break;
 
-    case DETECTION_SYSTEM_ID:
+    case DETECTION_SYSTEM:
       if (value == null) {
-        unsetDetectionSystemId();
+        unsetDetectionSystem();
       } else {
-        setDetectionSystemId((String)value);
+        setDetectionSystem((DetectionSystem)value);
       }
       break;
 
@@ -420,8 +420,8 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
     case INTERVAL:
       return getInterval();
 
-    case DETECTION_SYSTEM_ID:
-      return getDetectionSystemId();
+    case DETECTION_SYSTEM:
+      return getDetectionSystem();
 
     }
     throw new IllegalStateException();
@@ -444,8 +444,8 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
       return isSetAction();
     case INTERVAL:
       return isSetInterval();
-    case DETECTION_SYSTEM_ID:
-      return isSetDetectionSystemId();
+    case DETECTION_SYSTEM:
+      return isSetDetectionSystem();
     }
     throw new IllegalStateException();
   }
@@ -508,12 +508,12 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
         return false;
     }
 
-    boolean this_present_detectionSystemId = true && this.isSetDetectionSystemId();
-    boolean that_present_detectionSystemId = true && that.isSetDetectionSystemId();
-    if (this_present_detectionSystemId || that_present_detectionSystemId) {
-      if (!(this_present_detectionSystemId && that_present_detectionSystemId))
+    boolean this_present_detectionSystem = true && this.isSetDetectionSystem();
+    boolean that_present_detectionSystem = true && that.isSetDetectionSystem();
+    if (this_present_detectionSystem || that_present_detectionSystem) {
+      if (!(this_present_detectionSystem && that_present_detectionSystem))
         return false;
-      if (!this.detectionSystemId.equals(that.detectionSystemId))
+      if (!this.detectionSystem.equals(that.detectionSystem))
         return false;
     }
 
@@ -583,12 +583,12 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetDetectionSystemId()).compareTo(typedOther.isSetDetectionSystemId());
+    lastComparison = Boolean.valueOf(isSetDetectionSystem()).compareTo(typedOther.isSetDetectionSystem());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetDetectionSystemId()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.detectionSystemId, typedOther.detectionSystemId);
+    if (isSetDetectionSystem()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.detectionSystem, typedOther.detectionSystem);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -649,11 +649,11 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
     }
     first = false;
     if (!first) sb.append(", ");
-    sb.append("detectionSystemId:");
-    if (this.detectionSystemId == null) {
+    sb.append("detectionSystem:");
+    if (this.detectionSystem == null) {
       sb.append("null");
     } else {
-      sb.append(this.detectionSystemId);
+      sb.append(this.detectionSystem);
     }
     first = false;
     sb.append(")");
@@ -668,6 +668,9 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
     }
     if (interval != null) {
       interval.validate();
+    }
+    if (detectionSystem != null) {
+      detectionSystem.validate();
     }
   }
 
@@ -749,10 +752,11 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 6: // DETECTION_SYSTEM_ID
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.detectionSystemId = iprot.readString();
-              struct.setDetectionSystemIdIsSet(true);
+          case 6: // DETECTION_SYSTEM
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+              struct.detectionSystem = new DetectionSystem();
+              struct.detectionSystem.read(iprot);
+              struct.setDetectionSystemIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -795,9 +799,9 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
         struct.interval.write(oprot);
         oprot.writeFieldEnd();
       }
-      if (struct.detectionSystemId != null) {
-        oprot.writeFieldBegin(DETECTION_SYSTEM_ID_FIELD_DESC);
-        oprot.writeString(struct.detectionSystemId);
+      if (struct.detectionSystem != null) {
+        oprot.writeFieldBegin(DETECTION_SYSTEM_FIELD_DESC);
+        struct.detectionSystem.write(oprot);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -833,7 +837,7 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
       if (struct.isSetInterval()) {
         optionals.set(4);
       }
-      if (struct.isSetDetectionSystemId()) {
+      if (struct.isSetDetectionSystem()) {
         optionals.set(5);
       }
       oprot.writeBitSet(optionals, 6);
@@ -852,8 +856,8 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
       if (struct.isSetInterval()) {
         struct.interval.write(oprot);
       }
-      if (struct.isSetDetectionSystemId()) {
-        oprot.writeString(struct.detectionSystemId);
+      if (struct.isSetDetectionSystem()) {
+        struct.detectionSystem.write(oprot);
       }
     }
 
@@ -884,8 +888,9 @@ public class Response implements org.apache.thrift.TBase<Response, Response._Fie
         struct.setIntervalIsSet(true);
       }
       if (incoming.get(5)) {
-        struct.detectionSystemId = iprot.readString();
-        struct.setDetectionSystemIdIsSet(true);
+        struct.detectionSystem = new DetectionSystem();
+        struct.detectionSystem.read(iprot);
+        struct.setDetectionSystemIsSet(true);
       }
     }
   }

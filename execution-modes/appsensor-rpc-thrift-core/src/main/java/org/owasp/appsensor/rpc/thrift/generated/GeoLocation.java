@@ -30,28 +30,28 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class User implements org.apache.thrift.TBase<User, User._Fields>, java.io.Serializable, Cloneable {
-  private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("User");
+public class GeoLocation implements org.apache.thrift.TBase<GeoLocation, GeoLocation._Fields>, java.io.Serializable, Cloneable {
+  private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("GeoLocation");
 
   private static final org.apache.thrift.protocol.TField ID_FIELD_DESC = new org.apache.thrift.protocol.TField("id", org.apache.thrift.protocol.TType.I32, (short)1);
-  private static final org.apache.thrift.protocol.TField USERNAME_FIELD_DESC = new org.apache.thrift.protocol.TField("username", org.apache.thrift.protocol.TType.STRING, (short)2);
-  private static final org.apache.thrift.protocol.TField IP_ADDRESS_FIELD_DESC = new org.apache.thrift.protocol.TField("ipAddress", org.apache.thrift.protocol.TType.STRUCT, (short)3);
+  private static final org.apache.thrift.protocol.TField LATITUDE_FIELD_DESC = new org.apache.thrift.protocol.TField("latitude", org.apache.thrift.protocol.TType.DOUBLE, (short)2);
+  private static final org.apache.thrift.protocol.TField LONGITUDE_FIELD_DESC = new org.apache.thrift.protocol.TField("longitude", org.apache.thrift.protocol.TType.DOUBLE, (short)3);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
-    schemes.put(StandardScheme.class, new UserStandardSchemeFactory());
-    schemes.put(TupleScheme.class, new UserTupleSchemeFactory());
+    schemes.put(StandardScheme.class, new GeoLocationStandardSchemeFactory());
+    schemes.put(TupleScheme.class, new GeoLocationTupleSchemeFactory());
   }
 
   public int id; // required
-  public String username; // required
-  public IPAddress ipAddress; // required
+  public double latitude; // required
+  public double longitude; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     ID((short)1, "id"),
-    USERNAME((short)2, "username"),
-    IP_ADDRESS((short)3, "ipAddress");
+    LATITUDE((short)2, "latitude"),
+    LONGITUDE((short)3, "longitude");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -68,10 +68,10 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       switch(fieldId) {
         case 1: // ID
           return ID;
-        case 2: // USERNAME
-          return USERNAME;
-        case 3: // IP_ADDRESS
-          return IP_ADDRESS;
+        case 2: // LATITUDE
+          return LATITUDE;
+        case 3: // LONGITUDE
+          return LONGITUDE;
         default:
           return null;
       }
@@ -113,66 +113,68 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
 
   // isset id assignments
   private static final int __ID_ISSET_ID = 0;
+  private static final int __LATITUDE_ISSET_ID = 1;
+  private static final int __LONGITUDE_ISSET_ID = 2;
   private byte __isset_bitfield = 0;
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.ID, new org.apache.thrift.meta_data.FieldMetaData("id", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32        , "int")));
-    tmpMap.put(_Fields.USERNAME, new org.apache.thrift.meta_data.FieldMetaData("username", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-    tmpMap.put(_Fields.IP_ADDRESS, new org.apache.thrift.meta_data.FieldMetaData("ipAddress", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, IPAddress.class)));
+    tmpMap.put(_Fields.LATITUDE, new org.apache.thrift.meta_data.FieldMetaData("latitude", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.DOUBLE)));
+    tmpMap.put(_Fields.LONGITUDE, new org.apache.thrift.meta_data.FieldMetaData("longitude", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.DOUBLE)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
-    org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(User.class, metaDataMap);
+    org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(GeoLocation.class, metaDataMap);
   }
 
-  public User() {
+  public GeoLocation() {
   }
 
-  public User(
+  public GeoLocation(
     int id,
-    String username,
-    IPAddress ipAddress)
+    double latitude,
+    double longitude)
   {
     this();
     this.id = id;
     setIdIsSet(true);
-    this.username = username;
-    this.ipAddress = ipAddress;
+    this.latitude = latitude;
+    setLatitudeIsSet(true);
+    this.longitude = longitude;
+    setLongitudeIsSet(true);
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
-  public User(User other) {
+  public GeoLocation(GeoLocation other) {
     __isset_bitfield = other.__isset_bitfield;
     this.id = other.id;
-    if (other.isSetUsername()) {
-      this.username = other.username;
-    }
-    if (other.isSetIpAddress()) {
-      this.ipAddress = new IPAddress(other.ipAddress);
-    }
+    this.latitude = other.latitude;
+    this.longitude = other.longitude;
   }
 
-  public User deepCopy() {
-    return new User(this);
+  public GeoLocation deepCopy() {
+    return new GeoLocation(this);
   }
 
   @Override
   public void clear() {
     setIdIsSet(false);
     this.id = 0;
-    this.username = null;
-    this.ipAddress = null;
+    setLatitudeIsSet(false);
+    this.latitude = 0.0;
+    setLongitudeIsSet(false);
+    this.longitude = 0.0;
   }
 
   public int getId() {
     return this.id;
   }
 
-  public User setId(int id) {
+  public GeoLocation setId(int id) {
     this.id = id;
     setIdIsSet(true);
     return this;
@@ -191,52 +193,50 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __ID_ISSET_ID, value);
   }
 
-  public String getUsername() {
-    return this.username;
+  public double getLatitude() {
+    return this.latitude;
   }
 
-  public User setUsername(String username) {
-    this.username = username;
+  public GeoLocation setLatitude(double latitude) {
+    this.latitude = latitude;
+    setLatitudeIsSet(true);
     return this;
   }
 
-  public void unsetUsername() {
-    this.username = null;
+  public void unsetLatitude() {
+    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __LATITUDE_ISSET_ID);
   }
 
-  /** Returns true if field username is set (has been assigned a value) and false otherwise */
-  public boolean isSetUsername() {
-    return this.username != null;
+  /** Returns true if field latitude is set (has been assigned a value) and false otherwise */
+  public boolean isSetLatitude() {
+    return EncodingUtils.testBit(__isset_bitfield, __LATITUDE_ISSET_ID);
   }
 
-  public void setUsernameIsSet(boolean value) {
-    if (!value) {
-      this.username = null;
-    }
+  public void setLatitudeIsSet(boolean value) {
+    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __LATITUDE_ISSET_ID, value);
   }
 
-  public IPAddress getIpAddress() {
-    return this.ipAddress;
+  public double getLongitude() {
+    return this.longitude;
   }
 
-  public User setIpAddress(IPAddress ipAddress) {
-    this.ipAddress = ipAddress;
+  public GeoLocation setLongitude(double longitude) {
+    this.longitude = longitude;
+    setLongitudeIsSet(true);
     return this;
   }
 
-  public void unsetIpAddress() {
-    this.ipAddress = null;
+  public void unsetLongitude() {
+    __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __LONGITUDE_ISSET_ID);
   }
 
-  /** Returns true if field ipAddress is set (has been assigned a value) and false otherwise */
-  public boolean isSetIpAddress() {
-    return this.ipAddress != null;
+  /** Returns true if field longitude is set (has been assigned a value) and false otherwise */
+  public boolean isSetLongitude() {
+    return EncodingUtils.testBit(__isset_bitfield, __LONGITUDE_ISSET_ID);
   }
 
-  public void setIpAddressIsSet(boolean value) {
-    if (!value) {
-      this.ipAddress = null;
-    }
+  public void setLongitudeIsSet(boolean value) {
+    __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __LONGITUDE_ISSET_ID, value);
   }
 
   public void setFieldValue(_Fields field, Object value) {
@@ -249,19 +249,19 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       }
       break;
 
-    case USERNAME:
+    case LATITUDE:
       if (value == null) {
-        unsetUsername();
+        unsetLatitude();
       } else {
-        setUsername((String)value);
+        setLatitude((Double)value);
       }
       break;
 
-    case IP_ADDRESS:
+    case LONGITUDE:
       if (value == null) {
-        unsetIpAddress();
+        unsetLongitude();
       } else {
-        setIpAddress((IPAddress)value);
+        setLongitude((Double)value);
       }
       break;
 
@@ -273,11 +273,11 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     case ID:
       return Integer.valueOf(getId());
 
-    case USERNAME:
-      return getUsername();
+    case LATITUDE:
+      return Double.valueOf(getLatitude());
 
-    case IP_ADDRESS:
-      return getIpAddress();
+    case LONGITUDE:
+      return Double.valueOf(getLongitude());
 
     }
     throw new IllegalStateException();
@@ -292,10 +292,10 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     switch (field) {
     case ID:
       return isSetId();
-    case USERNAME:
-      return isSetUsername();
-    case IP_ADDRESS:
-      return isSetIpAddress();
+    case LATITUDE:
+      return isSetLatitude();
+    case LONGITUDE:
+      return isSetLongitude();
     }
     throw new IllegalStateException();
   }
@@ -304,12 +304,12 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
   public boolean equals(Object that) {
     if (that == null)
       return false;
-    if (that instanceof User)
-      return this.equals((User)that);
+    if (that instanceof GeoLocation)
+      return this.equals((GeoLocation)that);
     return false;
   }
 
-  public boolean equals(User that) {
+  public boolean equals(GeoLocation that) {
     if (that == null)
       return false;
 
@@ -322,21 +322,21 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
         return false;
     }
 
-    boolean this_present_username = true && this.isSetUsername();
-    boolean that_present_username = true && that.isSetUsername();
-    if (this_present_username || that_present_username) {
-      if (!(this_present_username && that_present_username))
+    boolean this_present_latitude = true;
+    boolean that_present_latitude = true;
+    if (this_present_latitude || that_present_latitude) {
+      if (!(this_present_latitude && that_present_latitude))
         return false;
-      if (!this.username.equals(that.username))
+      if (this.latitude != that.latitude)
         return false;
     }
 
-    boolean this_present_ipAddress = true && this.isSetIpAddress();
-    boolean that_present_ipAddress = true && that.isSetIpAddress();
-    if (this_present_ipAddress || that_present_ipAddress) {
-      if (!(this_present_ipAddress && that_present_ipAddress))
+    boolean this_present_longitude = true;
+    boolean that_present_longitude = true;
+    if (this_present_longitude || that_present_longitude) {
+      if (!(this_present_longitude && that_present_longitude))
         return false;
-      if (!this.ipAddress.equals(that.ipAddress))
+      if (this.longitude != that.longitude)
         return false;
     }
 
@@ -348,13 +348,13 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     return 0;
   }
 
-  public int compareTo(User other) {
+  public int compareTo(GeoLocation other) {
     if (!getClass().equals(other.getClass())) {
       return getClass().getName().compareTo(other.getClass().getName());
     }
 
     int lastComparison = 0;
-    User typedOther = (User)other;
+    GeoLocation typedOther = (GeoLocation)other;
 
     lastComparison = Boolean.valueOf(isSetId()).compareTo(typedOther.isSetId());
     if (lastComparison != 0) {
@@ -366,22 +366,22 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetUsername()).compareTo(typedOther.isSetUsername());
+    lastComparison = Boolean.valueOf(isSetLatitude()).compareTo(typedOther.isSetLatitude());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetUsername()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.username, typedOther.username);
+    if (isSetLatitude()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.latitude, typedOther.latitude);
       if (lastComparison != 0) {
         return lastComparison;
       }
     }
-    lastComparison = Boolean.valueOf(isSetIpAddress()).compareTo(typedOther.isSetIpAddress());
+    lastComparison = Boolean.valueOf(isSetLongitude()).compareTo(typedOther.isSetLongitude());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetIpAddress()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ipAddress, typedOther.ipAddress);
+    if (isSetLongitude()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.longitude, typedOther.longitude);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -403,27 +403,19 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("User(");
+    StringBuilder sb = new StringBuilder("GeoLocation(");
     boolean first = true;
 
     sb.append("id:");
     sb.append(this.id);
     first = false;
     if (!first) sb.append(", ");
-    sb.append("username:");
-    if (this.username == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.username);
-    }
+    sb.append("latitude:");
+    sb.append(this.latitude);
     first = false;
     if (!first) sb.append(", ");
-    sb.append("ipAddress:");
-    if (this.ipAddress == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.ipAddress);
-    }
+    sb.append("longitude:");
+    sb.append(this.longitude);
     first = false;
     sb.append(")");
     return sb.toString();
@@ -432,9 +424,6 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
   public void validate() throws org.apache.thrift.TException {
     // check for required fields
     // check for sub-struct validity
-    if (ipAddress != null) {
-      ipAddress.validate();
-    }
   }
 
   private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -455,15 +444,15 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     }
   }
 
-  private static class UserStandardSchemeFactory implements SchemeFactory {
-    public UserStandardScheme getScheme() {
-      return new UserStandardScheme();
+  private static class GeoLocationStandardSchemeFactory implements SchemeFactory {
+    public GeoLocationStandardScheme getScheme() {
+      return new GeoLocationStandardScheme();
     }
   }
 
-  private static class UserStandardScheme extends StandardScheme<User> {
+  private static class GeoLocationStandardScheme extends StandardScheme<GeoLocation> {
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot, User struct) throws org.apache.thrift.TException {
+    public void read(org.apache.thrift.protocol.TProtocol iprot, GeoLocation struct) throws org.apache.thrift.TException {
       org.apache.thrift.protocol.TField schemeField;
       iprot.readStructBegin();
       while (true)
@@ -481,19 +470,18 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 2: // USERNAME
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-              struct.username = iprot.readString();
-              struct.setUsernameIsSet(true);
+          case 2: // LATITUDE
+            if (schemeField.type == org.apache.thrift.protocol.TType.DOUBLE) {
+              struct.latitude = iprot.readDouble();
+              struct.setLatitudeIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 3: // IP_ADDRESS
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-              struct.ipAddress = new IPAddress();
-              struct.ipAddress.read(iprot);
-              struct.setIpAddressIsSet(true);
+          case 3: // LONGITUDE
+            if (schemeField.type == org.apache.thrift.protocol.TType.DOUBLE) {
+              struct.longitude = iprot.readDouble();
+              struct.setLongitudeIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -509,64 +497,60 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       struct.validate();
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot, User struct) throws org.apache.thrift.TException {
+    public void write(org.apache.thrift.protocol.TProtocol oprot, GeoLocation struct) throws org.apache.thrift.TException {
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
       oprot.writeFieldBegin(ID_FIELD_DESC);
       oprot.writeI32(struct.id);
       oprot.writeFieldEnd();
-      if (struct.username != null) {
-        oprot.writeFieldBegin(USERNAME_FIELD_DESC);
-        oprot.writeString(struct.username);
-        oprot.writeFieldEnd();
-      }
-      if (struct.ipAddress != null) {
-        oprot.writeFieldBegin(IP_ADDRESS_FIELD_DESC);
-        struct.ipAddress.write(oprot);
-        oprot.writeFieldEnd();
-      }
+      oprot.writeFieldBegin(LATITUDE_FIELD_DESC);
+      oprot.writeDouble(struct.latitude);
+      oprot.writeFieldEnd();
+      oprot.writeFieldBegin(LONGITUDE_FIELD_DESC);
+      oprot.writeDouble(struct.longitude);
+      oprot.writeFieldEnd();
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
 
   }
 
-  private static class UserTupleSchemeFactory implements SchemeFactory {
-    public UserTupleScheme getScheme() {
-      return new UserTupleScheme();
+  private static class GeoLocationTupleSchemeFactory implements SchemeFactory {
+    public GeoLocationTupleScheme getScheme() {
+      return new GeoLocationTupleScheme();
     }
   }
 
-  private static class UserTupleScheme extends TupleScheme<User> {
+  private static class GeoLocationTupleScheme extends TupleScheme<GeoLocation> {
 
     @Override
-    public void write(org.apache.thrift.protocol.TProtocol prot, User struct) throws org.apache.thrift.TException {
+    public void write(org.apache.thrift.protocol.TProtocol prot, GeoLocation struct) throws org.apache.thrift.TException {
       TTupleProtocol oprot = (TTupleProtocol) prot;
       BitSet optionals = new BitSet();
       if (struct.isSetId()) {
         optionals.set(0);
       }
-      if (struct.isSetUsername()) {
+      if (struct.isSetLatitude()) {
         optionals.set(1);
       }
-      if (struct.isSetIpAddress()) {
+      if (struct.isSetLongitude()) {
         optionals.set(2);
       }
       oprot.writeBitSet(optionals, 3);
       if (struct.isSetId()) {
         oprot.writeI32(struct.id);
       }
-      if (struct.isSetUsername()) {
-        oprot.writeString(struct.username);
+      if (struct.isSetLatitude()) {
+        oprot.writeDouble(struct.latitude);
       }
-      if (struct.isSetIpAddress()) {
-        struct.ipAddress.write(oprot);
+      if (struct.isSetLongitude()) {
+        oprot.writeDouble(struct.longitude);
       }
     }
 
     @Override
-    public void read(org.apache.thrift.protocol.TProtocol prot, User struct) throws org.apache.thrift.TException {
+    public void read(org.apache.thrift.protocol.TProtocol prot, GeoLocation struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
       BitSet incoming = iprot.readBitSet(3);
       if (incoming.get(0)) {
@@ -574,13 +558,12 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
         struct.setIdIsSet(true);
       }
       if (incoming.get(1)) {
-        struct.username = iprot.readString();
-        struct.setUsernameIsSet(true);
+        struct.latitude = iprot.readDouble();
+        struct.setLatitudeIsSet(true);
       }
       if (incoming.get(2)) {
-        struct.ipAddress = new IPAddress();
-        struct.ipAddress.read(iprot);
-        struct.setIpAddressIsSet(true);
+        struct.longitude = iprot.readDouble();
+        struct.setLongitudeIsSet(true);
       }
     }
   }
