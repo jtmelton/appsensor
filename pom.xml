@@ -5,7 +5,7 @@
 
 	<groupId>org.owasp.appsensor</groupId>
   	<artifactId>appsensor-parent</artifactId>
-	<version>2.0.1-SNAPSHOT</version>
+	<version>2.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>appsensor-parent</name>
@@ -90,6 +90,7 @@
 		<module>analysis-engines/appsensor-analysis-reference</module>
 		<module>access-controllers/appsensor-access-control-reference</module>
 		<module>configuration-modes/appsensor-configuration-stax</module>
+		<module>geolocators/appsensor-geolocation-geoip2</module>
 		<module>execution-modes/appsensor-local</module>
 		<module>execution-modes/appsensor-ws-rest-client</module>
 		<module>execution-modes/appsensor-ws-rest-server</module>
@@ -99,6 +100,9 @@
 		<module>execution-modes/appsensor-rpc-thrift-core</module>
 		<module>execution-modes/appsensor-rpc-thrift-client</module>
 		<module>execution-modes/appsensor-rpc-thrift-server</module>
+		<module>execution-modes/appsensor-amqp-rabbitmq-core</module>
+		<module>execution-modes/appsensor-amqp-rabbitmq-client</module>
+		<module>execution-modes/appsensor-amqp-rabbitmq-server</module>
 		<module>reporting-engines/appsensor-reporting-simple-logging</module>
 		<module>reporting-engines/appsensor-reporting-websocket</module>
 		<module>storage-providers/appsensor-storage-file-based</module>
