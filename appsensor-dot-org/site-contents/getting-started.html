@@ -143,7 +143,7 @@
           <div id="chooseDeploymentModel" class="panel-collapse collapse">
             <div class="panel-body">
               <p>
-                The reference implementation currently supports 3 execution modes and we'll discuss each in turn.
+                The reference implementation currently supports 4 execution modes and we'll discuss each in turn.
               </p>
 
               <p>&nbsp;</p><h3>REST Web Service</h3>
@@ -167,11 +167,38 @@
                 Avoid this model if any/all of the following are true:
               </p>
               <ul>
-                <li>You only have 1 application</li>
-                <li>Your 1 application is Java</li>
+                <li>You only have 1 application and it is Java</li>
                 <li>You do not want the network overhead, and would rather make local JVM calls</li>
               </ul>
 
+			  <p>&nbsp;</p><h3>Thrift</h3>
+
+              <p>
+                The Thrift model uses Thrift, which is a binary protocol that allows fast communication and supports many languages.
+              </p>
+
+              <p>&nbsp;</p><h4>Use when:</h4>
+              <p>
+                Choose this model if any/all of the following are true:
+              </p>
+              <ul>
+              	<li>You are looking for high-speed communication</li>
+                <li>You are using a non-Java language for your application</li>
+                <li>All of your client applications are in a thrift-supported language</li>
+                <li>You need to support multiple applications</li>
+                <li>You are in a clustered environment (1 application over multiple servers)</li>
+              </ul>
+              
+              <p>&nbsp;</p><h4>Avoid when:</h4>
+              <p>
+                Avoid this model if any/all of the following are true:
+              </p>
+              <ul>
+                <li>You are using a non-thrift language for a client application</li>
+                <li>You only have 1 application and it is Java</li>
+                <li>You are not comfortable with a binary protocol and want something more "debuggable", like REST</li>
+              </ul>
+              
               <p>&nbsp;</p><h3>SOAP Web Service</h3>
 
               <p>
@@ -194,8 +221,7 @@
                 Avoid this model if any/all of the following are true:
               </p>
               <ul>
-                <li>You only have 1 application</li>
-                <li>Your 1 application is Java</li>
+                <li>You only have 1 application and it is Java</li>
                 <li>You do not want the network overhead, and would rather make local JVM calls</li>
                 <li>You would rather use a simpler network model, like REST</li>
               </ul>
@@ -211,8 +237,7 @@
                 Choose this model if any/all of the following are true:
               </p>
               <ul>
-                <li>You only have 1 application</li>
-                <li>Your 1 application is Java</li>
+                <li>You only have 1 application and it is Java</li>
                 <li>You do not want the network overhead, and would rather make local JVM calls</li>
               </ul>
               
