@@ -133,7 +133,7 @@ public abstract class EventStore {
 
 		// check detection system match if detection systems specified
 		boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
-				detectionSystemIds.contains(event.getDetectionSystemId()) : true;
+				detectionSystemIds.contains(event.getDetectionSystem().getDetectionSystemId()) : true;
 
 		// check detection point match if detection point specified
 		boolean detectionPointMatch = (detectionPoint != null) ? 

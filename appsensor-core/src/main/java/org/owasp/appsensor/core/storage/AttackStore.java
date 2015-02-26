@@ -115,7 +115,7 @@ public abstract class AttackStore {
 			
 			//check detection system match if detection systems specified
 			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
-					detectionSystemIds.contains(attack.getDetectionSystemId()) : true;
+					detectionSystemIds.contains(attack.getDetectionSystem().getDetectionSystemId()) : true;
 			
 			//check detection point match if detection point specified
 			boolean detectionPointMatch = (detectionPoint != null) ? 
@@ -152,7 +152,7 @@ public abstract class AttackStore {
 
 		// check detection system match if detection systems specified
 		boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
-				detectionSystemIds.contains(attack.getDetectionSystemId()) : true;
+				detectionSystemIds.contains(attack.getDetectionSystem().getDetectionSystemId()) : true;
 
 		// check detection point match if detection point specified
 		boolean detectionPointMatch = (detectionPoint != null) ? 
