@@ -4,6 +4,10 @@ https://www.owasp.org/index.php/Projects/OWASP_AppSensor_Project
 http://appsensor.org/
 https://github.com/jtmelton/appsensor
 
+Changes in version 2.0.1 (2015/02/26)
+--------------------------------------
+* Support multiple detection point configurations per detection 
+  point label (https://github.com/jtmelton/appsensor/issues/18)
 
 Changes in version 2.0 (2015/01/27)
 --------------------------------------
