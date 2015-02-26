@@ -2,6 +2,7 @@ package org.owasp.appsensor.core;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,8 @@ import javax.persistence.Id;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.google.common.net.InetAddresses;
 
 /**
  * The standard User object. This represents the end user in the system, 
@@ -37,11 +40,21 @@ public class User implements Serializable {
 	private Integer id;
 	
 	private String username;
+	
+	private IPAddress ipAddress;
+	
+	@Inject
+	private transient IPAddress locator;
 
 	public User() {}
 	
 	public User(String username) {
 		setUsername(username);
+	}
+	
+	public User(String username, IPAddress ipAddress) {
+		setUsername(username);
+		setIPAddress(ipAddress);
 	}
 	
 	public String getUsername() {
@@ -50,6 +63,21 @@ public class User implements Serializable {
 
 	public User setUsername(String username) {
 		this.username = username;
+		
+		// if IP is used as username, setup IP address w/ geolocation
+		if (InetAddresses.isInetAddress(username)) {
+			this.ipAddress = locator.fromString(username);
+		}
+		
+		return this;
+	}
+	
+	public IPAddress getIPAddress() {
+		return ipAddress;
+	}
+
+	public User setIPAddress(IPAddress ipAddress) {
+		this.ipAddress = ipAddress;
 		
 		return this;
 	}
@@ -81,6 +109,7 @@ public class User implements Serializable {
 	public String toString() {
 		return new ToStringBuilder(this).
 				append("username", username).
+				append("ipAddress", ipAddress).
 			    toString();
 	}
 	
