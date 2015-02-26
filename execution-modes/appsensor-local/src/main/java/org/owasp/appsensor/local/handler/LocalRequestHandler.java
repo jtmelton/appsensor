@@ -47,7 +47,7 @@ public class LocalRequestHandler implements RequestHandler {
 	@Override
 	public void addEvent(Event event) throws NotAuthorizedException {
 		if (detectionSystemId == null) {
-			detectionSystemId = event.getDetectionSystemId();
+			detectionSystemId = event.getDetectionSystem().getDetectionSystemId();
 		}
 		
 		appSensorServer.getEventStore().addEvent(event);
@@ -59,7 +59,7 @@ public class LocalRequestHandler implements RequestHandler {
 	@Override
 	public void addAttack(Attack attack) throws NotAuthorizedException {
 		if (detectionSystemId == null) {
-			detectionSystemId = attack.getDetectionSystemId();
+			detectionSystemId = attack.getDetectionSystem().getDetectionSystemId();
 		}
 		
 		appSensorServer.getAttackStore().addAttack(attack);

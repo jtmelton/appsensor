@@ -14,6 +14,7 @@ import org.owasp.appsensor.core.AppSensorClient;
 import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.DetectionSystem;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.Response;
@@ -42,7 +43,7 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	
 	private static Collection<String> detectionSystems1 = new ArrayList<String>();
 	
-	private static String detectionSystem1 = "localhostme";
+	private static DetectionSystem detectionSystem1 = new DetectionSystem("localhostme");
 	
 	@Inject
 	AppSensorServer appSensorServer;
@@ -55,7 +56,7 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 		detectionPoint1.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
 		detectionPoint1.setLabel("IE1");
 		
-		detectionSystems1.add(detectionSystem1);
+		detectionSystems1.add(detectionSystem1.getDetectionSystemId());
 	}
 	
 	@Test
@@ -72,37 +73,37 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 		assertEquals(0, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
 		
 		assertEquals(1, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
 		
 		assertEquals(2, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
 		
 		assertEquals(3, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
 		
 		assertEquals(4, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
 		
 		assertEquals(5, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
 		
 		assertEquals(6, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(2, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
 		
 		assertEquals(7, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(2, appSensorServer.getAttackStore().findAttacks(criteria).size());
