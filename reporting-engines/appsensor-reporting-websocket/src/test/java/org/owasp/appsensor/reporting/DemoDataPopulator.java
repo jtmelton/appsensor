@@ -1,19 +1,28 @@
 package org.owasp.appsensor.reporting;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.owasp.appsensor.core.AppSensorClient;
 import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.DetectionSystem;
 import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.IPAddress;
 import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.Threshold;
 import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Provide demo data for websockets test web app.
@@ -21,51 +30,81 @@ import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  * @author Raphaël Taban
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations={"classpath:applicationContext.xml"})
 public class DemoDataPopulator {
 	
 	@Inject
-	private static AppSensorClient appSensorClient;
+	private AppSensorClient appSensorClient;
 	
 	@Inject
 	private AppSensorServer appSensorServer;
 	
-	private static User bob = new User("bob");
+	@Inject
+	private IPAddress locator; 
 	
 	private static DetectionPoint detectionPoint1 = new DetectionPoint();
 	
-	private static Collection<String> detectionSystems1 = new ArrayList<String>();
-	
-	private static String detectionSystem1 = "localhostme";
+	private static Random random = new Random(); 
 	
 	public static void main(String[] args) throws Exception {
 		new DemoDataPopulator().populateData();
 	}
 	
-	private void populateData() throws Exception {
-		int delay = 500;
+	@Test
+	public void populateData() throws Exception {
+		User user1 = new User("user1 (russia)", locator.fromString("5.45.80.10"));
+		User user2 = new User("user2 (canada)", locator.fromString("23.29.201.141"));
+		User user3 = new User("user3 (australia)", locator.fromString("27.54.137.119"));
+		User user4 = new User("user4 (south africa)", locator.fromString("41.50.10.35"));
+
+		DetectionSystem detectionSystem1 = new DetectionSystem("attacked server1 (Mexico)", locator.fromString("148.208.15.39"));
+		DetectionSystem detectionSystem2 = new DetectionSystem("attacked server2 (Italy)", locator.fromString("5.172.75.122"));
+		
+		List<User> users = Arrays.asList(user1, user2, user3, user4);
+		List<DetectionSystem> detectionSystems = Arrays.asList(detectionSystem1, detectionSystem2);
+		
 		detectionPoint1.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
 		detectionPoint1.setLabel("IE1");
-		detectionSystems1.add(detectionSystem1);
 		
 		ServerConfiguration updatedConfiguration = appSensorServer.getConfiguration();
 		updatedConfiguration.setDetectionPoints(loadMockedDetectionPoints());
 		appSensorServer.setConfiguration(updatedConfiguration);
 		
-		Thread.sleep(delay);
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
-		Thread.sleep(delay);
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
-		Thread.sleep(delay);
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
-		Thread.sleep(delay);
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
-		Thread.sleep(delay);
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
-		Thread.sleep(delay);
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
-		Thread.sleep(delay);
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "localhostme"));
-		Thread.sleep(delay);
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+		appSensorClient.getEventManager().addEvent(new Event(users.get(random.nextInt(4)), detectionPoint1, detectionSystems.get(random.nextInt(2))));
+		Thread.sleep(getDelay());
+	}
+
+	// between 500ms and 2,500ms
+	private int getDelay() {
+		return random.nextInt(2000) + 500;
 	}
 	
 	private Collection<DetectionPoint> loadMockedDetectionPoints() {

@@ -5,22 +5,25 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
-import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
-import javax.websocket.WebSocketContainer;
 
+import org.glassfish.tyrus.client.ClientManager;
 import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.logging.Loggable;
 import org.owasp.appsensor.core.reporting.ReportingEngine;
+import org.owasp.appsensor.core.storage.AttackStoreListener;
+import org.owasp.appsensor.core.storage.EventStoreListener;
+import org.owasp.appsensor.core.storage.ResponseStoreListener;
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;
@@ -40,6 +43,9 @@ import com.google.gson.Gson;
  */
 @Named
 @Loggable
+@EventStoreListener
+@AttackStoreListener
+@ResponseStoreListener
 @ClientEndpoint
 public class WebSocketReportingEngine implements ReportingEngine {
 	
@@ -52,6 +58,11 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	private Gson gson = new Gson();
 	
 	public WebSocketReportingEngine() { }
+	
+	@PostConstruct
+	public void attemptInitialConnection() {
+		ensureConnected();
+	}
 	
 	/**
 	 * {@inheritDoc}
@@ -123,7 +134,11 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	
 	@OnOpen
 	public void onOpen(Session session) {
-		logger.info("Connected ... " + session.getId());
+		if(logger != null) {
+			logger.info("Connected ... " + (session != null ? session.getId() : ""));
+		} else {
+			System.err.println("Connected ... " + (session != null ? session.getId() : ""));
+		}
 	}
 
 	@OnMessage
@@ -133,18 +148,23 @@ public class WebSocketReportingEngine implements ReportingEngine {
 
 	@OnClose
 	public void onClose(Session session, CloseReason closeReason) {
-		logger.info(String.format("Session %s close because of %s",
-				session.getId(), closeReason));
+		if(logger != null) {
+			logger.info(String.format("Session closed because of %s", closeReason));
+		} else {
+			System.err.println(String.format("Session closed because of %s", closeReason));
+		}
 	}
 
 	private void ensureConnected() {
 		if (! webSocketInitialized) {
-			WebSocketContainer client = ContainerProvider.getWebSocketContainer();
-	
+//			WebSocketContainer client = ContainerProvider.getWebSocketContainer();
+			ClientManager client = ClientManager.createClient();
+
 			try {
 	            localSession = client.connectToServer(WebSocketReportingEngine.class, new URI("ws://localhost:8080/simple-websocket-dashboard/dashboard"));
 	            webSocketInitialized = true;
 	        } catch (DeploymentException | URISyntaxException | IOException e) {
+	        	System.err.println("Bailing out");
 	            throw new RuntimeException(e);
 	        }
 	    	System.err.println("started and connected");
