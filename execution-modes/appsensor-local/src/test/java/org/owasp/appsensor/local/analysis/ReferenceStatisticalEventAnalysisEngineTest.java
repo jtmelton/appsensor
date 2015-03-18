@@ -45,6 +45,8 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	
 	private static DetectionSystem detectionSystem1 = new DetectionSystem("localhostme");
 	
+	protected int sleepAmount = 0;
+	
 	@Inject
 	AppSensorServer appSensorServer;
 	
@@ -70,40 +72,56 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 				setDetectionPoint(detectionPoint1).
 				setDetectionSystemIds(detectionSystems1);
 		
+		Thread.sleep(sleepAmount);
+		
 		assertEquals(0, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
 		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+		
+		Thread.sleep(sleepAmount);
 		
 		assertEquals(1, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
 		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
 		
+		Thread.sleep(sleepAmount);
+		
 		assertEquals(2, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
 		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+		
+		Thread.sleep(sleepAmount);
 		
 		assertEquals(3, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
 		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
 		
+		Thread.sleep(sleepAmount);
+		
 		assertEquals(4, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
 		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+		
+		Thread.sleep(sleepAmount);
 		
 		assertEquals(5, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
 		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
 		
+		Thread.sleep(sleepAmount);
+		
 		assertEquals(6, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(2, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
 		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+		
+		Thread.sleep(sleepAmount);
 		
 		assertEquals(7, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(2, appSensorServer.getAttackStore().findAttacks(criteria).size());
