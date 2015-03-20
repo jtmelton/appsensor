@@ -108,6 +108,8 @@
 		<module>storage-providers/appsensor-storage-file-based</module>
 		<module>storage-providers/appsensor-storage-jpa2</module>
 		<module>storage-providers/appsensor-storage-nosql-mongodb</module>
+		<module>integrations/appsensor-integration-jmx</module>
+		<module>integrations/appsensor-integration-cef-syslog</module>
 	</modules>
 	
 	<dependencies>	
