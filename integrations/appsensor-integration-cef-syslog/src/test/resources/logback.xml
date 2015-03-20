@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="SYSLOG-UDP" class="com.papertrailapp.logback.Syslog4jAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<!-- just report the message - all formatting handled by emitter -->
+			<pattern>%m</pattern>
+		</layout>
+	
+		<syslogConfig class="org.productivity.java.syslog4j.impl.net.udp.UDPNetSyslogConfig">
+			<!-- remote system to log to -->
+			<host>localhost</host>
+			<!-- remote port to log to -->
+			<port>514</port>
+		</syslogConfig>
+	</appender>
+	
+	<!-- MUST be named "appsensor_syslog" - that's looked up by name in the code -->
+	<!-- additivity=false ensures appsensor data only goes to the appsensor log -->
+    <logger name="appsensor_syslog" level="DEBUG" additivity="false">
+        <appender-ref ref="SYSLOG-UDP"/>
+    </logger>
+
+	<!-- Strictly speaking, the level attribute is not necessary since -->
+	<!-- the level of the root level is set to DEBUG by default. -->
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>
