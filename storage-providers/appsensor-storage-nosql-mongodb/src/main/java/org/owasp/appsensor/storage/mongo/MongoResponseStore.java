@@ -48,7 +48,7 @@ public class MongoResponseStore extends ResponseStore {
 	 */
 	@Override
 	public void addResponse(Response response) {
-		logger.warn("Security response " + response + " triggered for user: " + response.getUser().getUsername());
+		logger.warn("Security response " + response.getAction() + " triggered for user: " + response.getUser().getUsername());
 
 		String json = gson.toJson(response);
 		
