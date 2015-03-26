@@ -5,7 +5,7 @@ AppSensor is a framework that provides real-time event detection and response. T
 
 AppSensor has a [website](http://appsensor.org) with further documentation and is an [OWASP](https://www.owasp.org/index.php/AppSensor) project.
 
-This code is under active development and is currently going through a release candidate process with a planned 2.0 release in January 2015. 
+This code is actively being developed. There was a 2.0 release in January 2015. The upcoming releases and milestones are tracked in the [roadmap](https://www.owasp.org/index.php/OWASP_AppSensor_Project#tab=Road_Map_and_Getting_Involved).
 
 The AppSensor source code is released under an MIT license. See the accompanying LICENSE.txt file.
 
@@ -41,7 +41,7 @@ AppSensor is a multi-module maven project. The project requires Java version 7 o
 Documentation
 -------------
 
-For an extensive book documenting the concepts behind AppSensor, go to the  [OWASP](https://www.owasp.org/index.php/OWASP_AppSensor_Project) site and download the PDF. 
+For an extensive book documenting the concepts (ideas) behind AppSensor, go to the [OWASP](https://www.owasp.org/index.php/OWASP_AppSensor_Project) site and download the PDF. 
 
 If you're looking for in-depth user or developer documentation, visit http://appsensor.org/ 
 
@@ -63,7 +63,7 @@ An example of getting one of the dependencies is shown below:
 <dependency>
 	<groupId>org.owasp.appsensor</groupId>
 	<artifactId>appsensor-core</artifactId>
-	<version>2.0.0-RC3</version>
+	<version>2.0.1</version>
 </dependency>
 ```
 
