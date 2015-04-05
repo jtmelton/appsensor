@@ -43,8 +43,6 @@ public class KeyValuePair implements Serializable {
 		this.value = value;
 	}
 
-
-
 	@Override
     public int hashCode() {
     	int hashKey = key != null ? key.hashCode() : 0;
