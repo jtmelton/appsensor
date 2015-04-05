@@ -4,6 +4,24 @@ https://www.owasp.org/index.php/Projects/OWASP_AppSensor_Project
 http://appsensor.org/
 https://github.com/jtmelton/appsensor
 
+Changes in version 2.1 (2015/????)
+--------------------------------------
+* Geolocation of end users now possible (optional configuration)
+  
+* Added support for RabbitMQ execution mode
+
+* Added support for Kafka execution mode
+
+* Added support for JMX Notification emitter
+
+* Added support for CEF (over syslog) emitter
+
+* Documentation updates to cover new features 
+  and generally enhance end/user developer documentation
+  
+* Update maven configurations to upgrade dependency
+  versions and correct configuration for generating 
+  javadocs and maven "site"
 
 Changes in version 2.0 (2015/01/27)
 --------------------------------------
