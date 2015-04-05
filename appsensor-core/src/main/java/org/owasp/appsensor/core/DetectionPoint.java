@@ -20,9 +20,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 /**
  * The detection point represents the unique sensor concept in the code. 
  * 
- * A list of project detection points are maintained at {@link https://www.owasp.org/index.php/AppSensor_DetectionPoints}
+ * A list of project detection points are maintained at https://www.owasp.org/index.php/AppSensor_DetectionPoints
  * 
  * @see java.io.Serializable
+ * @see <a href="https://www.owasp.org/index.php/AppSensor_DetectionPoints">https://www.owasp.org/index.php/AppSensor_DetectionPoints</a>
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */

@@ -12,6 +12,7 @@ import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.EventListener;
+import org.owasp.appsensor.core.storage.EventStoreListener;
 import org.owasp.appsensor.core.util.DateUtils;
 
 /**
@@ -77,7 +78,7 @@ public abstract class EventStore {
 	}
 	
 	/**
-	 * Automatically inject any {@link @EventStoreListener}s, which are implementations of 
+	 * Automatically inject any {@link EventStoreListener}s, which are implementations of 
 	 * {@link EventListener} so they can be notified of changes.
 	 * 
 	 * @param collection of {@link EventListener}s that are injected to be 
