@@ -168,14 +168,13 @@
 	              <configuration>
 	              	  <skipProvidedScope>true</skipProvidedScope>
                       <skipRuntimeScope>true</skipRuntimeScope>
-	                  <aggregate>true</aggregate>
 	                  <failBuildOnCVSS>1</failBuildOnCVSS>
 	              </configuration>
 	              <executions>
 	                  <execution>
 	                  	<phase>package</phase>
 	                  	<goals>
-	                          <goal>check</goal>
+	                          <goal>aggregate</goal>
 	                      </goals>
 	                  </execution>
 	              </executions>
