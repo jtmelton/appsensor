@@ -53,8 +53,9 @@ public class User implements Serializable {
 	}
 	
 	public User(String username, IPAddress ipAddress) {
-		setUsername(username);
+		//set ip first so the setUsername call to geolocate won't run if it's already explicitly set
 		setIPAddress(ipAddress);
+		setUsername(username);
 	}
 	
 	public String getUsername() {
@@ -65,7 +66,7 @@ public class User implements Serializable {
 		this.username = username;
 		
 		// if IP is used as username, setup IP address w/ geolocation
-		if (InetAddresses.isInetAddress(username)) {
+		if (ipAddress != null && InetAddresses.isInetAddress(username)) {
 			this.ipAddress = locator.fromString(username);
 		}
 		
