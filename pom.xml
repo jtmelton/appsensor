@@ -113,6 +113,7 @@
 		<module>storage-providers/appsensor-storage-nosql-mongodb</module>
 		<module>integrations/appsensor-integration-jmx</module>
 		<module>integrations/appsensor-integration-cef-syslog</module>
+		<module>integrations/appsensor-integration-spring-security</module>
 	</modules>
 	
 	<dependencies>	
