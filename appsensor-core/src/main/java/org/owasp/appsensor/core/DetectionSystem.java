@@ -46,8 +46,8 @@ public class DetectionSystem implements Serializable {
 		setDetectionSystemId(detectionSystemId);
 	}
 	
-	public DetectionSystem(String username, IPAddress ipAddress) {
-		setDetectionSystemId(username);
+	public DetectionSystem(String detectionSystemId, IPAddress ipAddress) {
+		setDetectionSystemId(detectionSystemId);
 		setIPAddress(ipAddress);
 	}
 	
