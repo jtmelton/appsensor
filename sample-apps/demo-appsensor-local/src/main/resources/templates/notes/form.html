@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  layout:decorator="layout">
+  <head>
+    <title>Notes : Create</title>
+  </head>
+  <body>
+    <h1 layout:fragment="header">Notes : Create</h1>
+    <div layout:fragment="content" class="container">
+      <form id="noteForm"
+          th:action="@{/(form)}"
+          th:object="${note}"
+          action="#"
+          method="post">
+        <div th:if="${#fields.hasErrors('*')}" class="alert alert-error">
+          <p th:each="error : ${#fields.errors('*')}" th:text="${error}">
+            Validation error
+          </p>
+        </div>
+        <div class="pull-right">
+          <a th:href="@{/}" href="notes.html">
+            Notes
+          </a>
+        </div>
+        <label for="summary">Summary</label>
+        <input type="text"
+            th:field="*{summary}"
+            th:class="${#fields.hasErrors('summary')} ? 'field-error'"/>
+        <label for="text">Message</label>
+        <textarea
+            th:field="*{text}"
+            th:class="${#fields.hasErrors('text')} ? 'field-error'"></textarea>
+        <div>
+        	<p>Enter &lt;script&gt; to test the XSS event detection.</p>
+        </div>
+        <div class="form-actions">
+          <input type="submit" value="Create"/>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
