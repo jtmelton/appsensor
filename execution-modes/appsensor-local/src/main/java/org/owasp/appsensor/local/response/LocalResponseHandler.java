@@ -42,14 +42,12 @@ public class LocalResponseHandler implements ResponseHandler {
 					response.getUser().getUsername(), userManager.getClass().getName());
 			
 			userManager.logout(response.getUser());
-			System.err.println("called logout");
 		} else if (DISABLE_USER.equals(response.getAction())) {
 			logger.warn("Response executed for user <{}>, "
 					+ "Action: Disabling malicious account, delegating to configured user manager <{}>",
 					response.getUser().getUsername(), userManager.getClass().getName());
 			
 			userManager.disable(response.getUser());
-			System.err.println("called disable");
 		} else if (DISABLE_COMPONENT_FOR_SPECIFIC_USER.equals(response.getAction())) {
 			logger.warn("Response executed for user:" + response.getUser().getUsername() + 
 					", Action: Disabling Component for Specific User");
