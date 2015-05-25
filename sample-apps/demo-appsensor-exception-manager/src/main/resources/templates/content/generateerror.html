@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  layout:decorator="layout">
+  <head>
+    <title>Exceptions : Create</title>
+    <script>
+	$(document).ready(function(){
+	    $("#ExceptionOneButton").click(function(){
+	        $.get("api/generate?exceptionLabel=ExceptionOne", function(data, status){
+	            console.log("response is: " + data)
+	        });
+	    });
+	    
+	    $("#ExceptionTwoButton").click(function(){
+	        $.get("api/generate?exceptionLabel=ExceptionTwo", function(data, status){
+	            console.log("response is: " + data)
+	        });
+	    });
+	    
+	    $("#ExceptionThreeButton").click(function(){
+	        $.get("api/generate?exceptionLabel=ExceptionThree", function(data, status){
+	            console.log("response is: " + data)
+	        });
+	    });
+	});
+	</script>
+  </head>
+  <body>
+    <h1 layout:fragment="header">Exceptions : Create</h1>
+    <div layout:fragment="content" class="container">
+        
+   		<h2>Click these buttons to generate errors</h2>
+   		<button class="btn btn-default" type="submit" id="ExceptionOneButton">Send Exception One</button>
+   		&nbsp;&nbsp;&nbsp;&nbsp;
+   		<button class="btn btn-default" type="submit" id="ExceptionTwoButton">Send Exception Two</button>
+   		&nbsp;&nbsp;&nbsp;&nbsp;
+   		<button class="btn btn-default" type="submit" id="ExceptionThreeButton">Send Exception Three</button>
+        
+    </div>
+  </body>
+</html>

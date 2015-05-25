@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  layout:decorator="layout">
+  <head>
+    <title>Exceptions : View all</title>
+    <script>
+    
+    function clear() {
+    	$(".exceptionPanel").remove();
+    }
+    
+    function show(fullDataSet) {
+    	var countMap = {};
+    	
+    	// group each exception label in buckets with the count (for header label)
+    	$(fullDataSet).each(function(index, item) {
+    		var detectionPointLabel = item.detectionPoint.label;
+    		if (detectionPointLabel in countMap) {
+    			//already exists, increment
+    			var current = countMap[detectionPointLabel];
+    			var updated = current + 1;
+				countMap[detectionPointLabel] = updated;    			
+    		} else {
+    			//set new
+    			countMap[detectionPointLabel] = 1;
+    		}
+		});
+    	
+    	var sortedKeys = Object.keys(countMap).sort();
+
+    	var content = "";
+    	// for each category
+    	for (var label of sortedKeys) {
+    		
+    		content += 	'<div class="panel panel-default exceptionPanel">' + 
+								'<div class="panel-heading" role="tab" id="heading' + label + '">' + 
+									'<h4 class="panel-title">' +
+										'<a data-toggle="collapse" data-parent="#accordion" href="#collapse' + label + '" aria-expanded="true" aria-controls="collapse' + label + '">' + 
+										label + ' (' + countMap[label] + ')' + 
+										'</a>' + 
+									'</h4>' + 
+								'</div>' + 
+								'<div id="collapse' + label + '" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading' + label + '">' + 
+									'<div class="panel-body">' + 
+									
+										'<table class="table table-striped table-bordered table-hover table-condensed">';
+											'<tr>' +
+												'<th>Time</th>' +
+												'<th>User</th>' +
+												'<th>Detection System</th>' +
+												'<th>Content</th>' +
+											'</tr>';
+											
+											//create table here and create a row per
+											$(fullDataSet).each(function(index, item) {
+												if (label === item.detectionPoint.label) {
+													var stackTrace = item.metadata[0].value;
+													var shortText = stackTrace;
+													if (shortText.length > 50) {
+														shortText = shortText.substring(0,50) + "...";
+													}
+													content += '<tr title="' + stackTrace + '">' +
+																	'<td>' + item.timestamp + '</td>' +
+																	'<td>' + item.user.username + '</td>' +
+																	'<td>' + item.detectionSystem.detectionSystemId + '</td>' +
+																	'<td>' + shortText + 
+																	'</td>' +
+																'</tr>';
+												}
+								    		});
+											
+			content += 					'</table>' +
+									'</div>' + 
+	    						'</div>' + 
+	    					'</div>';
+	    	
+    	}
+    
+    	$("#accordion").html(content);
+    	$('.popovertext').popover({ trigger: "hover" });
+    	
+    }
+    
+    function refreshData() {
+    	$.get("api/list", function(data, status){
+        	
+			var count = 0;
+        	
+			if($.isArray(data)) {
+				
+				clear();
+				
+				count = data.length;
+        		
+				show(data);
+        	} 
+
+			if(count == 0) {
+				$("#accordion").html("<div>There are currently no exceptions to track</div>");
+			}
+			
+        });
+    }
+    
+	$(document).ready(function(){
+	    setInterval(refreshData, 4000);
+	    $("#accordion").html("<div>There are currently no exceptions to track</div>");
+	});
+	
+	$( document ).ajaxStart(function() {
+  		$("#loading").html("Loading......");
+  		$('#loading').css('background-color','yellow');
+  	});
+	
+	$( document ).ajaxComplete(function() {
+	  	$("#loading").html("&nbsp;");
+	  	$('#loading').css('background-color','white');
+  	});
+	
+	</script>
+  </head>
+  
+  <body>
+    <h1 layout:fragment="header">Exceptions : View all</h1>
+    <div layout:fragment="content" class="container">
+      
+      <p></p><p></p><p></p>
+      
+      	<div id="loading">&nbsp;</div>
+      		
+	    <div id="exceptionDataWrapper">
+	      	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+	      		
+	      		<!-- empty to start -->
+			  
+			</div>
+      	</div>
+    </div>
+  </body>
+</html>
