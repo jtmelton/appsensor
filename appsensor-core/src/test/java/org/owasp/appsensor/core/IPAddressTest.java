@@ -17,6 +17,7 @@ public class IPAddressTest {
 		ipAddress.fromString("123.123.123.456");
 	}
 	
+	@Test
 	public void testFromStringValid() {
 		ipAddress.fromString("1.2.3.4");
 		ipAddress.fromString("255.255.255.255");
