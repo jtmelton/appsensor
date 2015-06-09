@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.DetectionSystem;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.Response;
@@ -61,11 +62,11 @@ public class DemoDataMultiUserPopulator {
 			}
 			
 			if(i % 2 == 0) {
-				appSensorServer.getEventStore().addEvent(new Event(bob, detectionPoint1, "localhostme"));
+				appSensorServer.getEventStore().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
 			} else {
 				int randomNumber = new Random().nextInt() % 99;
 				User user = new User("otherUser" + randomNumber);
-				appSensorServer.getEventStore().addEvent(new Event(user, detectionPoint1, "localhostme"));
+				appSensorServer.getEventStore().addEvent(new Event(user, detectionPoint1, new DetectionSystem("localhostme")));
 			}
 			
 			i++;

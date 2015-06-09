@@ -41,7 +41,7 @@ public class InMemoryResponseStore extends ResponseStore {
 	 */
 	@Override
 	public void addResponse(Response response) {
-		logger.warn("Security response " + response + " triggered for user: " + response.getUser().getUsername());
+		logger.warn("Security response " + response.getAction() + " triggered for user: " + response.getUser().getUsername());
 
 		responses.add(response);
 		
@@ -69,7 +69,7 @@ public class InMemoryResponseStore extends ResponseStore {
 			
 			//check detection system match if detection systems specified
 			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
-					detectionSystemIds.contains(response.getDetectionSystemId()) : true;
+					detectionSystemIds.contains(response.getDetectionSystem().getDetectionSystemId()) : true;
 			
 			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(response.getTimestamp())) : true;
 					

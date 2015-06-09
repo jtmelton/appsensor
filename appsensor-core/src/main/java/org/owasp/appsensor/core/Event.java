@@ -1,9 +1,12 @@
 package org.owasp.appsensor.core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -51,8 +54,8 @@ public class Event implements Serializable {
 	 * Identifier label for the system that detected the event. 
 	 * This will be either the client application, or possibly an external 
 	 * detection system, such as syslog, a WAF, network IDS, etc.  */
-	@Column
-	private String detectionSystemId; 
+	@ManyToOne(cascade = CascadeType.ALL)
+	private DetectionSystem detectionSystem;  
 	
 	/** 
 	 * The resource being requested when the event was triggered, which can be used 
@@ -60,18 +63,22 @@ public class Event implements Serializable {
      */
 	@ManyToOne(cascade = CascadeType.ALL)
     private Resource resource;
-    
+	
+	/** Represent extra metadata, anything client wants to send */
+	@ElementCollection
+	private Collection<KeyValuePair> metadata = new ArrayList<>();
+	
     public Event () {}
     
-	public Event (User user, DetectionPoint detectionPoint, String detectionSystemId) {
-		this(user, detectionPoint, DateUtils.getCurrentTimestampAsString(), detectionSystemId);
+	public Event (User user, DetectionPoint detectionPoint, DetectionSystem detectionSystem) {
+		this(user, detectionPoint, DateUtils.getCurrentTimestampAsString(), detectionSystem);
 	}
 	
-	public Event (User user, DetectionPoint detectionPoint, String timestamp, String detectionSystemId) {
+	public Event (User user, DetectionPoint detectionPoint, String timestamp, DetectionSystem detectionSystem) {
 		setUser(user);
 		setDetectionPoint(detectionPoint);
 		setTimestamp(timestamp);
-		setDetectionSystemId(detectionSystemId);
+		setDetectionSystem(detectionSystem);
 	}
 	
 	public Integer getId() {
@@ -109,12 +116,12 @@ public class Event implements Serializable {
 		return this;
 	}
 	
-	public String getDetectionSystemId() {
-		return detectionSystemId;
+	public DetectionSystem getDetectionSystem() {
+		return detectionSystem;
 	}
 
-	public Event setDetectionSystemId(String detectionSystemId) {
-		this.detectionSystemId = detectionSystemId;
+	public Event setDetectionSystem(DetectionSystem detectionSystem) {
+		this.detectionSystem = detectionSystem;
 		return this;
 	}
 
@@ -127,14 +134,23 @@ public class Event implements Serializable {
 		return this;
 	}
 	
+	public Collection<KeyValuePair> getMetadata() {
+		return metadata;
+	}
+
+	public void setMetadata(Collection<KeyValuePair> metadata) {
+		this.metadata = metadata;
+	}
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).
 				append(user).
 				append(detectionPoint).
 				append(timestamp).
-				append(detectionSystemId).
+				append(detectionSystem).
 				append(resource).
+				append(metadata).
 				toHashCode();
 	}
 	
@@ -153,8 +169,9 @@ public class Event implements Serializable {
 				append(user, other.getUser()).
 				append(detectionPoint, other.getDetectionPoint()).
 				append(timestamp, other.getTimestamp()).
-				append(detectionSystemId, other.getDetectionSystemId()).
+				append(detectionSystem, other.getDetectionSystem()).
 				append(resource, other.getResource()).
+				append(metadata, other.getMetadata()).
 				isEquals();
 	}
 	
@@ -164,8 +181,9 @@ public class Event implements Serializable {
 				append("user", user).
 				append("detectionPoint", detectionPoint).
 				append("timestamp", timestamp).
-				append("detectionSystemId", detectionSystemId).
+				append("detectionSystem", detectionSystem).
 				append("resource", resource).
+				append("metadata", metadata).
 			    toString();
 	}
 }

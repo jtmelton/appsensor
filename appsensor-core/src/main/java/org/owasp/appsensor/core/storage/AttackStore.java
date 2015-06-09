@@ -12,6 +12,7 @@ import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.AttackListener;
+import org.owasp.appsensor.core.storage.AttackStoreListener;
 import org.owasp.appsensor.core.util.DateUtils;
 
 /**
@@ -77,7 +78,7 @@ public abstract class AttackStore {
 	}
 	
 	/**
-	 * Automatically inject any {@link @AttackStoreListener}s, which are implementations of 
+	 * Automatically inject any {@link AttackStoreListener}s, which are implementations of 
 	 * {@link AttackListener} so they can be notified of changes.
 	 * 
 	 * @param collection of {@link AttackListener}s that are injected to be 
@@ -115,7 +116,7 @@ public abstract class AttackStore {
 			
 			//check detection system match if detection systems specified
 			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
-					detectionSystemIds.contains(attack.getDetectionSystemId()) : true;
+					detectionSystemIds.contains(attack.getDetectionSystem().getDetectionSystemId()) : true;
 			
 			//check detection point match if detection point specified
 			boolean detectionPointMatch = (detectionPoint != null) ? 
@@ -152,7 +153,7 @@ public abstract class AttackStore {
 
 		// check detection system match if detection systems specified
 		boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
-				detectionSystemIds.contains(attack.getDetectionSystemId()) : true;
+				detectionSystemIds.contains(attack.getDetectionSystem().getDetectionSystemId()) : true;
 
 		// check detection point match if detection point specified
 		boolean detectionPointMatch = (detectionPoint != null) ? 

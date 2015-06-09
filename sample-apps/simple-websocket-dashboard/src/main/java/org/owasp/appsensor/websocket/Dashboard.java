@@ -48,5 +48,6 @@ public class Dashboard {
     @OnError
     public void onError(Throwable exception, Session session) {
     	System.err.println("Error for client: " + session.getId());
+    	exception.printStackTrace();
     }
 }

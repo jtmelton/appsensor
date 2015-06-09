@@ -1,9 +1,12 @@
 package org.owasp.appsensor.core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -50,28 +53,32 @@ public class Response implements Serializable {
 	private Interval interval;
 
 	/** Client application name that response applies to. */
-	@Column
-	private String detectionSystemId; 
+	@ManyToOne(cascade = CascadeType.ALL)
+	private DetectionSystem detectionSystem;
+	
+	/** Represent extra metadata, anything client wants to send */
+	@ElementCollection
+	private Collection<KeyValuePair> metadata = new ArrayList<>();
 	
 	public Response() {}
 	
-	public Response (User user, String action, String detectionSystemId) {
-		this(user, action, DateUtils.getCurrentTimestampAsString(), detectionSystemId, null);
+	public Response (User user, String action, DetectionSystem detectionSystem) {
+		this(user, action, DateUtils.getCurrentTimestampAsString(), detectionSystem, null);
 	}
 	
-	public Response (User user, String action, String timestamp, String detectionSystemId) {
-		this(user, action, timestamp, detectionSystemId, null);
+	public Response (User user, String action, String timestamp, DetectionSystem detectionSystem) {
+		this(user, action, timestamp, detectionSystem, null);
 	}
 	
-	public Response (User user, String action, String detectionSystemId, Interval interval) {
-		this(user, action, DateUtils.getCurrentTimestampAsString(), detectionSystemId, interval);
+	public Response (User user, String action, DetectionSystem detectionSystem, Interval interval) {
+		this(user, action, DateUtils.getCurrentTimestampAsString(), detectionSystem, interval);
 	}
 	
-	public Response (User user, String action, String timestamp, String detectionSystemId, Interval interval) {
+	public Response (User user, String action, String timestamp, DetectionSystem detectionSystem, Interval interval) {
 		setUser(user);
 		setAction(action);
 		setTimestamp(timestamp);
-		setDetectionSystemId(detectionSystemId);
+		setDetectionSystem(detectionSystem);
 		setInterval(interval);
 	}
 	
@@ -119,13 +126,21 @@ public class Response implements Serializable {
 		return this;
 	}
 
-	public String getDetectionSystemId() {
-		return detectionSystemId;
+	public DetectionSystem getDetectionSystem() {
+		return detectionSystem;
 	}
 
-	public Response setDetectionSystemId(String detectionSystemId) {
-		this.detectionSystemId = detectionSystemId;
+	public Response setDetectionSystem(DetectionSystem detectionSystem) {
+		this.detectionSystem = detectionSystem;
 		return this;
+	}
+	
+	public Collection<KeyValuePair> getMetadata() {
+		return metadata;
+	}
+
+	public void setMetadata(Collection<KeyValuePair> metadata) {
+		this.metadata = metadata;
 	}
 	
 	@Override
@@ -135,7 +150,8 @@ public class Response implements Serializable {
 				append(timestamp).
 				append(action).
 				append(interval).
-				append(detectionSystemId).
+				append(detectionSystem).
+				append(metadata).
 				toHashCode();
 	}
 	
@@ -155,7 +171,8 @@ public class Response implements Serializable {
 				append(timestamp, other.getTimestamp()).
 				append(action, other.getAction()).
 				append(interval, other.getInterval()).
-				append(detectionSystemId, other.getDetectionSystemId()).
+				append(detectionSystem, other.getDetectionSystem()).
+				append(metadata, other.getMetadata()).
 				isEquals();
 	}
 	
@@ -166,7 +183,8 @@ public class Response implements Serializable {
 			       append("timestamp", timestamp).
 			       append("action", action).
 			       append("interval", interval).
-			       append("detectionSystemId", detectionSystemId).
+			       append("detectionSystem", detectionSystem).
+			       append("metadata", metadata).
 			       toString();
 	}
 	

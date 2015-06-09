@@ -1,5 +1,7 @@
 package org.owasp.appsensor.core.exceptions;
 
+import javax.xml.ws.WebFault;
+
 /**
  * This exception is thrown by the {@link org.owasp.appsensor.core.accesscontrol.AccessController}
  * when a {@link org.owasp.appsensor.core.ClientApplication} is not authorized to perform a 
@@ -7,6 +9,7 @@ package org.owasp.appsensor.core.exceptions;
  * 
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
+@WebFault
 public class NotAuthorizedException extends RuntimeException  {
 
 	private static final long serialVersionUID = 3914161530293443363L;

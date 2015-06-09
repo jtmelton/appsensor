@@ -88,6 +88,16 @@
 			<xsd:enumeration value="days" />
 		</xsd:restriction>
 	</xsd:simpleType>
+	
+	<xsd:complexType name="geolocation">
+  		<xsd:attribute name="enabled" type="xsd:boolean"/>
+  		<!-- 
+  		This path represents the path to the geolite city database, 
+  		which will likely be named something like "GeoLite2-City.mmdb"
+  		This is for the default implementation
+  		-->
+  		<xsd:attribute name="databasePath" type="xsd:string" use="optional"/>
+	</xsd:complexType>
 			
 	<xsd:element name="appsensor-server-config">
 	  <xsd:complexType>
@@ -99,6 +109,8 @@
 	    	<xsd:element name="server-port" type="xsd:int" minOccurs="0" maxOccurs="1" />
 	    
 	    	<xsd:element name="server-socket-timeout-ms" type="xsd:int" minOccurs="0" maxOccurs="1" />
+	    	
+	    	<xsd:element name="geolocation" type="asconfig:geolocation" minOccurs="0" maxOccurs="1" />
 	    
 	    	<xsd:element name="client-applications" type="asconfig:client-applications" minOccurs="0" maxOccurs="1" />
 	    	

@@ -12,9 +12,28 @@ exception NotAuthorizedException {
   1: string message
 }
 
+struct GeoLocation {
+	1:int id,
+    2:double latitude,
+    3:double longitude
+}
+
+struct IPAddress {
+	1:int id,
+	2:string address,
+  	3:GeoLocation geoLocation
+}
+
+struct DetectionSystem {
+	1:int id,
+	2:string detectionSystemId,
+  	3:IPAddress ipAddress
+}
+
 struct User {
   1:int id,
-  2:string username
+  2:string username,
+  3:IPAddress ipAddress
 }
 
 struct Interval {
@@ -29,7 +48,6 @@ struct Threshold {
   3:Interval interval
 }
 
-
 struct Resource {
   1:int id,
   2:string location,
@@ -41,7 +59,7 @@ struct Response {
   3:string timestamp,
   4:string action,
   5:Interval interval,
-  6:string detectionSystemId
+  6:DetectionSystem detectionSystem
 }
 
 struct DetectionPoint {
@@ -57,7 +75,7 @@ struct Event {
   2:User user,
   3:DetectionPoint detectionPoint,
   4:string timestamp,
-  5:string detectionSystemId,
+  5:DetectionSystem detectionSystem,
   6:Resource resource
 }
 
@@ -66,7 +84,7 @@ struct Attack {
   2:User user,
   3:DetectionPoint detectionPoint,
   4:string timestamp,
-  5:string detectionSystemId,
+  5:DetectionSystem detectionSystem,
   6:Resource resource
 }
 

@@ -21,6 +21,7 @@ Each deploy:
 - for a release deployment: 
 	- ensure all versions DO NOT end in '-SNAPSHOT' (run 'mvn versions:set -DnewVersion=1.2.3 -DgenerateBackupPoms=false')
 	- need to run 'mvn -N install' (installs parent pom locally to run remainder of cases)
+	- update the changelog
 	- run 'mvn clean deploy -P release'
 		- need to deploy and activate release profile (-P release)
 		- this is needed to execute the gpg/javadoc/source plugins

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appsensor-server-config xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd">
+	
+	<client-application-identification-header-name>X-Appsensor-Client-Application-Name</client-application-identification-header-name>
+	
+	<client-applications>
+		<client-application>
+			<name>my-sample-client</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+		</client-application>
+	</client-applications>
+
+	<detection-points>
+		<detection-point>
+			<category>Input Validation</category>
+			<id>IE1</id>
+			<threshold>
+				<count>3</count>
+				<interval unit="minutes">5</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>System Trend</category>
+			<id>STE1</id>
+			<threshold>
+				<count>11</count>
+				<interval unit="minutes">4</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">31</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">11</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>System Trend</category>
+			<id>STE2</id>
+			<threshold>
+				<count>12</count>
+				<interval unit="minutes">5</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">32</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">12</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Authentication</category>
+			<id>AE3</id>
+			<threshold>
+				<count>13</count>
+				<interval unit="minutes">6</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">33</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">13</interval>
+				</response>
+			</responses>
+		</detection-point>
+	</detection-points>
+
+</appsensor-server-config>

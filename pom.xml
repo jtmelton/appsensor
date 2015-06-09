@@ -5,7 +5,7 @@
 
 	<groupId>org.owasp.appsensor</groupId>
   	<artifactId>appsensor-parent</artifactId>
-	<version>2.0.1</version>
+	<version>2.1.0</version>
 	<packaging>pom</packaging>
 
 	<name>appsensor-parent</name>
@@ -90,6 +90,7 @@
 		<module>analysis-engines/appsensor-analysis-reference</module>
 		<module>access-controllers/appsensor-access-control-reference</module>
 		<module>configuration-modes/appsensor-configuration-stax</module>
+		<module>geolocators/appsensor-geolocation-geoip2</module>
 		<module>execution-modes/appsensor-local</module>
 		<module>execution-modes/appsensor-ws-rest-client</module>
 		<module>execution-modes/appsensor-ws-rest-server</module>
@@ -99,11 +100,20 @@
 		<module>execution-modes/appsensor-rpc-thrift-core</module>
 		<module>execution-modes/appsensor-rpc-thrift-client</module>
 		<module>execution-modes/appsensor-rpc-thrift-server</module>
+		<module>execution-modes/appsensor-amqp-rabbitmq-core</module>
+		<module>execution-modes/appsensor-amqp-rabbitmq-client</module>
+		<module>execution-modes/appsensor-amqp-rabbitmq-server</module>
+		<module>execution-modes/appsensor-kafka-core</module>
+		<module>execution-modes/appsensor-kafka-client</module>
+		<module>execution-modes/appsensor-kafka-server</module>
 		<module>reporting-engines/appsensor-reporting-simple-logging</module>
 		<module>reporting-engines/appsensor-reporting-websocket</module>
 		<module>storage-providers/appsensor-storage-file-based</module>
 		<module>storage-providers/appsensor-storage-jpa2</module>
 		<module>storage-providers/appsensor-storage-nosql-mongodb</module>
+		<module>integrations/appsensor-integration-jmx</module>
+		<module>integrations/appsensor-integration-cef-syslog</module>
+		<module>integrations/appsensor-integration-spring-security</module>
 	</modules>
 	
 	<dependencies>	
@@ -155,22 +165,35 @@
 			<plugin>
               <groupId>org.owasp</groupId>
               <artifactId>dependency-check-maven</artifactId>
-              <version>1.2.5</version>
+              <version>1.2.9</version>
 	              <configuration>
 	              	  <skipProvidedScope>true</skipProvidedScope>
                       <skipRuntimeScope>true</skipRuntimeScope>
-	                  <aggregate>true</aggregate>
 	                  <failBuildOnCVSS>1</failBuildOnCVSS>
 	              </configuration>
 	              <executions>
 	                  <execution>
 	                  	<phase>package</phase>
 	                  	<goals>
-	                          <goal>check</goal>
+	                          <goal>aggregate</goal>
 	                      </goals>
 	                  </execution>
 	              </executions>
             </plugin>
+            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+		          <quiet>true</quiet>
+		          <nonavbar>true</nonavbar>
+		          <notree>true</notree>
+		          <nocomment>true</nocomment>
+		          <nohelp>true</nohelp>
+		          <additionalparam>-Xdoclint:none</additionalparam>
+		          <aggregate>true</aggregate>
+		      	</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	

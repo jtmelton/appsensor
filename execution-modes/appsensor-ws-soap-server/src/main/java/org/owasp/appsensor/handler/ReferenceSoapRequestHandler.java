@@ -17,6 +17,7 @@ import javax.xml.ws.handler.MessageContext;
 import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.ClientApplication;
+import org.owasp.appsensor.core.DetectionSystem;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.accesscontrol.Action;
@@ -53,7 +54,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	public void addEvent(Event event) throws NotAuthorizedException {
 		checkAuthorization(Action.ADD_EVENT);
 		
-		event.setDetectionSystemId(getClientApplicationName());
+		event.setDetectionSystem(new DetectionSystem(getClientApplicationName()));
 		
 		appSensorServer.getEventStore().addEvent(event);
 	}
@@ -66,7 +67,7 @@ public class ReferenceSoapRequestHandler implements SoapRequestHandler {
 	public void addAttack(Attack attack) throws NotAuthorizedException {
 		checkAuthorization(Action.ADD_ATTACK);
 		
-		attack.setDetectionSystemId(getClientApplicationName());
+		attack.setDetectionSystem(new DetectionSystem(getClientApplicationName()));
 		
 		appSensorServer.getAttackStore().addAttack(attack);
 	}

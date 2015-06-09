@@ -45,24 +45,31 @@
             }
         </style>
         
-        
         <script>
-        	var url = "ws://localhost:8080/simple-websocket-dashboard/dashboard";
-            var dashboard = null;// new WebSocket();
+        	//console.log("pathname - " + window.location.pathname);
+        	//console.log("href - " + window.location.href);
+        	//console.log("host - " + window.location.host);
+        	
+        	var proto = 'wss';	//default secure 
+        	if(window.location.href.indexOf('http:') != -1) {
+        		proto = 'ws';
+        	}
+        	
+        	var host = window.location.host;
+        	var path = window.location.pathname.split('/')[1];
+        	
+        	var url = proto + '://' + host + '/' + path + '/dashboard';
+        	
+            var dashboard = null;
+
+			openWebSocket();            
             
-            if ('WebSocket' in window) {
-            	dashboard = new WebSocket(url);
-            } else if ('MozWebSocket' in window) {
-            	dashboard = new MozWebSocket(url);
-            } else {
-                alert('WebSocket is not supported by this browser.');
-                //return;
-            }
             dashboard.onopen = function () {
                 console.log('Info: WebSocket connection opened.');
             };
             dashboard.onclose = function () {
                 console.log('Info: WebSocket connection closed.');
+                retryOpeningWebSocket();
             };
             
             dashboard.onmessage = function(evt) {
@@ -75,26 +82,49 @@
 				var eventType = obj.dataType;
                 var as = obj.dataValue;
 
+                var content = '';
+                
                 switch (eventType) {
 				    case "event":
-				        p.innerHTML = "Event triggered for detection point [" + as.detectionPoint.id + "] " +
+				    	content = "Event triggered for detection point [" + as.detectionPoint.label + "] " +
 				        	"by user [" + as.user.username + "] at [" + toDateString(as.timestamp) + "] " + 
-				        	"on system [" + as.detectionSystemId + "] and is of type [" + as.eventType + "]";
+				        	"on system [" + as.detectionSystem.detectionSystemId + "] and is of type [" + as.dataType + "]";
 				        break;
 				    case "attack":
-				    	p.innerHTML = "Attack triggered for detection point [" + as.detectionPoint.id + "] " +
+				    	content = "Attack triggered for detection point [" + as.detectionPoint.label + "] " +
 			        		"by user [" + as.user.username + "] at [" + toDateString(as.timestamp) + "] " + 
-				        	"on system [" + as.detectionSystemId + "]";
+				        	"on system [" + as.detectionSystem.detectionSystemId + "]";
 				        break;
 				    case "response":
-				    	p.innerHTML = "Response triggered for detection point [" + as.detectionPoint.id + "] " +
-			        		"by user [" + as.user.username + "] at [" + toDateString(as.timestamp) + "] " + 
-				        	"on system [" + as.detectionSystemId + "] and the response action is [" + as.action + "]";
+				    	content = "Response triggered for user [" + as.user.username + "] at [" + 
+				    	    toDateString(as.timestamp) + "] " + "on system [" + as.detectionSystem.detectionSystemId + 
+				    	    "] and the response action is [" + as.action + "]";
 				        break;
 				}
+                
+                p.innerHTML = content;
+                
                 var container = document.getElementById(eventType + "container");
+                console.log('writing to div ' + eventType + 'container the value [' + content + ']');
                 container.appendChild(p);
             };
+            
+            function retryOpeningWebSocket(){
+                if (retries < 2) {            
+                    setTimeout(openWebSocket, 1000);            
+                    retries++;
+                }
+            }
+            
+            function openWebSocket() {
+            	if ('WebSocket' in window) {
+                	dashboard = new WebSocket(url);
+                } else if ('MozWebSocket' in window) {
+                	dashboard = new MozWebSocket(url);
+                } else {
+                    alert('WebSocket is not supported by this browser.');
+                }
+            }
             
             function toDateString(unix_timestamp) {
             	var date = new Date(unix_timestamp);

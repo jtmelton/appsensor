@@ -4,7 +4,7 @@
 
 	<groupId>org.owasp.appsensor</groupId>
   	<artifactId>sample-appsensor-ws-soap-server</artifactId>
-  	<version>2.0.0-SNAPSHOT</version>
+  	<version>2.1.0</version>
 	<packaging>war</packaging>
 
 	<name>sample-appsensor-ws-soap-server</name>
@@ -74,12 +74,6 @@
 			<artifactId>appsensor-configuration-stax</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
-		<!-- <dependency>
-			<groupId>com.sun.xml.ws</groupId>
-			<artifactId>jaxws-rt</artifactId>
-			<version>2.2.8</version>
-		</dependency>-->
 		
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
@@ -161,53 +155,6 @@
 		    </exclusions>
 		</dependency>
 		
-		<!-- <dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-bindings-soap</artifactId>
-			<version>${cxf.version}</version>
-			<exclusions>
-		        <exclusion>
-		            <groupId>org.springframework</groupId>
-		            <artifactId>spring-core</artifactId>
-		        </exclusion>
-		        <exclusion>
-		            <groupId>org.springframework</groupId>
-		            <artifactId>spring-beans</artifactId>
-		        </exclusion>
-		        <exclusion>
-		            <groupId>org.springframework</groupId>
-		            <artifactId>spring-context</artifactId>
-		        </exclusion>
-		        <exclusion>
-		            <groupId>org.springframework</groupId>
-		            <artifactId>spring-aop</artifactId>
-		        </exclusion>
-		        <exclusion>
-		            <groupId>org.springframework</groupId>
-		            <artifactId>spring-web</artifactId>
-		        </exclusion>
-		        <exclusion>
-		            <groupId>org.springframework</groupId>
-		            <artifactId>spring-webmvc</artifactId>
-		        </exclusion>
-		    </exclusions>
-		</dependency>-->
-		
-		<!-- <dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-        <dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>-->
 	</dependencies>
 	
 	<build>

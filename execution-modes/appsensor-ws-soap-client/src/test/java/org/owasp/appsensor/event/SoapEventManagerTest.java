@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.owasp.appsensor.core.AppSensorClient;
 import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.DetectionSystem;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.Response;
@@ -62,7 +63,7 @@ public class SoapEventManagerTest {
 	
 //	private static Collection<String> detectionSystems1 = new ArrayList<String>();
 //	
-//	private static String detectionSystem1 = "my-sample-client";
+//	private static String detectionSystem1 = new DetectionSystem("my-sample-client");
 	
 
 	//appsensor/services/
@@ -110,19 +111,19 @@ public class SoapEventManagerTest {
         
         String twoHoursAgo = DateUtils.getCurrentTimestamp().minusHours(2).toString();
         
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "my-sample-client"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("my-sample-client")));
 		assertEquals(0, appSensorClient.getEventManager().getResponses(twoHoursAgo).size());
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "my-sample-client"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("my-sample-client")));
 		assertEquals(0, appSensorClient.getEventManager().getResponses(twoHoursAgo).size());
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "my-sample-client"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("my-sample-client")));
 		assertEquals(1, appSensorClient.getEventManager().getResponses(twoHoursAgo).size());
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "my-sample-client"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("my-sample-client")));
 		assertEquals(1, appSensorClient.getEventManager().getResponses(twoHoursAgo).size());
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "my-sample-client"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("my-sample-client")));
 		assertEquals(1, appSensorClient.getEventManager().getResponses(twoHoursAgo).size());
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "my-sample-client"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("my-sample-client")));
 		assertEquals(2, appSensorClient.getEventManager().getResponses(twoHoursAgo).size());
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, "my-sample-client"));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("my-sample-client")));
 		assertEquals(2, appSensorClient.getEventManager().getResponses(twoHoursAgo).size());
 		
 		System.err.println("Stopped service");

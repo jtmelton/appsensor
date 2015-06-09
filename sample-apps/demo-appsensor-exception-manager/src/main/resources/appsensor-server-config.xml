@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appsensor-server-config xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd">
+	
+	<client-application-identification-header-name>X-Appsensor-Client-Application-Name</client-application-identification-header-name>
+	
+	<client-applications>
+		<client-application>
+			<name>my-sample-client</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+		</client-application>
+	</client-applications>
+
+	<detection-points>
+		<detection-point>
+			<category>Exception Handling</category>
+			<id>UnhandledException</id>
+			<threshold>
+				<!-- set threshold very high - in this case, don't want to trigger a response - just want to report through UI -->
+				<count>500</count>
+				<interval unit="seconds">1</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Exception Handling</category>
+			<id>ExceptionOne</id>
+			<threshold>
+				<!-- set threshold very high - in this case, don't want to trigger a response - just want to report through UI -->
+				<count>500</count>
+				<interval unit="seconds">1</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Exception Handling</category>
+			<id>ExceptionTwo</id>
+			<threshold>
+				<!-- set threshold very high - in this case, don't want to trigger a response - just want to report through UI -->
+				<count>500</count>
+				<interval unit="seconds">1</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Exception Handling</category>
+			<id>ExceptionThree</id>
+			<threshold>
+				<!-- set threshold very high - in this case, don't want to trigger a response - just want to report through UI -->
+				<count>500</count>
+				<interval unit="seconds">1</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+			</responses>
+		</detection-point>
+	</detection-points>
+
+</appsensor-server-config>

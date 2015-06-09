@@ -68,20 +68,5 @@ public class DetectionPointTest {
 		
 		Assert.assertTrue(point1.typeAndThresholdMatches(point2));
 	}
-	
-	
-	
-	
-//	public boolean typeMatches(DetectionPoint other) {
-//		if (other == null) {
-//			throw new IllegalArgumentException("other must be non-null");
-//		}
-//		
-//		boolean matches = true;
-//		
-//		matches &= (category != null) ? category.equals(other.getCategory()) : true;
-//		matches &= (label != null) ? label.equals(other.getLabel()) : true;
-//		
-//		return matches;
-//	}
+
 }

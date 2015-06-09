@@ -35,6 +35,7 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
 
   private static final org.apache.thrift.protocol.TField ID_FIELD_DESC = new org.apache.thrift.protocol.TField("id", org.apache.thrift.protocol.TType.I32, (short)1);
   private static final org.apache.thrift.protocol.TField USERNAME_FIELD_DESC = new org.apache.thrift.protocol.TField("username", org.apache.thrift.protocol.TType.STRING, (short)2);
+  private static final org.apache.thrift.protocol.TField IP_ADDRESS_FIELD_DESC = new org.apache.thrift.protocol.TField("ipAddress", org.apache.thrift.protocol.TType.STRUCT, (short)3);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -44,11 +45,13 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
 
   public int id; // required
   public String username; // required
+  public IPAddress ipAddress; // required
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     ID((short)1, "id"),
-    USERNAME((short)2, "username");
+    USERNAME((short)2, "username"),
+    IP_ADDRESS((short)3, "ipAddress");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -67,6 +70,8 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
           return ID;
         case 2: // USERNAME
           return USERNAME;
+        case 3: // IP_ADDRESS
+          return IP_ADDRESS;
         default:
           return null;
       }
@@ -116,6 +121,8 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32        , "int")));
     tmpMap.put(_Fields.USERNAME, new org.apache.thrift.meta_data.FieldMetaData("username", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.IP_ADDRESS, new org.apache.thrift.meta_data.FieldMetaData("ipAddress", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, IPAddress.class)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(User.class, metaDataMap);
   }
@@ -125,12 +132,14 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
 
   public User(
     int id,
-    String username)
+    String username,
+    IPAddress ipAddress)
   {
     this();
     this.id = id;
     setIdIsSet(true);
     this.username = username;
+    this.ipAddress = ipAddress;
   }
 
   /**
@@ -141,6 +150,9 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     this.id = other.id;
     if (other.isSetUsername()) {
       this.username = other.username;
+    }
+    if (other.isSetIpAddress()) {
+      this.ipAddress = new IPAddress(other.ipAddress);
     }
   }
 
@@ -153,6 +165,7 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     setIdIsSet(false);
     this.id = 0;
     this.username = null;
+    this.ipAddress = null;
   }
 
   public int getId() {
@@ -202,6 +215,30 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
     }
   }
 
+  public IPAddress getIpAddress() {
+    return this.ipAddress;
+  }
+
+  public User setIpAddress(IPAddress ipAddress) {
+    this.ipAddress = ipAddress;
+    return this;
+  }
+
+  public void unsetIpAddress() {
+    this.ipAddress = null;
+  }
+
+  /** Returns true if field ipAddress is set (has been assigned a value) and false otherwise */
+  public boolean isSetIpAddress() {
+    return this.ipAddress != null;
+  }
+
+  public void setIpAddressIsSet(boolean value) {
+    if (!value) {
+      this.ipAddress = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case ID:
@@ -220,6 +257,14 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       }
       break;
 
+    case IP_ADDRESS:
+      if (value == null) {
+        unsetIpAddress();
+      } else {
+        setIpAddress((IPAddress)value);
+      }
+      break;
+
     }
   }
 
@@ -230,6 +275,9 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
 
     case USERNAME:
       return getUsername();
+
+    case IP_ADDRESS:
+      return getIpAddress();
 
     }
     throw new IllegalStateException();
@@ -246,6 +294,8 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       return isSetId();
     case USERNAME:
       return isSetUsername();
+    case IP_ADDRESS:
+      return isSetIpAddress();
     }
     throw new IllegalStateException();
   }
@@ -278,6 +328,15 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       if (!(this_present_username && that_present_username))
         return false;
       if (!this.username.equals(that.username))
+        return false;
+    }
+
+    boolean this_present_ipAddress = true && this.isSetIpAddress();
+    boolean that_present_ipAddress = true && that.isSetIpAddress();
+    if (this_present_ipAddress || that_present_ipAddress) {
+      if (!(this_present_ipAddress && that_present_ipAddress))
+        return false;
+      if (!this.ipAddress.equals(that.ipAddress))
         return false;
     }
 
@@ -317,6 +376,16 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetIpAddress()).compareTo(typedOther.isSetIpAddress());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetIpAddress()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.ipAddress, typedOther.ipAddress);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -348,6 +417,14 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       sb.append(this.username);
     }
     first = false;
+    if (!first) sb.append(", ");
+    sb.append("ipAddress:");
+    if (this.ipAddress == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.ipAddress);
+    }
+    first = false;
     sb.append(")");
     return sb.toString();
   }
@@ -355,6 +432,9 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
   public void validate() throws org.apache.thrift.TException {
     // check for required fields
     // check for sub-struct validity
+    if (ipAddress != null) {
+      ipAddress.validate();
+    }
   }
 
   private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -409,6 +489,15 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 3: // IP_ADDRESS
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
+              struct.ipAddress = new IPAddress();
+              struct.ipAddress.read(iprot);
+              struct.setIpAddressIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -430,6 +519,11 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       if (struct.username != null) {
         oprot.writeFieldBegin(USERNAME_FIELD_DESC);
         oprot.writeString(struct.username);
+        oprot.writeFieldEnd();
+      }
+      if (struct.ipAddress != null) {
+        oprot.writeFieldBegin(IP_ADDRESS_FIELD_DESC);
+        struct.ipAddress.write(oprot);
         oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
@@ -456,19 +550,25 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       if (struct.isSetUsername()) {
         optionals.set(1);
       }
-      oprot.writeBitSet(optionals, 2);
+      if (struct.isSetIpAddress()) {
+        optionals.set(2);
+      }
+      oprot.writeBitSet(optionals, 3);
       if (struct.isSetId()) {
         oprot.writeI32(struct.id);
       }
       if (struct.isSetUsername()) {
         oprot.writeString(struct.username);
       }
+      if (struct.isSetIpAddress()) {
+        struct.ipAddress.write(oprot);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, User struct) throws org.apache.thrift.TException {
       TTupleProtocol iprot = (TTupleProtocol) prot;
-      BitSet incoming = iprot.readBitSet(2);
+      BitSet incoming = iprot.readBitSet(3);
       if (incoming.get(0)) {
         struct.id = iprot.readI32();
         struct.setIdIsSet(true);
@@ -476,6 +576,11 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       if (incoming.get(1)) {
         struct.username = iprot.readString();
         struct.setUsernameIsSet(true);
+      }
+      if (incoming.get(2)) {
+        struct.ipAddress = new IPAddress();
+        struct.ipAddress.read(iprot);
+        struct.setIpAddressIsSet(true);
       }
     }
   }

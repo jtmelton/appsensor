@@ -4,6 +4,41 @@ https://www.owasp.org/index.php/Projects/OWASP_AppSensor_Project
 http://appsensor.org/
 https://github.com/jtmelton/appsensor
 
+Changes in version 2.1 (2015/06/09)
+--------------------------------------
+* Geolocation of end users now possible (optional configuration)
+  
+* Added support for RabbitMQ execution mode
+
+* Added support for Kafka execution mode
+
+* Added support for JMX Notification emitter
+
+* Added support for CEF (over syslog) emitter
+
+* Documentation updates to cover new features 
+  and generally enhance end/user developer documentation
+  
+* Update maven configurations to upgrade dependency
+  versions and correct configuration for generating 
+  javadocs and maven "site"
+  
+* Added spring security integration that covers: 
+	- events emitted by spring security added to appsensor
+	- a custom appsensor user manager
+	- a custom appsensor security context repository
+
+* Added example app to show usage in local mode with 
+  spring security integration
+
+* Added example app to show the use of appsensor for 
+  something other than application layer IDS. In this case, 
+  it is being used as an exception tracker. As exceptions 
+  are generated, they are logged with appsensor, then a simple
+  custom UI shows them in a grouped list. While the example 
+  is simple and contrived, a more sophisticated UI could 
+  allow for grouping, searching, sorting and analysis.
+
 Changes in version 2.0.1 (2015/02/26)
 --------------------------------------
 * Support multiple detection point configurations per detection 
