@@ -22,6 +22,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		<bootstrap.version>3.3.4</bootstrap.version>
+		<jquery.version>2.1.3</jquery.version>
+		<jqueryui.version>1.11.4</jqueryui.version>
 	</properties>
 
 	<dependencies>
@@ -68,6 +71,23 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${jquery.version}</version>
+        </dependency>
+        <dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>jquery-ui</artifactId>
+		    <version>${jqueryui.version}</version>
+		</dependency>
+        
 	</dependencies>
 	
 	<build>
