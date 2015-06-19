@@ -1,0 +1,37 @@
+{{>common/header}}
+	
+	<style>
+.dashboard-column {
+  min-height: 20px;
+  list-style-type: none;
+  margin: 0;
+  padding: 5px 0 0 0;
+  margin-right: 10px;
+}
+.dashboard-column li {
+  margin: 0 5px 5px 5px;
+  padding: 5px;
+}
+  </style>
+
+	<div class="row">
+	  <div id="dashboard-left-column-outer" class="col-md-6">
+	  	<ul id="dashboard-left-column" class="connectedSortable dashboard-column">
+		  <li id="item0" class="ui-state-default">Item 0</li>
+		  <li id="item1" class="ui-state-default">Item 1</li>
+		  <li id="item2" class="ui-state-default">Item 2</li>
+		  <li id="item3" class="ui-state-default">Item 3</li>
+		  <li id="item4" class="ui-state-default">Item 4</li>
+		</ul>
+	  </div>
+	  <div id="dashboard-right-column-outer" class="col-md-6">
+	  	<ul id="dashboard-right-column" class="connectedSortable dashboard-column">
+		  <li id="item5" class="ui-state-default">Item 5</li>
+		  <li id="item6" class="ui-state-default">Item 6</li>
+		  <li id="item7" class="ui-state-default">Item 7</li>
+		  <li id="item8" class="ui-state-default">Item 8</li>
+		  <li id="item9" class="ui-state-default">Item 9</li>
+		</ul>
+	  </div>
+	</div>
+{{>common/footer}}
