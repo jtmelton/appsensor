@@ -11,6 +11,7 @@ public class InterceptorConfigurerAdapter extends WebMvcConfigurerAdapter {
     public void addInterceptors(final InterceptorRegistry registry) {
         registry.addInterceptor(new UsernameTrackingInterceptor()).addPathPatterns("/**");
         registry.addInterceptor(new ContextPathInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new PathTrackingInterceptor()).addPathPatterns("/**");
     }
 
 }
