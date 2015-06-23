@@ -1,14 +1,33 @@
 package org.owasp.appsensor;
 
+import org.owasp.appsensor.configuration.stax.client.StaxClientConfiguration;
+import org.owasp.appsensor.configuration.stax.server.StaxServerConfiguration;
+import org.owasp.appsensor.core.AppSensorClient;
+import org.owasp.appsensor.core.AppSensorServer;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.ErrorPage;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
 
-@SpringBootApplication
+//instead of @SpringBootApplication, using 3 separate annotations 
+//so I can control exclusions for scanning - need to ignore the 
+//client so it doesn't get loaded
+
+@Configuration
+@EnableAutoConfiguration
+@ComponentScan(value="org.owasp.appsensor", excludeFilters = {
+			@ComponentScan.Filter(value = AppSensorClient.class, type = FilterType.ASSIGNABLE_TYPE), 
+			@ComponentScan.Filter(value = AppSensorServer.class, type = FilterType.ASSIGNABLE_TYPE),
+			@ComponentScan.Filter(value = StaxClientConfiguration.class, type = FilterType.ASSIGNABLE_TYPE),
+			@ComponentScan.Filter(value = StaxServerConfiguration.class, type = FilterType.ASSIGNABLE_TYPE)
+		}
+)
 public class AppsensorUiApplication {
 
     public static void main(String[] args) {
