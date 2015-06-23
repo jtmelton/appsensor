@@ -5,7 +5,9 @@ import java.util.Collection;
 import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.ClientApplication;
 import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.KeyValuePair;
 import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.core.exceptions.NotAuthorizedException;
 import org.owasp.appsensor.core.listener.AttackListener;
 import org.owasp.appsensor.core.listener.EventListener;
@@ -50,5 +52,21 @@ public interface ReportingEngine extends EventListener, AttackListener, Response
 	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
 	 */
 	public Collection<Response> findResponses(String earliest) throws NotAuthorizedException;
+	
+	/**
+	 * Return the {@link ServerConfiguration} 
+	 * 
+	 * @return the {@link ServerConfiguration} 
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
+	public ServerConfiguration getServerConfiguration() throws NotAuthorizedException;
+	
+	/**
+	 * Return a base-64 encoded version of the appsensor-server-config.xml
+	 * 
+	 * @return a base-64 encoded version of the appsensor-server-config.xml
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
+	public KeyValuePair getBase64EncodedServerConfiguration() throws NotAuthorizedException;
 	
 }

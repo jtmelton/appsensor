@@ -18,7 +18,10 @@ import javax.websocket.Session;
 import org.glassfish.tyrus.client.ClientManager;
 import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.KeyValuePair;
 import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
+import org.owasp.appsensor.core.exceptions.NotAuthorizedException;
 import org.owasp.appsensor.core.logging.Loggable;
 import org.owasp.appsensor.core.reporting.ReportingEngine;
 import org.owasp.appsensor.core.storage.AttackStoreListener;
@@ -118,6 +121,22 @@ public class WebSocketReportingEngine implements ReportingEngine {
 		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ServerConfiguration getServerConfiguration() throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public KeyValuePair getBase64EncodedServerConfiguration() throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
+	}
+	
 	private void notifyWebSocket(String type, Object object) {
 		ensureConnected();
 		
@@ -170,5 +189,5 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	    	System.err.println("started and connected");
 		}
 	}
-	
+
 }

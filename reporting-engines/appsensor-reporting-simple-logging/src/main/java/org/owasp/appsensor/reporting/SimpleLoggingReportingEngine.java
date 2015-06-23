@@ -6,7 +6,10 @@ import javax.inject.Named;
 
 import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.KeyValuePair;
 import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
+import org.owasp.appsensor.core.exceptions.NotAuthorizedException;
 import org.owasp.appsensor.core.logging.Loggable;
 import org.owasp.appsensor.core.reporting.ReportingEngine;
 import org.owasp.appsensor.core.storage.AttackStoreListener;
@@ -81,6 +84,22 @@ public class SimpleLoggingReportingEngine implements ReportingEngine {
 	 */
 	@Override
 	public Collection<Response> findResponses(String earliest) {
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ServerConfiguration getServerConfiguration() throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public KeyValuePair getBase64EncodedServerConfiguration() throws NotAuthorizedException {
 		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
 	}
 
