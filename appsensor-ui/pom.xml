@@ -25,6 +25,9 @@
 		<bootstrap.version>3.3.4</bootstrap.version>
 		<jquery.version>2.1.3</jquery.version>
 		<jqueryui.version>1.11.4</jqueryui.version>
+		<aceeditor.version>01.08.2014</aceeditor.version>
+		<reactjs.version>0.13.3</reactjs.version>
+		<appsensor.version>2.2.0-SNAPSHOT</appsensor.version>
 	</properties>
 
 	<dependencies>
@@ -86,6 +89,28 @@
 		    <groupId>org.webjars</groupId>
 		    <artifactId>jquery-ui</artifactId>
 		    <version>${jqueryui.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>ace</artifactId>
+		    <version>${aceeditor.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>react</artifactId>
+		    <version>${reactjs.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-core</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+	 
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-configuration-stax</artifactId>
+			<version>${appsensor.version}</version>
 		</dependency>
         
 	</dependencies>
