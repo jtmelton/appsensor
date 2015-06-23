@@ -2,8 +2,10 @@ package org.owasp.appsensor.configuration.stax.server;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -86,6 +88,18 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			xmlReader = xmlFactory.createXMLStreamReader(xmlInputStream);
 			
 			configuration = readServerConfiguration(xmlReader);
+			
+			if (configuration != null) {
+				URL xmlUrl = getClass().getResource(xml);
+				if (xmlUrl != null && xmlUrl != null) {
+					File configurationFile = new File(xmlUrl.getFile());
+					
+					if (configurationFile != null && configurationFile.exists()) {
+						configuration.setConfigurationFile(configurationFile);
+					}
+				}
+			}
+			
 		} catch(XMLStreamException | IOException | SAXException e) {
 			throw new ConfigurationException(e.getMessage(), e);
 		} finally {

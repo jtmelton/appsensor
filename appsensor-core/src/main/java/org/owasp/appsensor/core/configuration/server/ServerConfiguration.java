@@ -1,5 +1,6 @@
 package org.owasp.appsensor.core.configuration.server;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,6 +25,8 @@ import org.owasp.appsensor.core.correlation.CorrelationSet;
  */
 public abstract class ServerConfiguration {
 	
+	private transient File configurationFile;
+	
 	private Collection<DetectionPoint> detectionPoints = new ArrayList<>(); 
 	
 	private Collection<CorrelationSet> correlationSets = new HashSet<>();
@@ -43,6 +46,15 @@ public abstract class ServerConfiguration {
 	private String geolocationDatabasePath;
 	
 	private static transient Map<String, ClientApplication> clientApplicationCache = Collections.synchronizedMap(new HashMap<String, ClientApplication>());
+	
+	public File getConfigurationFile() {
+		return configurationFile;
+	}
+
+	public ServerConfiguration setConfigurationFile(File configurationFile) {
+		this.configurationFile = configurationFile;
+		return this;
+	}
 	
 	public Collection<DetectionPoint> getDetectionPoints() {
 		return detectionPoints;
