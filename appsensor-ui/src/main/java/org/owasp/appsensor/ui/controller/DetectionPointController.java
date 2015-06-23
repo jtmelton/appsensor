@@ -5,10 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/detection-point")
 public class DetectionPointController {
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value="/detection-point", method = RequestMethod.GET)
 	public String home() {
 		return "detection-point";
 	}
