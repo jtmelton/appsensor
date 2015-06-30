@@ -1,6 +1,5 @@
 package org.owasp.appsensor.ui.controller;
 
-import org.owasp.appsensor.configuration.stax.server.StaxServerConfiguration;
 import org.owasp.appsensor.core.KeyValuePair;
 import org.owasp.appsensor.ui.rest.RestReportingEngineFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class ConfigurationController {
 	
 	@RequestMapping(value="/api/configuration/server-config", method = RequestMethod.GET)
 	@ResponseBody
-	public StaxServerConfiguration getServerConfiguration() {
+	public String getServerConfiguration() {
 		return facade.getServerConfiguration();
 	}
 
