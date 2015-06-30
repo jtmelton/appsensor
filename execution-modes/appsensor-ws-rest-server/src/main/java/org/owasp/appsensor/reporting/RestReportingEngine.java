@@ -20,7 +20,6 @@ import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.KeyValuePair;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.accesscontrol.Action;
-import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.exceptions.NotAuthorizedException;
 import org.owasp.appsensor.core.reporting.ReportingEngine;
@@ -29,6 +28,7 @@ import org.owasp.appsensor.rest.AccessControlUtils;
 import com.google.common.base.Charsets;
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.Files;
+import com.google.gson.Gson;
 
 /**
  * This is the restful endpoint that handles reporting requests on the server-side. 
@@ -53,6 +53,8 @@ public class RestReportingEngine implements ReportingEngine {
 	
 	@Context
 	private ContainerRequestContext requestContext;
+	
+	private Gson gson = new Gson();
 	
 	/**
 	 * {@inheritDoc}
@@ -120,10 +122,10 @@ public class RestReportingEngine implements ReportingEngine {
 	@Override
 	@GET
 	@Path("/server-config")
-	public ServerConfiguration getServerConfiguration() throws NotAuthorizedException {
+	public String getServerConfigurationAsJson() throws NotAuthorizedException {
 		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
 		
-		return appSensorServer.getConfiguration();
+		return gson.toJson(appSensorServer.getConfiguration());
 	}
 	
 	/**
@@ -132,7 +134,7 @@ public class RestReportingEngine implements ReportingEngine {
 	@Override
 	@GET
 	@Path("/server-config-base64")
-	public KeyValuePair getBase64EncodedServerConfiguration() throws NotAuthorizedException {
+	public KeyValuePair getBase64EncodedServerConfigurationFileContent() throws NotAuthorizedException {
 		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
 		
 		KeyValuePair keyValuePair = new KeyValuePair("content", "");
