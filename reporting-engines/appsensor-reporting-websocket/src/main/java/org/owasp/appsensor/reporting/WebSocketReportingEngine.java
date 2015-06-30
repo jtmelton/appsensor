@@ -5,29 +5,29 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
+import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
+import javax.websocket.WebSocketContainer;
 
-import org.glassfish.tyrus.client.ClientManager;
 import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.KeyValuePair;
 import org.owasp.appsensor.core.Response;
-import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.core.exceptions.NotAuthorizedException;
-import org.owasp.appsensor.core.logging.Loggable;
 import org.owasp.appsensor.core.reporting.ReportingEngine;
 import org.owasp.appsensor.core.storage.AttackStoreListener;
 import org.owasp.appsensor.core.storage.EventStoreListener;
 import org.owasp.appsensor.core.storage.ResponseStoreListener;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import com.google.gson.Gson;
 
@@ -45,27 +45,26 @@ import com.google.gson.Gson;
  * @author Raphaël Taban
  */
 @Named
-@Loggable
 @EventStoreListener
 @AttackStoreListener
 @ResponseStoreListener
 @ClientEndpoint
 public class WebSocketReportingEngine implements ReportingEngine {
 	
+	// "ws://localhost:8080/simple-websocket-dashboard/dashboard"
+	private final String APPSENSOR_WEB_SOCKET_HOST_URL_PROPERTY_NAME = "APPSENSOR_WEB_SOCKET_HOST_URL";
+	
+	private String websocketHostUrl;
+	
 	private Session localSession = null;
 	
-	private Logger logger;
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private boolean webSocketInitialized = false;
 	
 	private Gson gson = new Gson();
 	
 	public WebSocketReportingEngine() { }
-	
-	@PostConstruct
-	public void attemptInitialConnection() {
-		ensureConnected();
-	}
 	
 	/**
 	 * {@inheritDoc}
@@ -125,7 +124,7 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ServerConfiguration getServerConfiguration() throws NotAuthorizedException {
+	public String getServerConfigurationAsJson() throws NotAuthorizedException {
 		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
 	}
 
@@ -133,7 +132,7 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public KeyValuePair getBase64EncodedServerConfiguration() throws NotAuthorizedException {
+	public KeyValuePair getBase64EncodedServerConfigurationFileContent() throws NotAuthorizedException {
 		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
 	}
 	
@@ -153,11 +152,7 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	
 	@OnOpen
 	public void onOpen(Session session) {
-		if(logger != null) {
-			logger.info("Connected ... " + (session != null ? session.getId() : ""));
-		} else {
-			System.err.println("Connected ... " + (session != null ? session.getId() : ""));
-		}
+		logger.info("Connected ... " + session.getId());
 	}
 
 	@OnMessage
@@ -167,23 +162,35 @@ public class WebSocketReportingEngine implements ReportingEngine {
 
 	@OnClose
 	public void onClose(Session session, CloseReason closeReason) {
-		if(logger != null) {
-			logger.info(String.format("Session closed because of %s", closeReason));
-		} else {
-			System.err.println(String.format("Session closed because of %s", closeReason));
-		}
+		logger.info(String.format("Session %s close because of %s",
+				session.getId(), closeReason));
 	}
 
 	private void ensureConnected() {
 		if (! webSocketInitialized) {
-//			WebSocketContainer client = ContainerProvider.getWebSocketContainer();
-			ClientManager client = ClientManager.createClient();
-
+			WebSocketContainer client = ContainerProvider.getWebSocketContainer();
+	
+			if (websocketHostUrl == null) {
+				String systemProperty = System.getProperty(APPSENSOR_WEB_SOCKET_HOST_URL_PROPERTY_NAME);
+				String osProperty = System.getenv(APPSENSOR_WEB_SOCKET_HOST_URL_PROPERTY_NAME);
+				
+				//prefer system property
+				if (StringUtils.hasText(systemProperty)) {
+					websocketHostUrl = systemProperty;
+				} else if (StringUtils.hasText(osProperty)) {
+					websocketHostUrl = osProperty;
+				}
+			}
+			
+			if(websocketHostUrl == null) {
+				throw new IllegalStateException("WebSocket host url must be configured either through a system property or OS property.");
+			}
+			
 			try {
-	            localSession = client.connectToServer(WebSocketReportingEngine.class, new URI("ws://localhost:8080/simple-websocket-dashboard/dashboard"));
+				//"ws://localhost:8080/simple-websocket-dashboard/dashboard"
+	            localSession = client.connectToServer(WebSocketReportingEngine.class, new URI(websocketHostUrl));
 	            webSocketInitialized = true;
 	        } catch (DeploymentException | URISyntaxException | IOException e) {
-	        	System.err.println("Bailing out");
 	            throw new RuntimeException(e);
 	        }
 	    	System.err.println("started and connected");

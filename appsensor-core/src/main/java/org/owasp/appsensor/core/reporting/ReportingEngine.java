@@ -54,12 +54,12 @@ public interface ReportingEngine extends EventListener, AttackListener, Response
 	public Collection<Response> findResponses(String earliest) throws NotAuthorizedException;
 	
 	/**
-	 * Return the {@link ServerConfiguration} 
+	 * Return the {@link ServerConfiguration} as JSON
 	 * 
-	 * @return the {@link ServerConfiguration} 
+	 * @return the {@link ServerConfiguration} as JSON
 	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
 	 */
-	public ServerConfiguration getServerConfiguration() throws NotAuthorizedException;
+	public String getServerConfigurationAsJson() throws NotAuthorizedException;
 	
 	/**
 	 * Return a base-64 encoded version of the appsensor-server-config.xml
@@ -67,6 +67,6 @@ public interface ReportingEngine extends EventListener, AttackListener, Response
 	 * @return a base-64 encoded version of the appsensor-server-config.xml
 	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
 	 */
-	public KeyValuePair getBase64EncodedServerConfiguration() throws NotAuthorizedException;
+	public KeyValuePair getBase64EncodedServerConfigurationFileContent() throws NotAuthorizedException;
 	
 }
