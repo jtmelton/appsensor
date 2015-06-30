@@ -1,5 +1,7 @@
 package org.owasp.appsensor.core.util;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -31,10 +33,43 @@ public class XmlUtils {
 	 * @throws SAXException sax exception for parsing files
 	 */
 	public static void validateXMLSchema(String xsdPath, String xmlPath) throws IOException, SAXException {
-		InputStream xsdStream = XmlUtils.class.getResourceAsStream(xsdPath);
-		InputStream xmlStream = XmlUtils.class.getResourceAsStream(xmlPath);
+		InputStream xsdStream = null;
+		InputStream xmlStream = null;
+		try {
+			xsdStream = XmlUtils.class.getResourceAsStream(xsdPath);
 		
-		validateXMLSchema(xsdStream, xmlStream);
+			//try loading from classpath first - fallback to disk
+			if (xsdStream == null) {
+				File xsdFile = new File(xsdPath);
+			    xsdStream = new FileInputStream(xsdFile);
+			}
+			
+			xmlStream = XmlUtils.class.getResourceAsStream(xmlPath);
+			
+			//try loading from classpath first - fallback to disk
+			if (xmlStream == null) {
+				File xmlFile = new File(xmlPath);
+				xmlStream = new FileInputStream(xmlFile);
+			}
+			
+			validateXMLSchema(xsdStream, xmlStream);
+			
+		} finally {
+			if (xsdStream != null) {
+				try {
+					xsdStream.close();
+				} catch(Exception e) {
+					xsdStream = null;
+				}
+			}
+			if (xmlStream != null) {
+				try {
+					xmlStream.close();
+				} catch(Exception e) {
+					xmlStream = null;
+				}
+			}
+		}
     }
 	
 	/**
