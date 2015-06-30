@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import javax.persistence.Transient;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -25,7 +27,8 @@ import org.owasp.appsensor.core.correlation.CorrelationSet;
  */
 public abstract class ServerConfiguration {
 	
-	private transient File configurationFile;
+	@Transient
+	private File configurationFile;
 	
 	private Collection<DetectionPoint> detectionPoints = new ArrayList<>(); 
 	

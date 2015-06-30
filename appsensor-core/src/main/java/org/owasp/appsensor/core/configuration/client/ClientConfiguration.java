@@ -2,6 +2,8 @@ package org.owasp.appsensor.core.configuration.client;
 
 import java.io.File;
 
+import javax.persistence.Transient;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,7 +15,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class ClientConfiguration {
 
-	private transient File configurationFile;
+	@Transient
+	private File configurationFile;
 	
 	/** Server connection with configuration info for rest/soap connections */
 	private ServerConnection serverConnection;
