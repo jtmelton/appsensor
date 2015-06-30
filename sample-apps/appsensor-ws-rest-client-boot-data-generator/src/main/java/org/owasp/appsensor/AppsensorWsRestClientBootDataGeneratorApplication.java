@@ -1,6 +1,7 @@
 package org.owasp.appsensor;
 
 import org.owasp.appsensor.core.AppSensorServer;
+import org.owasp.appsensor.generator.SimpleDataGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;

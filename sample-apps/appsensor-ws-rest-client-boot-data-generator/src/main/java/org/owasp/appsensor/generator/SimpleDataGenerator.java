@@ -1,4 +1,4 @@
-package org.owasp.appsensor;
+package org.owasp.appsensor.generator;
 
 import java.util.Random;
 
