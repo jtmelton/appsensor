@@ -2,3 +2,16 @@ body {
   min-height: 2000px;
   padding-top: 70px;
 }
+
+#geo_full_screen, #geo_normal_screen {
+	color: #9d9d9d; 
+	position: absolute; 
+	z-index: 10; 
+	top: 0px; 
+	right: 0px;
+}
+
+#geo_full_screen:hover, #geo_normal_screen:hover {
+	color: #FFFFFF; 
+}
+
