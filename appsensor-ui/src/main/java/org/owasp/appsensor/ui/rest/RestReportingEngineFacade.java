@@ -4,7 +4,6 @@ import javax.annotation.PostConstruct;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
-import org.owasp.appsensor.configuration.stax.server.StaxServerConfiguration;
 import org.owasp.appsensor.core.KeyValuePair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class RestReportingEngineFacade {
 	
 	public RestReportingEngineFacade() { }
 	
-	public StaxServerConfiguration getServerConfiguration() {
+	public String getServerConfiguration() {
 		return target
 				.path("api")
 				.path("v1.0")
@@ -35,7 +34,7 @@ public class RestReportingEngineFacade {
 				.path("server-config")
 				.request()
 				.header(clientApplicationIdName, clientApplicationIdValue)
-				.get(StaxServerConfiguration.class);
+				.get(String.class);
 	}
 	
 	public KeyValuePair getBase64EncodedServerConfiguration() {
