@@ -27,6 +27,12 @@
 		<jqueryui.version>1.11.4</jqueryui.version>
 		<aceeditor.version>01.08.2014</aceeditor.version>
 		<reactjs.version>0.13.3</reactjs.version>
+		<stompjs.version>2.3.3</stompjs.version>
+		<sockjs.version>0.3.4-2</sockjs.version>
+		<d3.version>3.5.5-1</d3.version>
+		<topojson.version>1.4.9</topojson.version>
+		<datamaps.version>0.3.7</datamaps.version>
+		<gson.version>2.3.1</gson.version>
 		<appsensor.version>2.2.0-SNAPSHOT</appsensor.version>
 	</properties>
 
@@ -100,6 +106,42 @@
 		    <artifactId>react</artifactId>
 		    <version>${reactjs.version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>stomp-websocket</artifactId>
+		    <version>${stompjs.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>sockjs-client</artifactId>
+		    <version>${sockjs.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>d3js</artifactId>
+		    <version>${d3.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>topojson</artifactId>
+		    <version>${topojson.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>datamaps</artifactId>
+		    <version>${datamaps.version}</version>
+		    <exclusions>
+		    	<exclusion>
+		    		<groupId>org.webjars.bower</groupId>
+		    		<artifactId>d3</artifactId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
 		
 		<dependency>
 			<groupId>org.owasp.appsensor</groupId>
@@ -111,6 +153,35 @@
 			<groupId>org.owasp.appsensor</groupId>
 			<artifactId>appsensor-configuration-stax</artifactId>
 			<version>${appsensor.version}</version>
+		</dependency>
+		
+		<!-- just for the domain object -->
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-reporting-websocket</artifactId>
+			<version>${appsensor.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.owasp.appsensor</groupId>
+					<artifactId>appsensor-local</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax</groupId>
+					<artifactId>javaee-web-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.websocket</groupId>
+					<artifactId>javax.websocket-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.tyrus</groupId>
+					<artifactId>tyrus-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.tyrus</groupId>
+					<artifactId>tyrus-client</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
         
 	</dependencies>
