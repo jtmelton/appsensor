@@ -4,6 +4,7 @@ import org.owasp.appsensor.configuration.stax.client.StaxClientConfiguration;
 import org.owasp.appsensor.configuration.stax.server.StaxServerConfiguration;
 import org.owasp.appsensor.core.AppSensorClient;
 import org.owasp.appsensor.core.AppSensorServer;
+import org.owasp.appsensor.reporting.WebSocketReportingEngine;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 //instead of @SpringBootApplication, using 3 separate annotations 
 //so I can control exclusions for scanning - need to ignore the 
@@ -25,9 +27,11 @@ import org.springframework.http.HttpStatus;
 			@ComponentScan.Filter(value = AppSensorClient.class, type = FilterType.ASSIGNABLE_TYPE), 
 			@ComponentScan.Filter(value = AppSensorServer.class, type = FilterType.ASSIGNABLE_TYPE),
 			@ComponentScan.Filter(value = StaxClientConfiguration.class, type = FilterType.ASSIGNABLE_TYPE),
-			@ComponentScan.Filter(value = StaxServerConfiguration.class, type = FilterType.ASSIGNABLE_TYPE)
+			@ComponentScan.Filter(value = StaxServerConfiguration.class, type = FilterType.ASSIGNABLE_TYPE),
+			@ComponentScan.Filter(value = WebSocketReportingEngine.class, type = FilterType.ASSIGNABLE_TYPE)
 		}
 )
+@EnableScheduling
 public class AppsensorUiApplication {
 
     public static void main(String[] args) {
