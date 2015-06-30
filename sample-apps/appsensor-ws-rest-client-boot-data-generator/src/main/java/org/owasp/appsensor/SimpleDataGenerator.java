@@ -12,7 +12,7 @@ import org.owasp.appsensor.core.event.EventManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Named
-public class DataGenerator {
+public class SimpleDataGenerator {
 	
 	private User bob = new User("bob");
 	

@@ -21,7 +21,7 @@ public class AppsensorWsRestClientBootDataGeneratorApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(AppsensorWsRestClientBootDataGeneratorApplication.class, args);
         
-        DataGenerator generator = context.getBean(DataGenerator.class);
+        SimpleDataGenerator generator = context.getBean(SimpleDataGenerator.class);
         
         generator.execute();
     }
