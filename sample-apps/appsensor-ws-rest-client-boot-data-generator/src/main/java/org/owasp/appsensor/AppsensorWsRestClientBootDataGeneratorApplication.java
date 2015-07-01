@@ -2,6 +2,7 @@ package org.owasp.appsensor;
 
 import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.generator.GeoDataGenerator;
+import org.owasp.appsensor.generator.SimpleDataGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -22,10 +23,11 @@ public class AppsensorWsRestClientBootDataGeneratorApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(AppsensorWsRestClientBootDataGeneratorApplication.class, args);
         
-        //SimpleDataGenerator generator = context.getBean(SimpleDataGenerator.class);
-        GeoDataGenerator generator = context.getBean(GeoDataGenerator.class);
-        
-        generator.execute();
+        SimpleDataGenerator simpleGenerator = context.getBean(SimpleDataGenerator.class);
+        GeoDataGenerator geoGenerator = context.getBean(GeoDataGenerator.class);
+
+        simpleGenerator.execute();
+        geoGenerator.execute();
     }
     
 }

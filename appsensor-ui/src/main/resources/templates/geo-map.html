@@ -5,9 +5,23 @@
 		<h3><a id="geo_normal_screen" href="#"><span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span></a></h3>
 	</div>
 	<div id="over_map">
-		<table id="activity_log" style="color: #E8E8E8;font-size:0.75em"></table>
+		<table id="activity_log" class="table table-condensed" style="color: #E8E8E8;font-size:0.75em">
+			<tr>
+				<th>Type</th>
+				<th>Category</th>
+				<th>From</th>
+				<th></th>
+				<th>To</th>
+				<th>Timestamp</th>
+			</tr>
+		</table>
 	</div>
 	<style>
-		#over_map { position: absolute; bottom: 2%; right: 2%; z-index: 99; }
+		#over_map { 
+			position: absolute; 
+			bottom: 2%; 
+			right: 2%; 
+			z-index: 99;
+		}
 	</style>
 {{>common/footer}}
