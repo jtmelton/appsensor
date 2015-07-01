@@ -3,130 +3,162 @@ var client;
 
 function subscribeOnSuccess(frame) {
 	  client.subscribe("/events", function(message) {
-//	    console.log("saw event: " + message);
-	    var event = JSON.parse(message.body);
-//	    console.log(JSON.stringify(eventOriginal, null, 4));
-//	    console.log(JSON.stringify(message, null, 4));
-	    
-	    var user = event.user;
-	    var detectionPoint = event.detectionPoint;
-	    var detectionSystem = event.detectionSystem;
-	    
-	    var composed = {};
-	    
-	    composed.type = 'Event';
-	    composed.category = detectionPoint.label + ' (' + detectionPoint.category + ')' ;
-	    composed.timestamp = event.timestamp;
-	    
-	    var fromIpAddress = (user.ipAddress) ? ' (' + user.ipAddress.address + ')' : ' (no IP Address)';
-    	var fromGeo = (user.ipAddress && user.ipAddress.geoLocation) ? 
-    			' (' + user.ipAddress.geoLocation.latitude + ' / ' + user.ipAddress.geoLocation.longitude + ')' : 
-    				' (no geo)';
-    	var toIpAddress = (detectionSystem.ipAddress) ? ' (' + detectionSystem.ipAddress.address + ')' : ' (no IP Address)';
-    	var toGeo = (detectionSystem.ipAddress && detectionSystem.ipAddress.geoLocation) ? 
-    			' (' + detectionSystem.ipAddress.geoLocation.latitude + ' / ' + detectionSystem.ipAddress.geoLocation.longitude + ')' : 
-    				' (no geo)';
-    	
-    	composed.from = user.username + fromIpAddress + fromGeo;
-	    composed.to = detectionSystem.detectionSystemId + toIpAddress + toGeo;
-	    
-	    if ('ipAddress' in user && user.ipAddress && 
-	    		'geoLocation' in user.ipAddress && user.ipAddress.geoLocation &&
-	    		'ipAddress' in detectionSystem && detectionSystem.ipAddress && 
-	    		'geoLocation' in detectionSystem.ipAddress && detectionSystem.ipAddress.geoLocation) {
-	    	console.log('YES');
-	    	composed.origin = {};
-	    	composed.origin.latitude = user.ipAddress.geoLocation.latitude;
-	    	composed.origin.longitude = user.ipAddress.geoLocation.longitude;
-	    	composed.destination = {};
-	    	composed.destination.latitude = detectionSystem.ipAddress.geoLocation.latitude;
-	    	composed.destination.longitude = detectionSystem.ipAddress.geoLocation.longitude;
-	    	composed.options = {};
-	    	composed.options.strokeColor = 'yellow';
-	    	composed.name = 'Event received of type "' + composed.category + '"<br /> from user "' + composed.from + '"<br /> to detection system "' + composed.to + '"<br />';
-	    	composed.radius = 10;
-	    	composed.fillKey = 'eventFill';
-	    	composed.latitude = detectionSystem.ipAddress.geoLocation.latitude;
-	    	composed.longitude = detectionSystem.ipAddress.geoLocation.longitude;
+		    var event = JSON.parse(message.body);
+		    
+		    var user = event.user;
+		    var detectionPoint = event.detectionPoint;
+		    var detectionSystem = event.detectionSystem;
+		    
+		    var composed = {};
+		    
+		    composed.type = 'Event';
+		    composed.category = detectionPoint.label + ' (' + detectionPoint.category + ')' ;
+		    composed.timestamp = event.timestamp;
+		    
+		    var fromIpAddress = (user.ipAddress) ? ' (' + user.ipAddress.address + ')' : ' (no IP Address)';
+	    	var fromGeo = (user.ipAddress && user.ipAddress.geoLocation) ? 
+	    			' (' + user.ipAddress.geoLocation.latitude + ' / ' + user.ipAddress.geoLocation.longitude + ')' : 
+	    				' (no geo)';
+	    	var toIpAddress = (detectionSystem.ipAddress) ? ' (' + detectionSystem.ipAddress.address + ')' : ' (no IP Address)';
+	    	var toGeo = (detectionSystem.ipAddress && detectionSystem.ipAddress.geoLocation) ? 
+	    			' (' + detectionSystem.ipAddress.geoLocation.latitude + ' / ' + detectionSystem.ipAddress.geoLocation.longitude + ')' : 
+	    				' (no geo)';
 	    	
-	    	add(composed, events, bubbleEvents);
-	    } else {
-	    	console.log('NO');
-	    	composed.type = 'Unmapped Event';
-//	    	composed.origin.latitude = user.ipAddress.geoLocation.latitude;
-//	    	composed.origin.longitude = user.ipAddress.geoLocation.longitude;
-//	    	composed.destination.latitude = detectionSystem.ipAddress.geoLocation.latitude;
-//	    	composed.destination.longitude = detectionSystem.ipAddress.geoLocation.longitude;
-//	    	composed.options.strokeColor = 'yellow';
-//	    	composed.name = 'Event received of type "' + composed.category + '"<br /> from user "' + composed.from + '"<br /> to detection system "' + composed.to + '"<br />';
-//	    	composed.radius = 10;
-//	    	composed.fillKey: 'eventFill',
-//	    	composed.latitude: detectionSystem.ipAddress.geoLocation.latitude,
-//	    	composed.longitude: detectionSystem.ipAddress.geoLocation.longitude
-	    	//don't add event, but log activity message
-	    	addActivityMessage(composed);
-	    }
+	    	composed.from = user.username + fromIpAddress + fromGeo;
+		    composed.to = detectionSystem.detectionSystemId + toIpAddress + toGeo;
 		    
+		    if ('ipAddress' in user && user.ipAddress && 
+		    		'geoLocation' in user.ipAddress && user.ipAddress.geoLocation &&
+		    		'ipAddress' in detectionSystem && detectionSystem.ipAddress && 
+		    		'geoLocation' in detectionSystem.ipAddress && detectionSystem.ipAddress.geoLocation) {
+		    	composed.origin = {};
+		    	composed.origin.latitude = user.ipAddress.geoLocation.latitude;
+		    	composed.origin.longitude = user.ipAddress.geoLocation.longitude;
+		    	composed.destination = {};
+		    	composed.destination.latitude = detectionSystem.ipAddress.geoLocation.latitude;
+		    	composed.destination.longitude = detectionSystem.ipAddress.geoLocation.longitude;
+		    	composed.options = {};
+		    	composed.options.strokeColor = 'yellow';
+		    	composed.name = 'Event received of type "' + composed.category + '"<br /> from user "' + composed.from + '"<br /> to detection system "' + composed.to + '"<br />';
+		    	composed.radius = 10;
+		    	composed.fillKey = 'eventFill';
+		    	composed.latitude = detectionSystem.ipAddress.geoLocation.latitude;
+		    	composed.longitude = detectionSystem.ipAddress.geoLocation.longitude;
+		    	
+		    	add(composed, events, bubbleEvents);
+		    } else {
+		    	composed.type = 'Unmapped Event';
+		    	
+		    	addActivityMessage(composed);
+		    }
 		    
-	    /*{
-        origin: {
-            latitude: 38.895111,
-            longitude: -77.036667
-        },
-        destination: {
-            latitude: 32.066667,
-            longitude: 34.783333 
-        },
-    options: {
-	strokeColor: 'yellow',
-    },
-    name: 'Event',
-    radius: 10,
-    fillKey: 'eventFill',
-    latitude: 32.066667,
-    longitude: 34.783333
-    },*/
-	    
-//	    {
-//	        "user": {
-//	            "username": "frank",
-//	            "ipAddress": {
-//	                "address": "10.10.10.1",
-//	                "geoLocation": {
-//	                    "latitude": 37.596758,
-//	                    "longitude": -121.647992
-//	                }
-//	            }
-//	        },
-//	        "detectionPoint": {
-//	            "category": "Input Validation",
-//	            "label": "IE2",
-//	            "responses": []
-//	        },
-//	        "timestamp": "2015-07-01T02:03:25.296Z",
-//	        "detectionSystem": {
-//	            "detectionSystemId": "myclientgeoapp2",
-//	            "ipAddress": {
-//	                "address": "10.10.10.6",
-//	                "geoLocation": {
-//	                    "latitude": -7.471493,
-//	                    "longitude": -47.248578
-//	                }
-//	            }
-//	        },
-	    
-	    
-	    
-	    
-	    
 	  });
 	
 	  client.subscribe("/attacks", function(message) {
-//		  console.log("saw attack: " + message);
+		  	var attack = JSON.parse(message.body);
+		    
+		    var user = attack.user;
+		    var detectionPoint = attack.detectionPoint;
+		    var detectionSystem = attack.detectionSystem;
+		    
+		    var composed = {};
+		    
+		    composed.type = 'Attack';
+		    composed.category = detectionPoint.label + ' (' + detectionPoint.category + ')' ;
+		    composed.timestamp = event.timestamp;
+		    
+		    var fromIpAddress = (user.ipAddress) ? ' (' + user.ipAddress.address + ')' : ' (no IP Address)';
+	    	var fromGeo = (user.ipAddress && user.ipAddress.geoLocation) ? 
+	    			' (' + user.ipAddress.geoLocation.latitude + ' / ' + user.ipAddress.geoLocation.longitude + ')' : 
+	    				' (no geo)';
+	    	var toIpAddress = (detectionSystem.ipAddress) ? ' (' + detectionSystem.ipAddress.address + ')' : ' (no IP Address)';
+	    	var toGeo = (detectionSystem.ipAddress && detectionSystem.ipAddress.geoLocation) ? 
+	    			' (' + detectionSystem.ipAddress.geoLocation.latitude + ' / ' + detectionSystem.ipAddress.geoLocation.longitude + ')' : 
+	    				' (no geo)';
+	    	
+	    	composed.from = user.username + fromIpAddress + fromGeo;
+		    composed.to = detectionSystem.detectionSystemId + toIpAddress + toGeo;
+		    
+		    if ('ipAddress' in user && user.ipAddress && 
+		    		'geoLocation' in user.ipAddress && user.ipAddress.geoLocation &&
+		    		'ipAddress' in detectionSystem && detectionSystem.ipAddress && 
+		    		'geoLocation' in detectionSystem.ipAddress && detectionSystem.ipAddress.geoLocation) {
+		    	composed.origin = {};
+		    	composed.origin.latitude = user.ipAddress.geoLocation.latitude;
+		    	composed.origin.longitude = user.ipAddress.geoLocation.longitude;
+		    	composed.destination = {};
+		    	composed.destination.latitude = detectionSystem.ipAddress.geoLocation.latitude;
+		    	composed.destination.longitude = detectionSystem.ipAddress.geoLocation.longitude;
+		    	composed.options = {};
+		    	composed.options.strokeColor = 'red';
+		    	composed.name = 'Attack received of type "' + composed.category + '"<br /> from user "' + composed.from + '"<br /> to detection system "' + composed.to + '"<br />';
+		    	composed.radius = 10;
+		    	composed.fillKey = 'attackFill';
+		    	composed.latitude = detectionSystem.ipAddress.geoLocation.latitude;
+		    	composed.longitude = detectionSystem.ipAddress.geoLocation.longitude;
+		    	
+		    	add(composed, attacks, bubbleAttacks);
+		    } else {
+		    	composed.type = 'Unmapped Attack';
+		    	
+		    	addActivityMessage(composed);
+		    }
+		  
 	  });
 	  
 	  client.subscribe("/responses", function(message) {
-//		  console.log("saw response: " + message);
+		  	var response = JSON.parse(message.body);
+		  	
+		    var user = response.user;
+		    var detectionSystem = response.detectionSystem;
+		    
+		    var composed = {};
+		    
+		    composed.type = 'Response';
+		    
+		    var responseInterval = (response.interval) ? ' ( effective for ' + response.interval.duration + ' ' + response.interval.unit + ')' : ''
+		    var responseDescription = response.action + responseInterval;
+		    
+		    composed.category = responseDescription;	
+		    composed.timestamp = event.timestamp;
+		    
+		    // for a response, to/from are reversed
+		    var toIpAddress = (user.ipAddress) ? ' (' + user.ipAddress.address + ')' : ' (no IP Address)';
+	    	var toGeo = (user.ipAddress && user.ipAddress.geoLocation) ? 
+	    			' (' + user.ipAddress.geoLocation.latitude + ' / ' + user.ipAddress.geoLocation.longitude + ')' : 
+	    				' (no geo)';
+	    	var fromIpAddress = (detectionSystem.ipAddress) ? ' (' + detectionSystem.ipAddress.address + ')' : ' (no IP Address)';
+	    	var fromGeo = (detectionSystem.ipAddress && detectionSystem.ipAddress.geoLocation) ? 
+	    			' (' + detectionSystem.ipAddress.geoLocation.latitude + ' / ' + detectionSystem.ipAddress.geoLocation.longitude + ')' : 
+	    				' (no geo)';
+	    	
+	    	composed.from = detectionSystem.detectionSystemId + fromIpAddress + fromGeo;
+		    composed.to = user.username + toIpAddress + toGeo;
+		    
+		    if ('ipAddress' in user && user.ipAddress && 
+		    		'geoLocation' in user.ipAddress && user.ipAddress.geoLocation &&
+		    		'ipAddress' in detectionSystem && detectionSystem.ipAddress && 
+		    		'geoLocation' in detectionSystem.ipAddress && detectionSystem.ipAddress.geoLocation) {
+		    	composed.destination = {};
+		    	composed.destination.latitude = user.ipAddress.geoLocation.latitude;
+		    	composed.destination.longitude = user.ipAddress.geoLocation.longitude;
+		    	composed.origin = {};
+		    	composed.origin.latitude = detectionSystem.ipAddress.geoLocation.latitude;
+		    	composed.origin.longitude = detectionSystem.ipAddress.geoLocation.longitude;
+		    	composed.options = {};
+		    	composed.options.strokeColor = 'green';
+		    	composed.name = 'Response received of type "' + composed.category + '"<br /> from detection system "' + composed.from + '"<br /> to user "' + composed.to + '"<br />';
+		    	composed.radius = 10;
+		    	composed.fillKey = 'responseFill';
+		    	composed.latitude = user.ipAddress.geoLocation.latitude;
+		    	composed.longitude = user.ipAddress.geoLocation.longitude;
+		    	
+		    	add(composed, responses, bubbleResponses);
+		    } else {
+		    	composed.type = 'Unmapped Response';
+		    	
+		    	addActivityMessage(composed);
+		    }
 	  });
 }
 
@@ -185,195 +217,6 @@ var map = new Datamap({
 	}
 });
 
-var eventData = [
-    /*{
-        origin: {
-            latitude: 38.895111,
-            longitude: -77.036667
-        },
-        destination: {
-            latitude: 32.066667,
-            longitude: 34.783333 
-        },
-    options: {
-	strokeColor: 'yellow',
-    },
-    name: 'Event',
-    radius: 10,
-    fillKey: 'eventFill',
-    latitude: 32.066667,
-    longitude: 34.783333
-    },
-    {
-        origin: {
-            latitude: 38.895111,
-            longitude: -77.036667
-        },
-        destination: {
-            latitude: 19.433333,
-            longitude: -99.133333
-        },
-    options: {
-	strokeColor: 'yellow',
-    },
-    name: 'Event',
-    radius: 10,
-    fillKey: 'eventFill',
-    latitude: 19.433333,
-    longitude: -99.133333
-    }*/
-];
-
-var attackData = [
-    /*{
-        origin: {
-            latitude: 38.895111,
-            longitude: -77.036667
-        },
-        destination: {
-            latitude: 9.933333,
-            longitude: -84.083333
-        },
-    options: {
-	strokeColor: 'red',
-    },
-    name: 'Attack',
-    radius: 10,
-    fillKey: 'attackFill',
-    latitude: 9.933333,
-    longitude: -84.083333
-    },
-    {
-        origin: {
-            latitude: 38.895111,
-            longitude: -77.036667
-        },
-        destination: {
-            latitude: 54.597,
-            longitude: -5.93
-        },
-    options: {
-	strokeColor: 'red',
-    },
-    name: 'Attack',
-    radius: 10,
-    fillKey: 'attackFill',
-    latitude: 54.597,
-    longitude: -5.93
-    },
-    {
-        origin: {
-            latitude: 38.895111,
-            longitude: -77.036667
-        },
-        destination: {
-            latitude: 52.516667,
-            longitude: 13.383333 
-        },
-    options: {
-	strokeColor: 'red',
-    },
-    name: 'Attack',
-    radius: 10,
-    fillKey: 'attackFill',
-    latitude: 52.516667,
-    longitude: 13.383333
-    }*/
-];
-
-var responseData = [
-    /*{
-        origin: {
-            latitude: 38.895111,
-            longitude: -77.036667
-        },
-        destination: {
-            latitude: 14.692778,
-            longitude: -17.446667
-        },
-    options: {
-	strokeColor: 'green',
-    },
-    name: 'Response',
-    radius: 10,
-    fillKey: 'responseFill',
-    latitude: 14.692778,
-    longitude: -17.446667
-    },
-    {
-        origin: {
-            latitude: 38.895111,
-            longitude: -77.036667
-        },
-        destination: {
-            latitude: -26.204444,
-            longitude: 28.045556
-        },
-    options: {
-	strokeColor: 'green',
-    },
-    name: 'Response',
-    radius: 10,
-    fillKey: 'responseFill',
-    latitude: -26.204444,
-    longitude: 28.045556
-    },
-    {
-        origin: {
-            latitude: 38.895111,
-            longitude: -77.036667
-        },
-        destination: {
-            latitude: -6.8,
-            longitude: 39.283333 
-        },
-    options: {
-	strokeColor: 'green',
-    },
-    name: 'Response',
-    radius: 10,
-    fillKey: 'responseFill',
-    latitude: -6.8,
-    longitude: 39.283333
-    },
-    {
-        origin: {
-            latitude: 38.895111,
-            longitude: -77.036667
-        },
-        destination: {
-            latitude: 59.329444,
-            longitude: 18.068611
-        },
-    options: {
-	strokeColor: 'green',
-    },
-    name: 'Response',
-    radius: 10,
-    fillKey: 'responseFill',
-    latitude: 59.329444,
-    longitude: 18.068611
-    },
-    {
-        origin: {
-            latitude: 38.895111,
-            longitude: -77.036667
-        },
-        destination: {
-            latitude: 59.95,
-            longitude: 30.3
-        },
-    options: {
-	strokeColor: 'green',
-    },
-    name: 'Response',
-    radius: 10,
-    fillKey: 'responseFill',
-    latitude: 59.95,
-    longitude: 30.3
-    }*/
-];
-
 var events = []
 var attacks = []
 var responses = []
@@ -400,44 +243,6 @@ function add(element, dataArray, bubbleArray) {
 	addActivityMessage(element);
 }
 
-/*
-function addActivityMessage(element) {
-	var tableRef = document.getElementById('activity_log');
-	
-	//delete last row if table too big
-	if(tableRef.rows.length > 10) {
-		tableRef.deleteRow(tableRef.rows.length -1)
-	}
-	
-	//console.log('num rows = ' + tableRef.rows.length);
-	
-	var newRow = tableRef.insertRow(1);
-	
-	var cType = newRow.insertCell(0);
-	var txtType = document.createTextNode('Event');
-	cType.appendChild(txtType);
-	
-	var cDetPt = newRow.insertCell(1);
-	var txtDetPt = document.createTextNode('IE2' + ' ' + '(Input Validation)');
-	cDetPt.appendChild(txtDetPt);
-	
-	var cUser = newRow.insertCell(2);
-	var txtUser = document.createTextNode('suzy' + '[' + '1.2.3.4' + ']' + '(' + '13.784 / 93.6714' + ')');
-	cUser.appendChild(txtUser);
-	
-	var cDash = newRow.insertCell(3);
-	var txtDash = document.createTextNode(' --> ');
-	cDash.appendChild(txtDash);
-	
-	var cDetSys = newRow.insertCell(4);
-	var txtDetSys = document.createTextNode('myapp2' + '[' + '5.6.7.8' + ']' + '(' + '54.892 / 45.2168' + ')');
-	cDetSys.appendChild(txtDetSys);
-	
-	var cTS = newRow.insertCell(5);
-	var txtTS = document.createTextNode('2015-07-01T02:03:25.296Z');
-	cTS.appendChild(txtTS);
-}
-*/
 function addActivityMessage(element) {
 	var tableRef = document.getElementById('activity_log');
 	
@@ -462,15 +267,11 @@ function addActivityMessage(element) {
 	var txtUser = document.createTextNode(element.from);
 	cUser.appendChild(txtUser);
 	
-	var cDash = newRow.insertCell(3);
-	var txtDash = document.createTextNode(' --> ');
-	cDash.appendChild(txtDash);
-	
-	var cDetSys = newRow.insertCell(4);
+	var cDetSys = newRow.insertCell(3);
 	var txtDetSys = document.createTextNode(element.to);
 	cDetSys.appendChild(txtDetSys);
 	
-	var cTS = newRow.insertCell(5);
+	var cTS = newRow.insertCell(4);
 	var txtTS = document.createTextNode(element.timestamp);
 	cTS.appendChild(txtTS);
 }
@@ -486,7 +287,6 @@ function popoverView(geo, data) {
 
 function displayData() {
 	window.setTimeout(function() {
-		console.log('------|| 1 ||------');
 		var joined = events.concat(attacks, responses);
 		var bubblejoined = bubbleEvents.concat(bubbleAttacks, bubbleResponses);
 	
@@ -496,49 +296,14 @@ function displayData() {
 			map.bubbles(bubblejoined, {popupTemplate: popoverView});
 		}, 10000);
 		
-		console.log('------|| 2 ||------');
 		displayData();
-		console.log('------|| 3 ||------');
 	    }, 1750);
 }
 
 var eventCounter = 0;
 var attackCounter = 0;
 var responseCounter = 0;                    
-/*
-function loopEvents () {        
-	setTimeout(function () {    
-	      	var event = eventData[eventCounter];
-	      	add(event, events, bubbleEvents);
-	      	eventCounter++;                     
-	      	if (eventCounter < eventData.length) {            
-	      		loopEvents();             
-	      	}                       
-	}, 1750)
-}
 
-function loopAttacks () {        
-	setTimeout(function () {    
-	      	var attack = attackData[attackCounter];
-	      	add(attack, attacks, bubbleAttacks);
-	      	attackCounter++;                     
-	      	if (attackCounter < attackData.length) {            
-	      		loopAttacks();             
-	      	}                       
-	}, 1750)
-}
-
-function loopResponses () {        
-	setTimeout(function () {    
-	      	var response = responseData[responseCounter];
-	      	add(response, responses, bubbleResponses);
-	      	responseCounter++;                     
-	      	if (responseCounter < responseData.length) {            
-	      		loopResponses();             
-	      	}                       
-	}, 1750)
-}
-*/
 function goFullScreen() {
 	$("#appsensor-navbar").hide();
 	$("#geo_full_screen").hide();
@@ -563,10 +328,6 @@ $(function() {
     });
     
     $("#geo_normal_screen").hide();
-
-//    loopEvents();  
-//	loopAttacks();  
-//	loopResponses();   
 	
 	displayData();
 });

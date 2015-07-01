@@ -100,7 +100,6 @@ public class GeoDataGenerator {
 					Event event = new Event(user, detectionPoint, detectionSystem);
 					System.err.println("sending || " + gson.toJson(event) + " ||");
 
-//					configuration.getServerConnection().setClientApplicationIdentificationHeaderValue(detectionSystem.getDetectionSystemId());
 					eventManager.updateApplicationIdentificationHeaderValue(detectionSystem.getDetectionSystemId());
 					eventManager.addEvent(event);
 				} catch(Exception e) {
