@@ -3,6 +3,8 @@
 	
 	<client-application-identification-header-name>X-Appsensor-Client-Application-Name2</client-application-identification-header-name>
 	
+	<geolocation enabled="true" databasePath="src/main/resources/GeoLite2-City.mmdb" />
+	
 	<client-applications>
 		<client-application>
 			<name>myclientapp</name>
@@ -12,6 +14,50 @@
 				<role>GET_RESPONSES</role>
 				<role>EXECUTE_REPORT</role>	
 			</roles>
+		</client-application>
+		<client-application>
+			<name>myclientgeoapp1</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+			<!-- ireland -->
+			<ip-address latitude="52.629678" longitude="-7.873585">10.10.10.5</ip-address>
+		</client-application>
+		<client-application>
+			<name>myclientgeoapp2</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+			<!-- brazil -->
+			<ip-address latitude="-7.471493" longitude="-47.248578">10.10.10.6</ip-address>
+		</client-application>
+		<client-application>
+			<name>myclientgeoapp3</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+			<!-- russia -->
+			<ip-address latitude="59.164625" longitude="123.96234">10.10.10.7</ip-address>
+		</client-application>
+		<client-application>
+			<name>myclientgeoapp4</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+			<!-- india -->
+			<ip-address latitude="12.875989" longitude="77.556100">10.10.10.8</ip-address>
 		</client-application>
 	</client-applications>
 

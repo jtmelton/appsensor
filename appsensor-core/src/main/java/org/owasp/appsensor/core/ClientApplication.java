@@ -19,6 +19,9 @@ public class ClientApplication {
 	/** The collection of {@link Role}s associated with this client application */
 	private Collection<Role> roles = new ArrayList<Role>();
 
+	/** The {@link IPAddress} of the client application, optionally set in the server configuration */
+	private IPAddress ipAddress;
+	
 	public String getName() {
 		return name;
 	}
@@ -32,4 +35,12 @@ public class ClientApplication {
 		return roles;
 	}
 
+	public IPAddress getIpAddress() {
+		return ipAddress;
+	}
+
+	public void setIpAddress(IPAddress ipAddress) {
+		this.ipAddress = ipAddress;
+	}
+	
 }

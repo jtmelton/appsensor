@@ -20,6 +20,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.owasp.appsensor.core.ClientApplication;
 import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.IPAddress;
 import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.Threshold;
@@ -28,6 +29,7 @@ import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.core.configuration.server.ServerConfigurationReader;
 import org.owasp.appsensor.core.correlation.CorrelationSet;
 import org.owasp.appsensor.core.exceptions.ConfigurationException;
+import org.owasp.appsensor.core.geolocation.GeoLocation;
 import org.owasp.appsensor.core.util.XmlUtils;
 import org.xml.sax.SAXException;
 
@@ -209,6 +211,13 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 						clientApplication.setName(xmlReader.getElementText().trim());
 					} else if("config:role".equals(name)) {
 						clientApplication.getRoles().add(Role.valueOf(xmlReader.getElementText().trim()));
+					} else if("config:ip-address".equals(name)) {
+						double latitude = Double.parseDouble(xmlReader.getAttributeValue(null, "latitude").trim());
+						double longitude = Double.parseDouble(xmlReader.getAttributeValue(null, "longitude").trim());
+						GeoLocation geoLocation = new GeoLocation(latitude, longitude);
+						String ipAddressStr = xmlReader.getElementText().trim();
+						IPAddress ipAddress = new IPAddress(ipAddressStr, geoLocation);
+						clientApplication.setIpAddress(ipAddress);
 					} else {
 						/** unexpected start element **/
 					}

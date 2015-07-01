@@ -124,6 +124,12 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-geolocation-geoip2</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jersey</artifactId>
 		</dependency>

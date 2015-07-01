@@ -18,6 +18,7 @@ import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.DetectionSystem;
 import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.IPAddress;
 import org.owasp.appsensor.core.RequestHandler;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.accesscontrol.Action;
@@ -60,7 +61,9 @@ public class RestRequestHandler implements RequestHandler {
 	public void addEvent(Event event) throws NotAuthorizedException {
 		accessControlUtils.checkAuthorization(Action.ADD_EVENT, requestContext);
 		
-		event.setDetectionSystem(new DetectionSystem(getClientApplicationName()));
+		String clientApplicationName = getClientApplicationName();
+		IPAddress ipAddress = appSensorServer.getConfiguration().findClientApplication(getClientApplicationName()).getIpAddress();
+		event.setDetectionSystem(new DetectionSystem(clientApplicationName, ipAddress)); 
 		
 		appSensorServer.getEventStore().addEvent(event);
 	}
@@ -75,7 +78,9 @@ public class RestRequestHandler implements RequestHandler {
 	public void addAttack(Attack attack) throws NotAuthorizedException {
 		accessControlUtils.checkAuthorization(Action.ADD_ATTACK, requestContext);
 		
-		attack.setDetectionSystem(new DetectionSystem(getClientApplicationName()));
+		String clientApplicationName = getClientApplicationName();
+		IPAddress ipAddress = appSensorServer.getConfiguration().findClientApplication(getClientApplicationName()).getIpAddress();
+		attack.setDetectionSystem(new DetectionSystem(clientApplicationName, ipAddress)); 
 		
 		appSensorServer.getAttackStore().addAttack(attack);
 	}

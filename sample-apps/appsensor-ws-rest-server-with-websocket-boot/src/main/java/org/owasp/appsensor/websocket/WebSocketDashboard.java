@@ -26,7 +26,7 @@ public class WebSocketDashboard {
     }
     
     @OnMessage
-    public String onMessage(String message, Session session) {
+    public synchronized void onMessage(String message, Session session) {
     	System.err.println("New message from Client " + session.getId() + ": " + message);
     	
     	//should echo back whatever is heard from any client to all clients
@@ -40,7 +40,7 @@ public class WebSocketDashboard {
     		}
     	}
 
-    	return null;
+//    	return null;
     }
     
     @OnClose

@@ -15,7 +15,9 @@ import org.glassfish.jersey.server.ResourceConfig;
 public class AppSensorApplication extends ResourceConfig {
 	
 	public AppSensorApplication() {
-        packages(true, "org.owasp.appsensor");
+//        ResourceConfig application = packages(true, "org.owasp.appsensor");
+//        application.property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
+		packages(true, "org.owasp.appsensor");
     }
 
 }

@@ -28,3 +28,25 @@ public class AppsensorWsRestServerWithWebsocketBootApplication {
     }
     
 }
+
+//package org.owasp.appsensor.jersey;
+//
+//import org.glassfish.jersey.server.ResourceConfig;
+//import org.glassfish.jersey.server.ServerProperties;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.context.annotation.Primary;
+//
+//@Configuration
+//@Primary
+//public class JerseyConfig extends ResourceConfig {
+//	
+//	public JerseyConfig() {
+//		packages(true, "org.owasp.appsensor");
+//		property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
+//        property(ServerProperties.JSON_PROCESSING_FEATURE_DISABLE, false);
+//        property(ServerProperties.MOXY_JSON_FEATURE_DISABLE, true);
+//        property(ServerProperties.WADL_FEATURE_DISABLE, true);
+//	}
+//	
+//}
+
