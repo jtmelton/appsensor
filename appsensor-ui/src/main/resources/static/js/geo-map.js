@@ -30,12 +30,11 @@ function stompConnect() {
 }
 
 function keepalive() {
-	// 14 mins * 60 * 1000
 	setInterval(
 		function(){
 		   $.get(apiBaseUrl + '/dashboard/ping');
 		}
-	, 840000); 
+	, 840000); 	// 14 mins * 60 * 1000
 }
 
 $(function() {
@@ -397,8 +396,6 @@ function goNormalScreen() {
 	$("#geo_full_screen").show();
 }
 
-//= $('#element').detach();
-//$('body').append(detached);
 $(function() {
 	// override bg-color for body
     $('body').css('background-color', '#2E2E2E !important');
