@@ -8,10 +8,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.owasp.appsensor.core.geolocation.GeoLocation;
 import org.owasp.appsensor.core.geolocation.GeoLocator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,7 @@ import com.google.common.net.InetAddresses;
  */
 @Entity
 @Named
+@XmlAccessorType(XmlAccessType.FIELD)
 public class IPAddress implements Serializable {
 
 	private static final long serialVersionUID = -2325233176848461722L;
@@ -38,6 +42,7 @@ public class IPAddress implements Serializable {
 	
 	private String address;
 	
+	@JsonProperty("geoLocation")
 	private GeoLocation geoLocation;
 
 	@Autowired(required = false)
@@ -45,7 +50,10 @@ public class IPAddress implements Serializable {
 
 	protected IPAddress() {}
 	
-	protected IPAddress(String address, GeoLocation geoLocation) {
+	public IPAddress(String address, GeoLocation geoLocation) {
+		if (! InetAddresses.isInetAddress(address)) {
+			throw new IllegalArgumentException("IP Address string is invalid: " + address);
+		}
 		this.address = address;
 		this.geoLocation = geoLocation;
 	}
@@ -71,13 +79,31 @@ public class IPAddress implements Serializable {
 	private InetAddress asInetAddress(String ipString) {
 		return InetAddresses.forString(ipString);
 	}
+
+	public IPAddress setAddress(String address) {
+		this.address = address;
+		
+		return this;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
 	
 	public String getAddressAsString() {
 		return address;
 	}
 	
+	@JsonProperty("geoLocation")
 	public GeoLocation getGeoLocation() {
 		return geoLocation;
+	}
+	
+	@JsonProperty("geoLocation")
+	public IPAddress setGeoLocation(GeoLocation geoLocation) {
+		this.geoLocation = geoLocation;
+		
+		return this;
 	}
 	
 	@Override
