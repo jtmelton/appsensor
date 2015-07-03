@@ -179,7 +179,7 @@ function stompConnect() {
 function keepalive() {
 	setInterval(
 		function(){
-		   $.get(apiBaseUrl + '/dashboard/ping');
+		   $.get(apiBaseUrl + '/ping');
 		}
 	, 840000); 	// 14 mins * 60 * 1000
 }
