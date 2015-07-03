@@ -15,3 +15,35 @@ body {
 	color: #FFFFFF; 
 }
 
+.trend-data {
+	font-size: 124px;
+}
+
+.trend-data .trend-higher {
+	color: white;
+	/*background-color: red;*/
+	background-color: #8A0808;/*#B40404;*/
+}
+
+.trend-data .trend-same {
+	color: white;
+	/*background-color: black;*/
+	background-color: #1C1C1C;
+}
+
+.trend-data .trend-lower {
+	color: white;
+	/*background-color: green;*/
+	background-color: #21610B;
+}
+
+.trend-data hr {
+	width: 100%; 
+	color: black; 
+	height: 20px; 
+	background-color:black;
+}
+
+.trend-data>tbody>tr>td {
+	border-top: 0px;
+}
