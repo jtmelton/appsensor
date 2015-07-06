@@ -54,6 +54,34 @@ public interface ReportingEngine extends EventListener, AttackListener, Response
 	public Collection<Response> findResponses(String earliest) throws NotAuthorizedException;
 	
 	/**
+	 * Find {@link Event}s starting from specified time (unix timestamp)
+	 * 
+	 * @param earliest String representing start time to use to find {@link Event}s (RFC-3339)
+	 * @return count of Collection of {@link Event}s from starting time
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
+	public int countEvents(String earliest) throws NotAuthorizedException;
+	
+	/**
+	 * Find {@link Attack}s starting from specified time (unix timestamp)
+	 * 
+	 * @param earliest String representing start time to use to find {@link Attack}s (RFC-3339)
+	 * @return count of Collection of {@link Attack}s from starting time
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
+	public int countAttacks(String earliest) throws NotAuthorizedException;
+	
+	/**
+	 * Find {@link Response}s starting from specified time (unix timestamp)
+	 * 
+	 * @param earliest String representing start time to use to find {@link Response}s (RFC-3339)
+	 * @return count of Collection of {@link Response}s from starting time
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
+	public int countResponses(String earliest) throws NotAuthorizedException;
+	
+	
+	/**
 	 * Return the {@link ServerConfiguration} as JSON
 	 * 
 	 * @return the {@link ServerConfiguration} as JSON
