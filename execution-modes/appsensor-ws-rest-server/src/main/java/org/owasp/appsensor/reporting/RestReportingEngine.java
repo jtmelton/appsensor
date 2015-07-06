@@ -121,6 +121,48 @@ public class RestReportingEngine implements ReportingEngine {
 	 */
 	@Override
 	@GET
+	@Path("/events/count")
+	public int countEvents(@QueryParam("earliest") String earliest) throws NotAuthorizedException {
+		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
+		
+		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest);
+		
+		return appSensorServer.getEventStore().findEvents(criteria).size();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@GET
+	@Path("/attacks/count")
+	public int countAttacks(@QueryParam("earliest") String earliest) throws NotAuthorizedException {
+		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
+		
+		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest);
+		
+		return appSensorServer.getAttackStore().findAttacks(criteria).size();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@GET
+	@Path("/responses/count")
+	public int countResponses(@QueryParam("earliest") String earliest) throws NotAuthorizedException {
+		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
+		
+		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest);
+		
+		return appSensorServer.getResponseStore().findResponses(criteria).size();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@GET
 	@Path("/server-config")
 	public String getServerConfigurationAsJson() throws NotAuthorizedException {
 		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
