@@ -44,7 +44,7 @@ var GeneralConfigurationHeader = React.createClass({
 	var geolocationInfo = 'Disabled (Not Configured)';
 	if ('geolocateIpAddresses' in config && config.geolocateIpAddresses) {
 		// it is configured, need to set enabled/disabled
-		if ('true' === config.geolocateIpAddresses) {
+		if (true === config.geolocateIpAddresses) {
 			if ('geolocationDatabasePath' in config && config.geolocationDatabasePath) {
 				// yes geolocation and path exists
 				geolocationInfo = 'Enabled (path: "' + config.geolocationDatabasePath + '")';
