@@ -33,13 +33,12 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li{{#ACTIVE_PATH_dashboard}} class="active"{{/ACTIVE_PATH_dashboard}}><a href="{{CONTEXT_PATH}}/"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>&nbsp;&nbsp;Dashboard</a></li>
-            <li{{#ACTIVE_PATH_configuration}} class="active"{{/ACTIVE_PATH_configuration}}><a href="{{CONTEXT_PATH}}/configuration"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>&nbsp;&nbsp;Configuration</a></li>
             <li{{#ACTIVE_PATH_geo-map}} class="active"{{/ACTIVE_PATH_geo-map}}><a href="{{CONTEXT_PATH}}/geo-map"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;&nbsp;GEO Map</a></li>
             <li{{#ACTIVE_PATH_trends-dashboard}} class="active"{{/ACTIVE_PATH_trends-dashboard}}><a href="{{CONTEXT_PATH}}/trends-dashboard"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp;&nbsp;Trends</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
           	<p class="navbar-text"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;Welcome, {{LOGGED_IN_USERNAME}}</p>
-            <!-- <li><a><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;Welcome, {{LOGGED_IN_USERNAME}}</a></li>-->
+			<li{{#ACTIVE_PATH_configuration}} class="active"{{/ACTIVE_PATH_configuration}}><a href="{{CONTEXT_PATH}}/configuration"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>&nbsp;&nbsp;Configuration</a></li>
           	<li{{#ACTIVE_PATH_about}} class="active"{{/ACTIVE_PATH_about}}><a href="{{CONTEXT_PATH}}/about"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>&nbsp;&nbsp;About</a></li>
             <li><a href="{{CONTEXT_PATH}}/logout"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;&nbsp;Logout</a></li>
           </ul>
