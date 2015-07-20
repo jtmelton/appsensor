@@ -84,7 +84,7 @@ public class RestReportingEngine implements ReportingEngine {
 		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
 		
 		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest);
-		
+
 		return appSensorServer.getEventStore().findEvents(criteria);
 	}
 	
