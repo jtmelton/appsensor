@@ -1,39 +1,159 @@
 {{>common/header}}
 {{>common/normal-container}}
-	<style>
-.dashboard-column {
-  min-height: 20px;
-  list-style-type: none;
-  margin: 0;
-  padding: 5px 0 0 0;
-  margin-right: 10px;
-}
-.dashboard-column li {
-  margin: 0 5px 5px 5px;
-  padding: 5px;
-}
-  </style>
 
 	<div class="row">
-	  <div id="dashboard-left-column-outer" class="col-md-6">
-	  	<ul id="dashboard-left-column" class="connectedSortable dashboard-column">
-		  <li id="item0" class="ui-state-default">Item 0</li>
-		  <li id="item1" class="ui-state-default">Item 1</li>
-		  <li id="item2" class="ui-state-default">Item 2</li>
-		  <li id="item3" class="ui-state-default">Item 3</li>
-		  <li id="item4" class="ui-state-default">Item 4</li>
-		</ul>
-	  </div>
-	  <div id="dashboard-right-column-outer" class="col-md-6">
-	  	<ul id="dashboard-right-column" class="connectedSortable dashboard-column">
-		  <li id="item5" class="ui-state-default">Item 5</li>
-		  <li id="item6" class="ui-state-default">Item 6</li>
-		  <li id="item7" class="ui-state-default">Item 7</li>
-		  <li id="item8" class="ui-state-default">Item 8</li>
-		  <li id="item9" class="ui-state-default">Item 9</li>
-		</ul>
-	  </div>
-	</div>
+	
+	  <div id="timeline-legend"></div>
+	  <div id="timeline-slider"></div>
+    
+	  <br /><br />
+	  <!--<input id="date-range-slider" type="range" min="1" max="5" step="1" value="5" list="ticks" data-rangeslider>
+      <output></output>
+      -->
+        
+	  <div class="col-md-8">	<!-- start left column -->
+	  	
+	  	<h4 class="dashboard-section-header"><strong>Detection Point Categories</strong></h4>
+	  	
+	  	<div class="panel-group" id="detection-point-accordion" role="tablist" aria-multiselectable="true">
+		  <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingOne">
+		      <h2>
+		      	<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;&nbsp;
+		        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#detection-point-accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+		          Input Validation
+		        </a>
+		        &nbsp;<span class="badge" title="4 events / 1 responses">4 / 1</span>
+		      </h2>
+		    </div>
+		    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+		      <div class="panel-body">
+		        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+		      </div>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingTwo">
+		      <h2>
+		      	<span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp;&nbsp;
+		        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#detection-point-accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+		          Session Management
+		        </a>
+		        &nbsp;<span class="badge" title="7 events / 2 responses">7 / 2</span>
+		      </h2>
+		    </div>
+		    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+		      <div class="panel-body">
+		        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+		      </div>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingThree">
+		      <h2>
+		      	<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>&nbsp;&nbsp;
+		        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#detection-point-accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+		          Access Control
+		        </a>
+		        &nbsp;<span class="badge" title="21 events / 4 responses">21 / 4</span>
+		      </h2>
+		    </div>
+		    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+		      <div class="panel-body">
+		        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	  	
+	  	<h4 class="dashboard-section-header"><strong>Count By Categories</strong></h4>
+	  	<div id='area-example' style='width:100%'>
+		</div>
+	  	
+	  	<h4 class="dashboard-section-header"><strong>Activity Log (most recent)</strong></h4>
+	  	<table id="dashboard-activity-log" class="table table-condensed">
+			<tr>
+				<th>Type</th>
+				<th>Category</th>
+				<th>From</th>
+				<th>To</th>
+				<th>Timestamp</th>
+			</tr>
+		</table>
+	  	
+	  </div>	<!-- end left column -->
+	  
+	  
+	  <div class="col-md-4">	<!-- start right column -->
 
+		<div class="text-right"><span>Last Refresh: </span><span id="last-updated-time">&nbsp;</span></div>
+		<br />
+		
+	  	<div id="most-active-detection-points" class="table-responsive">
+		  <table class="table table-hover table-bordered">
+		    <tr>
+		    	<th class="dashboard-section-header">Most Active Detection Points</th>
+		    </tr>
+		    <tr>
+		    	<td><a href="{{CONTEXT_PATH}}/detection-point/IE1">IE1</a> (Input Validation)</td>
+	    	</tr>
+	    	<tr>
+		    	<td><a href="{{CONTEXT_PATH}}/detection-point/RE1">RE1</a> (r Validation)</td>
+		    </tr>
+	    	<tr>
+		    	<td><a href="{{CONTEXT_PATH}}/detection-point/CE1">CE1</a> (c Validation)</td>
+		    </tr>
+	    	<tr>
+		    	<td><a href="{{CONTEXT_PATH}}/detection-point/BE1">BE1</a> (b Validation)</td>
+	    	</tr>
+	    	<tr>
+		    	<td><a href="{{CONTEXT_PATH}}/detection-point/DE1">DE1</a> (d Validation)</td>
+		    </tr>
+		  </table>
+		</div>
+		
+		<div id="most-active-users" class="table-responsive">
+		  <table class="table table-hover table-bordered">
+		    <tr>
+		    	<th class="dashboard-section-header">Most Active Users</th>
+		    </tr>
+		    <tr>
+		    	<td><a href="{{CONTEXT_PATH}}/user/susan">susan</a></td>
+	    	</tr>
+	    	<tr>
+		    	<td><a href="{{CONTEXT_PATH}}/user/frank">frank</a></td>
+		    </tr>
+	    	<tr>
+		    	<td><a href="{{CONTEXT_PATH}}/user/karen">karen</a></td>
+		    </tr>
+	    	<tr>
+		    	<td><a href="{{CONTEXT_PATH}}/user/dwayne">dwayne</a></td>
+	    	</tr>
+	    	<tr>
+		    	<td><a href="{{CONTEXT_PATH}}/user/julie">julie</a></td>
+		    </tr>
+		  </table>
+		</div>
+		
+		<div id="active-responses" class="table-responsive">
+		  <table class="table table-hover table-bordered">
+		    <tr>
+		    	<th class="dashboard-section-header">Active Responses)</th>
+		    </tr>
+		    <tr>
+		    	<td>Log (30 minutes) (client app: "mygeo2")</td>
+	    	</tr>
+	    	<tr>
+		    	<td>Disable User (frank) (client app: "myclientapp")</td>
+		    </tr>
+	    	<tr>
+		    	<td>Disable Component for 10 minutes ("/my/path") (client app: "myclientapp")</td>
+		    </tr>
+		  </table>
+		</div>
+		
+	  </div>
+	  
+	</div>	<!-- end right column -->
 
 {{>common/footer}}

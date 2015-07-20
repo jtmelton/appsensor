@@ -47,3 +47,29 @@ body {
 .trend-data>tbody>tr>td {
 	border-top: 0px;
 }
+
+.dashboard-section-header {
+	text-align: center;
+	background-color: #2E2E2E;
+	color: #9d9d9d;
+	padding: 8px;
+}
+
+#detection-point-accordion a {
+	color: inherit;
+}
+
+#dashboard-activity-log {
+	font-size: 0.75em;
+}
+
+#timeline-legend>label {
+  display: inline-block;
+  text-align:center;
+}
+#timeline-legend>label:first-child {
+  text-align:left;
+}
+#timeline-legend>label:last-child {
+  text-align:right;
+}

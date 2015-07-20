@@ -33,6 +33,10 @@
 		<topojson.version>1.4.9</topojson.version>
 		<datamaps.version>0.3.7</datamaps.version>
 		<momentjs.version>2.10.3</momentjs.version>
+		<nvd.version>1.8.1</nvd.version>
+		<chartjs.version>1.0.2</chartjs.version>
+		<morrisjs.version>0.5.1</morrisjs.version>
+		<raphael.version>2.1.4</raphael.version>
 		<gson.version>2.3.1</gson.version>
 		<appsensor.version>2.2.0-SNAPSHOT</appsensor.version>
 	</properties>
@@ -143,7 +147,27 @@
 		    <artifactId>momentjs</artifactId>
 		    <version>${momentjs.version}</version>
 		</dependency>
-
+		<dependency>
+		    <groupId>org.webjars.npm</groupId>
+		    <artifactId>nvd3</artifactId>
+		    <version>${nvd.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>Chart.js</artifactId>
+		    <version>${chartjs.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>morrisjs</artifactId>
+		    <version>${morrisjs.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>raphael</artifactId>
+		    <version>${raphael.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>

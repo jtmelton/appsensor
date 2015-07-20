@@ -45,6 +45,8 @@ public class RestReportingEngineFacade {
 				.request()
 				.header(clientApplicationIdName, clientApplicationIdValue)
 				.get(responseType);
+
+		System.err.println("got back: " + events.size() + " from " + target.getUri() + " plus " + rfc3339Timestamp);
 		
 		//make request
 		return events;

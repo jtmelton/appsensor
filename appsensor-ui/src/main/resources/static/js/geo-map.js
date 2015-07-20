@@ -251,8 +251,6 @@ function addActivityMessage(element) {
 		tableRef.deleteRow(tableRef.rows.length -1)
 	}
 	
-	//console.log('num rows = ' + tableRef.rows.length);
-	
 	var newRow = tableRef.insertRow(1);
 	
 	var cType = newRow.insertCell(0);
