@@ -125,24 +125,8 @@ public class DashboardController {
 	private Map<String, String> generateCategoryKeyMappings() {
 		Map<String, String> categoryKeyMappings = new HashMap<>();
 		
-		Set<String> categoriesSet = new HashSet<>();
-		
-		String serverConfigurationString = facade.getServerConfiguration();
-		//iterate over server config using manual json since we don't want config to try and load from disk
-		JsonElement rootElement = new JsonParser().parse(serverConfigurationString);
-	    JsonObject  root = rootElement.getAsJsonObject();
-	    JsonArray detectionPoints = root.getAsJsonArray("detectionPoints");
-	    for (JsonElement element : detectionPoints) {
-	    	String category = element.getAsJsonObject().get("category").getAsString();
-	    	categoriesSet.add(category);
-	    }
-		
-		List<String> categories = new ArrayList<>(categoriesSet);
-		
-		Collections.sort(categories);
-		
 		int i = 1;
-		for (String category : categories) {
+		for (String category : facade.getConfiguredDetectionPointCategories()) {
 			categoryKeyMappings.put(category, "a" + String.valueOf(i));
 			i++;
 		}

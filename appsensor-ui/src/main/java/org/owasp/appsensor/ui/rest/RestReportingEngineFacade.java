@@ -1,6 +1,11 @@
 package org.owasp.appsensor.ui.rest;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.client.ClientBuilder;
@@ -13,6 +18,11 @@ import org.owasp.appsensor.core.KeyValuePair;
 import org.owasp.appsensor.core.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Service
 public class RestReportingEngineFacade {
@@ -148,6 +158,26 @@ public class RestReportingEngineFacade {
 				.request()
 				.header(clientApplicationIdName, clientApplicationIdValue)
 				.get(KeyValuePair.class);
+	}
+	
+	public Collection<String> getConfiguredDetectionPointCategories() {
+		Set<String> categoriesSet = new HashSet<>();
+		
+		String serverConfigurationString = getServerConfiguration();
+		//iterate over server config using manual json since we don't want config to try and load from disk
+		JsonElement rootElement = new JsonParser().parse(serverConfigurationString);
+	    JsonObject  root = rootElement.getAsJsonObject();
+	    JsonArray detectionPoints = root.getAsJsonArray("detectionPoints");
+	    for (JsonElement element : detectionPoints) {
+	    	String category = element.getAsJsonObject().get("category").getAsString();
+	    	categoriesSet.add(category);
+	    }
+		
+		List<String> categories = new ArrayList<>(categoriesSet);
+		
+		Collections.sort(categories);
+		
+		return categories;
 	}
 	
 	@PostConstruct
