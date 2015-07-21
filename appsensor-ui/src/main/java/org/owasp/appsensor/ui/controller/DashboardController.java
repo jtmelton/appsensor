@@ -24,6 +24,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Controller
 public class DashboardController {
@@ -31,7 +35,7 @@ public class DashboardController {
 	private static final String DATE_FORMAT_STR = "YYYY-MM-dd HH:mm:ss";
 
 	@Autowired
-	RestReportingEngineFacade facade;
+	private RestReportingEngineFacade facade;
 	
 	@RequestMapping(value="/", method = RequestMethod.GET)
 	public String home() {
@@ -43,6 +47,8 @@ public class DashboardController {
 	public boolean keepalive() {
 		return true;
 	}
+	
+	
 
 	// pull events from "earliest" until now 
 	// build "slices" # (e.g. 20) of equal time ranges from "earliest" to now
@@ -64,14 +70,14 @@ public class DashboardController {
 	@ResponseBody
 	public ViewObject getGroupedEvents(@RequestParam("earliest") String rfc3339Timestamp, @RequestParam("slices") int slices) {
 		DateTime startingTime = DateUtils.fromString(rfc3339Timestamp); 
-		
+
 		Collection<Event> events = facade.findEvents(rfc3339Timestamp);
 		
 		DateTime now = DateUtils.getCurrentTimestamp();
 		
 		List<Interval> ranges = splitRange(startingTime, now, slices);
 
-		Map<String, String> categoryKeyMappings = generateCategoryKeyMappings(events);
+		Map<String, String> categoryKeyMappings = generateCategoryKeyMappings();
 		
 		// timestamp, category, count
 		Table<String, String, Long> timestampCategoryCounts = generateTimestampCategoryCounts(ranges, categoryKeyMappings, events);
@@ -116,14 +122,20 @@ public class DashboardController {
 		return table;
 	}
 	
-	private Map<String, String> generateCategoryKeyMappings(Collection<Event> events) {
+	private Map<String, String> generateCategoryKeyMappings() {
 		Map<String, String> categoryKeyMappings = new HashMap<>();
 		
 		Set<String> categoriesSet = new HashSet<>();
 		
-		for (Event event : events) {
-			categoriesSet.add(event.getDetectionPoint().getCategory());
-		}
+		String serverConfigurationString = facade.getServerConfiguration();
+		//iterate over server config using manual json since we don't want config to try and load from disk
+		JsonElement rootElement = new JsonParser().parse(serverConfigurationString);
+	    JsonObject  root = rootElement.getAsJsonObject();
+	    JsonArray detectionPoints = root.getAsJsonArray("detectionPoints");
+	    for (JsonElement element : detectionPoints) {
+	    	String category = element.getAsJsonObject().get("category").getAsString();
+	    	categoriesSet.add(category);
+	    }
 		
 		List<String> categories = new ArrayList<>(categoriesSet);
 		

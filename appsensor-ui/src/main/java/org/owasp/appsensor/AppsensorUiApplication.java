@@ -10,6 +10,9 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.ErrorPage;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +35,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 		}
 )
 @EnableScheduling
+@EnableCaching
 public class AppsensorUiApplication {
 
     public static void main(String[] args) {
@@ -54,6 +58,11 @@ public class AppsensorUiApplication {
  
             container.addErrorPages(error400Page, error401Page, error404Page, error500Page);
         }
+    }
+    
+    @Bean
+    public CacheManager cacheManager() {
+        return new ConcurrentMapCacheManager("server-config");
     }
     
 }
