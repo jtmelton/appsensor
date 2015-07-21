@@ -14,11 +14,6 @@ public class ConfigurationController {
 	@Autowired
 	private RestReportingEngineFacade facade;
 	
-	@RequestMapping(value="/configuration", method = RequestMethod.GET)
-	public String home() {
-		return "configuration";
-	}
-	
 	@RequestMapping(value="/api/configuration/server-config", method = RequestMethod.GET)
 	@ResponseBody
 	public String getServerConfiguration() {

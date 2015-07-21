@@ -18,11 +18,6 @@ public class TrendsDashboardController {
 	@Autowired
 	RestReportingEngineFacade facade;
 	
-	@RequestMapping(value="/trends-dashboard", method = RequestMethod.GET)
-	public String home() {
-		return "trends-dashboard";
-	}
-
 	@RequestMapping(value="/api/trends/by-time-frame", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<TrendItem> countEvents() {

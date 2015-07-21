@@ -1,14 +1,10 @@
 package org.owasp.appsensor.ui.controller;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
@@ -24,10 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 @Controller
 public class DashboardController {
@@ -37,19 +29,6 @@ public class DashboardController {
 	@Autowired
 	private RestReportingEngineFacade facade;
 	
-	@RequestMapping(value="/", method = RequestMethod.GET)
-	public String home() {
-		return "dashboard";
-	}
-	
-	@RequestMapping(value="/ping", method = RequestMethod.GET)
-	@ResponseBody
-	public boolean keepalive() {
-		return true;
-	}
-	
-	
-
 	// pull events from "earliest" until now 
 	// build "slices" # (e.g. 20) of equal time ranges from "earliest" to now
 	// group events by time frame. 
