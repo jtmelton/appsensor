@@ -1,14 +1,17 @@
 package org.owasp.appsensor.ui.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.util.DateUtils;
 import org.owasp.appsensor.ui.rest.RestReportingEngineFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,37 @@ public class DashboardController {
 
 	@Autowired
 	private RestReportingEngineFacade facade;
+	
+	@RequestMapping(value="/api/dashboard/by-category", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Long> byCategory(@RequestParam("earliest") String rfc3339Timestamp) {
+		Map<String, Long> map = new HashMap<>();
+		
+		Collection<Event> events = facade.findEvents(rfc3339Timestamp);
+		
+		// init table
+		for (String category : facade.getConfiguredDetectionPointCategories()) {
+			map.put(category, 0L);
+		}
+		
+		for (Event event : events) {
+			String category = event.getDetectionPoint().getCategory();
+
+			map.put(category, map.get(category) + 1L);
+		}
+		
+		return map;
+	}
+	
+	@RequestMapping(value="/api/responses/active", method = RequestMethod.GET)
+	@ResponseBody
+	public Collection<Response> activeResponses(@RequestParam("earliest") String rfc3339Timestamp) {
+		Collection<Response> responses = facade.findResponses(rfc3339Timestamp);
+		
+		Collection<Response> activeResponses = responses.stream().filter(Response::isActive).collect(Collectors.toSet());
+		
+		return activeResponses;
+	}
 	
 	// pull events from "earliest" until now 
 	// build "slices" # (e.g. 20) of equal time ranges from "earliest" to now
@@ -69,6 +103,7 @@ public class DashboardController {
 	private Table<String, String, Long> generateTimestampCategoryCounts(List<Interval> ranges,
 																		Map<String, String> categoryKeyMappings,
 																		Collection<Event> events) {
+		
 		Table<String, String, Long> table = HashBasedTable.create();
 		
 		for (Interval range : ranges) {

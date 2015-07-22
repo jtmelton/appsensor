@@ -29,22 +29,22 @@ public class ViewsController {
 	}
 	
 	@RequestMapping(value="/detection-point", method = RequestMethod.GET)
-	public String home() {
+	public String detectionPoint() {
 		return "detection-point";
 	}
 	
 	@RequestMapping(value="/user", method = RequestMethod.GET)
-	public String home() {
+	public String user() {
 		return "user";
 	}
 	
 	@RequestMapping(value="/geo-map", method = RequestMethod.GET)
-	public String home() {
+	public String geoMap() {
 		return "geo-map";
 	}
 	
 	@RequestMapping(value="/trends-dashboard", method = RequestMethod.GET)
-	public String home() {
+	public String trendsDashboard() {
 		return "trends-dashboard";
 	}
 	
