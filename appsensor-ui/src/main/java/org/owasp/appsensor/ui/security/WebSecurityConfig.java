@@ -15,6 +15,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+//        	.headers()
+//		        .contentTypeOptions()
+//		        .xssProtection()
+//		        .cacheControl()
+//		        .httpStrictTransportSecurity()
+//		        .frameOptions()
+//		        .addHeaderWriter(new StaticHeadersWriter("Content-Security-Policy","default-src 'self'; style-src 'self'; img-src 'self'"))
+//		        .addHeaderWriter(new StaticHeadersWriter("X-Content-Security-Policy","default-src 'self'; style-src 'self'; img-src 'self'"))
+//		        .addHeaderWriter(new StaticHeadersWriter("X-WebKit-CSP","default-src 'self'; style-src 'self'; img-src 'self'"))
+//		        .and()
             .authorizeRequests()
             	.antMatchers("/webjars/**").permitAll()
                 .anyRequest().authenticated()
@@ -29,6 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             	.logoutSuccessUrl("/login")
             	.invalidateHttpSession(true)
                 .permitAll();
+//        	.headers()
+//		        .addHeaderWriter(new StaticHeaderWriter("X-Content-Security-Policy","default-src 'self'"))
+//		        .addHeaderWriter(new StaticHeaderWriter("X-WebKit-CSP","default-src 'self'"));
     }
 
     @Autowired
