@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,13 +29,13 @@ public class ViewsController {
 		return "dashboard";
 	}
 	
-	@RequestMapping(value="/detection-point", method = RequestMethod.GET)
-	public String detectionPoint() {
+	@RequestMapping(value="/detection-points/{label}", method = RequestMethod.GET)
+	public String detectionPoint(@PathVariable String label) {
 		return "detection-point";
 	}
 	
-	@RequestMapping(value="/user", method = RequestMethod.GET)
-	public String user() {
+	@RequestMapping(value="/users/{username}", method = RequestMethod.GET)
+	public String user(@PathVariable String username) {
 		return "user";
 	}
 	
