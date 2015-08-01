@@ -18,15 +18,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+
 @Controller
 public class DetectionPointController {
 
 	@Autowired
-	RestReportingEngineFacade facade;
+	private RestReportingEngineFacade facade;
 
+	private final Gson gson = new Gson();
+	
 	@RequestMapping(value="/api/detection-points/top", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<DetectionPoint, Long> topUsers(@RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") String limit) {
+	public Map<String, Long> topDetectionPoints(@RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {
 		Map<DetectionPoint, Long> map = new HashMap<>();
 		
 		Collection<Event> events = facade.findEvents(rfc3339Timestamp);
@@ -52,7 +56,7 @@ public class DetectionPointController {
 				.entrySet()
 				.stream()
 				.sorted(byValue.reversed())
-				.limit(Long.parseLong(limit))
+				.limit(limit)
 				.collect(
 					Collectors.toMap(
 						entry -> entry.getKey(),
@@ -60,7 +64,13 @@ public class DetectionPointController {
 					)
 				);
 		
-		Map<DetectionPoint, Long> sorted = Maps.sortDetectionPointsByValue(filtered);
+		Map<String, Long> stringFiltered = new HashMap<>();
+		
+		for(DetectionPoint detectionPoint : filtered.keySet()) {
+			stringFiltered.put(gson.toJson(detectionPoint), filtered.get(detectionPoint));
+		}
+		
+		Map<String, Long> sorted = Maps.sortStringsByValue(stringFiltered);
 		
 		return sorted;
 	}
