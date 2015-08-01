@@ -25,7 +25,7 @@ public class UserController {
 
 	@RequestMapping(value="/api/users/top", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Long> topUsers(@RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") String limit) {
+	public Map<String, Long> topUsers(@RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {
 		Map<String, Long> map = new HashMap<>();
 		
 		Collection<Event> events = facade.findEvents(rfc3339Timestamp);
@@ -51,7 +51,7 @@ public class UserController {
 				.entrySet()
 				.stream()
 				.sorted(byValue.reversed())
-				.limit(Long.parseLong(limit))
+				.limit(limit)
 				.collect(
 					Collectors.toMap(
 						entry -> entry.getKey(),
