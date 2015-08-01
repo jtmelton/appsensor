@@ -61,6 +61,8 @@ public class Response implements Serializable {
 	@ElementCollection
 	private Collection<KeyValuePair> metadata = new ArrayList<>();
 	
+	private boolean active = false;
+	
 	public Response() {}
 	
 	public Response (User user, String action, DetectionSystem detectionSystem) {
@@ -151,7 +153,7 @@ public class Response implements Serializable {
 			return false;
 		}
 		
-		boolean active = false;
+		boolean localActive = false;
 		
 		DateTime responseStartTime = DateUtils.fromString(getTimestamp());
 		DateTime responseEndTime = responseStartTime.plus(interval.toMillis());
@@ -160,8 +162,10 @@ public class Response implements Serializable {
 		
 		// only active if current time between response start and end time
 		if (responseStartTime.isBefore(now) && responseEndTime.isAfter(now)) {
-			active = true;
+			localActive = true;
 		}
+		
+		active = localActive;
 		
 		return active;
 	}
