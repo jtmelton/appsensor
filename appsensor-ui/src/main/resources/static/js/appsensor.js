@@ -1,0 +1,1 @@
+var apiBaseUrl = $('#ctx').text();
