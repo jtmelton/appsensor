@@ -81,7 +81,19 @@
 		
 		<dependency>
 			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-reporting-simple-logging</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
 			<artifactId>appsensor-access-control-reference</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-integration-cef-syslog</artifactId>
 			<version>${appsensor.version}</version>
 		</dependency>
 		
