@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.client.ClientBuilder;
@@ -13,12 +14,15 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 
 import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.KeyValuePair;
 import org.owasp.appsensor.core.Response;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -40,8 +44,11 @@ public class RestReportingEngineFacade {
 	
 	private WebTarget target;
 	
+	final Gson gson = new Gson();
+	
 	public RestReportingEngineFacade() { }
 
+	@Cacheable("events")
 	public Collection<Event> findEvents(String rfc3339Timestamp) {
 		GenericType<Collection<Event>> responseType = new GenericType<Collection<Event>>() {};
         
@@ -55,11 +62,12 @@ public class RestReportingEngineFacade {
 				.request()
 				.header(clientApplicationIdName, clientApplicationIdValue)
 				.get(responseType);
-
+		
 		//make request
 		return events;
 	}
 	
+	@Cacheable("attacks")
 	public Collection<Attack> findAttacks(String rfc3339Timestamp) {
 		GenericType<Collection<Attack>> responseType = new GenericType<Collection<Attack>>() {};
         
@@ -78,6 +86,7 @@ public class RestReportingEngineFacade {
 		return attacks;
 	}
 	
+	@Cacheable("responses")
 	public Collection<Response> findResponses(String rfc3339Timestamp) {
 		GenericType<Collection<Response>> responseType = new GenericType<Collection<Response>>() {};
         
@@ -96,6 +105,7 @@ public class RestReportingEngineFacade {
 		return responses;
 	}
 	
+	@Cacheable("events-count")
 	public int countEvents(String rfc3339Timestamp) {
 		return
 		        target
@@ -110,6 +120,7 @@ public class RestReportingEngineFacade {
 				.get(Integer.class);
 	}
 	
+	@Cacheable("attacks-count")
 	public int countAttacks(String rfc3339Timestamp) {
 		return
 		        target
@@ -124,6 +135,7 @@ public class RestReportingEngineFacade {
 				.get(Integer.class);
 	}
 	
+	@Cacheable("responses-count")
 	public int countResponses(String rfc3339Timestamp) {
 		return 
 		        target
@@ -178,6 +190,23 @@ public class RestReportingEngineFacade {
 		Collections.sort(categories);
 		
 		return categories;
+	}
+	
+	public Collection<DetectionPoint> getConfiguredDetectionPoints(String label) {
+		Set<DetectionPoint> allDetectionPoints = new HashSet<>();
+		
+		String serverConfigurationString = getServerConfiguration();
+		//iterate over server config using manual json since we don't want config to try and load from disk
+		JsonElement rootElement = new JsonParser().parse(serverConfigurationString);
+	    JsonObject  root = rootElement.getAsJsonObject();
+	    JsonArray detectionPointArray = root.getAsJsonArray("detectionPoints");
+
+	    for (JsonElement element : detectionPointArray) {
+	    	DetectionPoint point = gson.fromJson(element, DetectionPoint.class);
+	    	allDetectionPoints.add(point);
+	    }
+		
+		return allDetectionPoints.stream().filter(d -> label.equals(d.getLabel())).collect(Collectors.toSet());
 	}
 	
 	@PostConstruct
