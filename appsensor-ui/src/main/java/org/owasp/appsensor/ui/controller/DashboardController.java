@@ -16,6 +16,7 @@ import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.util.DateUtils;
 import org.owasp.appsensor.ui.rest.RestReportingEngineFacade;
+import org.owasp.appsensor.ui.utils.Dates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -193,7 +194,7 @@ public class DashboardController {
 		
 		DateTime now = DateUtils.getCurrentTimestamp();
 		
-		List<Interval> ranges = splitRange(startingTime, now, slices);
+		List<Interval> ranges = Dates.splitRange(startingTime, now, slices);
 
 		Map<String, String> categoryKeyMappings = generateCategoryKeyMappings();
 		
@@ -251,28 +252,6 @@ public class DashboardController {
 		}
 		
 		return categoryKeyMappings;
-	}
-	
-	private List<Interval> splitRange(final DateTime from, final DateTime to, int slices) {
-		List<Interval> ranges = new LinkedList<Interval>();
-		
-		long millisDifference = to.getMillis() - from.getMillis();
-		
-		long rangeInMillis = millisDifference / slices;
-		
-		for(int i = 0; i < slices; i++) {
-			long startMillis = from.getMillis();
-			
-			if (ranges.size() > 0) {
-				// add 1 ms to end time of previous range
-				startMillis = ranges.get(i - 1).getEndMillis() + 1;
-			}
-			
-			Interval range = new Interval(startMillis, startMillis + rangeInMillis);
-			ranges.add(range);
-		}
-		
-		return ranges;
 	}
 	
 	static class ViewObject {
@@ -412,7 +391,6 @@ public class DashboardController {
 
 		public String getCountByLabel() {
 			return gson.toJson(countByLabel);
-//			return countByLabel.toString();
 		}
 
 		public Collection<Event> getRecentEvents() {
