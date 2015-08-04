@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class ViewsController {
-
+	
 	@RequestMapping(value="/about", method = RequestMethod.GET)
 	public String about() {
 		return "about";

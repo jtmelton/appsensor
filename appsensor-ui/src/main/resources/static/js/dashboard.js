@@ -286,12 +286,12 @@ var Dashboard = React.createClass({
 	    
 		  this.loadDashboardObjectFromServer();
 		  
-		  var intervalVar = setInterval(this.loadDashboardObjectFromServer, 7 * 1000);	// refresh once per minute
+		  var intervalVar = setInterval(this.loadDashboardObjectFromServer, 60 * 1000);	// refresh once per minute
 		  setIntervals.push(intervalVar);
 	  },
 	  
 	  render: function() {
-		var timestamp = this.props.timestamp;
+		var timestamp = getTimestamp(this.props.selectedTimeSpan);
 		
 	    return (
 			<div class="row">
