@@ -15,7 +15,6 @@ public class PathTrackingInterceptor extends HandlerInterceptorAdapter {
      */
     public static final String ACTIVE_PATH = "ACTIVE_PATH";
 
-
     @Override
     public void postHandle(final HttpServletRequest request,
             final HttpServletResponse response, final Object handler,
@@ -36,6 +35,16 @@ public class PathTrackingInterceptor extends HandlerInterceptorAdapter {
     			//special handler for dashboard
     			if ("".equals(path.trim())) {
     				path = "dashboard";
+    			}
+    			
+    			//special handler for detection point
+    			if (servletPath.trim().contains("/detection-points/")) {
+    				path = "detection-point";
+    			}
+    			
+    			//special handler for users
+    			if (servletPath.trim().contains("/users/")) {
+    				path = "user";
     			}
     			
     		}
