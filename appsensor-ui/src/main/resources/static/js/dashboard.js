@@ -117,15 +117,6 @@ function stompConnect() {
     client.connect('unused_user', 'unused_password', subscribeOnSuccess, reconnectOnFailure);
 }
 
-function keepalive() {
-	// 14 mins * 60 * 1000
-	setInterval(
-		function(){
-		   $.get(apiBaseUrl + '/ping');
-		}
-	, 840000); 
-}
-
 function activateSlider(selectedTimeSpan) {
 	var items =[ 'Month','Week','Day','Shift', 'Hour'];
 	var s = $("#timeline-slider");
@@ -156,47 +147,6 @@ function activateSlider(selectedTimeSpan) {
 	if (selectedTimeSpan) {
 		s.slider('value', toCardinal(selectedTimeSpan));
 	}
-}
-
-function getTimestamp(selectedTimeSpan) {
-	var now = moment();
-  	var timestamp;
-  	
-  	if (selectedTimeSpan === 'HOUR') {
-  		timestamp = now.subtract(1, 'hours').format();
-	} else if (selectedTimeSpan === 'SHIFT') {
-  		timestamp = now.subtract(8, 'hours').format();
-	} else if (selectedTimeSpan === 'DAY') {
-  		timestamp = now.subtract(1, 'days').format();
-	} else if (selectedTimeSpan === 'WEEK') {
-  		timestamp = now.subtract(1, 'weeks').format();
-	} else {
-  		timestamp = now.subtract(1, 'months').format();
-	}
-  	
-  	return timestamp;
-}
-
-function toCardinal(selectedTimeSpan) {
-  	var cardinal;
-  	
-  	if (selectedTimeSpan === 'HOUR') {
-  		cardinal = 5;
-	} else if (selectedTimeSpan === 'SHIFT') {
-		cardinal = 4;
-	} else if (selectedTimeSpan === 'DAY') {
-		cardinal = 3;
-	} else if (selectedTimeSpan === 'WEEK') {
-		cardinal = 2
-	} else {
-		cardinal = 1;
-	}
-  	
-  	return cardinal;
-}
-
-function capitalizeFirstLetter(s) {
-    return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 function findCount(timeUnit, category, trendItemArray) {
@@ -598,15 +548,22 @@ var TopUsersContent = React.createClass({
 	  render: function() {
 		var topUsers = this.props.topUsers;
 		
-		var rows = [];
+		var usersArray = [], item;
 
 		for (key in topUsers) {
-			var content = '<a href="'
-				  + apiBaseUrl + '/users/' + key + '">' + key + '</a>' 
-				  + ' (' + topUsers[key] + ' events)';
-			
-			rows.push(<SingleColumnRow message={content} />);
+		    item = {};
+		    item.name = key;
+		    item.count = topUsers[key];
+		    usersArray.push(item);
 		}
+		
+		var topUserRender = usersArray.map(function (topUser) {
+		      return (
+		    	<tr>
+		    	  <td><a href={[apiBaseUrl + '/users/' + topUser.name]}>{topUser.name}</a>  ({topUser.count} events)</td>
+		    	</tr>
+		      );
+		    });
 		
 	    return (
 	    	<div className="table-responsive">
@@ -614,7 +571,7 @@ var TopUsersContent = React.createClass({
 				    <tr>
 				    	<th className="dashboard-section-header">Most Active Users</th>
 				    </tr>
-				    {rows}
+				    {topUserRender}
 				</table>
 			</div>
 	    );
@@ -739,7 +696,6 @@ $(function() {
 	      url: apiBaseUrl + '/api/dashboard/by-time-frame',
 	      
 	      success: function(data) {
-
 	    		var span;
 	    		
 	    	  	var monthEvents = findCount('MONTH', 'EVENT', data);

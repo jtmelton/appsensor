@@ -176,14 +176,6 @@ function stompConnect() {
     client.connect('unused_user', 'unused_password', subscribeOnSuccess, reconnectOnFailure);
 }
 
-function keepalive() {
-	setInterval(
-		function(){
-		   $.get(apiBaseUrl + '/ping');
-		}
-	, 840000); 	// 14 mins * 60 * 1000
-}
-
 $(function() {
 	stompConnect();
 	keepalive();

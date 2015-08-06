@@ -1,6 +1,8 @@
 package org.owasp.appsensor.ui.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -11,6 +13,7 @@ import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.util.DateUtils;
@@ -37,36 +40,182 @@ public class DetectionPointController {
 
 	private final Gson gson = new Gson();
 	
-	private final static String MORRIS_ID = "a1";
+	private final static String MORRIS_EVENTS_ID = "events1";
+	private final static String MORRIS_ATTACKS_ID = "attacks1";
+	private final static String EVENTS_LABEL = "Events";
+	private final static String ATTACKS_LABEL = "Attacks";
 	
 	private static final String DATE_FORMAT_STR = "YYYY-MM-dd HH:mm:ss";
 	
 	@RequestMapping(value="/api/detection-points/{label}/all", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String,Object> allContent(@PathVariable String label, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam Long limit) { 
+	public Map<String,Object> allContent(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam Long limit, @RequestParam int slices) { 
 		Map<String,Object> allContent = new HashMap<>();
 		
-		allContent.put("detectionPointConfiguration", gson.toJson(facade.getConfiguredDetectionPoints(label)));
-		
-//		allContent.put("byTimeFrame", byTimeFrame());
-//		allContent.put("byCategory", byCategory(rfc3339Timestamp));
-//		allContent.put("groupedEvents", groupedEvents(rfc3339Timestamp, slices));
-//		allContent.put("topUsers", userController.topUsers(rfc3339Timestamp, limit));
-//		allContent.put("topDetectionPoints", detectionPointController.topDetectionPoints(rfc3339Timestamp, limit));
-//		
+		allContent.put("byTimeFrame", byTimeFrame(label));
+		allContent.put("configuration", configuration(label));
+		allContent.put("recentEvents", recentEvents(label, rfc3339Timestamp, limit));
+		allContent.put("recentAttacks", recentAttacks(label, rfc3339Timestamp, limit));
+		allContent.put("byClientApplication", byClientApplication(label, rfc3339Timestamp));
+		allContent.put("topUsers", topUsers(label, rfc3339Timestamp, limit));
+		allContent.put("groupedDetectionPoints", groupedDetectionPoints(label, rfc3339Timestamp, slices));
+
 		return allContent;
 	}
 	
+	@RequestMapping(value="/api/detection-points/{label}/by-time-frame", method = RequestMethod.GET)
+	@ResponseBody
+	public Collection<TimeFrameItem> byTimeFrame(@PathVariable("label") String label) {
+		Collection<TimeFrameItem> items = new ArrayList<>();
+		
+		DateTime now = DateUtils.getCurrentTimestamp();
+		DateTime monthAgo = now.minusMonths(1);
+		DateTime weekAgo = now.minusWeeks(1);
+		DateTime dayAgo = now.minusDays(1);
+		DateTime shiftAgo = now.minusHours(8);
+		DateTime hourAgo = now.minusHours(1);
+		
+		long monthAgoEventCount = facade.countEventsByLabel(monthAgo.toString(), label);
+		long weekAgoEventCount = facade.countEventsByLabel(weekAgo.toString(), label);
+		long dayAgoEventCount = facade.countEventsByLabel(dayAgo.toString(), label);
+		long shiftAgoEventCount = facade.countEventsByLabel(shiftAgo.toString(), label);
+		long hourAgoEventCount = facade.countEventsByLabel(hourAgo.toString(), label);
+		
+		long monthAgoResponseCount = facade.countAttacksByLabel(monthAgo.toString(), label);
+		long weekAgoResponseCount = facade.countAttacksByLabel(weekAgo.toString(), label);
+		long dayAgoResponseCount = facade.countAttacksByLabel(dayAgo.toString(), label);
+		long shiftAgoResponseCount = facade.countAttacksByLabel(shiftAgo.toString(), label);
+		long hourAgoResponseCount = facade.countAttacksByLabel(hourAgo.toString(), label);
+	
+		items.add(TimeFrameItem.of(monthAgoEventCount, TimeFrameItem.TimeUnit.MONTH, TimeFrameItem.Type.EVENT));
+		items.add(TimeFrameItem.of(monthAgoResponseCount, TimeFrameItem.TimeUnit.MONTH, TimeFrameItem.Type.ATTACK));
+		items.add(TimeFrameItem.of(weekAgoEventCount,  TimeFrameItem.TimeUnit.WEEK, TimeFrameItem.Type.EVENT));
+		items.add(TimeFrameItem.of(weekAgoResponseCount,  TimeFrameItem.TimeUnit.WEEK, TimeFrameItem.Type.ATTACK));
+		items.add(TimeFrameItem.of(dayAgoEventCount,   TimeFrameItem.TimeUnit.DAY, TimeFrameItem.Type.EVENT));
+		items.add(TimeFrameItem.of(dayAgoResponseCount,   TimeFrameItem.TimeUnit.DAY, TimeFrameItem.Type.ATTACK));
+		items.add(TimeFrameItem.of(shiftAgoEventCount, TimeFrameItem.TimeUnit.SHIFT, TimeFrameItem.Type.EVENT));
+		items.add(TimeFrameItem.of(shiftAgoResponseCount, TimeFrameItem.TimeUnit.SHIFT, TimeFrameItem.Type.ATTACK));
+		items.add(TimeFrameItem.of(hourAgoEventCount,  TimeFrameItem.TimeUnit.HOUR, TimeFrameItem.Type.EVENT));
+		items.add(TimeFrameItem.of(hourAgoResponseCount,  TimeFrameItem.TimeUnit.HOUR, TimeFrameItem.Type.ATTACK));
+
+		return items;
+	}
+	
+	@RequestMapping(value="/api/detection-points/{label}/configuration", method = RequestMethod.GET)
+	@ResponseBody
+	public String configuration(@PathVariable("label") String label) {
+		return gson.toJson(facade.getConfiguredDetectionPoints(label));
+	}
+	
+	@RequestMapping(value="/api/detection-points/{label}/latest-events", method = RequestMethod.GET)
+	@ResponseBody
+	public Collection<Event> recentEvents(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {
+		Comparator<Event> byDate = (entry1, entry2) -> DateUtils.fromString(entry1.getTimestamp()).compareTo(DateUtils.fromString(entry2.getTimestamp()));
+		
+		List<Event> dateSorted = facade.findEvents(rfc3339Timestamp)
+				.stream()
+				.filter(e -> label.equals(e.getDetectionPoint().getLabel()))
+				.sorted(byDate)
+				.collect(Collectors.toList());
+				
+		Collections.reverse(dateSorted);
+		Collection<Event> events = dateSorted.stream().limit(limit).collect(Collectors.toList());
+
+		return events;
+	}
+	
+	@RequestMapping(value="/api/detection-points/{label}/latest-attacks", method = RequestMethod.GET)
+	@ResponseBody
+	public Collection<Attack> recentAttacks(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {
+		Comparator<Attack> byDate = (entry1, entry2) -> DateUtils.fromString(entry1.getTimestamp()).compareTo(DateUtils.fromString(entry2.getTimestamp()));
+		
+		List<Attack> dateSorted = facade.findAttacks(rfc3339Timestamp)
+				.stream()
+				.filter(a -> label.equals(a.getDetectionPoint().getLabel()))
+				.sorted(byDate)
+				.collect(Collectors.toList());
+				
+		Collections.reverse(dateSorted);
+		Collection<Attack> attacks = dateSorted.stream().limit(limit).collect(Collectors.toList());
+
+		return attacks;
+	}
 	
 	// seen by these client apps
 	@RequestMapping(value="/api/detection-points/{label}/by-client-application", method = RequestMethod.GET)
 	@ResponseBody
-	public Table<String,TimeFrameItem.Type,Integer> byClientApplication(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp) {
-		Table<String,TimeFrameItem.Type,Integer> table = HashBasedTable.create();
+	public String byClientApplication(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp) {
+		Table<String,TimeFrameItem.Type,Long> table = HashBasedTable.create();
 
+		Collection<Event> events = facade.findEvents(rfc3339Timestamp).stream().filter(e -> label.equals(e.getDetectionPoint().getLabel())).collect(Collectors.toList());
+		Collection<Attack> attacks = facade.findAttacks(rfc3339Timestamp).stream().filter(a -> label.equals(a.getDetectionPoint().getLabel())).collect(Collectors.toList());
 		
+		for(Event event : events) {
+			Long count = table.get(event.getDetectionSystem().getDetectionSystemId(), TimeFrameItem.Type.EVENT);
+			
+			if (count == null) {
+				count = 0L;
+			}
+			
+			count = count + 1L;
+			
+			table.put(event.getDetectionSystem().getDetectionSystemId(), TimeFrameItem.Type.EVENT, count);
+		}
 		
-		return table;
+		for(Attack attack : attacks) {
+			Long count = table.get(attack.getDetectionSystem().getDetectionSystemId(), TimeFrameItem.Type.ATTACK);
+			
+			if (count == null) {
+				count = 0L;
+			}
+			
+			count = count + 1L;
+			
+			table.put(attack.getDetectionSystem().getDetectionSystemId(), TimeFrameItem.Type.ATTACK, count);
+		}
+		
+		return gson.toJson(table);
+	}
+	
+	@RequestMapping(value="/api/detection-points/{label}/top-users", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Long> topUsers(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {
+		Map<String, Long> map = new HashMap<>();
+		
+		Collection<Event> events = facade.findEvents(rfc3339Timestamp).stream().filter(e -> label.equals(e.getDetectionPoint().getLabel())).collect(Collectors.toList());
+		
+		Comparator<Entry<String, Long>> byValue = (entry1, entry2) -> entry1.getValue().compareTo(entry2.getValue());
+	    
+		for (Event event : events) {
+			String username = event.getUser().getUsername();
+			
+			Long count = map.get(username);
+			
+			if (count == null) {
+				count = 0L;
+			}
+			
+			count = count + 1L;
+			
+			map.put(username, count);
+		}
+		
+		Map<String, Long> filtered = 
+				map
+				.entrySet()
+				.stream()
+				.sorted(byValue.reversed())
+				.limit(limit)
+				.collect(
+					Collectors.toMap(
+						entry -> entry.getKey(),
+						entry -> entry.getValue()
+					)
+				);
+		
+		Map<String, Long> sorted = Maps.sortStringsByValue(filtered);
+		
+		return sorted;
 	}
 	
 	@RequestMapping(value="/api/detection-points/{label}/grouped", method = RequestMethod.GET)
@@ -74,19 +223,21 @@ public class DetectionPointController {
 	public ViewObject groupedDetectionPoints(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam("slices") int slices) {
 		DateTime startingTime = DateUtils.fromString(rfc3339Timestamp); 
 
-		Collection<Event> events = facade.findEvents(rfc3339Timestamp);
+		Collection<Event> events = facade.findEvents(rfc3339Timestamp).stream().filter(e -> label.equals(e.getDetectionPoint().getLabel())).collect(Collectors.toList());
+		Collection<Attack> attacks = facade.findAttacks(rfc3339Timestamp).stream().filter(a -> label.equals(a.getDetectionPoint().getLabel())).collect(Collectors.toList());
 		
 		DateTime now = DateUtils.getCurrentTimestamp();
 		
 		List<Interval> ranges = Dates.splitRange(startingTime, now, slices);
 
 		Map<String, String> categoryKeyMappings = new HashMap<>();
-		categoryKeyMappings.put(MORRIS_ID, label);
+		categoryKeyMappings.put(EVENTS_LABEL, MORRIS_EVENTS_ID);
+		categoryKeyMappings.put(ATTACKS_LABEL, MORRIS_ATTACKS_ID);
 		
 		// timestamp, category, count
-		Map<String, Long> timestampCounts = generateTimestampCounts(ranges, events, label);
+		Table<String, String, Long> timestampCounts = generateTimestampCounts(ranges, events, attacks, label);
 		
-		ViewObject viewObject = new ViewObject(timestampCounts, label);
+		ViewObject viewObject = new ViewObject(timestampCounts, categoryKeyMappings);
 		
 		return viewObject;
 	}
@@ -138,41 +289,54 @@ public class DetectionPointController {
 		return sorted;
 	}
 	
-	private Map<String, Long> generateTimestampCounts(List<Interval> ranges, Collection<Event> events, String label) {
+	private Table<String, String, Long> generateTimestampCounts(List<Interval> ranges, Collection<Event> events, Collection<Attack> attacks, String label) {
 
-		Map<String, Long> map = new HashMap<>();
+		Table<String, String, Long> table = HashBasedTable.create();
 
 		for (Interval range : ranges) {
 			String timestamp = range.getEnd().toString(DATE_FORMAT_STR);
-
-			map.put(timestamp, 0L);
+			
+			table.put(timestamp, EVENTS_LABEL, 0L);
+			table.put(timestamp, ATTACKS_LABEL, 0L);
 		}
-
+		
 		for (Event event : events) {
-			
-			if (!event.getDetectionPoint().getLabel().equals(label)) {
-				// skip events not for this label
-				continue;
-			}
-			
 			DateTime eventDate = DateUtils.fromString(event.getTimestamp());
-
-			intervalLoop: for (Interval range : ranges) {
+			
+			intervalLoop: for(Interval range : ranges) {
 				if (range.contains(eventDate)) {
 					String timestamp = range.getEnd().toString(DATE_FORMAT_STR);
 
-					Long count = map.get(timestamp);
-
+					Long count = table.get(timestamp, EVENTS_LABEL);
+					
 					count = count + 1L;
-
-					map.put(timestamp, count);
-
+					
+					table.put(timestamp, EVENTS_LABEL, count);
+					
 					break intervalLoop;
 				}
 			}
 		}
+		
+		for (Attack attack : attacks) {
+			DateTime attackDate = DateUtils.fromString(attack.getTimestamp());
+			
+			intervalLoop: for(Interval range : ranges) {
+				if (range.contains(attackDate)) {
+					String timestamp = range.getEnd().toString(DATE_FORMAT_STR);
 
-		return map;
+					Long count = table.get(timestamp, ATTACKS_LABEL);
+					
+					count = count + 1L;
+					
+					table.put(timestamp, ATTACKS_LABEL, count);
+					
+					break intervalLoop;
+				}
+			}
+		}
+		
+		return table;
 	}
 	
 	static class TimeFrameItem {
@@ -182,14 +346,14 @@ public class DetectionPointController {
 		private enum Type { EVENT, ATTACK } 
 		
 		private TimeUnit unit;
-		private int count;
+		private long count;
 		private Type type;
 		
-		public static TimeFrameItem of(int count, TimeUnit unit, Type type) {
+		public static TimeFrameItem of(long count, TimeUnit unit, Type type) {
 			return new TimeFrameItem(count, unit, type);
 		}
 		
-		private TimeFrameItem(int count, TimeUnit unit, Type type) {
+		private TimeFrameItem(long count, TimeUnit unit, Type type) {
 			this.count = count;
 			this.unit = unit;
 			this.type = type;
@@ -199,7 +363,7 @@ public class DetectionPointController {
 			return unit;
 		}
 
-		public int getCount() {
+		public long getCount() {
 			return count;
 		}
 		
@@ -210,27 +374,31 @@ public class DetectionPointController {
 	}
 	
 	static class ViewObject {
-		
-		public ViewObject(Map<String, Long> timestampCounts, String label) {
 
-			ykeys.add(MORRIS_ID);
-			labels.add(label);
+		public ViewObject(Table<String, String, Long> timestampCategoryCounts, Map<String, String> categoryKeyMappings) {
+
+			for (String category : categoryKeyMappings.keySet()) {
+				ykeys.add(categoryKeyMappings.get(category));
+				labels.add(category);
+			}
 
 			StringBuilder sb = new StringBuilder();
 			sb.append("[");
 
 			int i = 1;
-			for (String timestamp : timestampCounts.keySet()) {
+			for (String timestamp : timestampCategoryCounts.rowKeySet()) {
 				sb.append("{ ");
 
 				sb.append("\"y\": \"" + timestamp + "\"");
 
-				sb.append(", \"" + MORRIS_ID + "\": " + timestampCounts.get(timestamp));
+				Map<String, Long> categoryCountMap = timestampCategoryCounts.row(timestamp);
+				for (String category : categoryCountMap.keySet()) {
+					sb.append(", \"" + categoryKeyMappings.get(category) + "\": " + categoryCountMap.get(category));
+				}
 
 				sb.append(" }");
-				
 				// attach a comma if not last timestamp
-				if (i != timestampCounts.size()) {
+				if (i != timestampCategoryCounts.rowKeySet().size()) {
 					sb.append(", ");
 				}
 

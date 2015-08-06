@@ -150,6 +150,54 @@ public class RestReportingEngineFacade {
 				.get(Integer.class);
 	}
 	
+	@Cacheable("events-by-label-count")
+	public int countEventsByLabel(String rfc3339Timestamp, String label) {
+		return
+		        target
+				.path("api")
+				.path("v1.0")
+				.path("reports")
+				.path("events")
+				.path("count-by-label")
+				.queryParam("earliest", rfc3339Timestamp)
+				.queryParam("label", label)
+				.request()
+				.header(clientApplicationIdName, clientApplicationIdValue)
+				.get(Integer.class);
+	}
+	
+	@Cacheable("attacks-by-label-count")
+	public int countAttacksByLabel(String rfc3339Timestamp, String label) {
+		return
+		        target
+				.path("api")
+				.path("v1.0")
+				.path("reports")
+				.path("attacks")
+				.path("count-by-label")
+				.queryParam("earliest", rfc3339Timestamp)
+				.queryParam("label", label)
+				.request()
+				.header(clientApplicationIdName, clientApplicationIdValue)
+				.get(Integer.class);
+	}
+	
+	@Cacheable("responses-by-label-count")
+	public int countResponsesByLabel(String rfc3339Timestamp, String label) {
+		return 
+		        target
+				.path("api")
+				.path("v1.0")
+				.path("reports")
+				.path("responses")
+				.path("count-by-label")
+				.queryParam("earliest", rfc3339Timestamp)
+				.queryParam("label", label)
+				.request()
+				.header(clientApplicationIdName, clientApplicationIdValue)
+				.get(Integer.class);
+	}
+	
 	public String getServerConfiguration() {
 		return target
 				.path("api")

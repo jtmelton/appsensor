@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ViewsController {
 	
+	private static final String DETECTION_POINT_LABEL_DETAIL = "DETECTION_POINT_LABEL_DETAIL";
+	private static final String USERNAME_DETAIL = "USERNAME_DETAIL";
+	
 	@RequestMapping(value="/about", method = RequestMethod.GET)
 	public String about() {
 		return "about";
@@ -30,12 +33,14 @@ public class ViewsController {
 	}
 	
 	@RequestMapping(value="/detection-points/{label}", method = RequestMethod.GET)
-	public String detectionPoint(@PathVariable String label) {
+	public String detectionPoint(@PathVariable String label, Map<String, Object> model) {
+		model.put(DETECTION_POINT_LABEL_DETAIL, label);
 		return "detection-point";
 	}
 	
 	@RequestMapping(value="/users/{username}", method = RequestMethod.GET)
-	public String user(@PathVariable String username) {
+	public String user(@PathVariable String username, Map<String, Object> model) {
+		model.put(USERNAME_DETAIL, username);
 		return "user";
 	}
 	
