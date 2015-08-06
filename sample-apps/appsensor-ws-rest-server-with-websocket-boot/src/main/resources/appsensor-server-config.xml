@@ -94,6 +94,23 @@
 		</detection-point>
 		<detection-point>
 			<category>Input Validation</category>
+			<id>IE1</id>
+			<threshold>
+				<count>30</count>
+				<interval unit="minutes">1</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>disable</action>
+					<interval unit="minutes">10</interval>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Input Validation</category>
 			<id>IE2</id>
 			<threshold>
 				<count>6</count>
