@@ -156,6 +156,54 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public int countEventsByLabel(String earliest, String label) throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int countAttacksByLabel(String earliest, String label) throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int countResponsesByLabel(String earliest, String label) throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int countEventsByUser(String earliest, String user) throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int countAttacksByUser(String earliest, String user) throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int countResponsesByUser(String earliest, String user) throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public KeyValuePair getBase64EncodedServerConfigurationFileContent() throws NotAuthorizedException {
 		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
 	}

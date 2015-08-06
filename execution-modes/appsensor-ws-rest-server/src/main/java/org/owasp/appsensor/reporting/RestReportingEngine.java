@@ -16,9 +16,11 @@ import javax.ws.rs.core.MediaType;
 
 import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.KeyValuePair;
 import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.accesscontrol.Action;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.exceptions.NotAuthorizedException;
@@ -135,6 +137,34 @@ public class RestReportingEngine implements ReportingEngine {
 	 */
 	@Override
 	@GET
+	@Path("/events/count-by-label")
+	public int countEventsByLabel(@QueryParam("earliest") String earliest, @QueryParam("label") String label) throws NotAuthorizedException {
+		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
+		
+		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest).setDetectionPoint(new DetectionPoint(null, label));
+		
+		return appSensorServer.getEventStore().findEvents(criteria).size();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@GET
+	@Path("/events/count-by-user")
+	public int countEventsByUser(@QueryParam("earliest") String earliest, @QueryParam("username") String username) throws NotAuthorizedException {
+		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
+		
+		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest).setUser(new User(username));
+		
+		return appSensorServer.getEventStore().findEvents(criteria).size();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@GET
 	@Path("/attacks/count")
 	public int countAttacks(@QueryParam("earliest") String earliest) throws NotAuthorizedException {
 		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
@@ -149,11 +179,67 @@ public class RestReportingEngine implements ReportingEngine {
 	 */
 	@Override
 	@GET
+	@Path("/attacks/count-by-label")
+	public int countAttacksByLabel(@QueryParam("earliest") String earliest, @QueryParam("label") String label) throws NotAuthorizedException {
+		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
+		
+		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest).setDetectionPoint(new DetectionPoint(null, label));
+		
+		return appSensorServer.getAttackStore().findAttacks(criteria).size();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@GET
+	@Path("/attacks/count-by-label")
+	public int countAttacksByUser(@QueryParam("earliest") String earliest, @QueryParam("username") String username) throws NotAuthorizedException {
+		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
+		
+		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest).setUser(new User(username));
+		
+		return appSensorServer.getAttackStore().findAttacks(criteria).size();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@GET
 	@Path("/responses/count")
 	public int countResponses(@QueryParam("earliest") String earliest) throws NotAuthorizedException {
 		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
 		
 		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest);
+		
+		return appSensorServer.getResponseStore().findResponses(criteria).size();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@GET
+	@Path("/responses/count-by-label")
+	public int countResponsesByLabel(@QueryParam("earliest") String earliest, @QueryParam("label") String label) throws NotAuthorizedException {
+		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
+		
+		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest).setDetectionPoint(new DetectionPoint(null, label));
+		
+		return appSensorServer.getResponseStore().findResponses(criteria).size();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@GET
+	@Path("/responses/count-by-user")
+	public int countResponsesByUser(@QueryParam("earliest") String earliest, @QueryParam("username") String username) throws NotAuthorizedException {
+		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
+		
+		SearchCriteria criteria = new SearchCriteria().setEarliest(earliest).setUser(new User(username));
 		
 		return appSensorServer.getResponseStore().findResponses(criteria).size();
 	}

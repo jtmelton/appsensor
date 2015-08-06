@@ -80,6 +80,65 @@ public interface ReportingEngine extends EventListener, AttackListener, Response
 	 */
 	public int countResponses(String earliest) throws NotAuthorizedException;
 	
+	/**
+	 * Find {@link Event}s starting from specified time (unix timestamp) matching label
+	 * 
+	 * @param earliest String representing start time to use to find {@link Event}s (RFC-3339)
+	 * @param label String representing detection point label
+	 * @return count of Collection of {@link Event}s from starting time matching label
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
+	public int countEventsByLabel(String earliest, String label) throws NotAuthorizedException;
+	
+	/**
+	 * Find {@link Attack}s starting from specified time (unix timestamp) matching label
+	 * 
+	 * @param earliest String representing start time to use to find {@link Event}s (RFC-3339)
+	 * @param label String representing detection point label
+	 * @return count of Collection of {@link Event}s from starting time matching label
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
+	public int countAttacksByLabel(String earliest, String label) throws NotAuthorizedException;
+	
+	/**
+	 * Find {@link Response}s starting from specified time (unix timestamp) matching label
+	 * 
+	 * @param earliest String representing start time to use to find {@link Event}s (RFC-3339)
+	 * @param label String representing detection point label
+	 * @return count of Collection of {@link Event}s from starting time matching label
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
+	public int countResponsesByLabel(String earliest, String label) throws NotAuthorizedException;
+	
+	/**
+	 * Find {@link Event}s starting from specified time (unix timestamp) matching user
+	 * 
+	 * @param earliest String representing start time to use to find {@link Event}s (RFC-3339)
+	 * @param user String representing user
+	 * @return count of Collection of {@link Event}s from starting time matching user
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
+	public int countEventsByUser(String earliest, String user) throws NotAuthorizedException;
+	
+	/**
+	 * Find {@link Attack}s starting from specified time (unix timestamp) matching user
+	 * 
+	 * @param earliest String representing start time to use to find {@link Event}s (RFC-3339)
+	 * @param user String representing user
+	 * @return count of Collection of {@link Event}s from starting time matching user
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
+	public int countAttacksByUser(String earliest, String user) throws NotAuthorizedException;
+	
+	/**
+	 * Find {@link Response}s starting from specified time (unix timestamp) matching user
+	 * 
+	 * @param earliest String representing start time to use to find {@link Event}s (RFC-3339)
+	 * @param user String representing user
+	 * @return count of Collection of {@link Event}s from starting time matching user
+	 * @throws NotAuthorizedException thrown if {@link ClientApplication} is not authorized for reporting
+	 */
+	public int countResponsesByUser(String earliest, String user) throws NotAuthorizedException;
 	
 	/**
 	 * Return the {@link ServerConfiguration} as JSON

@@ -107,7 +107,7 @@ public class SimpleLoggingReportingEngine implements ReportingEngine {
 	 */
 	@Override
 	public int countEvents(String earliest) throws NotAuthorizedException {
-		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class SimpleLoggingReportingEngine implements ReportingEngine {
 	 */
 	@Override
 	public int countAttacks(String earliest) throws NotAuthorizedException {
-		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
 	}
 
 	/**
@@ -123,6 +123,55 @@ public class SimpleLoggingReportingEngine implements ReportingEngine {
 	 */
 	@Override
 	public int countResponses(String earliest) throws NotAuthorizedException {
-		throw new UnsupportedOperationException("This method is not implemented for WebSocket reporting implementation");
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int countEventsByLabel(String earliest, String label) throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int countAttacksByLabel(String earliest, String label) throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int countResponsesByLabel(String earliest, String label) throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int countEventsByUser(String earliest, String user) throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int countAttacksByUser(String earliest, String user) throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int countResponsesByUser(String earliest, String user) throws NotAuthorizedException {
+		throw new UnsupportedOperationException("This method is not implemented for local logging implementation");
+	}
+	
 }
