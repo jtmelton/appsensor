@@ -251,7 +251,7 @@ var Dashboard = React.createClass({
 			  <br /><br />
 			   
 			  <div className="col-md-8">
-				  <ByCategoryAccordion byCategory={this.state.data.byCategory} />
+			  	  <ByCategoryAccordion byCategory={this.state.data.byCategory} />
 				  <ByCategoryCount />
 			  </div>
 			  
@@ -281,17 +281,174 @@ var Slider = React.createClass({
 	  }
 	});
 
-var ByCategoryAccordion = React.createClass({
+var RecentItemsPanel = React.createClass({
 	  render: function() {
-		var byCategory = this.props.byCategory;
+		var recentItems = this.props.recentItems;
+		var type = this.props.type;
 		
-		var shouldRender = (!byCategory || byCategory.length === 0) ? "There are no categories found to be active in this time period." : <ByCategoryAccordionContent byCategory={byCategory}/>;
+		var typeLabel = "";
+		
+		if ("EVENT" === type) {
+			typeLabel = "events";
+		} else if ("ATTACK" === type) {
+			typeLabel = "attacks";
+		} 
+		
+		var message = "There are no " + typeLabel + " found to be active in this time period.";
+		
+		var shouldRender = ( $.isEmptyObject(recentItems) ) ? 
+				<tbody><ColspanRow colCount="4" message={message} /></tbody>: 
+					<RecentItemsPanelContent recentItems={recentItems} />;
+				
+	    return (
+			<span>{shouldRender}</span>
+	    );
+	  }
+	});
+
+var RecentItemsPanelContent = React.createClass({
+	  render: function() {
+		var recentItems = this.props.recentItems;
+		
+		var recentItemsRender = recentItems.map(function (item) {
+			return (
+		    	<tr>
+		    	  <td><a href={[apiBaseUrl + '/detection-points/' + item.detectionPoint.label]}>{item.detectionPoint.label}</a></td>
+		    	  <td><a href={[apiBaseUrl + '/users/' + item.user.username]}>{item.user.username}</a></td>
+		    	  <td>{item.detectionSystem.detectionSystemId}</td>
+		    	  <td>{item.timestamp}</td>
+		    	</tr>
+		      );
+		    });
 		
 	    return (
-    		<div>
-		    	<h4 className="dashboard-section-header"><strong>Detection Point Categories</strong></h4>
-	    		{shouldRender}
-    		</div>
+	    	<tbody>
+			    {recentItemsRender}
+			</tbody>
+	    );
+	  }
+	});
+
+var ByDetectionPointPanel = React.createClass({
+	  render: function() {
+		var countByLabel = this.props.countByLabel;
+		
+		var shouldRender = ( $.isEmptyObject(countByLabel) || $.isEmptyObject(countByLabel.backingMap) ) ? 
+				<tbody><ColspanRow colCount="2" message="There are no detection points found to be active in this time period." /></tbody>: 
+					<ByDetectionPointPanel countByLabel={countByLabel} />;
+				
+	    return (
+			<span>{shouldRender}</span>
+	    );
+	  }
+	});
+
+var ByDetectionPointPanel = React.createClass({
+	  render: function() {
+		var countByLabel = this.props.countByLabel;
+		var type = this.props.type;
+		
+		var cblArray = [], item;
+
+		for (key in countByLabel.backingMap) {
+		    item = {};
+		    item.label = key;
+		    item.count = countByLabel.backingMap[key];
+		    cblArray.push(item);
+		}
+		
+		var byDetectionPointRender = cblArray.map(function (detectionPointInfo) {
+			
+			var count = 0;
+			
+			if ("EVENT" === type) {
+				count = (detectionPointInfo.count.EVENT) ? detectionPointInfo.count.EVENT : 0;
+			} else if ("ATTACK" === type) {
+				count = (detectionPointInfo.count.ATTACK) ? detectionPointInfo.count.ATTACK : 0;
+			}
+			
+			return (
+		    	<tr>
+		    	  <td>{detectionPointInfo.label}</td>
+		    	  <td>{count}</td>
+		    	</tr>
+		      );
+		    });
+		
+	    return (
+	    	<tbody>
+			    {byDetectionPointRender}
+			</tbody>
+	    );
+	  }
+	});
+
+var AccordionPanelContent = React.createClass({
+	  render: function() {
+		var recentEvents = this.props.recentEvents;
+		var recentAttacks = this.props.recentAttacks;
+		var countByLabel = this.props.countByLabel;
+
+	    return (
+				  <div className="row"> 
+	    		  	 <div className="col-md-8"> 
+	    		  	  	<h4 className="dashboard-section-header"><strong>Recent Events</strong></h4>
+	    		  		<div className="table-responsive">
+			      		  <table className="table table-hover table-bordered">
+			      		  	<thead>
+				    		    <tr>
+				    		    	<th>Label</th>
+				    		    	<th>User</th>
+				    		    	<th>Detection System</th>
+				    		    	<th>Timestamp</th>
+				    		    </tr>
+				    		</thead>
+				    		<RecentItemsPanel type="EVENT" recentItems={recentEvents} />
+				  	     </table>
+				      </div>
+				      
+				  	  	<h4 className="dashboard-section-header"><strong>Recent Attacks</strong></h4>
+	    		  		<div className="table-responsive">
+			      		  <table className="table table-hover table-bordered">
+			      		  	<thead>
+				    		    <tr>
+				    		    	<th>Label</th>
+				    		    	<th>From</th>
+				    		    	<th>To</th>
+				    		    	<th>Timestamp</th>
+				    		    </tr>
+				    		</thead>
+				    		<RecentItemsPanel type="ATTACK" recentItems={recentAttacks} />
+				  	     </table>
+				      </div>
+				    </div>
+	    		    <div className="col-md-4">
+		    	  	  	<h4 className="dashboard-section-header"><strong>Events By Detection Point</strong></h4>
+	    		  		<div className="table-responsive">
+			      		  <table className="table table-hover table-bordered">
+			      		  	<thead>
+				    		    <tr>
+				    		    	<th>Label</th>
+				    		    	<th>#</th>
+				    		    </tr>
+				    		</thead>
+				    		<ByDetectionPointPanel type="EVENT" countByLabel={countByLabel} />
+				  		  </table>
+			      		</div>
+			      		<h4 className="dashboard-section-header"><strong>Attacks By Detection Point</strong></h4>
+	    		  		<div className="table-responsive">
+			      		  <table className="table table-hover table-bordered">
+			      		  	<thead>
+				    		    <tr>
+				    		    	<th>Label</th>
+				    		    	<th>#</th>
+				    		    </tr>
+				    		</thead>
+				    		<ByDetectionPointPanel type="ATTACK" countByLabel={countByLabel} />
+				  		  </table>
+			      		</div>
+	    		    </div> 
+	    		  </div>
 	    );
 	  }
 	});
@@ -302,8 +459,7 @@ var ByCategoryAccordionContent = React.createClass({
 		
 		  var content = '';
 		  
-		  for (index in byCategory) {
-			  var categoryData = byCategory[index];
+		  var categoryDataRender = byCategory.map(function (categoryData) {
 			  var categoryName = categoryData.category;
 			  var categoryNameNoWhitespace = categoryName.replace(/ /g,'');
 			  
@@ -313,150 +469,55 @@ var ByCategoryAccordionContent = React.createClass({
 			  var recentAttacks = categoryData.recentAttacks;
 			 
 			  var countByLabel = JSON.parse(categoryData.countByLabel);
+
+			  var headingName = 'heading' + categoryNameNoWhitespace;
+			  var collapseName = 'collapse' + categoryNameNoWhitespace;
+			  var collapseAnchor = '#collapse' + categoryNameNoWhitespace;
+			  var countTitle = eventCount + ' events / ' + attackCount + ' attacks';
 			  
-			  var panelContent = 
-				  '<div class="row">' + 
-	    		  '	 <div class="col-md-8">' + 
-	    		  '	  	<h4 class="dashboard-section-header"><strong>Recent Events</strong></h4>' +
-	    		  '		<div class="table-responsive">' +
-			      '		  <table class="table table-hover table-bordered">' +
-			      '     	<thead>' +
-				  '  		    <tr>' +
-				  '  		    	<th>Label</th>' +
-				  '  		    	<th>User</th>' +
-				  '  		    	<th>Detection System</th>' +
-				  '  		    	<th>Timestamp</th>' +
-				  '  		    </tr>' +
-				  '  		</thead>' +
-				  '  		<tbody>';
-	
-			  if( $.isEmptyObject(recentEvents) ) {
-				  panelContent += '<tr><td colspan="4">There are no events found to be active in this time period.</td></tr>';
-	    	  } else {
-	    		  for (var index in recentEvents) {
-	    			  var event = recentEvents[index];
-	
-	    			  var label = '<a href="' + apiBaseUrl + '/detection-points/' + event.detectionPoint.label + '">' + event.detectionPoint.label + '</a>'
-	    			  var user = '<a href="' + apiBaseUrl + '/users/' + event.user.username + '">' + event.user.username + '</a>';
-	    			  var detectionSystem = event.detectionSystem.detectionSystemId;
-	    			  var timestamp = event.timestamp;
-	    			  
-	    			  panelContent += '<tr><td>' + label + '</td><td>' + user + '</td><td>' + detectionSystem + '</td><td>' + timestamp + '</td></tr>';
-	    		  }
-	    	  }
-	    		  
-			  panelContent +=
-				  '  	   </tbody>' +
-				  '	     </table>' +
-				  '    </div>' +
-				  '	  	<h4 class="dashboard-section-header"><strong>Recent Attacks</strong></h4>' +
-	    		  '		<div class="table-responsive">' +
-			      '		  <table class="table table-hover table-bordered">' +
-			      '     	<thead>' +
-				  '  		    <tr>' +
-				  '  		    	<th>Label</th>' +
-				  '  		    	<th>From</th>' +
-				  '  		    	<th>To</th>' +
-				  '  		    	<th>Timestamp</th>' +
-				  '  		    </tr>' +
-				  '  		</thead>' +
-				  '  		<tbody>';
-	
-			  if( $.isEmptyObject(recentAttacks) ) {
-				  panelContent += '<tr><td colspan="4">There are no attacks found to be active in this time period.</td></tr>';
-	    	  } else {
-	    		  for (var index in recentAttacks) {
-	    			  var attack = recentAttacks[index];
-	
-	    			  var label = '<a href="' + apiBaseUrl + '/detection-points/' + attack.detectionPoint.label + '">' + attack.detectionPoint.label + '</a>'
-	    			  var user = '<a href="' + apiBaseUrl + '/users/' + attack.user.username + '">' + attack.user.username + '</a>';
-	    			  var detectionSystem = attack.detectionSystem.detectionSystemId;
-	    			  var timestamp = attack.timestamp;
-	    			  
-	    			  panelContent += '<tr><td>' + label + '</td><td>' + user + '</td><td>' + detectionSystem + '</td><td>' + timestamp + '</td></tr>';
-	    		  }
-	    	  }
-	    		  
-			  panelContent +=
-				  '  	   </tbody>' +
-				  '	     </table>' +
-				  '    </div>' +
-				  '  </div>' +
-	    		  '  <div class="col-md-4">' +
-		    	  '	  	<h4 class="dashboard-section-header"><strong>Events By Detection Point</strong></h4>' +
-	    		  '		<div class="table-responsive">' +
-			      '		  <table class="table table-hover table-bordered">' +
-			      '     	<thead>' +
-				  '  		    <tr>' +
-				  '  		    	<th>Label</th>' +
-				  '  		    	<th>#</th>' +
-				  '  		    </tr>' +
-				  '  		</thead>' +
-				  '  		<tbody>';
-	
-			  if( $.isEmptyObject(countByLabel) || $.isEmptyObject(countByLabel.backingMap) ) {
-				  panelContent += '<tr><td colspan="2">There are no detection points found to be active in this time period.</td></tr>';
-	    	  } else {
-	    		  for (var detectionPointLabel in countByLabel.backingMap) {
-	    			  var eventAttackMap = countByLabel.backingMap[detectionPointLabel];
-	    			  var count = (eventAttackMap.EVENT) ? eventAttackMap.EVENT : 0;
-	    			  panelContent += '<tr><td>' + detectionPointLabel + '</td><td>' + count + '</td></tr>';
-	    		  }
-	    	  }
+			  var recentEvents = categoryData.recentEvents;
+			  var recentAttacks = categoryData.recentAttacks;
+			  var countByLabel = JSON.parse(categoryData.countByLabel);
 			  
-			  panelContent +=
-				  '  		</tbody>' +
-				  '		  </table>' +
-			      '		</div>' +
-			      '		<h4 class="dashboard-section-header"><strong>Attacks By Detection Point</strong></h4>' +
-	    		  '		<div class="table-responsive">' +
-			      '		  <table class="table table-hover table-bordered">' +
-			      '		  	<thead>' +
-				  '  		    <tr>' +
-				  '  		    	<th>Label</th>' +
-				  '  		    	<th>#</th>' +
-				  '  		    </tr>' +
-				  '  		</thead>' +
-				  '  		<tbody>';
-	
-	    		  if( $.isEmptyObject(countByLabel) || $.isEmptyObject(countByLabel.backingMap) ) {
-	    			  panelContent += '<tr><td colspan="2">There are no detection points found to be active in this time period.</td></tr>';
-		    	  } else {
-		    		  for (var detectionPointLabel in countByLabel.backingMap) {
-		    			  var eventAttackMap = countByLabel.backingMap[detectionPointLabel];
-		    			  var count = (eventAttackMap.ATTACK) ? eventAttackMap.ATTACK : 0;
-		    			  panelContent += '<tr><td>' + detectionPointLabel + '</td><td>' + count + '</td></tr>';
-		    		  }
-		    	  }
-				  
-			  panelContent +=
-				  '  		</tbody>' +
-				  '		  </table>' +
-			      '		</div>' +
-	    		  '  </div>' + 
-	    		  '</div>';
-			  
-			  content += 
-				  '<div class="panel panel-default">' +
-				  '  <div class="panel-heading" role="tab" id="heading' + categoryNameNoWhitespace + '">' +
-				  '  <h2>' +
-				  '    	<span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp;&nbsp;' +
-				  '      <a class="collapsed" role="button" data-toggle="collapse" data-parent="#category-accordion" href="#collapse' + categoryNameNoWhitespace + '" aria-expanded="false" aria-controls="collapse' + categoryNameNoWhitespace + '">' +
-				  '       ' + categoryName +
-				  '      </a>' +
-				  '      &nbsp;<span class="badge" title="' + eventCount + ' events / ' + attackCount + ' attacks">' + eventCount + ' / ' + attackCount + '</span>' +
-				  '    </h2>' +
-				  '  </div>' +
-				  '  <div id="collapse' + categoryNameNoWhitespace + '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading' + categoryNameNoWhitespace + '">' +
-				  '    <div class="panel-body">' +
-				  '     ' + panelContent + 
-				  '    </div>' +
-				  '  </div>' +
-				  '</div>';
-		  }
+		      return (
+	    		  <div className="panel panel-default">
+				    <div className="panel-heading" role="tab" id={headingName}>
+				    <h2>
+				      	<span className="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp;&nbsp;
+				        <a className="collapsed" role="button" data-toggle="collapse" data-parent="#category-accordion" href={collapseAnchor} aria-expanded="false" aria-controls={collapseName}>
+				         {categoryName}
+				        </a>
+				        &nbsp;<span className="badge" title={countTitle}>{eventCount} / {attackCount}</span>
+				      </h2>
+				    </div>
+				    <div id={collapseName} className="panel-collapse collapse" role="tabpanel" aria-labelledby={headingName}>
+				      <div className="panel-body">
+				        <AccordionPanelContent recentEvents={recentEvents} recentAttacks={recentAttacks} countByLabel={countByLabel} /> 
+				      </div>
+				    </div>
+				  </div>
+		      );
+		    });
 
 	    return (
-	    		<AccordionContent content={content} />
+    		<div className="panel-group" id="category-accordion" role="tablist" aria-multiselectable="true">
+    			{categoryDataRender}
+    		</div>
+	    );
+	  }
+	});
+
+var ByCategoryAccordion = React.createClass({
+	  render: function() {
+		var byCategory = this.props.byCategory;
+		
+		var shouldRender = (!byCategory || byCategory.length === 0) ? "There are no categories found to be active in this time period." : <ByCategoryAccordionContent byCategory={byCategory}/>;
+		
+	    return (
+		<div>
+		    	<h4 className="dashboard-section-header"><strong>Detection Point Categories</strong></h4>
+	    		{shouldRender}
+		</div>
 	    );
 	  }
 	});
@@ -504,16 +565,28 @@ var TopDetectionPointsContent = React.createClass({
 	  render: function() {
 		var topDetectionPoints = this.props.topDetectionPoints;
 		
-		var rows = [];
+		var tdpArray = [], item;
 
 		for (key in topDetectionPoints) {
-			var detectionPoint = JSON.parse(key);
-			var content = '<a href="'
-				  + apiBaseUrl + '/detection-points/' + detectionPoint.label + '">' + detectionPoint.label + '</a>' 
-				  + ' (' + detectionPoint.category + ')' 
-				  + ' (' + topDetectionPoints[key] + ' events)';
-			rows.push(<SingleColumnRow message={content} />);
+		    item = {};
+		    item.info = JSON.parse(key);
+		    item.count = topDetectionPoints[key];
+		    tdpArray.push(item);
 		}
+		
+		var topDetectionPointsRender = tdpArray.map(function (detectionPoint) {
+			  var label = detectionPoint.info.label;
+			  var category = detectionPoint.info.category;
+			  var count = detectionPoint.count;
+			  
+		      return (
+		    	<tr>
+		    	  <td>
+		    	  	<a href={[apiBaseUrl + '/detection-points/' + label]}>{label}</a> ({category}) ({count} events)
+		    	  </td>
+		    	</tr>
+		      );
+		    });
 		
 	    return (
     		<div className="table-responsive">
@@ -521,7 +594,7 @@ var TopDetectionPointsContent = React.createClass({
 				    <tr>
 				    	<th className="dashboard-section-header">Most Active Detection Points</th>
 				    </tr>
-				    {rows}
+				    {topDetectionPointsRender}
 				</table>
 			</div>
 	    );
@@ -578,7 +651,6 @@ var TopUsersContent = React.createClass({
 	  }
 	});
 
-			
 var ActiveResponses = React.createClass({
 	  render: function() {
 		var activeResponses = this.props.activeResponses;
@@ -594,28 +666,30 @@ var ActiveResponses = React.createClass({
 	    );
 	  }
 	});
-
+			
 var ActiveResponsesContent = React.createClass({
 	  render: function() {
 		var activeResponses = this.props.activeResponses;
 		
-		var rows = [];
-
-		for (index in activeResponses) {
-			var response = activeResponses[index];
-			
-			var duration = (response.interval.duration && response.interval.unit) ? 
-					' (' + response.interval.duration + ' ' + response.interval.unit + ')' : 
-						'';
-			
-			var content = response.action
-				  + ' ' + duration
-				  + ' (<a href="' + apiBaseUrl + '/users/' + response.user.username + '">' + response.user.username + '</a>' + ')'
-				  + ' (client app: "' + response.detectionSystem.detectionSystemId + '")'
-				  + ' (started at: "' + moment(response.timestamp).format("YYYY/MM/DD, HH:mm:ss") + '")';
-
-			rows.push(<SingleColumnRow message={content} />);
-		}
+		var activeResponseRender = activeResponses.map(function (response) {
+			  
+			 var duration = (response.interval.duration && response.interval.unit) ? 
+						' (' + response.interval.duration + ' ' + response.interval.unit + ')' : 
+							'';
+			 
+			 var ts = moment(response.timestamp).format("YYYY/MM/DD, HH:mm:ss");
+			 
+		      return (
+		    	<tr>
+		    	  <td>
+		    	  	{response.action} {duration} (<a href={[apiBaseUrl + '/users/' + response.user.username]}>{response.user.username}</a>)
+		    	    (client app: "{response.detectionSystem.detectionSystemId}")
+		    	    (started at: "{ts}")
+		    	  </td>
+		    	</tr>
+		      );
+		    });
+		
 		
 	    return (
 	    	<div className="table-responsive">
@@ -623,29 +697,20 @@ var ActiveResponsesContent = React.createClass({
 				    <tr>
 				    	<th className="dashboard-section-header">Active Responses</th>
 				    </tr>
-				    {rows}
+				    {activeResponseRender}
 				</table>
 			</div>
 	    );
 	  }
 	});
 
-var SingleColumnRow = React.createClass({
+var ColspanRow = React.createClass({
 	  render: function() {
+		var colCount = this.props.colCount;
 		var message = this.props.message;
 		
 	    return (
-	    		<tr><td dangerouslySetInnerHTML={{__html: message}} /></tr>
-	    );
-	  }
-	});
-
-var AccordionContent = React.createClass({
-	  render: function() {
-		var content = this.props.content;
-		
-	    return (
-	    	<div className="panel-group" id="category-accordion" role="tablist" aria-multiselectable="true" dangerouslySetInnerHTML={{__html: content}} />
+	    	<tr><td colSpan={colCount}>{message}</td></tr>
 	    );
 	  }
 	});
