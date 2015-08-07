@@ -198,6 +198,54 @@ public class RestReportingEngineFacade {
 				.get(Integer.class);
 	}
 	
+	@Cacheable("events-by-user-count")
+	public int countEventsByUser(String rfc3339Timestamp, String username) {
+		return
+		        target
+				.path("api")
+				.path("v1.0")
+				.path("reports")
+				.path("events")
+				.path("count-by-user")
+				.queryParam("earliest", rfc3339Timestamp)
+				.queryParam("username", username)
+				.request()
+				.header(clientApplicationIdName, clientApplicationIdValue)
+				.get(Integer.class);
+	}
+	
+	@Cacheable("attacks-by-user-count")
+	public int countAttacksByUser(String rfc3339Timestamp, String username) {
+		return
+		        target
+				.path("api")
+				.path("v1.0")
+				.path("reports")
+				.path("attacks")
+				.path("count-by-user")
+				.queryParam("earliest", rfc3339Timestamp)
+				.queryParam("username", username)
+				.request()
+				.header(clientApplicationIdName, clientApplicationIdValue)
+				.get(Integer.class);
+	}
+	
+	@Cacheable("responses-by-user-count")
+	public int countResponsesByUser(String rfc3339Timestamp, String username) {
+		return 
+		        target
+				.path("api")
+				.path("v1.0")
+				.path("reports")
+				.path("responses")
+				.path("count-by-user")
+				.queryParam("earliest", rfc3339Timestamp)
+				.queryParam("username", username)
+				.request()
+				.header(clientApplicationIdName, clientApplicationIdValue)
+				.get(Integer.class);
+	}
+	
 	public String getServerConfiguration() {
 		return target
 				.path("api")

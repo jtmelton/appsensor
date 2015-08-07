@@ -193,7 +193,7 @@ public class RestReportingEngine implements ReportingEngine {
 	 */
 	@Override
 	@GET
-	@Path("/attacks/count-by-label")
+	@Path("/attacks/count-by-user")
 	public int countAttacksByUser(@QueryParam("earliest") String earliest, @QueryParam("username") String username) throws NotAuthorizedException {
 		accessControlUtils.checkAuthorization(Action.EXECUTE_REPORT, requestContext);
 		

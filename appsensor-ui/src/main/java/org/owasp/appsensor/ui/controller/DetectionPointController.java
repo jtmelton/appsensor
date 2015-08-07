@@ -235,7 +235,7 @@ public class DetectionPointController {
 		categoryKeyMappings.put(ATTACKS_LABEL, MORRIS_ATTACKS_ID);
 		
 		// timestamp, category, count
-		Table<String, String, Long> timestampCounts = generateTimestampCounts(ranges, events, attacks, label);
+		Table<String, String, Long> timestampCounts = generateTimestampCounts(ranges, events, attacks);
 		
 		ViewObject viewObject = new ViewObject(timestampCounts, categoryKeyMappings);
 		
@@ -289,7 +289,7 @@ public class DetectionPointController {
 		return sorted;
 	}
 	
-	private Table<String, String, Long> generateTimestampCounts(List<Interval> ranges, Collection<Event> events, Collection<Attack> attacks, String label) {
+	private Table<String, String, Long> generateTimestampCounts(List<Interval> ranges, Collection<Event> events, Collection<Attack> attacks) {
 
 		Table<String, String, Long> table = HashBasedTable.create();
 
