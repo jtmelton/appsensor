@@ -18,6 +18,7 @@ import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.KeyValuePair;
 import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.ui.handler.AssociatedApplicationsContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -64,7 +65,7 @@ public class RestReportingEngineFacade {
 				.get(responseType);
 		
 		//make request
-		return events;
+		return filterEventsByClientApplications(events);
 	}
 	
 	@Cacheable("attacks")
@@ -83,7 +84,7 @@ public class RestReportingEngineFacade {
 				.get(responseType);
 		
 		//make request
-		return attacks;
+		return filterAttacksByClientApplications(attacks);
 	}
 	
 	@Cacheable("responses")
@@ -102,7 +103,28 @@ public class RestReportingEngineFacade {
 				.get(responseType);
 		
 		//make request
-		return responses;
+		return filterResponsesByClientApplications(responses);
+	}
+	
+	private Collection<Event> filterEventsByClientApplications(Collection<Event> original) {
+
+		final Collection<String> associatedClientApplications = AssociatedApplicationsContext.get();
+		
+		return original.stream().filter(r -> associatedClientApplications.contains(r.getDetectionSystem().getDetectionSystemId())).collect(Collectors.toList());
+	}
+	
+	private Collection<Attack> filterAttacksByClientApplications(Collection<Attack> original) {
+
+		final Collection<String> associatedClientApplications = AssociatedApplicationsContext.get();
+		
+		return original.stream().filter(a -> associatedClientApplications.contains(a.getDetectionSystem().getDetectionSystemId())).collect(Collectors.toList());
+	}
+	
+	private Collection<Response> filterResponsesByClientApplications(Collection<Response> original) {
+
+		final Collection<String> associatedClientApplications = AssociatedApplicationsContext.get();
+		
+		return original.stream().filter(r -> associatedClientApplications.contains(r.getDetectionSystem().getDetectionSystemId())).collect(Collectors.toList());
 	}
 	
 	@Cacheable("events-count")
