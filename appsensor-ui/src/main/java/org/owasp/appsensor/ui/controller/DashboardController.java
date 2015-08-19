@@ -18,6 +18,7 @@ import org.owasp.appsensor.core.util.DateUtils;
 import org.owasp.appsensor.ui.rest.RestReportingEngineFacade;
 import org.owasp.appsensor.ui.utils.Dates;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,6 +45,7 @@ public class DashboardController {
 	
 	private final static Gson gson = new Gson();
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/dashboard/all", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String,Object> allContent(@RequestParam("earliest") String rfc3339Timestamp, @RequestParam("slices") int slices, @RequestParam("limit") Long limit) {
@@ -59,6 +61,7 @@ public class DashboardController {
 		return allContent;
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/responses/active", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<Response> activeResponses(@RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {
@@ -70,6 +73,7 @@ public class DashboardController {
 		return activeResponses;
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/dashboard/by-time-frame", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<TimeFrameItem> byTimeFrame() {
@@ -108,6 +112,7 @@ public class DashboardController {
 		return items;
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/dashboard/by-category", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<CategoryItem> byCategory(@RequestParam("earliest") String rfc3339Timestamp) {
@@ -185,6 +190,7 @@ public class DashboardController {
 	// 
 	// this function drives the dashboard and is specifically formatted for an morris.js graph
 	// 
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/events/grouped", method = RequestMethod.GET)
 	@ResponseBody
 	public ViewObject groupedEvents(@RequestParam("earliest") String rfc3339Timestamp, @RequestParam("slices") int slices) {

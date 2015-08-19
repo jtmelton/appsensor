@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,33 +23,39 @@ public class ViewsController {
 		return "about";
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_CONFIGURATION', 'EDIT_CONFIGURATION')")
 	@RequestMapping(value="/configuration", method = RequestMethod.GET)
 	public String configuration() {
 		return "configuration";
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/", method = RequestMethod.GET)
 	public String dashboard() {
 		return "dashboard";
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/detection-points/{label}", method = RequestMethod.GET)
 	public String detectionPoint(@PathVariable String label, Map<String, Object> model) {
 		model.put(DETECTION_POINT_LABEL_DETAIL, label);
 		return "detection-point";
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/users/{username}", method = RequestMethod.GET)
 	public String user(@PathVariable String username, Map<String, Object> model) {
 		model.put(USERNAME_DETAIL, username);
 		return "user";
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/geo-map", method = RequestMethod.GET)
 	public String geoMap() {
 		return "geo-map";
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/trends-dashboard", method = RequestMethod.GET)
 	public String trendsDashboard() {
 		return "trends-dashboard";

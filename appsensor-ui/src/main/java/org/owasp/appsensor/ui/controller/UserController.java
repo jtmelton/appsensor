@@ -21,6 +21,7 @@ import org.owasp.appsensor.ui.rest.RestReportingEngineFacade;
 import org.owasp.appsensor.ui.utils.Dates;
 import org.owasp.appsensor.ui.utils.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +50,7 @@ public class UserController {
 	
 	private static final String DATE_FORMAT_STR = "YYYY-MM-dd HH:mm:ss";
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/users/{username}/all", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String,Object> allContent(@PathVariable("username") String username, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam Long limit, @RequestParam int slices) { 
@@ -65,6 +67,7 @@ public class UserController {
 		return allContent;
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/users/{username}/active-responses", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<Response> activeResponses(@PathVariable("username") String username, @RequestParam("earliest") String rfc3339Timestamp) {
@@ -79,6 +82,8 @@ public class UserController {
 				
 		return activeResponses;
 	}
+	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/users/{username}/by-time-frame", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<TimeFrameItem> byTimeFrame(@PathVariable("username") String username) {
@@ -117,6 +122,7 @@ public class UserController {
 		return items;
 	}
 
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/users/{username}/latest-events", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<Event> recentEvents(@PathVariable("username") String username, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {
@@ -134,6 +140,7 @@ public class UserController {
 		return events;
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/users/{username}/latest-attacks", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<Attack> recentAttacks(@PathVariable("username") String username, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {
@@ -151,6 +158,7 @@ public class UserController {
 		return attacks;
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/users/{username}/latest-responses", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<Response> recentResponses(@PathVariable("username") String username, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {
@@ -169,6 +177,7 @@ public class UserController {
 	}
 	
 	// seen by these client apps
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/users/{username}/by-client-application", method = RequestMethod.GET)
 	@ResponseBody
 	public String byClientApplication(@PathVariable("username") String username, @RequestParam("earliest") String rfc3339Timestamp) {
@@ -217,6 +226,7 @@ public class UserController {
 		return gson.toJson(table);
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/users/{username}/grouped", method = RequestMethod.GET)
 	@ResponseBody
 	public ViewObject groupedUsers(@PathVariable("username") String username, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam("slices") int slices) {
@@ -243,6 +253,7 @@ public class UserController {
 		return viewObject;
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/users/top", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Long> topUsers(@RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {

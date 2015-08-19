@@ -21,6 +21,7 @@ import org.owasp.appsensor.ui.rest.RestReportingEngineFacade;
 import org.owasp.appsensor.ui.utils.Dates;
 import org.owasp.appsensor.ui.utils.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +48,7 @@ public class DetectionPointController {
 	
 	private static final String DATE_FORMAT_STR = "YYYY-MM-dd HH:mm:ss";
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/detection-points/{label}/all", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String,Object> allContent(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam Long limit, @RequestParam int slices) { 
@@ -63,6 +65,7 @@ public class DetectionPointController {
 		return allContent;
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/detection-points/{label}/by-time-frame", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<TimeFrameItem> byTimeFrame(@PathVariable("label") String label) {
@@ -101,12 +104,14 @@ public class DetectionPointController {
 		return items;
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/detection-points/{label}/configuration", method = RequestMethod.GET)
 	@ResponseBody
 	public String configuration(@PathVariable("label") String label) {
 		return gson.toJson(facade.getConfiguredDetectionPoints(label));
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/detection-points/{label}/latest-events", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<Event> recentEvents(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {
@@ -124,6 +129,7 @@ public class DetectionPointController {
 		return events;
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/detection-points/{label}/latest-attacks", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<Attack> recentAttacks(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {
@@ -142,6 +148,7 @@ public class DetectionPointController {
 	}
 	
 	// seen by these client apps
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/detection-points/{label}/by-client-application", method = RequestMethod.GET)
 	@ResponseBody
 	public String byClientApplication(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp) {
@@ -177,6 +184,7 @@ public class DetectionPointController {
 		return gson.toJson(table);
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/detection-points/{label}/top-users", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Long> topUsers(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {
@@ -218,6 +226,7 @@ public class DetectionPointController {
 		return sorted;
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/detection-points/{label}/grouped", method = RequestMethod.GET)
 	@ResponseBody
 	public ViewObject groupedDetectionPoints(@PathVariable("label") String label, @RequestParam("earliest") String rfc3339Timestamp, @RequestParam("slices") int slices) {
@@ -242,6 +251,7 @@ public class DetectionPointController {
 		return viewObject;
 	}
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/detection-points/top", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Long> topDetectionPoints(@RequestParam("earliest") String rfc3339Timestamp, @RequestParam("limit") Long limit) {

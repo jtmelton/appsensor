@@ -7,6 +7,7 @@ import org.joda.time.DateTime;
 import org.owasp.appsensor.core.util.DateUtils;
 import org.owasp.appsensor.ui.rest.RestReportingEngineFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,7 @@ public class TrendsDashboardController {
 	@Autowired
 	RestReportingEngineFacade facade;
 	
+	@PreAuthorize("hasAnyRole('VIEW_DATA')")
 	@RequestMapping(value="/api/trends/by-time-frame", method = RequestMethod.GET)
 	@ResponseBody
 	public Collection<TrendItem> countEvents() {
