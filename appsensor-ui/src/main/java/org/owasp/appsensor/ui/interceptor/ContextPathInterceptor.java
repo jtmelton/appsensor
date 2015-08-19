@@ -15,7 +15,6 @@ public class ContextPathInterceptor extends HandlerInterceptorAdapter {
      */
     public static final String CONTEXT_PATH = "CONTEXT_PATH";
 
-
     @Override
     public void postHandle(final HttpServletRequest request,
             final HttpServletResponse response, final Object handler,

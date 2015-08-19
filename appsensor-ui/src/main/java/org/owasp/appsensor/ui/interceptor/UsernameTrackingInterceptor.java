@@ -17,7 +17,6 @@ public class UsernameTrackingInterceptor extends HandlerInterceptorAdapter {
      */
     public static final String LOGGED_IN_USERNAME = "LOGGED_IN_USERNAME";
 
-
     @Override
     public void postHandle(final HttpServletRequest request,
             final HttpServletResponse response, final Object handler,
