@@ -13,12 +13,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<repositories>
+	<!-- <repositories>
 		<repository>
 		    <id>jitpack.io</id>
 		    <url>https://jitpack.io</url>
 		</repository>
-	</repositories>
+	</repositories>-->
 	
 	<dependencies>
 		<dependency>
@@ -27,11 +27,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		
-		<dependency>
+		<!-- <dependency>
 		    <groupId>com.github.influxdb</groupId>
 		    <artifactId>influxdb-java</artifactId>
 		    <version>influxdb-java-2.0</version>
-		</dependency>
+		</dependency>-->
 		
 		<!-- 
 		TODO: this is a short-term workaround due to https://github.com/influxdb/influxdb-java/issues/37
@@ -40,11 +40,11 @@
 		- remove com.github dependency from above 
 		- use below "real" dependency 
 		-->
-		<!-- <dependency>
+		<dependency>
             <groupId>org.influxdb</groupId>
             <artifactId>influxdb-java</artifactId>
-            <version>2.0</version>
-        </dependency>-->
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
         
 		<!-- See http://stackoverflow.com/questions/174560/sharing-test-code-in-maven -->
 		<dependency>
