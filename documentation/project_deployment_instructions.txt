@@ -16,10 +16,12 @@ Each deploy:
 	
 - for a snapshot deployment: 
 	- ensure all versions end in '-SNAPSHOT' (run 'mvn versions:set -DnewVersion=1.2.3-SNAPSHOT -DgenerateBackupPoms=false')
+	- also run this step separately for appsensor-ui since it's on a different release cycle
 	- run 'mvn clean deploy'
 	
 - for a release deployment: 
 	- ensure all versions DO NOT end in '-SNAPSHOT' (run 'mvn versions:set -DnewVersion=1.2.3 -DgenerateBackupPoms=false')
+	- also run this step separately for appsensor-ui since it's on a different release cycle
 	- need to run 'mvn -N install' (installs parent pom locally to run remainder of cases)
 	- update the changelog
 	- run 'mvn clean deploy -P release'
