@@ -1,13 +1,17 @@
 package org.owasp.appsensor.core.storage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
 import org.owasp.appsensor.core.Response;
+import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.ResponseListener;
+import org.owasp.appsensor.core.util.DateUtils;
 
 /**
  * A store is an observable object. 
@@ -30,6 +34,7 @@ public abstract class ResponseStore {
 	 */
 	public abstract void addResponse(Response response);
 	
+
 	/**
 	 * Finder for responses in the ResponseStore
 	 * 
@@ -37,6 +42,41 @@ public abstract class ResponseStore {
 	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.core.Response} objects matching the search criteria.
 	 */
 	public abstract Collection<Response> findResponses(SearchCriteria criteria);
+	
+	/**
+	 * Finder for responses in the ResponseStore
+	 * 
+	 * @param criteria the {@link org.owasp.appsensor.core.criteria.SearchCriteria} object to search by
+	 * @return a {@link java.util.Collection} of {@link org.owasp.appsensor.core.Response} objects matching the search criteria.
+	 */
+	public Collection<Response> findResponses(SearchCriteria criteria, Collection<Response> responses) {
+		if (criteria == null) {
+			throw new IllegalArgumentException("criteria must be non-null");
+		}
+		
+		Collection<Response> matches = new ArrayList<Response>();
+		
+		User user = criteria.getUser();
+		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
+		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
+		
+		for (Response response : responses) {
+			//check user match if user specified
+			boolean userMatch = (user != null) ? user.equals(response.getUser()) : true;
+			
+			//check detection system match if detection systems specified
+			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
+					detectionSystemIds.contains(response.getDetectionSystem().getDetectionSystemId()) : true;
+			
+			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(response.getTimestamp())) : true;
+					
+			if (userMatch && detectionSystemMatch && earliestMatch) {
+				matches.add(response);
+			}
+		}
+		
+		return matches;
+	}
 
 	/**
 	 * Register an {@link ResponseListener} to notify when {@link Response}s are added

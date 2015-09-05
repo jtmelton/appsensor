@@ -62,16 +62,12 @@ public class MongoResponseStore extends ResponseStore {
 	 */
 	@Override
 	public Collection<Response> findResponses(SearchCriteria criteria) {
-		if (criteria == null) {
-			throw new IllegalArgumentException("criteria must be non-null");
-		}
+		return findResponses(criteria, loadResponses());
+	}
+	
+	private Collection<Response> loadResponses() {
+		Collection<Response> responsesCollection = new ArrayList<Response>();
 		
-		Collection<Response> matches = new ArrayList<Response>();
-		
-		User user = criteria.getUser();
-		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
-		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
-
 		DBCursor cursor = responses.find();
 		
 		try {
@@ -79,26 +75,13 @@ public class MongoResponseStore extends ResponseStore {
 				DBObject object = cursor.next();
 				String json = JSON.serialize(object);
 				Response response = gson.fromJson(json, Response.class);
-
-				//check user match if user specified
-				boolean userMatch = (user != null) ? user.equals(response.getUser()) : true;
-				
-				//check detection system match if detection systems specified
-				boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
-						detectionSystemIds.contains(response.getDetectionSystem().getDetectionSystemId()) : true;
-				
-				boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(response.getTimestamp())) : true;
-						
-				if (userMatch && detectionSystemMatch && earliestMatch) {
-					matches.add(response);
-				}
+				responsesCollection.add(response);
 			}
 		} finally {
 			cursor.close();
 		}
 		
-		
-		return matches;
+		return responsesCollection;
 	}
 	
 	@PostConstruct
