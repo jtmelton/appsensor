@@ -5,7 +5,7 @@
 
 	<groupId>org.owasp.appsensor</groupId>
 	<artifactId>appsensor-ui</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>2.2.0</version>
 	<packaging>jar</packaging>
 
 	<name>appsensor-ui</name>
@@ -38,7 +38,7 @@
 		<morrisjs.version>0.5.1</morrisjs.version>
 		<raphael.version>2.1.4</raphael.version>
 		<gson.version>2.3.1</gson.version>
-		<appsensor.version>2.2.0-SNAPSHOT</appsensor.version>
+		<appsensor.version>${project.version}</appsensor.version>
 	</properties>
 
 	<dependencies>

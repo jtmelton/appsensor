@@ -4,7 +4,7 @@ https://www.owasp.org/index.php/Projects/OWASP_AppSensor_Project
 http://appsensor.org/
 https://github.com/jtmelton/appsensor
 
-Changes in version 2.2 (2015/09/??)
+Changes in version 2.2 (2015/09/18)
 --------------------------------------
 * First version of appsensor-ui 
   
