@@ -8,7 +8,9 @@ Once you've built AppSensor's modules there are three ways to run the WS REST Se
 Spring Boot
 ------------
 This will run the application locally 'exploded' allowing static resource to be 'hot reloaded'
-`mvn spring-boot:run`
+```
+mvn spring-boot:run
+```
 
 
 Fat Jar
