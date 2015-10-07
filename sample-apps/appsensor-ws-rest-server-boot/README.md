@@ -24,7 +24,6 @@ java -jar target/appsensor-ws-rest-server-boot-0.0.1-SNAPSHOT.jar
 Docker
 -----------
 ```
-mvn package 
-sudo docker build -t appsensor-ws-rest-server-boot . 
-sudo docker run -d -p 8085:8085 appsensor-ws-rest-server-boot
+mvn package docker:build
+docker run -d -p 8085:8085 appsensor/appsensor-ws-rest-server-boot 
 ```
