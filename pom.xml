@@ -114,7 +114,7 @@
 		<module>integrations/appsensor-integration-jmx</module>
 		<module>integrations/appsensor-integration-cef-syslog</module>
 		<module>integrations/appsensor-integration-spring-security</module>
-		<module>integrations/appsensor-integration-influxdb</module>
+		<!-- <module>integrations/appsensor-integration-influxdb</module> -->
 	</modules>
 	
 	<dependencies>	
