@@ -23,6 +23,8 @@ java -jar target/appsensor-ws-rest-server-boot-0.0.1-SNAPSHOT.jar
 
 Docker
 -----------
+This container does not implement TLS and is intended for development. Please harden the image if you intend
+to run in a container in production.
 ```
 mvn package docker:build
 docker run -d -p 8085:8085 appsensor/appsensor-ws-rest-server-boot 
