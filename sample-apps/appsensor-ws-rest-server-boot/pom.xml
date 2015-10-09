@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.2.4.RELEASE</version>
+		<version>1.2.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -110,41 +110,41 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-                			<requiresUnpack>
-                    				<dependency>
-                        				<groupId>org.owasp.appsensor</groupId>
-                        				<artifactId>appsensor-ws-rest-server</artifactId>
-                    				</dependency>
+					<requiresUnpack>
 						<dependency>
-                                                        <groupId>org.owasp.appsensor</groupId>
-                                                        <artifactId>appsensor-core</artifactId>
-                                                </dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-ws-rest-server</artifactId>
+						</dependency>
 						<dependency>
-                        				<groupId>org.owasp.appsensor</groupId>
-                        				<artifactId>appsensor-storage-in-memory</artifactId>
-                				</dependency>
-                				<dependency>
-                        				<groupId>org.owasp.appsensor</groupId>
-                        				<artifactId>appsensor-analysis-reference</artifactId>
-                				</dependency>
-                				<dependency>
-                        				<groupId>org.owasp.appsensor</groupId>
-                        				<artifactId>appsensor-reporting-simple-logging</artifactId>
-                				</dependency>
-                				<dependency>
-                        				<groupId>org.owasp.appsensor</groupId>
-                        				<artifactId>appsensor-access-control-reference</artifactId>
-                				</dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-core</artifactId>
+						</dependency>
 						<dependency>
-				                        <groupId>org.owasp.appsensor</groupId>
-                        				<artifactId>appsensor-configuration-stax</artifactId>
-                				</dependency>
-                				<dependency>
-                        				<groupId>org.springframework.boot</groupId>
-                        				<artifactId>spring-boot-starter-jersey</artifactId>
-                				</dependency>
-                			</requiresUnpack>
-            			</configuration>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-storage-in-memory</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-analysis-reference</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-reporting-simple-logging</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-access-control-reference</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-configuration-stax</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.springframework.boot</groupId>
+							<artifactId>spring-boot-starter-jersey</artifactId>
+						</dependency>
+					</requiresUnpack>
+				</configuration>
 			</plugin>
 			<plugin>
             	<groupId>com.spotify</groupId>
