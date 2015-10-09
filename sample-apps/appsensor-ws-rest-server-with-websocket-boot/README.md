@@ -27,7 +27,10 @@ Docker
 -----------
 This container does not implement TLS and is intended for development. Please harden the image if you intend
 to run in a container in production.
+
+Default ENV overridable with -e
+DAPPSENSOR_WEB_SOCKET_HOST_URL=ws://localhost:8085/dashboard
 ```
 mvn package docker:build
-docker run -d -p 8085:8085 -e DAPPSENSOR_WEB_SOCKET_HOST_URL=ws://localhost:8085/dashboard appsensor/appsensor-ws-rest-server-with-websocket-boot 
+docker run -d -p 8085:8085  appsensor/appsensor-ws-rest-server-with-websocket-boot 
 ```
