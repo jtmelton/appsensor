@@ -228,9 +228,7 @@ public class WebSocketReportingEngine implements ReportingEngine {
 	}
 
 	@OnMessage
-	public String onMessage(String message, Session session) {
-		return null;
-	}
+	public void onMessage(String message, Session session) { }
 
 	@OnClose
 	public void onClose(Session session, CloseReason closeReason) {
