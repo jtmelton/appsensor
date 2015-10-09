@@ -14,7 +14,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.2.4.RELEASE</version>
+		<version>1.2.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -22,7 +22,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<appsensor.version>2.2.0</appsensor.version>
+<<<<<<< HEAD
 		<docker.image.prefix>appsensor</docker.image.prefix>
+=======
+>>>>>>> 891800ac0e86fe896f2ddf4a720532f79d8dbcd9
 	</properties>
 
 	<dependencies>
@@ -159,26 +162,49 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+<<<<<<< HEAD
                 	<requiresUnpack>
                     	<dependency>
 							<groupId>org.owasp.appsensor</groupId>
 							<artifactId>appsensor-storage-in-memory</artifactId>
 						</dependency>
 		
+=======
+					<requiresUnpack>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-ws-rest-server</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-core</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-storage-in-memory</artifactId>
+						</dependency>
+>>>>>>> 891800ac0e86fe896f2ddf4a720532f79d8dbcd9
 						<dependency>
 							<groupId>org.owasp.appsensor</groupId>
 							<artifactId>appsensor-analysis-reference</artifactId>
 						</dependency>
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 891800ac0e86fe896f2ddf4a720532f79d8dbcd9
 						<dependency>
 							<groupId>org.owasp.appsensor</groupId>
 							<artifactId>appsensor-reporting-simple-logging</artifactId>
 						</dependency>
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 891800ac0e86fe896f2ddf4a720532f79d8dbcd9
 						<dependency>
 							<groupId>org.owasp.appsensor</groupId>
 							<artifactId>appsensor-access-control-reference</artifactId>
 						</dependency>
+<<<<<<< HEAD
 		
 						<dependency>
 							<groupId>org.owasp.appsensor</groupId>
@@ -221,15 +247,33 @@
 							<artifactId>appsensor-configuration-stax</artifactId>
 						</dependency>
 		
+=======
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-configuration-stax</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-integration-cef-syslog</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-reporting-websocket</artifactId>
+						</dependency>
+>>>>>>> 891800ac0e86fe896f2ddf4a720532f79d8dbcd9
 						<dependency>
 							<groupId>org.owasp.appsensor</groupId>
 							<artifactId>appsensor-geolocation-geoip2</artifactId>
 						</dependency>
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 891800ac0e86fe896f2ddf4a720532f79d8dbcd9
 						<dependency>
 							<groupId>org.springframework.boot</groupId>
 							<artifactId>spring-boot-starter-jersey</artifactId>
 						</dependency>
+<<<<<<< HEAD
 
 						<dependency>
 							<groupId>org.springframework.boot</groupId>
@@ -243,6 +287,10 @@
 						</dependency>
                 	</requiresUnpack>
             	</configuration>
+=======
+					</requiresUnpack>
+				</configuration>
+>>>>>>> 891800ac0e86fe896f2ddf4a720532f79d8dbcd9
 			</plugin>
 			<plugin>
             	<groupId>com.spotify</groupId>
