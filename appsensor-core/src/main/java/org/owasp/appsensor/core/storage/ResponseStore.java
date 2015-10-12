@@ -68,8 +68,12 @@ public abstract class ResponseStore {
 			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
 					detectionSystemIds.contains(response.getDetectionSystem().getDetectionSystemId()) : true;
 			
-			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(response.getTimestamp())) : true;
-					
+			DateTime responseTimestamp = DateUtils.fromString(response.getTimestamp());
+			
+			boolean earliestMatch = (earliest != null) ? 
+					(earliest.isBefore(responseTimestamp) || earliest.isEqual(responseTimestamp))
+					: true;
+			
 			if (userMatch && detectionSystemMatch && earliestMatch) {
 				matches.add(response);
 			}
