@@ -114,7 +114,12 @@
 		<module>integrations/appsensor-integration-jmx</module>
 		<module>integrations/appsensor-integration-cef-syslog</module>
 		<module>integrations/appsensor-integration-spring-security</module>
+		<!-- TODO: re-enable influxdb when this issue is resolved -->
+		<!-- https://github.com/influxdb/influxdb-java/issues/37 -->
 		<!-- <module>integrations/appsensor-integration-influxdb</module> -->
+		<module>integrations/appsensor-integration-block-emitter</module>
+		<module>sample-apps/appsensor-block-store</module>
+		<module>sample-apps/appsensor-block-proxy</module>
 	</modules>
 	
 	<dependencies>	
