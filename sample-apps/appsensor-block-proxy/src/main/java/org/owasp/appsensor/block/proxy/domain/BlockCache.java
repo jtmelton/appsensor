@@ -2,7 +2,6 @@ package org.owasp.appsensor.block.proxy.domain;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -37,12 +36,11 @@ public class BlockCache {
 		
 		DateTime now = DateTime.now();
 		
-		expired.addAll(
-				cache
-    				.stream()
-    				.filter(block -> !block.isActive(now))
-    				.collect(Collectors.toList())
-		);
+		for(Block block : cache) {
+			if(!block.isActive(now)) {
+				expired.add(block);
+			}
+		}
 		
 		if(! expired.isEmpty()) {
 			cache.removeAll(expired);

@@ -1,7 +1,6 @@
 package org.owasp.appsensor.block.store.jobs;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.owasp.appsensor.block.store.domain.Block;
@@ -30,18 +29,17 @@ public class CleanupBlockListJob extends Job {
     	final Collection<Block> all = blockList.getAllBlocks();
     	
     	final Collection<Block> expired = Lists.newArrayList(); 
-    			
-    	expired.addAll(
-    			all
-    				.stream()
-    				.filter(block -> !block.isActive(now))
-    				.collect(Collectors.toList())
-		);
+    	
+    	for(Block block : all) {
+    		if(!block.isActive(now)) {
+    			expired.add(block);
+    		}
+    	}
 
     	if(! expired.isEmpty()) {
-			expired
-				.stream()
-				.forEach(block -> blockList.remove(block));
+    		for(Block block : expired) {
+    			blockList.remove(block);
+    		}
 			
 			LOGGER.info("Removed {} expired blocks {}", expired.size(), expired);
     	}

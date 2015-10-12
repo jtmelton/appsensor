@@ -87,8 +87,13 @@ public class InMemoryBlockList implements BlockList {
 		
 		Collection<Block> blocks = Lists.newArrayList();
 
-		ipsOnly.keySet().stream().forEach(ip -> blocks.add( new Block(ip, null, ipsOnly.get(ip)) ));
-		resourcesOnly.keySet().stream().forEach(resource -> blocks.add( new Block(null, resource, resourcesOnly.get(resource)) ));
+		for(String ip : ipsOnly.keySet()) {
+			blocks.add( new Block(ip, null, ipsOnly.get(ip)) );
+		}
+		
+		for(String resource : resourcesOnly.keySet()) {
+			blocks.add( new Block(null, resource, resourcesOnly.get(resource)) );
+		}
 		
 		for ( Cell<String, String, DateTime> cell: ipsAndResources.cellSet() ) {
 			blocks.add( new Block(cell.getRowKey(), cell.getColumnKey(), cell.getValue()) );
