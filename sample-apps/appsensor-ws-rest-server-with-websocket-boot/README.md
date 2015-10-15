@@ -10,7 +10,7 @@ Spring Boot
 ------------
 This will run the application locally 'exploded' allowing static resource to be 'hot reloaded'
 ```
-mvn spring-boot:run -APPSENSOR_WEB_SOCKET_HOST_URL=ws://localhost:8085/dashboard
+mvn spring-boot:run -D APPSENSOR_WEB_SOCKET_HOST_URL=ws://localhost:8085/dashboard
 ```
 
 
