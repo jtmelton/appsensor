@@ -22,6 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 		<appsensor.version>2.2.0</appsensor.version>
+		<docker.image.prefix>appsensor</docker.image.prefix>
 	</properties>
 
 	<dependencies>
@@ -158,7 +159,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<requiresUnpack>
+                			<requiresUnpack>
+                    				<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-storage-in-memory</artifactId>
+						</dependency>
 						<dependency>
 							<groupId>org.owasp.appsensor</groupId>
 							<artifactId>appsensor-ws-rest-server</artifactId>
@@ -185,6 +190,46 @@
 						</dependency>
 						<dependency>
 							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-integration-cef-syslog</artifactId>
+						</dependency>
+		
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-reporting-websocket</artifactId>
+							<exclusions>
+								<exclusion>
+									<groupId>org.owasp.appsensor</groupId>
+									<artifactId>appsensor-local</artifactId>
+								</exclusion>
+								<!-- <exclusion>
+									<groupId>com.google.code.gson</groupId>
+									<artifactId>gson</artifactId>
+								</exclusion>-->
+								<exclusion>
+									<groupId>javax</groupId>
+									<artifactId>javaee-web-api</artifactId>
+								</exclusion>
+								<exclusion>
+									<groupId>javax.websocket</groupId>
+									<artifactId>javax.websocket-api</artifactId>
+								</exclusion>
+								<exclusion>
+									<groupId>org.glassfish.tyrus</groupId>
+									<artifactId>tyrus-server</artifactId>
+								</exclusion>
+								<exclusion>
+									<groupId>org.glassfish.tyrus</groupId>
+									<artifactId>tyrus-client</artifactId>
+								</exclusion>
+							</exclusions>		
+						</dependency>
+		
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-configuration-stax</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
 							<artifactId>appsensor-configuration-stax</artifactId>
 						</dependency>
 						<dependency>
@@ -203,9 +248,35 @@
 							<groupId>org.springframework.boot</groupId>
 							<artifactId>spring-boot-starter-jersey</artifactId>
 						</dependency>
+						<dependency>
+							<groupId>org.springframework.boot</groupId>
+							<artifactId>spring-boot-starter-websocket</artifactId>
+						</dependency>
+						
+						<dependency>
+							<groupId>org.springframework.boot</groupId>
+							<artifactId>spring-boot-starter-test</artifactId>
+							<scope>test</scope>
+						</dependency>
 					</requiresUnpack>
 				</configuration>
 			</plugin>
+			<plugin>
+            			<groupId>com.spotify</groupId>
+            			<artifactId>docker-maven-plugin</artifactId>
+            			<version>0.2.3</version>
+            			<configuration>
+                			<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                			<dockerDirectory>.</dockerDirectory>
+                			<resources>
+                    				<resource>
+                        				<targetPath>/</targetPath>
+                        				<directory>${project.build.directory}</directory>
+                        				<include>${project.build.finalName}.jar</include>
+                    				</resource>
+                			</resources>
+            			</configuration>
+        		</plugin>
 		</plugins>
 	</build>
 
