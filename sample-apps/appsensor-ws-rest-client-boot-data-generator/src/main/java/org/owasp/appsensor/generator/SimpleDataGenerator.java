@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.inject.Named;
 
+import org.owasp.appsensor.AppsensorWsRestClientBootDataGeneratorApplication;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.DetectionSystem;
 import org.owasp.appsensor.core.Event;
@@ -81,8 +82,11 @@ public class SimpleDataGenerator {
 				try {
 					Event event = new Event(bob, detectionPoint, detectionSystem);
 					System.err.println("sending || " + gson.toJson(event) + " ||");
-					eventManager.updateApplicationIdentificationHeaderValue(detectionSystem.getDetectionSystemId());
-					eventManager.addEvent(event);
+					
+					synchronized(AppsensorWsRestClientBootDataGeneratorApplication.mutex) {
+						eventManager.updateApplicationIdentificationHeaderValue(detectionSystem.getDetectionSystemId());
+						eventManager.addEvent(event);
+					}
 				} catch(Exception e) {
 					System.err.println("Exception type: " + e.getClass().getCanonicalName());
 					e.printStackTrace();

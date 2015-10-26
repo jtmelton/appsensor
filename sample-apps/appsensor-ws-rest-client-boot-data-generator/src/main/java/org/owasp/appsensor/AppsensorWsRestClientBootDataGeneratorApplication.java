@@ -20,6 +20,8 @@ import org.springframework.context.annotation.FilterType;
 @ComponentScan(value="org.owasp.appsensor", excludeFilters = @ComponentScan.Filter(value = AppSensorServer.class, type = FilterType.ASSIGNABLE_TYPE))
 public class AppsensorWsRestClientBootDataGeneratorApplication {
 
+	public static Object mutex = new Object();
+	
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(AppsensorWsRestClientBootDataGeneratorApplication.class, args);
         
