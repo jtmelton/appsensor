@@ -35,11 +35,6 @@ import org.owasp.appsensor.handler.RestRequestHandler;
 @Named
 public class ClientApplicationIdentificationFilter implements ContainerRequestFilter {
 	
-	private final static WebApplicationException unauthorized =
-			   new WebApplicationException(
-			       Response.status(Status.UNAUTHORIZED)
-			               .entity("Page requires sending configured client application identification header.").build());
-	
 	/** default name for client application identification header */
 	private static String HEADER_NAME = "X-Appsensor-Client-Application-Name";
 	
@@ -60,7 +55,9 @@ public class ClientApplicationIdentificationFilter implements ContainerRequestFi
 	    String clientApplicationIdentifier = context.getHeaderString(HEADER_NAME);
 	    
 	    if (clientApplicationIdentifier == null) {
-	    	throw unauthorized;
+	    	throw new WebApplicationException(
+				       Response.status(Status.UNAUTHORIZED)
+		               .entity("Page requires sending configured client application identification header.").build());
 	    }
 	    
 	    context.setProperty(RestRequestHandler.APPSENSOR_CLIENT_APPLICATION_IDENTIFIER_ATTR, clientApplicationIdentifier);
