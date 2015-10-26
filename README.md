@@ -7,9 +7,14 @@ AppSensor is a framework that provides real-time event detection and response. T
 
 AppSensor has a [website](http://appsensor.org) with further documentation and is an [OWASP](https://www.owasp.org/index.php/AppSensor) project.
 
-This code is actively being developed. There was a 2.0 release in January 2015. The upcoming releases and milestones are tracked in the [roadmap](https://www.owasp.org/index.php/OWASP_AppSensor_Project#tab=Road_Map_and_Getting_Involved).
+Previous releases are tracked here in the [releases](https://github.com/jtmelton/appsensor/releases). The upcoming releases and milestones are tracked in the [roadmap](https://www.owasp.org/index.php/OWASP_AppSensor_Project#tab=Road_Map_and_Getting_Involved).
 
-The AppSensor source code is released under an MIT license. See the accompanying LICENSE.txt file.
+The AppSensor source code is released under an MIT license. See the accompanying LICENSE.txt file for license content.
+
+Demo Quickstart
+------------
+
+If you are just wanting to get a demo going, see the [sample-apps/DemoSetup.md](sample-apps/DemoSetup.md) guide.
 
 Building
 --------
@@ -47,10 +52,14 @@ For an extensive book documenting the concepts (ideas) behind AppSensor, go to t
 
 If you're looking for in-depth user or developer documentation, visit http://appsensor.org/ 
 
-Quick Start
+User / Developer Quick Start
 -----------
 
-We recommend you visit http://appsensor.org/ and read the "Getting Started" page.
+We recommend you visit http://appsensor.org/ and read the "Getting Started" page. 
+
+If you prefer presentations, here is a [recent slide deck](http://www.slideshare.net/jtmelton/appsensor-near-real-time-event-detection-and-response)
+
+If you prefer video, here is a [recent talk](https://www.youtube.com/watch?v=1imlD1O4HrY)
 
 Downloads
 ---------
@@ -65,7 +74,7 @@ An example of getting one of the dependencies is shown below:
 <dependency>
 	<groupId>org.owasp.appsensor</groupId>
 	<artifactId>appsensor-core</artifactId>
-	<version>2.0.1</version>
+	<version>2.2.0</version>
 </dependency>
 ```
 
