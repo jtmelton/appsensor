@@ -1,6 +1,13 @@
 AppSensor Sample Applications
 =========
 
+Quickstart
+------------
+
+If you are just wanting to get a demo going, see the [DemoSetup.md](DemoSetup.md) guide.
+
+------------
+
 This is the parent directory of several sample applications
 
 There are 2 different mechanisms for using these sample applications
