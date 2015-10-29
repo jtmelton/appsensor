@@ -12,13 +12,6 @@
 		<spring.version>4.0.3.RELEASE</spring.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
-	<!-- <repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-	</repositories>-->
 	
 	<dependencies>
 		<dependency>
@@ -27,24 +20,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		
-		<!-- <dependency>
-		    <groupId>com.github.influxdb</groupId>
-		    <artifactId>influxdb-java</artifactId>
-		    <version>influxdb-java-2.0</version>
-		</dependency>-->
-		
-		<!-- 
-		TODO: this is a short-term workaround due to https://github.com/influxdb/influxdb-java/issues/37
-		Need to :
-		- remove jitpack repository from above
-		- remove com.github dependency from above 
-		- use below "real" dependency 
-		-->
-		<dependency>
-            <groupId>org.influxdb</groupId>
-            <artifactId>influxdb-java</artifactId>
-            <version>2.0-SNAPSHOT</version>
-        </dependency>
+        <dependency>
+			<groupId>org.influxdb</groupId>
+			<artifactId>influxdb-java</artifactId>
+			<version>2.0</version>
+		</dependency>
         
 		<!-- See http://stackoverflow.com/questions/174560/sharing-test-code-in-maven -->
 		<dependency>
