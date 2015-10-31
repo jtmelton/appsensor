@@ -9,6 +9,11 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,8 +25,14 @@ import org.springframework.stereotype.Component;
 @ServerEndpoint(value = "/dashboard")
 public class WebSocketDashboard {
     
+	private static Queue<Session> queue = new ConcurrentLinkedQueue<Session>();
+	
     @OnOpen
     public void onOpen(final Session session) {
+    	queue.add(session);
+    	
+    	removeClosedSessions();
+    	
     	System.err.println("Opened connection with client: " + session.getId());
     }
     
@@ -30,7 +41,7 @@ public class WebSocketDashboard {
     	System.err.println("New message from Client " + session.getId() + ": " + message);
     	
     	//should echo back whatever is heard from any client to all clients
-    	for (Session sess : session.getOpenSessions()) {
+    	for (Session sess : queue) {
     		if (sess.isOpen()) {
     			try {
 					sess.getBasicRemote().sendText(message);
@@ -39,13 +50,28 @@ public class WebSocketDashboard {
 				}
     		}
     	}
-
-//    	return null;
+    	
     }
     
     @OnClose
     public void onClose(Session session) {
+    	queue.remove(session);
+    	
+    	removeClosedSessions();
+    	
     	System.err.println("Closed connection with client: " + session.getId());
+    }
+    
+    private void removeClosedSessions() {
+    	Collection<Session> closedSessions = new ArrayList<>();
+    	
+    	for (Session session : queue) {
+    		if (! session.isOpen()) {
+    			closedSessions.add(session);
+    		}
+    	}
+    	
+    	queue.removeAll(closedSessions);
     }
     
     @OnError
