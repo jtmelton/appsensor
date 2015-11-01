@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 
@@ -19,6 +20,8 @@ import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.KeyValuePair;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.ui.handler.AssociatedApplicationsContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,8 @@ import com.google.gson.JsonParser;
 
 @Service
 public class RestReportingEngineFacade {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private static String NEWLINE = System.getProperty("line.separator");
 	
@@ -53,6 +58,8 @@ public class RestReportingEngineFacade {
 	public Collection<Event> findEvents(String rfc3339Timestamp) {
 		GenericType<Collection<Event>> responseType = new GenericType<Collection<Event>>() {};
         
+		logger.info("Making REST call to " + target.getUri().toString() + " ... with path of /api/v1.0/reports/events");
+		
 		Collection<Event> events = 
 		        target
 				.path("api")
@@ -72,6 +79,8 @@ public class RestReportingEngineFacade {
 	public Collection<Attack> findAttacks(String rfc3339Timestamp) {
 		GenericType<Collection<Attack>> responseType = new GenericType<Collection<Attack>>() {};
         
+		logger.info("Making REST call to " + target.getUri().toString() + " ... with path of /api/v1.0/reports/attacks");
+		
 		Collection<Attack> attacks = 
 		        target
 				.path("api")
@@ -91,6 +100,8 @@ public class RestReportingEngineFacade {
 	public Collection<Response> findResponses(String rfc3339Timestamp) {
 		GenericType<Collection<Response>> responseType = new GenericType<Collection<Response>>() {};
         
+		logger.info("Making REST call to " + target.getUri().toString() + " ... with path of /api/v1.0/reports/responses");
+		
 		Collection<Response> responses = 
 		        target
 				.path("api")
