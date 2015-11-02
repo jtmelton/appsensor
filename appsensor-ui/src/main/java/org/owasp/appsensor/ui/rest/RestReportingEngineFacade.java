@@ -1,5 +1,6 @@
 package org.owasp.appsensor.ui.rest;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -10,7 +11,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 
@@ -100,7 +100,15 @@ public class RestReportingEngineFacade {
 	public Collection<Response> findResponses(String rfc3339Timestamp) {
 		GenericType<Collection<Response>> responseType = new GenericType<Collection<Response>>() {};
         
-		logger.info("Making REST call to " + target.getUri().toString() + " ... with path of /api/v1.0/reports/responses");
+		URI uri = target
+			.path("api")
+			.path("v1.0")
+			.path("reports")
+			.path("responses")
+			.queryParam("earliest", rfc3339Timestamp)
+			.getUri();
+		
+		logger.info("Making REST call to \"" + uri.toASCIIString() + "\" with header name: \"" + clientApplicationIdName + "\" and value: \"" + clientApplicationIdValue + "\"");
 		
 		Collection<Response> responses = 
 		        target
@@ -112,6 +120,8 @@ public class RestReportingEngineFacade {
 				.request()
 				.header(clientApplicationIdName, clientApplicationIdValue)
 				.get(responseType);
+		
+		logger.info("REST call success to \"" + uri.toASCIIString() + "\" with header name: \"" + clientApplicationIdName + "\" and value: \"" + clientApplicationIdValue + "\"");
 		
 		//make request
 		return filterResponsesByClientApplications(responses);
