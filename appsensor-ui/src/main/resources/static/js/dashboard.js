@@ -209,7 +209,7 @@ var Dashboard = React.createClass({
 		  	var timestamp = getTimestamp(selectedTimeSpan);
 		  
 		    $.ajax({
-		      url: apiBaseUrl + '/api/dashboard/all?earliest=' + timestamp + '&limit=5&slices=10',
+		      url: apiBaseUrl + '/api/dashboard/all?earliest=' + encodeURIComponent(timestamp) + '&limit=5&slices=10',
 		      success: function(data) {
 		    	this.setState({data: data});
 		        
