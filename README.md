@@ -83,4 +83,4 @@ Contributing
 
 Want to contribute? Great - we love the help! Start on the mailing list at owasp-appsensor-project@lists.owasp.org for help with any questions.
 
-Ideas for enhancements (as well as any bugs) are filed on the issues page: https://github.com/jtmelton/appsensor/issues
+If you want more information about how to contribute, see the [CONTRIBUTING.md](CONTRIBUTING.md)
