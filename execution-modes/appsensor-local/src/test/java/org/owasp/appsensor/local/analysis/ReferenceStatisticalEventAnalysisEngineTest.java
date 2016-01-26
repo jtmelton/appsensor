@@ -45,7 +45,7 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	
 	private static DetectionSystem detectionSystem1 = new DetectionSystem("localhostme");
 	
-	protected int sleepAmount = 0;
+	protected int sleepAmount = 1;
 	
 	@Inject
 	AppSensorServer appSensorServer;

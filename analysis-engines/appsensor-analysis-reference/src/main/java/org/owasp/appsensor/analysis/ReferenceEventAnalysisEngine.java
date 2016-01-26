@@ -60,7 +60,7 @@ public class ReferenceEventAnalysisEngine extends EventAnalysisEngine {
 		// find all events matching this event for this user 
 		Collection<Event> existingEvents = appSensorServer.getEventStore().findEvents(criteria);
 
-		Collection<DetectionPoint> configuredDetectionPoints = appSensorServer.getConfiguration().findDetectionPoints(event.getDetectionPoint());
+		Collection<DetectionPoint> configuredDetectionPoints = appSensorServer.getConfiguration().findDetectionPoints(event.getDetectionPoint(),event.getDetectionSystem().getDetectionSystemId());
 
 		if (configuredDetectionPoints.size() > 0) {
 			

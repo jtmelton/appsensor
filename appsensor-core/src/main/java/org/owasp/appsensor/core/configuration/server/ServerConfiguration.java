@@ -1,12 +1,14 @@
 package org.owasp.appsensor.core.configuration.server;
 
 import java.io.File;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.Transient;
 
@@ -48,7 +50,20 @@ public abstract class ServerConfiguration {
 	
 	private String geolocationDatabasePath;
 	
+	//Change for adding new custom client specific detection points
+	private HashMap<String,List<DetectionPoint>> customDetectionPoints = new HashMap<String, List<DetectionPoint>>();
+	
 	private static transient Map<String, ClientApplication> clientApplicationCache = Collections.synchronizedMap(new HashMap<String, ClientApplication>());
+	
+	
+	public HashMap<String,List<DetectionPoint>> getCustomDetectionPoints() {
+		return customDetectionPoints;
+	}
+	
+	public ServerConfiguration setCustomDetectionPoints(HashMap<String,List<DetectionPoint>> customPoints) {
+		this.customDetectionPoints = customPoints;
+		return this;
+	}
 	
 	public File getConfigurationFile() {
 		return configurationFile;
@@ -179,7 +194,7 @@ public abstract class ServerConfiguration {
 	 * @return DetectionPoint populated with configuration information from server-side config
 	 */
 	public Collection<DetectionPoint> findDetectionPoints(DetectionPoint search) {
-		Collection<DetectionPoint> matches = new ArrayList<>();
+		Collection<DetectionPoint> matches = new ArrayList<DetectionPoint>();
 		
 		for (DetectionPoint configuredDetectionPoint : getDetectionPoints()) {
 			if (configuredDetectionPoint.typeMatches(search)) {
@@ -187,6 +202,44 @@ public abstract class ServerConfiguration {
 			}
 		}
 		
+		return matches;
+	}
+	
+	
+	
+	/**
+	 * Locate matching detection points configuration from server-side config file. 
+	 * 
+	 * @param search detection point that has been added to the system
+	 * @param clientApplicationName the client name for which the detection point exists
+	 * @return DetectionPoint populated with configuration information from server-side config
+	 */
+	
+	public Collection<DetectionPoint> findDetectionPoints(DetectionPoint search, String clientApplicationName) {
+			Collection<DetectionPoint> matches = new ArrayList<DetectionPoint>();
+			
+			if( getCustomDetectionPoints().size() != 0){
+			
+					for (Entry customDetectionPoint : getCustomDetectionPoints().entrySet()) {
+					String clientName = customDetectionPoint.getKey().toString();			
+					if(clientApplicationName.equals(clientName)){
+					   List<DetectionPoint> customList = (List<DetectionPoint>)customDetectionPoint.getValue();
+					   for(DetectionPoint customPoint: customList)
+					   {
+							if (customPoint.typeMatches(search)) {
+								matches.add(customPoint);
+							}
+						}
+					}
+				}
+			}
+			for (DetectionPoint configuredDetectionPoint : getDetectionPoints()) {
+				if(!matches.contains(configuredDetectionPoint)){
+					if (configuredDetectionPoint.typeMatches(search)) {
+						matches.add(configuredDetectionPoint);
+					}
+				}	
+			}
 		return matches;
 	}
 	

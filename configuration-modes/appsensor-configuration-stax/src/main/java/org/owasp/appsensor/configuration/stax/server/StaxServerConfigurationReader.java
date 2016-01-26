@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLResolver;
@@ -173,6 +174,8 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 						configuration.getCorrelationSets().addAll(readCorrelationSets(xmlReader));
 					} else if("config:detection-point".equals(name)) {
 						configuration.getDetectionPoints().add(readDetectionPoint(xmlReader));
+					} else if("config:clients".equals(name)) {
+						configuration.getCustomDetectionPoints().putAll(readCustomDetectionPoints(xmlReader));
 					} else {
 						/** unexpected start element **/
 					}
@@ -314,6 +317,51 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 		}
 		
 		return detectionPoint;
+	}
+	
+	private HashMap<String,List<DetectionPoint>> readCustomDetectionPoints(XMLStreamReader xmlReader) throws XMLStreamException {
+		DetectionPoint detectionPoint = new DetectionPoint();
+		HashMap<String,List<DetectionPoint>> customPoints = new HashMap<String,List<DetectionPoint>>();
+		String clientName = "";
+		boolean finished = false;
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			List<DetectionPoint> customList = new ArrayList<DetectionPoint>();
+			
+			
+			switch(event) {
+				case XMLStreamConstants.START_ELEMENT:
+				if("config:client-name".equals(name)) {
+						clientName = xmlReader.getElementText().trim();
+					}else if("config:detection-point".equals(name)) {
+						customList.add(readDetectionPoint(xmlReader));
+						
+					}else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:clients".equals(name)) {
+						finished = true;
+					}else if("config:client".equals(name)) {	
+						customPoints.put(clientName,customList);
+						customList = new ArrayList<DetectionPoint>();
+					}else {
+					
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+			
+			//clientName = "";
+		}
+		
+		return customPoints;
 	}
 	
 	private Threshold readThreshold(XMLStreamReader xmlReader) throws XMLStreamException {

@@ -22,6 +22,9 @@ public class StaxServerConfigurationReaderTest {
 		assertEquals(3, configuration.getCorrelationSets().size());
 		assertEquals("server1", configuration.getCorrelationSets().iterator().next().getClientApplications().iterator().next());
 		
+		assertEquals(1, configuration.getCustomDetectionPoints().size());
+		//assertEquals("server1", configuration.getCorrelationSets().iterator().next().getClientApplications().iterator().next());
+		
 		assertEquals(5, configuration.getDetectionPoints().size());
 		assertEquals("IE1", configuration.getDetectionPoints().iterator().next().getLabel());
 		assertEquals(4, configuration.getDetectionPoints().iterator().next().getThreshold().getInterval().getDuration());
