@@ -47,11 +47,38 @@
 		</xsd:sequence>
 	</xsd:complexType>
 	
+	
+	
+	
+	
+	
+	
 	<xsd:complexType name="detection-points">
 		<xsd:sequence>
+		<xsd:element name="clients" type="asconfig:clients" minOccurs="0" maxOccurs="1" />
 			<xsd:element name="detection-point" type="asconfig:detection-point" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
 	</xsd:complexType>
+	
+	<xsd:complexType name="clients">
+		<xsd:sequence>
+		<xsd:element name="client" type="asconfig:client" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="client">
+		<xsd:sequence>
+		<xsd:element name="client-name" type="xsd:string" minOccurs="1" maxOccurs="unbounded" />
+			<xsd:element name="custom-detection-point" type="asconfig:custom-detection-point" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="custom-detection-point">
+		<xsd:sequence>
+		<xsd:element name="detection-point" type="asconfig:detection-point" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
 
 	<xsd:complexType name="interval">
 		<xsd:simpleContent>
