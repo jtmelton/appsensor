@@ -38,7 +38,6 @@
 			<clients>
 				<client>
 				<client-name>myclientapp</client-name>
-				<custom-detection-point>
 					<detection-point>
 							<category>Input Validation</category>
 							<id>IE1</id>
@@ -66,7 +65,6 @@
 								</response>
 							</responses>
 						</detection-point>
-				</custom-detection-point>
 			</client>
 		</clients>
 				<detection-point>

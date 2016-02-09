@@ -205,18 +205,7 @@ public abstract class ServerConfiguration {
 		return matches;
 	}
 	
-	/**
-	 * Locate matching client name in custom configuration from server-side config file. 
-	 * 
-	 * @param clientApplicationName the client name for which the detection point exists
-	 */
-	public Boolean findCustomDectectionClientName(String clientName){
-	if(getCustomDetectionPoints().size() != 0){
-			return getCustomDetectionPoints().containsKey(clientName);
-		}
-		return false;
 	
-	}
 	
 	/**
 	 * Locate matching detection points configuration from server-side config file. 
@@ -229,20 +218,23 @@ public abstract class ServerConfiguration {
 	public Collection<DetectionPoint> findDetectionPoints(DetectionPoint search, String clientApplicationName) {
 			Collection<DetectionPoint> matches = new ArrayList<DetectionPoint>();
 			
-			for (Entry customDetectionPoint : getCustomDetectionPoints().entrySet()) {
-			String clientName = customDetectionPoint.getKey().toString();			
-			if(clientApplicationName.equals(clientName)){
-			   List<DetectionPoint> customList = (List<DetectionPoint>)customDetectionPoint.getValue();
-			   for(DetectionPoint customPoint: customList)
-			   {
-					if (customPoint.typeMatches(search)) {
-						matches.add(customPoint);
+			if( getCustomDetectionPoints().size() != 0){
+			
+					for (Entry customDetectionPoint : getCustomDetectionPoints().entrySet()) {
+					String clientName = customDetectionPoint.getKey().toString();			
+					if(clientApplicationName.equals(clientName)){
+					   List<DetectionPoint> customList = (List<DetectionPoint>)customDetectionPoint.getValue();
+					   for(DetectionPoint customPoint: customList)
+					   {
+							if (customPoint.typeMatches(search)) {
+								matches.add(customPoint);
+							}
+						}
 					}
 				}
+			}else{
+					matches = findDetectionPoints(search);
 			}
-			
-			
-		}
 		return matches;
 	}
 	

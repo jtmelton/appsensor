@@ -1,7 +1,7 @@
 package org.owasp.appsensor.analysis;
 
 import java.util.Collection;
-import java.util.ArrayList;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -52,76 +52,57 @@ public class ReferenceEventAnalysisEngine extends EventAnalysisEngine {
 	@Override
 	public void analyze(Event event) {
 		
-		
-		Collection<DetectionPoint> configuredDetectionPoints = null;
-		
-		//check if the client has custom detection points
-		if(appSensorServer.getConfiguration().findCustomDectectionClientName(event.getDetectionSystem().getDetectionSystemId())){
-			configuredDetectionPoints = appSensorServer.getConfiguration().findDetectionPoints(event.getDetectionPoint(),event.getDetectionSystem().getDetectionSystemId());
-			if (configuredDetectionPoints.size() > 0) {
-				addDetectedEvents(configuredDetectionPoints,event);
-			}else{
-				logger.error("Could not find detection point configured for this type: " + event.getDetectionPoint().getLabel());
-			}
-		}else{
-			configuredDetectionPoints = appSensorServer.getConfiguration().findDetectionPoints(event.getDetectionPoint());
-			System.out.println("here in false");
-			if(configuredDetectionPoints.size() > 0){
-				addDetectedEvents(configuredDetectionPoints,event);
-			}else{
-				logger.error("Could not find detection point configured for this type: " + event.getDetectionPoint().getLabel());
-			}
-		}
-	}
-	
-	private void addDetectedEvents(Collection<DetectionPoint> detectionPoints,Event event){
-	
-	SearchCriteria criteria = new SearchCriteria().
-					setUser(event.getUser()).
-					setDetectionPoint(event.getDetectionPoint()).
-					setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystem()));
+		SearchCriteria criteria = new SearchCriteria().
+				setUser(event.getUser()).
+				setDetectionPoint(event.getDetectionPoint()).
+				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystem()));
 
-				// find all events matching this event for this user 
-				Collection<Event> existingEvents = appSensorServer.getEventStore().findEvents(criteria);
-	
-		ArrayList<DetectionPoint> points = (ArrayList)detectionPoints;
-		for(DetectionPoint configuredDetectionPoint : points) {
+		// find all events matching this event for this user 
+		Collection<Event> existingEvents = appSensorServer.getEventStore().findEvents(criteria);
 
-					// filter and count events that match this detection point (filtering by threshold) 
-					// and that are after the most recent attack (filter by timestamp)
-					int eventCount = countEvents(existingEvents, event, configuredDetectionPoint);
-					
-					// if the event count is 0, reset to 1 -> we know at least 1 event has occurred (the one we're considering)
-					// this can occur sometimes when testing with dates out of the given range or due to clock drift
-					if (eventCount == 0) {
-						eventCount = 1;
-					}
-					
-					// examples for the below code
-					// 1. count is 5, t.count is 10 (5%10 = 5, No Violation)
-					// 2. count is 45, t.count is 10 (45%10 = 5, No Violation) 
-					// 3. count is 10, t.count is 10 (10%10 = 0, Violation Observed)
-					// 4. count is 30, t.count is 10 (30%10 = 0, Violation Observed)
+		Collection<DetectionPoint> configuredDetectionPoints = appSensorServer.getConfiguration().findDetectionPoints(event.getDetectionPoint(),event.getDetectionSystem().getDetectionSystemId());
+
+		if (configuredDetectionPoints.size() > 0) {
 			
-					int thresholdCount = configuredDetectionPoint.getThreshold().getCount();
-			
-					if (eventCount % thresholdCount == 0) {
-						logger.info("Violation Observed for user <" + event.getUser().getUsername() + "> - storing attack");
-						
-						//have determined this event triggers attack
-						//ensure appropriate detection point is being used (associated responses, etc.)
-						Attack attack = new Attack(
-								event.getUser(),
-								configuredDetectionPoint,
-								event.getTimestamp(),
-								event.getDetectionSystem(),
-								event.getResource()
-								);
-						
-						appSensorServer.getAttackStore().addAttack(attack);
-					}
+			for(DetectionPoint configuredDetectionPoint : configuredDetectionPoints) {
+				
+				// filter and count events that match this detection point (filtering by threshold) 
+				// and that are after the most recent attack (filter by timestamp)
+				int eventCount = countEvents(existingEvents, event, configuredDetectionPoint);
+				
+				// if the event count is 0, reset to 1 -> we know at least 1 event has occurred (the one we're considering)
+				// this can occur sometimes when testing with dates out of the given range or due to clock drift
+				if (eventCount == 0) {
+					eventCount = 1;
 				}
-	
+				
+				// examples for the below code
+				// 1. count is 5, t.count is 10 (5%10 = 5, No Violation)
+				// 2. count is 45, t.count is 10 (45%10 = 5, No Violation) 
+				// 3. count is 10, t.count is 10 (10%10 = 0, Violation Observed)
+				// 4. count is 30, t.count is 10 (30%10 = 0, Violation Observed)
+		
+				int thresholdCount = configuredDetectionPoint.getThreshold().getCount();
+		
+				if (eventCount % thresholdCount == 0) {
+					logger.info("Violation Observed for user <" + event.getUser().getUsername() + "> - storing attack");
+					
+					//have determined this event triggers attack
+					//ensure appropriate detection point is being used (associated responses, etc.)
+					Attack attack = new Attack(
+							event.getUser(),
+							configuredDetectionPoint,
+							event.getTimestamp(),
+							event.getDetectionSystem(),
+							event.getResource()
+							);
+					
+					appSensorServer.getAttackStore().addAttack(attack);
+				}
+			}
+		} else {
+			logger.error("Could not find detection point configured for this type: " + event.getDetectionPoint().getLabel());
+		}
 	}
 	
 	/**
