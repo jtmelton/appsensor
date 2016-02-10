@@ -232,7 +232,8 @@ public abstract class ServerConfiguration {
 						}
 					}
 				}
-			}else{
+			}
+			if(matches.size() == 0){
 					matches = findDetectionPoints(search);
 			}
 		return matches;
