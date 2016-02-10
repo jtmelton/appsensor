@@ -233,8 +233,12 @@ public abstract class ServerConfiguration {
 					}
 				}
 			}
-			if(matches.size() == 0){
-					matches = findDetectionPoints(search);
+			for (DetectionPoint configuredDetectionPoint : getDetectionPoints()) {
+				if(!matches.contains(configuredDetectionPoint)){
+					if (configuredDetectionPoint.typeMatches(search)) {
+						matches.add(configuredDetectionPoint);
+					}
+				}	
 			}
 		return matches;
 	}
