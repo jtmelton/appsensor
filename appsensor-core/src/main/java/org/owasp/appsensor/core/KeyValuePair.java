@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 @Entity
 public class KeyValuePair implements Serializable {
  
@@ -76,9 +78,13 @@ public class KeyValuePair implements Serializable {
     	return false;
     }
 
-    @Override
-    public String toString() { 
-           return "(" + key + ", " + value + ")"; 
-    }
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("id", id)
+				.append("key", key)
+				.append("value", value)
+				.toString();
+	}
 
 }
