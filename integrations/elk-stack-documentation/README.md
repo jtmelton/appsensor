@@ -124,7 +124,8 @@ It has the following advantages: <br/>
 
 *Architecture* <br/>
 Here is a simple schema of the expected architecture :   <br/>
-(Screenshot2)
+
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot2.png)
 
 Documentation of ELK stack:
 ---------------------------
@@ -197,7 +198,8 @@ If you'd like to deploy one of these applications to a standalone application se
 run 'mvn spring-boot:run -DAPPSENSOR_WEB_SOCKET_HOST_URL=ws://localhost:8085/dashboard' (run from the appsensor-ws-rest-server-with-websocket-boot directory)
 
 After successful building of Appsensor-ws-rest-server-with-websocket-boot environment, you should the find the following data on your screen. <br/>
-(Screenshot3)
+
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot3.png)
 
 *Appsensor-ws-rest-client-boot-data-generator environment:* <br/>
 
@@ -209,11 +211,12 @@ This should start printing things to syslog that will give plenty of data to tes
 
 After successful building of Appsensor-ws-rest-client-boot-data-generator environment, you should the find the following data on your screen.<br/>
 
-(Screenshot4)
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot4.png)
 
 *Display syslog messages:* <br/>
 To see the syslog logs, run 'tail /var/log/syslog'. You should the find the following data on your screen. <br/>
-(Screenshot5)
+
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot5.png)
 
 *Logstash Filters used for parsing Appsensor syslogs:*
 ------------------------------------------------------
@@ -299,30 +302,42 @@ Once the code is executed, open new terminal and run the following command. <br/
 Command  : telnet localhost 5000 <br/>
 
 In that window, enter the sample syslog format data, you can see the parsed text as below. <br/>
-(Screenshot6)
+
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot6.png)
 
 Building Dashboards using Kibana:
 ----------------------------------
 After logstash.conf has been imported to logstash, <br/>
 1.	One can search for the index name in Kibana. In this case, my index name is “dashboard”. <br/>
+
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot7.png)
+
 2.	Select “timestamp” as fieldname and hit create.<br/>
-(Screenshot7)<br/>
+	
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot8.png)
 3. After clicking create, a list of all the fields will be created which is shown as below.<br/>
-(Screenshot8) <br/>
+
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot9.png)
 4. Later, switch to “Discover” tab. Select the time range as per convenience on the top right column. You can find all the related fields of an log on the left of window. <br/>
-(Screenshot9) <br/>
+
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot10.png)
 5. I am selecting “@timestamp” field which in my case providing five different timings.<br/>
- (Screenshot10)<br/>
+
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot11.png)
 6. Hit “Visualize” option which will create a basic visualization of the timestamp field.<br/>
-(Screenshot11) <br/>
+
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot12.png)
 7. Try different visualizations and save them by hitting “save” icon on top right of the tab.<br/>
-(Screenshot12) <br/>
+
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot13.png)
 8. After saving visualizations, switch to “Dashboard” tab and click on “+” symbol which enables you to add visualizations to dashboard. Later save the dashboard by hitting “save” icon on the top right of the screen.<br/>
- (Screenshot13)<br/>
+
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot14.png)
 9. In this way, one can create visualizations, save them and add them to dashboards. <br/>
 
 Below is the sample dashboard which I had create. You can choose any number of available visualizations and built own dashboards. <br/>
-(Screenshot14)
+
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot15.png)
 Kibana supports custom dashboards too…!! <br/>
 Follow this guide: http://blog.trifork.com/2014/05/20/advanced-kibana-dashboard/ <br/>
 
