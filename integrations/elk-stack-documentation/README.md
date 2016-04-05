@@ -101,7 +101,7 @@ Jul 23 11:39:11 cheerwine CEF: 0|OWASP|appsensor|1.0|logout|appsensor_response|7
 
 After parsing, the data would be appearing in the following manner. <br/>
 
-(Screenshot1)
+![Alt tag](https://github.com/sims143/elk-stack-documentation-screenshots/blob/master/screenshot1.png)
 
 *Intro to ELK Stack and Installing procedure:*
 ----------------------------------------------
