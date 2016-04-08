@@ -95,6 +95,8 @@ public class ThriftEventManagerTest {
 		updatedConfiguration.setDetectionPoints(loadMockedDetectionPoints());
 		appSensorServer.setConfiguration(updatedConfiguration);
 
+		Thread.sleep(2000);
+		
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(bob).
 				setDetectionPoint(detectionPoint1).
@@ -328,7 +330,7 @@ public class ThriftEventManagerTest {
         // start the server
         
         //let server start
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         
         System.err.println("started thrift test server");
     }
