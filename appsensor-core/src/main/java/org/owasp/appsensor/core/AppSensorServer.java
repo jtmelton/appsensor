@@ -1,22 +1,19 @@
 package org.owasp.appsensor.core;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.owasp.appsensor.core.accesscontrol.AccessController;
 import org.owasp.appsensor.core.analysis.AttackAnalysisEngine;
 import org.owasp.appsensor.core.analysis.EventAnalysisEngine;
 import org.owasp.appsensor.core.analysis.ResponseAnalysisEngine;
 import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
-import org.owasp.appsensor.core.listener.EventListener;
 import org.owasp.appsensor.core.logging.Loggable;
 import org.owasp.appsensor.core.storage.AttackStore;
 import org.owasp.appsensor.core.storage.EventStore;
 import org.owasp.appsensor.core.storage.ResponseStore;
 import org.slf4j.Logger;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Collection;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * AppSensor core class for accessing server-side components. Most components
