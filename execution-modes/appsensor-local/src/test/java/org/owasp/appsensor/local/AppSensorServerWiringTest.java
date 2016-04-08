@@ -23,8 +23,8 @@ public class AppSensorServerWiringTest {
 		assertNotNull("Event store cannot is null", appSensorServer.getEventStore());
 		assertNotNull("Attack store cannot is null", appSensorServer.getAttackStore());
 		assertNotNull("Response store cannot is null", appSensorServer.getResponseStore());
-		assertNotNull("EventAnalysisEngine store cannot is null", appSensorServer.getEventAnalysisEngine());
-		assertNotNull("AttackAnalysisEngine store cannot is null", appSensorServer.getAttackAnalysisEngine());
+		assertNotNull("EventAnalysisEngine store cannot is null", appSensorServer.getEventAnalysisEngines());
+		assertNotNull("AttackAnalysisEngine store cannot is null", appSensorServer.getAttackAnalysisEngines());
 		assertNotNull("ClientApplicationIdentificationHeaderName cannot be null", appSensorServer.getConfiguration().getClientApplicationIdentificationHeaderName());
 	}
 }
