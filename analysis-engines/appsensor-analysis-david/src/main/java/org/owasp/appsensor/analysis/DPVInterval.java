@@ -1,0 +1,57 @@
+package org.owasp.appsensor.analysis;
+
+import javax.persistence.Column;
+
+import org.hamcrest.SelfDescribing;
+import org.joda.time.DateTime;
+import org.owasp.appsensor.core.Interval;
+
+public class DPVInterval extends Interval {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	/** 
+	 * The @DateTime of the first event in the interval 
+	 */
+	@Column
+	private DateTime startTime;
+	
+	private DetectionPointVariable detectionPointVariable;
+	
+	public DPVInterval () { };
+	
+	public DPVInterval (int duration, String unit) {
+		super(duration, unit);
+		startTime = null;
+	}
+	
+	public DPVInterval (int duration, String unit, DateTime startTime, DetectionPointVariable detectionPointVariable) {
+		super(duration, unit);
+		setStartTime(startTime);
+		setDetectionPointVariable(detectionPointVariable);
+	}
+	
+	public DateTime getStartTime() {
+		return this.startTime;
+	}
+	
+	public void setStartTime(DateTime startTime) {
+		this.startTime = startTime;
+	}
+	
+	public DateTime getEndTime() {
+		return this.startTime.plusMillis((int) this.toMillis());
+	}
+	
+	public DetectionPointVariable getDetectionPointVariable() {
+		return this.detectionPointVariable;
+	}
+	
+	public void setDetectionPointVariable(DetectionPointVariable detectionPointVariable) {
+		this.detectionPointVariable = detectionPointVariable;
+	}
+
+}
