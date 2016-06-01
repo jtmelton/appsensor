@@ -6,7 +6,7 @@ import javax.inject.Named;
 
 @Named
 public class AttackMetrics extends AbstractMetrics<Counter> {
-    private static final String[] LABELS = new String[]{"detection_system", "category", "label", "username"};
+    private static final String[] LABELS = new String[]{"detection_system", "category", "label"};
 
     public AttackMetrics() {
         super(Counter.build()
@@ -15,7 +15,7 @@ public class AttackMetrics extends AbstractMetrics<Counter> {
                 .help("Total attacks count.").register());
     }
 
-    public void inc(String detectionSystem, String category, String label, String username) {
-        getCollector().labels(detectionSystem, category, label, username).inc();
+    public void inc(String detectionSystem, String category, String label) {
+        getCollector().labels(detectionSystem, category, label).inc();
     }
 }
