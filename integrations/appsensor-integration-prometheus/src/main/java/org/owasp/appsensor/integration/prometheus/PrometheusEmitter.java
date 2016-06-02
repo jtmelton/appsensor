@@ -6,7 +6,6 @@ import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.listener.SystemListener;
-import org.owasp.appsensor.core.storage.ResponseStoreListener;
 import org.owasp.appsensor.integration.prometheus.metrics.AbstractMetrics;
 import org.owasp.appsensor.integration.prometheus.metrics.AttackMetrics;
 import org.owasp.appsensor.integration.prometheus.metrics.EventMetrics;
@@ -45,7 +44,6 @@ import java.util.Collection;
  */
 
 @Named
-@ResponseStoreListener
 public class PrometheusEmitter extends SystemListener {
 
     public static final String PROMETHEUS_PUSHGATEWAY_ADDRESS = "PROMETHEUS_PUSHGATEWAY_ADDRESS";
