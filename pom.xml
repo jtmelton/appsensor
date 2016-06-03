@@ -116,6 +116,7 @@
 		<module>integrations/appsensor-integration-spring-security</module>
 		<module>integrations/appsensor-integration-influxdb</module>
 		<module>integrations/appsensor-integration-block-emitter</module>
+		<module>integrations/appsensor-integration-prometheus</module>
 		<module>sample-apps/appsensor-block-store</module>
 		<module>sample-apps/appsensor-block-proxy</module>
 	</modules>
