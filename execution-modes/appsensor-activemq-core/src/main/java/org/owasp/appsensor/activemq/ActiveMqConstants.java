@@ -1,0 +1,17 @@
+package org.owasp.appsensor.activemq;
+
+public interface ActiveMqConstants {
+	
+	String APPSENSOR_CLIENT_APPLICATION_NAME = "APPSENSOR_CLIENT_APPLICATION_NAME";
+	
+	String ACTIVEMQ_BROKER_URL_ENV_VAR_NAME = "APPSENSOR_ACTIVEMQ_BROKER_URL";
+	String ACTIVEMQ_USERNAME_ENV_VAR_NAME = "APPSENSOR_ACTIVEMQ_USERNAME";
+	String ACTIVEMQ_PASSWORD_ENV_VAR_NAME = "APPSENSOR_ACTIVEMQ_PASSWORD";
+	
+	String APPSENSOR_ADD_EVENT_QUEUE = "appsensor.add.event.queue";
+	String APPSENSOR_ADD_ATTACK_QUEUE = "appsensor.add.attack.queue";
+	
+	String APPSENSOR_GET_RESPONSES_QUEUE_PREFIX = "appsensor.";
+	String APPSENSOR_GET_RESPONSES_QUEUE_SUFFIX = ".response.queue";
+
+}

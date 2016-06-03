@@ -100,6 +100,9 @@
 		<module>execution-modes/appsensor-rpc-thrift-core</module>
 		<module>execution-modes/appsensor-rpc-thrift-client</module>
 		<module>execution-modes/appsensor-rpc-thrift-server</module>
+		<module>execution-modes/appsensor-activemq-core</module>
+		<module>execution-modes/appsensor-activemq-client</module>
+		<module>execution-modes/appsensor-activemq-server</module>
 		<module>execution-modes/appsensor-amqp-rabbitmq-core</module>
 		<module>execution-modes/appsensor-amqp-rabbitmq-client</module>
 		<module>execution-modes/appsensor-amqp-rabbitmq-server</module>
