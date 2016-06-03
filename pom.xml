@@ -114,6 +114,7 @@
 		<module>storage-providers/appsensor-storage-file-based</module>
 		<module>storage-providers/appsensor-storage-jpa2</module>
 		<module>storage-providers/appsensor-storage-nosql-mongodb</module>
+		<module>storage-providers/appsensor-storage-nosql-riak</module>
 		<module>integrations/appsensor-integration-jmx</module>
 		<module>integrations/appsensor-integration-cef-syslog</module>
 		<module>integrations/appsensor-integration-spring-security</module>
