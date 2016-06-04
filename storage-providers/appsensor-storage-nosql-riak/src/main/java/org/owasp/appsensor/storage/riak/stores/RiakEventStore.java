@@ -1,4 +1,4 @@
-package org.owasp.appsensor.storage.riak;
+package org.owasp.appsensor.storage.riak.stores;
 
 import com.basho.riak.client.api.RiakClient;
 import com.basho.riak.client.api.commands.datatypes.FetchSet;
@@ -14,6 +14,7 @@ import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.EventListener;
 import org.owasp.appsensor.core.logging.Loggable;
 import org.owasp.appsensor.core.storage.EventStore;
+import org.owasp.appsensor.storage.riak.RiakConstants;
 import org.slf4j.Logger;
 import org.springframework.core.env.Environment;
 
@@ -39,9 +40,7 @@ import java.util.concurrent.ExecutionException;
  */
 @Named
 @Loggable
-public class RiakEventStore extends EventStore {
-
-	public static final String RIAK_SERVER_ADDRESS = "RIAK_SERVER_ADDRESS";
+public class RiakEventStore extends EventStore implements RiakConstants {
 
 	private Logger logger;
 
@@ -51,8 +50,8 @@ public class RiakEventStore extends EventStore {
 	private Location events;
 
 	private RiakClient client;
-	private Gson gson;
-
+	
+	private Gson gson = new Gson();
 
 	/**
 	 * {@inheritDoc}
@@ -93,7 +92,7 @@ public class RiakEventStore extends EventStore {
 			throw new IllegalArgumentException("criteria must be non-null");
 		}
 
-		Collection<Event> matches = new ArrayList<Event>();
+		Collection<Event> matches = new ArrayList<>();
 
 		try {
 			RiakSet set = client.execute(
@@ -137,12 +136,17 @@ public class RiakEventStore extends EventStore {
 		RiakClient client = null;
 		try {
 			String addresses = environment.getProperty(RIAK_SERVER_ADDRESS);
-			client = RiakClient.newClient(addresses.split(","));
+			int port = Integer.parseInt(environment.getProperty(RIAK_SERVER_PORT));
+			client = RiakClient.newClient(port, addresses.split(","));
 		} catch (UnknownHostException e) {
 			if (logger != null) {
 				logger.error("Riak connection could not be made", e);
 			}
 			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			if (logger != null) {
+				logger.warn("Riak connection could not be made. Port configuration is missing or invalid '{}'", environment.getProperty(RIAK_SERVER_PORT));
+			}
 		}
 		return client;
 	}

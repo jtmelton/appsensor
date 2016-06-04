@@ -1,4 +1,4 @@
-package org.owasp.appsensor.storage.riak;
+package org.owasp.appsensor.storage.riak.stores;
 
 import com.basho.riak.client.api.RiakClient;
 import com.basho.riak.client.api.commands.datatypes.FetchSet;
@@ -14,6 +14,7 @@ import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.ResponseListener;
 import org.owasp.appsensor.core.logging.Loggable;
 import org.owasp.appsensor.core.storage.ResponseStore;
+import org.owasp.appsensor.storage.riak.RiakConstants;
 import org.slf4j.Logger;
 import org.springframework.core.env.Environment;
 
@@ -40,9 +41,7 @@ import java.util.concurrent.ExecutionException;
  */
 @Named
 @Loggable
-public class RiakResponseStore extends ResponseStore {
-
-	public static final String RIAK_SERVER_ADDRESS = "RIAK_SERVER_ADDRESS";
+public class RiakResponseStore extends ResponseStore implements RiakConstants {
 
 	private Logger logger;
 
@@ -52,8 +51,8 @@ public class RiakResponseStore extends ResponseStore {
 	private Location responses;
 
 	private RiakClient client;
-	private Gson gson;
 
+	private Gson gson = new Gson();
 
 	/**
 	 * {@inheritDoc}
@@ -94,7 +93,7 @@ public class RiakResponseStore extends ResponseStore {
 	}
 
 	private Collection<Response> loadResponses() {
-		Collection<Response> responsesCollection = new ArrayList<Response>();
+		Collection<Response> responsesCollection = new ArrayList<>();
 		try {
 			RiakSet set = client.execute(
 					new FetchSet.Builder(responses)
@@ -136,12 +135,17 @@ public class RiakResponseStore extends ResponseStore {
 		RiakClient client = null;
 		try {
 			String addresses = environment.getProperty(RIAK_SERVER_ADDRESS);
-			client = RiakClient.newClient(addresses.split(","));
+			int port = Integer.parseInt(environment.getProperty(RIAK_SERVER_PORT));
+			client = RiakClient.newClient(port, addresses.split(","));
 		} catch (UnknownHostException e) {
 			if (logger != null) {
 				logger.error("Riak connection could not be made", e);
 			}
 			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			if (logger != null) {
+				logger.warn("Riak connection could not be made. Port configuration is missing or invalid '{}'", environment.getProperty(RIAK_SERVER_PORT));
+			}
 		}
 		return client;
 	}
