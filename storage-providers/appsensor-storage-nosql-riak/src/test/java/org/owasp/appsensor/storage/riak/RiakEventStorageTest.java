@@ -14,11 +14,15 @@ import java.util.concurrent.ExecutionException;
 
 
 /**
- * Test basic Mongo based * Store's by extending the ReferenceStatisticalEventAnalysisEngineTest
- * and only doing the file based setup. All of the same tests execute, but with the Mongo
+ * Test basic Riak based * Store's by extending the ReferenceStatisticalEventAnalysisEngineTest
+ * and only doing the file based setup. All of the same tests execute, but with the Riak
  * based stores instead of the memory based stores.
  *
- * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author Robert Przystasz  (robert.przystasz@gmail.com)
+ * @author Bartosz Wyględacz (bartosz.wygledacz@gmail.com)
+ * @author Michal Warzecha   (mwarzechaa@gmail.com)
+ * @author Magdalena Idzik   (maddie@pwnag3.net)
+ * @since 2.2.1
  */
 public class RiakEventStorageTest extends ReferenceStatisticalEventAnalysisEngineTest implements RiakConstants {
 
@@ -42,8 +46,8 @@ public class RiakEventStorageTest extends ReferenceStatisticalEventAnalysisEngin
     }
 
     private void cleanupSet(String set) throws ExecutionException, InterruptedException {
-        Location attacks = new Location(new Namespace("sets", "appsensor"), set);
-        client.execute(new DeleteValue.Builder(attacks).build());
+        Location location = new Location(new Namespace("sets", "appsensor"), set);
+        client.execute(new DeleteValue.Builder(location).build());
     }
 
     public void startRiakProcess() {

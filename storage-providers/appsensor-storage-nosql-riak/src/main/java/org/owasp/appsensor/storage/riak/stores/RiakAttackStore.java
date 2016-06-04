@@ -28,12 +28,28 @@ import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 
 /**
- * This is a reference implementation of the {@link AttackStore}.
+ * This is a Riak implementation of the {@link AttackStore}.
  * <p>
  * Implementations of the {@link AttackListener} interface can register with
  * this class and be notified when new {@link Attack}s are added to the data store
  * <p>
- * The implementation is trivial and simply stores the {@link Attack} in an in-memory collection.
+ *     This implementation add and fetch attacks from set with key "attacks" in bucket "appsensor"
+ *     Therefore you have to enable "sets" bucket type on your riak server
+ *     <ul>
+ *          <li>riak-admin bucket-type create sets '{"props":{"datatype":"set"}}'</li>
+ *          <li>riak-admin bucket-type activate sets</li>
+ *      </ul>
+ * </p>
+ * <p>Note: This class requires a few settings to run properly. These can be set as either
+ *    environment variables ('export my_var="some_value"') or environment
+ *    properties ('-Dmy_var=some_value')</p>
+ * <ul>
+ *   <li><em>RIAK_SERVER_ADDRESS</em> - comma separated riak server addresses list, e.g. "192.168.1.1,192.168.1.2"</li>
+ *   <li><em>RIAK_SERVER_PORT</em> - riak server port, e.g. "8087"</li>
+ * </ul>
+ * <p>
+ *     {@link #initializeConnection()} method can be overridden if custom initialization is needed.
+ * </p>
  *
  * @author Robert Przystasz  (robert.przystasz@gmail.com)
  * @author Bartosz Wyględacz (bartosz.wygledacz@gmail.com)
@@ -156,7 +172,7 @@ public class RiakAttackStore extends AttackStore implements RiakConstants {
     /**
      * Default implementation - override if you want a custom initializer.
      *
-     * @return StatefulRedisConnection you want to write to.
+     * @return RiakClient you want to write to.
      */
     public RiakClient initializeConnection() {
         return null;
