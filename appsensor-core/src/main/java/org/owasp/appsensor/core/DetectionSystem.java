@@ -7,10 +7,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.google.common.net.InetAddresses;
 
@@ -24,6 +27,7 @@ import com.google.common.net.InetAddresses;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Entity
+@XmlAccessorType(XmlAccessType.FIELD) 
 public class DetectionSystem implements Serializable {
 
 	private static final long serialVersionUID = -9213994652294519363L;
@@ -35,6 +39,7 @@ public class DetectionSystem implements Serializable {
 	
 	private String detectionSystemId;
 	
+	@JsonProperty("ipAddress")
 	private IPAddress ipAddress;
 	
 	@Inject
@@ -65,11 +70,13 @@ public class DetectionSystem implements Serializable {
 		
 		return this;
 	}
-
+	
+	@JsonProperty("ipAddress")
 	public IPAddress getIPAddress() {
 		return ipAddress;
 	}
 
+	@JsonProperty("ipAddress")
 	public DetectionSystem setIPAddress(IPAddress ipAddress) {
 		this.ipAddress = ipAddress;
 		

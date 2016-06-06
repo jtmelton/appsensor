@@ -1,8 +1,5 @@
 package org.owasp.appsensor.core;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.owasp.appsensor.core.accesscontrol.AccessController;
 import org.owasp.appsensor.core.analysis.AttackAnalysisEngine;
 import org.owasp.appsensor.core.analysis.EventAnalysisEngine;
@@ -13,6 +10,10 @@ import org.owasp.appsensor.core.storage.AttackStore;
 import org.owasp.appsensor.core.storage.EventStore;
 import org.owasp.appsensor.core.storage.ResponseStore;
 import org.slf4j.Logger;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Collection;
 
 /**
  * AppSensor core class for accessing server-side components. Most components
@@ -41,14 +42,14 @@ public class AppSensorServer {
 	/** accessor for {@link org.owasp.appsensor.core.storage.ResponseStore} */
 	private ResponseStore responseStore;
 	
-	/** accessor for {@link org.owasp.appsensor.storage.EventAnalysisEngine} */
-	private EventAnalysisEngine eventAnalysisEngine;
+	/** accessor for {@link org.owasp.appsensor.core.analysis.EventAnalysisEngine} */
+	private Collection<EventAnalysisEngine> eventAnalysisEngines;
 	
-	/** accessor for {@link org.owasp.appsensor.storage.AttackAnalysisEngine} */
-	private AttackAnalysisEngine attackAnalysisEngine;
+	/** accessor for {@link org.owasp.appsensor.core.analysis.AttackAnalysisEngine} */
+	private Collection<AttackAnalysisEngine> attackAnalysisEngines;
 	
-	/** accessor for {@link org.owasp.appsensor.storage.ResponseAnalysisEngine} */
-	private ResponseAnalysisEngine responseAnalysisEngine;
+	/** accessor for {@link org.owasp.appsensor.core.analysis.ResponseAnalysisEngine} */
+	private Collection<ResponseAnalysisEngine> responseAnalysisEngines;
 	
 	/** accessor for {@link org.owasp.appsensor.core.accesscontrol.AccessController} */
 	private AccessController accessController;
@@ -80,16 +81,16 @@ public class AppSensorServer {
 		return responseStore;
 	}
 
-	public EventAnalysisEngine getEventAnalysisEngine() {
-		return eventAnalysisEngine;
+	public Collection<EventAnalysisEngine> getEventAnalysisEngines() {
+		return eventAnalysisEngines;
 	}
 
-	public AttackAnalysisEngine getAttackAnalysisEngine() {
-		return attackAnalysisEngine;
+	public Collection<AttackAnalysisEngine> getAttackAnalysisEngines() {
+		return attackAnalysisEngines;
 	}
 	
-	public ResponseAnalysisEngine getResponseAnalysisEngine() {
-		return responseAnalysisEngine;
+	public Collection<ResponseAnalysisEngine> getResponseAnalysisEngines() {
+		return responseAnalysisEngines;
 	}
 
 	public AccessController getAccessController() {
@@ -112,18 +113,18 @@ public class AppSensorServer {
 	}
 
 	@Inject
-	public void setEventAnalysisEngine(EventAnalysisEngine eventAnalysisEngine) {
-		this.eventAnalysisEngine = eventAnalysisEngine;
+	public void setEventAnalysisEngines(Collection<EventAnalysisEngine> eventAnalysisEngines) {
+		this.eventAnalysisEngines = eventAnalysisEngines;
 	}
 
 	@Inject
-	public void setAttackAnalysisEngine(AttackAnalysisEngine attackAnalysisEngine) {
-		this.attackAnalysisEngine = attackAnalysisEngine;
+	public void setAttackAnalysisEngines(Collection<AttackAnalysisEngine> attackAnalysisEngines) {
+		this.attackAnalysisEngines = attackAnalysisEngines;
 	}
 
 	@Inject
-	public void setResponseAnalysisEngine(ResponseAnalysisEngine responseAnalysisEngine) {
-		this.responseAnalysisEngine = responseAnalysisEngine;
+	public void setResponseAnalysisEngines(Collection<ResponseAnalysisEngine> responseAnalysisEngines) {
+		this.responseAnalysisEngines = responseAnalysisEngines;
 	}
 	
 	@Inject

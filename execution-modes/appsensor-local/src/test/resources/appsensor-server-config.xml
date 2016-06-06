@@ -194,6 +194,27 @@
 				</response>
 			</responses>
 		</detection-point>
+		<detection-point>
+			<category>Input Validation</category>
+			<id>IE15</id>
+			<threshold>
+				<count>3</count>
+				<interval unit="minutes">5</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="seconds">20</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="seconds">45</interval>
+				</response>
+			</responses>
+		</detection-point>
 		
 	</detection-points>
 

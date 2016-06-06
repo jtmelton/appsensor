@@ -5,7 +5,7 @@
 
 	<groupId>org.owasp.appsensor</groupId>
   	<artifactId>appsensor-parent</artifactId>
-	<version>2.1.0</version>
+	<version>2.2.0</version>
 	<packaging>pom</packaging>
 
 	<name>appsensor-parent</name>
@@ -114,6 +114,10 @@
 		<module>integrations/appsensor-integration-jmx</module>
 		<module>integrations/appsensor-integration-cef-syslog</module>
 		<module>integrations/appsensor-integration-spring-security</module>
+		<module>integrations/appsensor-integration-influxdb</module>
+		<module>integrations/appsensor-integration-block-emitter</module>
+		<module>sample-apps/appsensor-block-store</module>
+		<module>sample-apps/appsensor-block-proxy</module>
 	</modules>
 	
 	<dependencies>	

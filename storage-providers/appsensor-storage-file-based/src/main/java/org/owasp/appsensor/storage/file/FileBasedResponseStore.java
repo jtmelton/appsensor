@@ -12,6 +12,7 @@ import java.util.Collection;
 import javax.inject.Named;
 
 import org.joda.time.DateTime;
+import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
@@ -75,34 +76,7 @@ public class FileBasedResponseStore extends ResponseStore {
 	 */
 	@Override
 	public Collection<Response> findResponses(SearchCriteria criteria) {
-		if (criteria == null) {
-			throw new IllegalArgumentException("criteria must be non-null");
-		}
-		
-		Collection<Response> matches = new ArrayList<Response>();
-		
-		User user = criteria.getUser();
-		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
-		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
-		
-		Collection<Response> responses = loadResponses();
-		
-		for (Response response : responses) {
-			//check user match if user specified
-			boolean userMatch = (user != null) ? user.equals(response.getUser()) : true;
-			
-			//check detection system match if detection systems specified
-			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
-					detectionSystemIds.contains(response.getDetectionSystem().getDetectionSystemId()) : true;
-			
-			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(response.getTimestamp())) : true;
-					
-			if (userMatch && detectionSystemMatch && earliestMatch) {
-				matches.add(response);
-			}
-		}
-		
-		return matches;
+		return findResponses(criteria, loadResponses());
 	}
 	
 	protected void writeResponse(Response response) {

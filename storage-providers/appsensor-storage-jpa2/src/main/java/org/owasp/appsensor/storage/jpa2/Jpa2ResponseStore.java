@@ -1,20 +1,17 @@
 package org.owasp.appsensor.storage.jpa2;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.joda.time.DateTime;
+import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.Response;
-import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.ResponseListener;
 import org.owasp.appsensor.core.logging.Loggable;
 import org.owasp.appsensor.core.storage.ResponseStore;
-import org.owasp.appsensor.core.util.DateUtils;
 import org.owasp.appsensor.storage.jpa2.dao.ResponseRepository;
 import org.slf4j.Logger;
 
@@ -55,33 +52,10 @@ public class Jpa2ResponseStore extends ResponseStore {
 	 */
 	@Override
 	public Collection<Response> findResponses(SearchCriteria criteria) {
-		if (criteria == null) {
-			throw new IllegalArgumentException("criteria must be non-null");
-		}
+		Collection<Response> responsesAllTimestamps = responseRepository.find(criteria);
 		
-		Collection<Response> matches = new ArrayList<Response>();
-		
-		User user = criteria.getUser();
-		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds(); 
-		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
-		
-		// TODO: instead of findAll every time (inefficient), update this to do actual query
-		for (Response response : responseRepository.findAll()) {
-			//check user match if user specified
-			boolean userMatch = (user != null) ? user.equals(response.getUser()) : true;
-			
-			//check detection system match if detection systems specified
-			boolean detectionSystemMatch = (detectionSystemIds != null && detectionSystemIds.size() > 0) ? 
-					detectionSystemIds.contains(response.getDetectionSystem().getDetectionSystemId()) : true;
-			
-			boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(response.getTimestamp())) : true;
-					
-			if (userMatch && detectionSystemMatch && earliestMatch) {
-				matches.add(response);
-			}
-		}
-		
-		return matches;
+		// timestamp stored as string not queryable in DB, all timestamps come back, still need to filter this subset		
+		return findResponses(criteria, responsesAllTimestamps);
 	}
 	
 }

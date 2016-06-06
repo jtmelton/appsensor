@@ -50,8 +50,10 @@ public class Jpa2EventStore extends EventStore {
 	 */
 	@Override
 	public Collection<Event> findEvents(SearchCriteria criteria) {
-		// TODO: instead of findAll every time (inefficient), update this to do actual query
-		return findEvents(criteria, eventRepository.findAll());
+		Collection<Event> eventsAllTimestamps = eventRepository.find(criteria);
+		
+		// timestamp stored as string not queryable in DB, all timestamps come back, still need to filter this subset		
+		return findEvents(criteria, eventsAllTimestamps);
 	}
 	
 }

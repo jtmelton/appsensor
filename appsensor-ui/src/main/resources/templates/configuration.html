@@ -1,0 +1,47 @@
+{{>common/header}}
+{{>common/normal-container}}
+<style>
+#editor {
+    /** Setting height is also important, otherwise editor wont showup**/
+    height: 500px;
+}
+</style>
+
+	<div>
+		<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+	        <li class="active"><a href="#configview" data-toggle="tab">Configuration</a></li>
+	        <li><a href="#xmlview" data-toggle="tab">XML View</a></li>
+	    </ul>
+	    <div id="my-tab-content" class="tab-content">
+	    
+	        <div class="tab-pane active" id="configview">
+	            <div class="page-header">
+				  <h1>Configuration Viewer</h1>
+				</div>
+	            
+	            <div id="react_configuration_container">
+				    <!-- react to replace -->
+				</div>
+				
+	        </div><!-- end configview -->
+	        
+	        <div class="tab-pane" id="xmlview">
+	            <div class="page-header">
+				  <h1>XML Viewer (Read-Only)</h1>
+				</div>
+			    <div class="panel panel-default">
+			        <div class="panel-heading">
+			             <h3 class="panel-title">XML View for appsensor-server-config.xml</h3>
+			        </div>
+			        <div class="panel-body">
+						<div id="editor">Should have content.</div>
+			            <div id="react_xml_container">
+						    <!-- react to replace -->
+						</div>
+			        </div>
+			    </div>
+	        </div><!-- end xmlview -->
+	    </div>
+	</div>
+	
+{{>common/footer}}

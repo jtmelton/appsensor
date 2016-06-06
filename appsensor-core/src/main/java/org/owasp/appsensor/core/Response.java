@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.joda.time.DateTime;
 import org.owasp.appsensor.core.util.DateUtils;
 
 /**
@@ -59,6 +60,8 @@ public class Response implements Serializable {
 	/** Represent extra metadata, anything client wants to send */
 	@ElementCollection
 	private Collection<KeyValuePair> metadata = new ArrayList<>();
+	
+	private boolean active = false;
 	
 	public Response() {}
 	
@@ -141,6 +144,30 @@ public class Response implements Serializable {
 
 	public void setMetadata(Collection<KeyValuePair> metadata) {
 		this.metadata = metadata;
+	}
+	
+	public boolean isActive() {
+		
+		// if there is no interval, the response is executed immediately and hence does not have active/inactive state
+		if (interval == null) {
+			return false;
+		}
+		
+		boolean localActive = false;
+		
+		DateTime responseStartTime = DateUtils.fromString(getTimestamp());
+		DateTime responseEndTime = responseStartTime.plus(interval.toMillis());
+		
+		DateTime now = DateUtils.getCurrentTimestamp();
+		
+		// only active if current time between response start and end time
+		if (responseStartTime.isBefore(now) && responseEndTime.isAfter(now)) {
+			localActive = true;
+		}
+		
+		active = localActive;
+		
+		return active;
 	}
 	
 	@Override

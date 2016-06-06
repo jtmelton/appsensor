@@ -1,0 +1,44 @@
+
+	</div> <!-- /container -->
+   	<script src="/webjars/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
+    <script src="/webjars/jquery-ui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="/webjars/bootstrap/3.3.4/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/webjars/react/0.13.3/react.min.js" type="text/javascript"></script>
+    <script src="/webjars/react/0.13.3/JSXTransformer.js" type="text/javascript"></script>
+    <script src="/webjars/momentjs/2.10.3/min/moment.min.js" type="text/javascript"></script>
+    <script src="/js/appsensor.js" type="text/javascript"></script>
+    {{#ACTIVE_PATH_configuration}}
+	    <script src="/webjars/ace/01.08.2014/src-noconflict/ace.js" type="text/javascript"></script>
+		<script src="/js/configuration.js" type="text/jsx"></script>
+	{{/ACTIVE_PATH_configuration}}
+	{{#ACTIVE_PATH_dashboard}}
+		<script src="/webjars/sockjs-client/0.3.4-2/sockjs.min.js" type="text/javascript"></script>
+		<script src="/webjars/stomp-websocket/2.3.3/stomp.min.js" type="text/javascript"></script>
+		<script src="/webjars/raphael/2.1.4/raphael-min.js" type="text/javascript"></script>
+		<script src="/webjars/morrisjs/0.5.1/morris.min.js" type="text/javascript"></script>
+		<script src="/js/dashboard.js" type="text/jsx"></script>
+	{{/ACTIVE_PATH_dashboard}}
+	{{#ACTIVE_PATH_user}}
+		<script src="/webjars/raphael/2.1.4/raphael-min.js" type="text/javascript"></script>
+		<script src="/webjars/morrisjs/0.5.1/morris.min.js" type="text/javascript"></script>
+		<script src="/js/user.js" type="text/jsx"></script>
+	{{/ACTIVE_PATH_user}}
+	{{#ACTIVE_PATH_detection-point}}
+		<script src="/webjars/raphael/2.1.4/raphael-min.js" type="text/javascript"></script>
+		<script src="/webjars/morrisjs/0.5.1/morris.min.js" type="text/javascript"></script>
+		<script src="/js/detection-point.js" type="text/jsx"></script>
+	{{/ACTIVE_PATH_detection-point}}
+	{{#ACTIVE_PATH_geo-map}}
+		<script src="/webjars/sockjs-client/0.3.4-2/sockjs.min.js" type="text/javascript"></script>
+		<script src="/webjars/stomp-websocket/2.3.3/stomp.min.js" type="text/javascript"></script>
+		<script src="/webjars/d3js/3.5.5/d3.min.js" type="text/javascript"></script>
+		<script src="/webjars/topojson/1.4.9/topojson.js" type="text/javascript"></script>
+		<script src="/webjars/datamaps/0.3.7/dist/datamaps.world.min.js" type="text/javascript"></script>
+		<script src="/js/geo-map.js" type="text/javascript"></script>
+	{{/ACTIVE_PATH_geo-map}}
+	{{#ACTIVE_PATH_trends-dashboard}}
+		<script src="/js/trends-dashboard.js" type="text/javascript"></script>
+	{{/ACTIVE_PATH_trends-dashboard}}
+  </body>
+</html>
+	

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.owasp.appsensor</groupId>
+	<artifactId>appsensor-ui</artifactId>
+	<version>2.2.0</version>
+	<packaging>jar</packaging>
+
+	<name>appsensor-ui</name>
+	<description>Web Application UI for AppSensor Management</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<!-- <version>1.3.0.BUILD-SNAPSHOT</version> -->
+		<version>1.2.6.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<bootstrap.version>3.3.4</bootstrap.version>
+		<jquery.version>2.1.3</jquery.version>
+		<jqueryui.version>1.11.4</jqueryui.version>
+		<aceeditor.version>01.08.2014</aceeditor.version>
+		<reactjs.version>0.13.3</reactjs.version>
+		<stompjs.version>2.3.3</stompjs.version>
+		<sockjs.version>0.3.4-2</sockjs.version>
+		<d3.version>3.5.5-1</d3.version>
+		<topojson.version>1.4.9</topojson.version>
+		<datamaps.version>0.3.7</datamaps.version>
+		<momentjs.version>2.10.3</momentjs.version>
+		<nvd.version>1.8.1</nvd.version>
+		<chartjs.version>1.0.2</chartjs.version>
+		<morrisjs.version>0.5.1</morrisjs.version>
+		<raphael.version>2.1.4</raphael.version>
+		<gson.version>2.3.1</gson.version>
+		<appsensor.version>${project.version}</appsensor.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jersey</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mustache</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${jquery.version}</version>
+        </dependency>
+        <dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>jquery-ui</artifactId>
+		    <version>${jqueryui.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>ace</artifactId>
+		    <version>${aceeditor.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>react</artifactId>
+		    <version>${reactjs.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>stomp-websocket</artifactId>
+		    <version>${stompjs.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>sockjs-client</artifactId>
+		    <version>${sockjs.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>d3js</artifactId>
+		    <version>${d3.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>topojson</artifactId>
+		    <version>${topojson.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>datamaps</artifactId>
+		    <version>${datamaps.version}</version>
+		    <exclusions>
+		    	<exclusion>
+		    		<groupId>org.webjars.bower</groupId>
+		    		<artifactId>d3</artifactId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>momentjs</artifactId>
+		    <version>${momentjs.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.npm</groupId>
+		    <artifactId>nvd3</artifactId>
+		    <version>${nvd.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>Chart.js</artifactId>
+		    <version>${chartjs.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>morrisjs</artifactId>
+		    <version>${morrisjs.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars.bower</groupId>
+		    <artifactId>raphael</artifactId>
+		    <version>${raphael.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-core</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+	 
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-configuration-stax</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+		
+		<!-- just for the domain object -->
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-reporting-websocket</artifactId>
+			<version>${appsensor.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.owasp.appsensor</groupId>
+					<artifactId>appsensor-local</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax</groupId>
+					<artifactId>javaee-web-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.websocket</groupId>
+					<artifactId>javax.websocket-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.tyrus</groupId>
+					<artifactId>tyrus-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.tyrus</groupId>
+					<artifactId>tyrus-client</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+        
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- <repositories>
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>-->
+
+
+</project>

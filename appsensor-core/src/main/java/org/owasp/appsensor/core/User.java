@@ -7,10 +7,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.google.common.net.InetAddresses;
 
@@ -30,6 +33,7 @@ import com.google.common.net.InetAddresses;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Entity
+@XmlAccessorType(XmlAccessType.FIELD) 
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 5084152023446797592L;
@@ -41,6 +45,7 @@ public class User implements Serializable {
 	
 	private String username;
 	
+	@JsonProperty("ipAddress")
 	private IPAddress ipAddress;
 	
 	@Inject
@@ -73,10 +78,12 @@ public class User implements Serializable {
 		return this;
 	}
 	
+	@JsonProperty("ipAddress")
 	public IPAddress getIPAddress() {
 		return ipAddress;
 	}
-
+	
+	@JsonProperty("ipAddress")
 	public User setIPAddress(IPAddress ipAddress) {
 		this.ipAddress = ipAddress;
 		

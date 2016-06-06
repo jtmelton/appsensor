@@ -51,8 +51,10 @@ public class Jpa2AttackStore extends AttackStore {
 	 */
 	@Override
 	public Collection<Attack> findAttacks(SearchCriteria criteria) {
-		// TODO: instead of findAll every time (inefficient), update this to do actual query
-		return findAttacks(criteria, attackRepository.findAll());
+		Collection<Attack> attacksAllTimestamps = attackRepository.find(criteria);
+		
+		// timestamp stored as string not queryable in DB, all timestamps come back, still need to filter this subset		
+		return findAttacks(criteria, attacksAllTimestamps);
 	}
 	
 }

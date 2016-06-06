@@ -2,8 +2,11 @@ package org.owasp.appsensor.configuration.stax.client;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,9 +78,34 @@ public class StaxClientConfigurationReader implements ClientConfigurationReader 
 			
 			xmlInputStream = getClass().getResourceAsStream(xml);
 			
+			//try loading from classpath first - fallback to disk
+			if (xmlInputStream == null) {
+				File xmlFile = new File(xml);
+				xmlInputStream = new FileInputStream(xmlFile);
+			}
+			
 			xmlReader = xmlFactory.createXMLStreamReader(xmlInputStream);
 			
 			configuration = readClientConfiguration(xmlReader);
+			
+			if (configuration != null) {
+				URL xmlUrl = getClass().getResource(xml);
+				if (xmlUrl != null) {
+					File configurationFile = new File(xmlUrl.getFile());
+					
+					if (configurationFile != null && configurationFile.exists()) {
+						configuration.setConfigurationFile(configurationFile);
+					}
+				} else {
+					//try a disk-based backup
+					File configurationFile = new File(xml);
+					
+					if (configurationFile != null && configurationFile.exists()) {
+						configuration.setConfigurationFile(configurationFile);
+					}
+				}
+			}
+			
 		} catch(XMLStreamException | IOException | SAXException e) {
 			throw new ConfigurationException(e.getMessage(), e);
 		} finally {

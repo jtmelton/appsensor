@@ -96,5 +96,10 @@ public class RestEventManager implements EventManager {
 		clientApplicationIdName = appSensorClient.getConfiguration().getServerConnection().getClientApplicationIdentificationHeaderNameOrDefault();
 		clientApplicationIdValue = appSensorClient.getConfiguration().getServerConnection().getClientApplicationIdentificationHeaderValue();
 	}
+	
+	// this is primarily used for testing, but in the case where a single client needs to look like multiple clients, this is useful
+	public void updateApplicationIdentificationHeaderValue(String value) {
+		clientApplicationIdValue = value;		
+	}
 
 }

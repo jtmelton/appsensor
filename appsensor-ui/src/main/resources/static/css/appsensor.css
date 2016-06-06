@@ -1,0 +1,75 @@
+body {
+  min-height: 2000px;
+  padding-top: 70px;
+}
+
+#geo_full_screen, #geo_normal_screen {
+	color: #9d9d9d; 
+	position: absolute; 
+	z-index: 10; 
+	top: 0px; 
+	right: 0px;
+}
+
+#geo_full_screen:hover, #geo_normal_screen:hover {
+	color: #FFFFFF; 
+}
+
+.text-huge {
+	font-size: 124px;
+}
+
+.trend-data .trend-higher {
+	color: white;
+	/*background-color: red;*/
+	background-color: #8A0808;/*#B40404;*/
+}
+
+.trend-data .trend-same {
+	color: white;
+	/*background-color: black;*/
+	background-color: #1C1C1C;
+}
+
+.trend-data .trend-lower {
+	color: white;
+	/*background-color: green;*/
+	background-color: #21610B;
+}
+
+.trend-data hr {
+	width: 100%; 
+	color: black; 
+	height: 20px; 
+	background-color:black;
+}
+
+.trend-data>tbody>tr>td {
+	border-top: 0px;
+}
+
+.dashboard-section-header {
+	text-align: center;
+	background-color: #2E2E2E;
+	color: #9d9d9d;
+	padding: 8px;
+}
+
+#detection-point-accordion a {
+	color: inherit;
+}
+
+#dashboard-activity-log {
+	font-size: 0.75em;
+}
+
+#timeline-legend>label {
+  display: inline-block;
+  text-align:center;
+}
+#timeline-legend>label:first-child {
+  text-align:left;
+}
+#timeline-legend>label:last-child {
+  text-align:right;
+}

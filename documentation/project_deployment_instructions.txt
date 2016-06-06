@@ -16,16 +16,27 @@ Each deploy:
 	
 - for a snapshot deployment: 
 	- ensure all versions end in '-SNAPSHOT' (run 'mvn versions:set -DnewVersion=1.2.3-SNAPSHOT -DgenerateBackupPoms=false')
+	- also run this step separately for appsensor-ui since it's on a different release cycle
 	- run 'mvn clean deploy'
 	
 - for a release deployment: 
 	- ensure all versions DO NOT end in '-SNAPSHOT' (run 'mvn versions:set -DnewVersion=1.2.3 -DgenerateBackupPoms=false')
+	- also run this step separately for appsensor-ui since it's on a different release cycle
 	- need to run 'mvn -N install' (installs parent pom locally to run remainder of cases)
 	- update the changelog
 	- run 'mvn clean deploy -P release'
 		- need to deploy and activate release profile (-P release)
 		- this is needed to execute the gpg/javadoc/source plugins
+	- create documentation folder
+		- create a v${version} folder (for 2.1.2, it would be 'v2.1.2')
+		- build the javadoc
+			- run 'mvn javadoc:aggregate'
+			- copy the 'target/site/api' folder to the 'appsensor-dot-org/docs/${version}/javadoc'
+			- add a link to the 'api.html' page for the new javadoc folder
+		- build the swagger ui (when the rest api changes)
+			- copy the results from the 'execution-modes/appsensor-ws-rest-server/target/site/apidocs' dir over to 'appsensor-dot-org/docs/${version}/api' folder
 	- commit code
 	- tag the github repo with the appropriate tag (gpg signed) (run "git tag -u 'jtmelton@gmail.com' -s v1.2.3 -m 'appsensor release version 1.2.3'")
 	- push tags (run 'git push origin --tags')
 	- create a release (https://help.github.com/articles/creating-releases - use the pre-release flag if this is an alpha, beta or RC release)
+	

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+		<meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+    	<title>AppSensor UI</title>
+    	<link rel="stylesheet" href="/webjars/bootstrap/3.3.4/css/bootstrap.min.css"></link>
+    	<link rel="stylesheet" href="/webjars/jquery-ui/1.11.4/jquery-ui.min.css"></link>
+    	{{#ACTIVE_PATH_dashboard}}
+    		<link rel="stylesheet" href="/webjars/morrisjs/0.5.1/morris.css"></link>
+			<link rel="stylesheet" href="/webjars/nvd3/1.8.1/build/nv.d3.min.css"></link>
+		{{/ACTIVE_PATH_dashboard}}
+    	<link rel="stylesheet" href="/css/appsensor.css"></link>
+    	<link rel="icon" href="/favicon.ico">
+  	</head>
+	<body>
+  </head>
+
+  <span id="ctx" style="display:none;">{{CONTEXT_PATH}}</span>
+  
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav id="appsensor-navbar" class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{CONTEXT_PATH}}/">AppSensor UI</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li{{#ACTIVE_PATH_dashboard}} class="active"{{/ACTIVE_PATH_dashboard}}><a href="{{CONTEXT_PATH}}/"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>&nbsp;&nbsp;Dashboard</a></li>
+            <li{{#ACTIVE_PATH_geo-map}} class="active"{{/ACTIVE_PATH_geo-map}}><a href="{{CONTEXT_PATH}}/geo-map"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;&nbsp;GEO Map</a></li>
+            <li{{#ACTIVE_PATH_trends-dashboard}} class="active"{{/ACTIVE_PATH_trends-dashboard}}><a href="{{CONTEXT_PATH}}/trends-dashboard"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp;&nbsp;Trends</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+          	<p class="navbar-text"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;Welcome, {{LOGGED_IN_USERNAME}}</p>
+			<li{{#ACTIVE_PATH_configuration}} class="active"{{/ACTIVE_PATH_configuration}}><a href="{{CONTEXT_PATH}}/configuration"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>&nbsp;&nbsp;Configuration</a></li>
+          	<li{{#ACTIVE_PATH_about}} class="active"{{/ACTIVE_PATH_about}}><a href="{{CONTEXT_PATH}}/about"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>&nbsp;&nbsp;About</a></li>
+            <li><a href="{{CONTEXT_PATH}}/logout"><span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;&nbsp;Logout</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+

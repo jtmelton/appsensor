@@ -2,12 +2,16 @@ package org.owasp.appsensor.configuration.stax.server;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLResolver;
@@ -17,6 +21,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.owasp.appsensor.core.ClientApplication;
 import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.IPAddress;
 import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.Threshold;
@@ -25,6 +30,7 @@ import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.core.configuration.server.ServerConfigurationReader;
 import org.owasp.appsensor.core.correlation.CorrelationSet;
 import org.owasp.appsensor.core.exceptions.ConfigurationException;
+import org.owasp.appsensor.core.geolocation.GeoLocation;
 import org.owasp.appsensor.core.util.XmlUtils;
 import org.xml.sax.SAXException;
 
@@ -83,9 +89,34 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			
 			xmlInputStream = getClass().getResourceAsStream(xml);
 			
+			//try loading from classpath first - fallback to disk
+			if (xmlInputStream == null) {
+				File xmlFile = new File(xml);
+				xmlInputStream = new FileInputStream(xmlFile);
+			}
+			
 			xmlReader = xmlFactory.createXMLStreamReader(xmlInputStream);
 			
 			configuration = readServerConfiguration(xmlReader);
+			
+			if (configuration != null) {
+				URL xmlUrl = getClass().getResource(xml);
+				if (xmlUrl != null) {
+					File configurationFile = new File(xmlUrl.getFile());
+					
+					if (configurationFile != null && configurationFile.exists()) {
+						configuration.setConfigurationFile(configurationFile);
+					}
+				} else {
+					//try a disk-based backup
+					File configurationFile = new File(xml);
+					
+					if (configurationFile != null && configurationFile.exists()) {
+						configuration.setConfigurationFile(configurationFile);
+					}
+				}
+			}
+			
 		} catch(XMLStreamException | IOException | SAXException e) {
 			throw new ConfigurationException(e.getMessage(), e);
 		} finally {
@@ -143,6 +174,8 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 						configuration.getCorrelationSets().addAll(readCorrelationSets(xmlReader));
 					} else if("config:detection-point".equals(name)) {
 						configuration.getDetectionPoints().add(readDetectionPoint(xmlReader));
+					} else if("config:clients".equals(name)) {
+						configuration.getCustomDetectionPoints().putAll(readCustomDetectionPoints(xmlReader));
 					} else {
 						/** unexpected start element **/
 					}
@@ -181,6 +214,13 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 						clientApplication.setName(xmlReader.getElementText().trim());
 					} else if("config:role".equals(name)) {
 						clientApplication.getRoles().add(Role.valueOf(xmlReader.getElementText().trim()));
+					} else if("config:ip-address".equals(name)) {
+						double latitude = Double.parseDouble(xmlReader.getAttributeValue(null, "latitude").trim());
+						double longitude = Double.parseDouble(xmlReader.getAttributeValue(null, "longitude").trim());
+						GeoLocation geoLocation = new GeoLocation(latitude, longitude);
+						String ipAddressStr = xmlReader.getElementText().trim();
+						IPAddress ipAddress = new IPAddress(ipAddressStr, geoLocation);
+						clientApplication.setIpAddress(ipAddress);
 					} else {
 						/** unexpected start element **/
 					}
@@ -277,6 +317,51 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 		}
 		
 		return detectionPoint;
+	}
+	
+	private HashMap<String,List<DetectionPoint>> readCustomDetectionPoints(XMLStreamReader xmlReader) throws XMLStreamException {
+		DetectionPoint detectionPoint = new DetectionPoint();
+		HashMap<String,List<DetectionPoint>> customPoints = new HashMap<String,List<DetectionPoint>>();
+		String clientName = "";
+		boolean finished = false;
+		
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+			List<DetectionPoint> customList = new ArrayList<DetectionPoint>();
+			
+			
+			switch(event) {
+				case XMLStreamConstants.START_ELEMENT:
+				if("config:client-name".equals(name)) {
+						clientName = xmlReader.getElementText().trim();
+					}else if("config:detection-point".equals(name)) {
+						customList.add(readDetectionPoint(xmlReader));
+						
+					}else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:clients".equals(name)) {
+						finished = true;
+					}else if("config:client".equals(name)) {	
+						customPoints.put(clientName,customList);
+						customList = new ArrayList<DetectionPoint>();
+					}else {
+					
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+			
+			//clientName = "";
+		}
+		
+		return customPoints;
 	}
 	
 	private Threshold readThreshold(XMLStreamReader xmlReader) throws XMLStreamException {

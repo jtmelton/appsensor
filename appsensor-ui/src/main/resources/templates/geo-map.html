@@ -1,0 +1,26 @@
+{{>common/header}}
+{{>common/wide-container}}
+	<div id="mapcontainer" style="position: relative; height: 670px; background-color: #2E2E2E;">
+		<h3><a id="geo_full_screen" href="#"><span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span></a></h3>
+		<h3><a id="geo_normal_screen" href="#"><span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span></a></h3>
+	</div>
+	<div id="over_map">
+		<table id="activity_log" class="table table-condensed" style="color: #E8E8E8;font-size:0.75em">
+			<tr>
+				<th>Type</th>
+				<th>Category</th>
+				<th>From</th>
+				<th>To</th>
+				<th>Timestamp</th>
+			</tr>
+		</table>
+	</div>
+	<style>
+		#over_map { 
+			position: absolute; 
+			bottom: 2%; 
+			right: 2%; 
+			z-index: 99;
+		}
+	</style>
+{{>common/footer}}

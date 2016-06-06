@@ -140,7 +140,11 @@ public abstract class EventStore {
 		boolean detectionPointMatch = (detectionPoint != null) ? 
 				detectionPoint.typeAndThresholdMatches(event.getDetectionPoint()) : true;
 
-		boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(event.getTimestamp())): true;
+		DateTime eventTimestamp = DateUtils.fromString(event.getTimestamp());
+		
+		boolean earliestMatch = (earliest != null) ? 
+				(earliest.isBefore(eventTimestamp) || earliest.isEqual(eventTimestamp))
+				: true;
 
 		if (userMatch && detectionSystemMatch && detectionPointMatch&& earliestMatch) {
 			match = true;

@@ -1,0 +1,28 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+  adminConnectors:
+    - type: http
+      port: 8081
+
+# example values
+# export APPSENSOR_BLOCK_STORE_URL=http://localhost:8090/api/v1.0/blocks
+# export APPSENSOR_APPLICATION_TARGET_URI=http://localhost:8090
+
+blockStoreUrl: ${APPSENSOR_BLOCK_STORE_URL}
+applicationTargetUri: ${APPSENSOR_APPLICATION_TARGET_URI}
+
+# Logging settings.
+logging:
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+  level: INFO
+
+  # Logger-specific levels.
+  #loggers:
+
+  appenders:
+    - type: console
+
+

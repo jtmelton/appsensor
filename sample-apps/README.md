@@ -1,7 +1,16 @@
 AppSensor Sample Applications
 =========
 
+Quickstart
+------------
+
+If you are just wanting to get a demo going, see the [DemoSetup.md](DemoSetup.md) guide.
+
+------------
+
 This is the parent directory of several sample applications
+
+**Note: the applications in the sample-apps/ directory generally require java 1.8 or greater.**
 
 There are 2 different mechanisms for using these sample applications
 

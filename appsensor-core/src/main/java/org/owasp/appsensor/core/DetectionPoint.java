@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * The detection point represents the unique sensor concept in the code. 
@@ -69,12 +70,14 @@ public class DetectionPoint implements Serializable {
 	 * should be considered an {@link Attack}.
 	 */
 	@ManyToOne(cascade = CascadeType.ALL)
+	@JsonProperty("threshold")
 	private Threshold threshold;
 	
 	/**
 	 * Set of {@link Response}s associated with given detection point.
 	 */
 	@Transient
+	@JsonProperty("responses")
 	private Collection<Response> responses = new ArrayList<Response>();
 	
 	public DetectionPoint() {}
@@ -116,20 +119,24 @@ public class DetectionPoint implements Serializable {
 	}
 	
 	@XmlTransient
+	@JsonProperty("threshold")
 	public Threshold getThreshold() {
 		return threshold;
 	}
 
+	@JsonProperty("threshold")
 	public DetectionPoint setThreshold(Threshold threshold) {
 		this.threshold = threshold;
 		return this;
 	}
 
 	@XmlTransient
+	@JsonProperty("responses")
 	public Collection<Response> getResponses() {
 		return responses;
 	}
 
+	@JsonProperty("responses")
 	public DetectionPoint setResponses(Collection<Response> responses) {
 		this.responses = responses;
 		return this;
