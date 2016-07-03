@@ -1,107 +1,93 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-
-  	<artifactId>appsensor-reporting-websocket</artifactId>
-	<packaging>jar</packaging>
-
-	<name>appsensor-reporting-websocket</name>
-
-	<parent>
-		<groupId>org.owasp.appsensor</groupId>
-	  	<artifactId>appsensor-parent</artifactId>
-		<version>2.2.0</version>
-	</parent>
-	
-	<properties>
-		<tyrus.version>1.5</tyrus.version>
-		<gson.version>2.2.4</gson.version>
-		<javaee.version>7.0</javaee.version>
-		<websocket.version>1.0</websocket.version>
-		<spring.version>4.0.3.RELEASE</spring.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-local</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>${gson.version}</version>
-		</dependency>
-		<dependency>
-	        <groupId>javax</groupId>
-	        <artifactId>javaee-web-api</artifactId>
-	        <version>${javaee.version}</version>
-	    </dependency>
-	    <dependency>
-	        <groupId>javax.websocket</groupId>
-	        <artifactId>javax.websocket-api</artifactId>
-	        <version>${websocket.version}</version>
-	    </dependency>
-	     <dependency>
-		    <groupId>org.glassfish.tyrus</groupId>
-		    <artifactId>tyrus-server</artifactId>
-		    <version>${tyrus.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.glassfish.tyrus</groupId>
-		    <artifactId>tyrus-client</artifactId>
-		    <version>${tyrus.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-storage-in-memory</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-analysis-reference</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-reporting-simple-logging</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-access-control-reference</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-configuration-stax</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-	</dependencies>
-	
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>appsensor-parent</artifactId>
+    <groupId>org.owasp.appsensor</groupId>
+    <version>2.2.0</version>
+  </parent>
+  <artifactId>appsensor-reporting-websocket</artifactId>
+  <packaging>jar</packaging>
+  <name>appsensor-reporting-websocket</name>
+  <properties>
+    <tyrus.version>1.5</tyrus.version>
+    <gson.version>2.2.4</gson.version>
+    <javaee.version>7.0</javaee.version>
+    <websocket.version>1.0</websocket.version>
+    <spring.version>4.0.3.RELEASE</spring.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-local</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>${gson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-web-api</artifactId>
+      <version>${javaee.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.websocket</groupId>
+      <artifactId>javax.websocket-api</artifactId>
+      <version>${websocket.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.tyrus</groupId>
+      <artifactId>tyrus-server</artifactId>
+      <version>${tyrus.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.tyrus</groupId>
+      <artifactId>tyrus-client</artifactId>
+      <version>${tyrus.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-storage-in-memory</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-analysis-reference</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-reporting-simple-logging</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-access-control-reference</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-configuration-stax</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

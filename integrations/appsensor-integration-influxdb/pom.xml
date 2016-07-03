@@ -1,95 +1,79 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-
-  	<artifactId>appsensor-integration-influxdb</artifactId>
-	<packaging>jar</packaging>
-
-	<name>appsensor-integration-influxdb</name>
-
-	<properties>
-		<influxdb.version>2.0</influxdb.version>
-		<spring.version>4.0.3.RELEASE</spring.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	
-	<dependencies>
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
-        <dependency>
-			<groupId>org.influxdb</groupId>
-			<artifactId>influxdb-java</artifactId>
-			<version>2.0</version>
-		</dependency>
-        
-		<!-- See http://stackoverflow.com/questions/174560/sharing-test-code-in-maven -->
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-local</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-local</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-configuration-stax</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-storage-in-memory</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-analysis-reference</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-reporting-simple-logging</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-access-control-reference</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-	</dependencies>
-
-	<parent>
-		<groupId>org.owasp.appsensor</groupId>
-	  	<artifactId>appsensor-parent</artifactId>
-		<version>2.2.0</version>
-	</parent>
-	
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>appsensor-parent</artifactId>
+    <groupId>org.owasp.appsensor</groupId>
+    <version>2.2.0</version>
+  </parent>
+  <artifactId>appsensor-integration-influxdb</artifactId>
+  <packaging>jar</packaging>
+  <name>appsensor-integration-influxdb</name>
+  <properties>
+    <influxdb.version>2.0</influxdb.version>
+    <spring.version>4.0.3.RELEASE</spring.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.influxdb</groupId>
+      <artifactId>influxdb-java</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <!-- See http://stackoverflow.com/questions/174560/sharing-test-code-in-maven -->
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-local</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-local</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-configuration-stax</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-storage-in-memory</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-analysis-reference</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-reporting-simple-logging</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-access-control-reference</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

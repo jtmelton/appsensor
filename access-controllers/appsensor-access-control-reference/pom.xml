@@ -1,29 +1,22 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-
-  	<artifactId>appsensor-access-control-reference</artifactId>
-	<packaging>jar</packaging>
-
-	<name>appsensor-access-control-reference</name>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-	</dependencies>
-
-	<parent>
-		<groupId>org.owasp.appsensor</groupId>
-	  	<artifactId>appsensor-parent</artifactId>
-		<version>2.2.0</version>
-	</parent>
-	
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>appsensor-parent</artifactId>
+    <groupId>org.owasp.appsensor</groupId>
+    <version>2.2.0</version>
+  </parent>
+  <artifactId>appsensor-access-control-reference</artifactId>
+  <packaging>jar</packaging>
+  <name>appsensor-access-control-reference</name>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.owasp.appsensor</groupId>
+      <artifactId>appsensor-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>
-
