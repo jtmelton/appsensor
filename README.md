@@ -2,6 +2,7 @@ AppSensor
 =========
 
 [![Build Status](https://travis-ci.org/jtmelton/appsensor.svg?branch=master)](https://travis-ci.org/jtmelton/appsensor)
+[![Dependency Status](https://www.versioneye.com/user/projects/5779926a68ee070047f06894/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/5779926a68ee070047f06894)
 
 AppSensor is a framework that provides real-time event detection and response. The initial goal is to provide application layer intrusion detection (self-defending applications), though many types of systems are possible using the framework. 
 
