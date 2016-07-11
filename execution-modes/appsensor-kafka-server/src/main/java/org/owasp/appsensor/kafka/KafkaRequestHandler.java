@@ -314,7 +314,7 @@ public class KafkaRequestHandler implements RequestHandler, KafkaConstants, Resp
 	    	
 	    	logger.info("Starting EventManager kafka consumer .. ");
 	    	
-	    	logger.info("Connecting to zookepper: " + config.getConsumerZookeeperConnect());
+	    	logger.info("Connecting to zookeeper: " + config.getConsumerZookeeperConnect());
 	    	logger.info("Connecting with group id: " + config.getConsumerGroupId());
 	    	logger.info("Connecting with client id: " + config.getClientApplicationName());
 	    	logger.info("Connecting to topic: " + topic);
