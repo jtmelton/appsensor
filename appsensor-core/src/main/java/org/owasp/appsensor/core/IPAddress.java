@@ -1,6 +1,5 @@
 package org.owasp.appsensor.core;
 
-import java.io.Serializable;
 import java.net.InetAddress;
 
 import javax.inject.Named;
@@ -31,14 +30,14 @@ import com.google.common.net.InetAddresses;
 @Entity
 @Named
 @XmlAccessorType(XmlAccessType.FIELD)
-public class IPAddress implements Serializable {
+public class IPAddress implements IAppsensorEntity {
 
 	private static final long serialVersionUID = -2325233176848461722L;
 
 	@Id
-	@Column
+	@Column(columnDefinition = "integer")
 	@GeneratedValue
-	private Integer id;
+	private String id;
 	
 	private String address;
 	
@@ -85,7 +84,17 @@ public class IPAddress implements Serializable {
 		
 		return this;
 	}
-	
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public String getAddress() {
 		return address;
 	}

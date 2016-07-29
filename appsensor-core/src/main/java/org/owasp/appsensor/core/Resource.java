@@ -1,7 +1,5 @@
 package org.owasp.appsensor.core;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,15 +15,15 @@ import javax.persistence.Id;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Entity
-public class Resource implements Serializable {
+public class Resource implements IAppsensorEntity {
 	
 	private static final long serialVersionUID = 343899601431699577L;
 
 	@Id
-	@Column
+	@Column(columnDefinition = "integer")
 	@GeneratedValue
-	private Integer id;
-	
+	private String id;
+
 	/** 
 	 * The resource being requested when a given event/attack was triggered, which can be used 
      * later to block requests to a given function.  In this implementation, 
@@ -33,6 +31,16 @@ public class Resource implements Serializable {
      */
 	@Column
 	private String location;
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getLocation() {
 		return location;

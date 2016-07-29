@@ -28,14 +28,14 @@ import org.owasp.appsensor.core.util.DateUtils;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Entity
-public class Response implements Serializable {
+public class Response implements IAppsensorEntity {
 	
 	private static final long serialVersionUID = -4183973779552497656L;
 
 	@Id
-	@Column
+	@Column(columnDefinition = "integer")
 	@GeneratedValue
-	private Integer id;
+	private String id;
 	
 	/** User the response is for */
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -85,11 +85,11 @@ public class Response implements Serializable {
 		setInterval(interval);
 	}
 	
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

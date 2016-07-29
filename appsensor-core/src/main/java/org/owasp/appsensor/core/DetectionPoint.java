@@ -1,6 +1,5 @@
 package org.owasp.appsensor.core;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -29,14 +28,14 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Entity
-public class DetectionPoint implements Serializable {
+public class DetectionPoint implements IAppsensorEntity {
 	
 	private static final long serialVersionUID = -6294211676275622809L;
 
 	@Id
-	@Column
+	@Column(columnDefinition = "integer")
 	@GeneratedValue
-	private Integer id;
+	private String id;
 	
 	public class Category {
 		public static final String REQUEST 				= "Request";
@@ -117,7 +116,17 @@ public class DetectionPoint implements Serializable {
 		this.label = label;
 		return this;
 	}
-	
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	@XmlTransient
 	@JsonProperty("threshold")
 	public Threshold getThreshold() {

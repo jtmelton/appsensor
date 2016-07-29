@@ -1,6 +1,5 @@
 package org.owasp.appsensor.core;
 
-import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,14 +9,14 @@ import javax.persistence.Id;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
-public class KeyValuePair implements Serializable {
+public class KeyValuePair implements IAppsensorEntity {
  
 	private static final long serialVersionUID = 7159160142952459590L;
 
 	@Id
-	@Column
+	@Column(columnDefinition = "integer")
 	@GeneratedValue
-	private Integer id;
+	private String id;
 	
 	private String key;
     private String value;
@@ -29,7 +28,17 @@ public class KeyValuePair implements Serializable {
     	this.value = value;
     }
 
-    public String getKey() {
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getKey() {
 		return key;
 	}
 
