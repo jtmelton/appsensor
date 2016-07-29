@@ -72,7 +72,7 @@ public abstract class AbstractElasticRepository {
         }
 
 
-        PutMappingResponse putMappingResponse = getClient().admin().indices()
+        getClient().admin().indices()
                 .preparePutMapping(indexName)
                 .setType(getElasticIndexType())
                 .setSource(mapping)

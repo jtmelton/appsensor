@@ -38,7 +38,7 @@ public class GeoLocationMapperDeSerializer extends StdDeserializer<GeoLocation> 
             }
         }
 
-        if (lat == null && lon == null) {
+        if (lat == null || lon == null) {
             return null;
         }
 
