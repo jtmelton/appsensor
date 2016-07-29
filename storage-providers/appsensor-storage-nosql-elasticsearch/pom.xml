@@ -76,7 +76,7 @@
         <dependency>
             <groupId>org.owasp.appsensor</groupId>
             <artifactId>appsensor-local</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
@@ -84,41 +84,41 @@
         <dependency>
             <groupId>org.owasp.appsensor</groupId>
             <artifactId>appsensor-local</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.owasp.appsensor</groupId>
             <artifactId>appsensor-configuration-stax</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.owasp.appsensor</groupId>
             <artifactId>appsensor-core</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.owasp.appsensor</groupId>
             <artifactId>appsensor-analysis-reference</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.owasp.appsensor</groupId>
             <artifactId>appsensor-reporting-simple-logging</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.owasp.appsensor</groupId>
             <artifactId>appsensor-access-control-reference</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
