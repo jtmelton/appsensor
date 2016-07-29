@@ -113,6 +113,7 @@
 		<module>reporting-engines/appsensor-reporting-websocket</module>
 		<module>storage-providers/appsensor-storage-file-based</module>
 		<module>storage-providers/appsensor-storage-jpa2</module>
+		<module>storage-providers/appsensor-storage-nosql-elasticsearch</module>
 		<module>storage-providers/appsensor-storage-nosql-mongodb</module>
 		<module>storage-providers/appsensor-storage-nosql-riak</module>
 		<module>integrations/appsensor-integration-jmx</module>
