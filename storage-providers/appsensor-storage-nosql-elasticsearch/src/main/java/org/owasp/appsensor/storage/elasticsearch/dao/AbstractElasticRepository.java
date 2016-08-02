@@ -174,26 +174,25 @@ public abstract class AbstractElasticRepository {
                     }
                 }
             }
+        }
 
-            Collection<String> detectionSystemIds = searchCriteria.getDetectionSystemIds();
-            if (detectionSystemIds != null && detectionSystemIds.size() > 0) {
-                query = query.must(QueryBuilders.termsQuery("detectionSystem.detectionSystemId", detectionSystemIds));
+        Collection<String> detectionSystemIds = searchCriteria.getDetectionSystemIds();
+        if (detectionSystemIds != null && detectionSystemIds.size() > 0) {
+            query = query.must(QueryBuilders.termsQuery("detectionSystem.detectionSystemId", detectionSystemIds));
+        }
+
+
+        String earliest = searchCriteria.getEarliest();
+        if (StringUtils.isNotEmpty(earliest)) {
+            query = query.must(QueryBuilders.rangeQuery("timestamp").from(earliest).includeLower(true));
+        }
+
+        User user = searchCriteria.getUser();
+        if (user != null) {
+            String username = user.getUsername();
+            if (StringUtils.isNotBlank(username)) {
+                query = query.must(QueryBuilders.termQuery("user.username", username));
             }
-
-
-            String earliest = searchCriteria.getEarliest();
-            if (StringUtils.isNotEmpty(earliest)) {
-                query = query.must(QueryBuilders.rangeQuery("timestamp").from(earliest).includeLower(true));
-            }
-
-            User user = searchCriteria.getUser();
-            if (user != null) {
-                String username = user.getUsername();
-                if (StringUtils.isNotBlank(username)) {
-                    query = query.must(QueryBuilders.termQuery("user.username", username));
-                }
-            }
-
         }
 
 
