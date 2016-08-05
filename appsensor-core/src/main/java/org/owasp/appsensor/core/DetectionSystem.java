@@ -63,7 +63,7 @@ public class DetectionSystem implements IAppsensorEntity {
 		this.detectionSystemId = detectionSystemId;
 		
 		// if IP is used as system id, setup IP address w/ geolocation
-		if (InetAddresses.isInetAddress(detectionSystemId)) {
+		if (locator != null && InetAddresses.isInetAddress(detectionSystemId)) {
 			this.ipAddress = locator.fromString(detectionSystemId);
 		}
 		
