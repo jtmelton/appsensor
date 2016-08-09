@@ -1,5 +1,6 @@
 package org.owasp.appsensor.storage.elasticsearch.mapping;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -22,6 +23,12 @@ public class ElasticSearchJsonMapper extends ObjectMapper {
 
         customSerializationModule.addSerializer(GeoLocation.class, new GeoLocationMapperSerializer());
         customSerializationModule.addDeserializer(GeoLocation.class, new GeoLocationMapperDeSerializer());
+
+        this.setVisibility(this.getSerializationConfig().getDefaultVisibilityChecker()
+                .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
+                .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withCreatorVisibility(JsonAutoDetect.Visibility.NONE));
 
         this.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         this.setSerializationInclusion(JsonInclude.Include.NON_NULL);
