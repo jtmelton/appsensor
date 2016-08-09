@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
-import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -45,6 +45,9 @@ public abstract class AbstractElasticRepository {
     @Value("${appsensor.elasticsearch.indexname}")
     private String indexName;
 
+    @Value("${appsensor.elasticsearch.clustername}")
+    private String clustername;
+
     @Value("${appsensor.elasticsearch.host}")
     private String host;
 
@@ -59,7 +62,10 @@ public abstract class AbstractElasticRepository {
     @PostConstruct
     private void initRepository() throws IOException {
 
-        client = TransportClient.builder().build()
+        Settings settings = Settings.settingsBuilder()
+                .put("cluster.name", clustername).build();
+
+        client = TransportClient.builder().settings(settings).build()
                 .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), port));
 
         objectMapper = new ElasticSearchJsonMapper();

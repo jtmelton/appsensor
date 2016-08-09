@@ -72,6 +72,7 @@ public class ElasticTestConfiguration {
                 props.put("appsensor.elasticsearch.host", "127.0.0.1");
 
                 props.put("appsensor.elasticsearch.port", elasticTcpPort);
+                props.put("appsensor.elasticsearch.clustername", "elasticsearch");
 
             }
         };
