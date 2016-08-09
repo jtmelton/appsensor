@@ -48,9 +48,6 @@ public class ElasticTestConfiguration {
                 .build();
         node = NodeBuilder.nodeBuilder().settings(settings).node();
         node.start();
-
-        System.out.println("ELASTIC HTTP MAIK : " + elasticHttpPort);
-
     }
 
     @PreDestroy
