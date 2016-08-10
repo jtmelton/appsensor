@@ -41,12 +41,29 @@ public class Rule implements Serializable {
 	 */
 	//TODO: add proper annotation
 	private ArrayList<Expression> expressions;
+	
+	private String name;
 
 	public Rule () { }
+	
+	public Rule (String name, Interval interval, ArrayList<Expression> expressions) {
+		setName(name);
+		setInterval(interval);
+		setExpressions(expressions);
+	}
 	
 	public Rule (Interval interval, ArrayList<Expression> expressions) {
 		setInterval(interval);
 		setExpressions(expressions);
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public Rule setName(String name) {
+		this.name = name;
+		return this;
 	}
 	
 	public Interval getInterval() {
@@ -82,7 +99,7 @@ public class Rule implements Serializable {
 	}
 	
 	public ArrayList<DetectionPoint> getAllDetectionPoints () {
-		ArrayList<DetectionPoint> detectionPoints = null;
+		ArrayList<DetectionPoint> detectionPoints = new ArrayList<DetectionPoint>();
 		
 		for (Expression expression : this.expressions) {
 			detectionPoints.addAll(expression.getDetectionPoints());

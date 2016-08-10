@@ -67,7 +67,7 @@ public class Expression implements Serializable {
 	}
 
 	public ArrayList<DetectionPoint> getDetectionPoints() {
-		ArrayList<DetectionPoint> detectionPoints = null;
+		ArrayList<DetectionPoint> detectionPoints = new ArrayList<DetectionPoint>();
 		
 		for (DetectionPointVariable detectionPointVariable : this.detectionPointVariables) {
 			detectionPoints.add(detectionPointVariable.getDetectionPoint());

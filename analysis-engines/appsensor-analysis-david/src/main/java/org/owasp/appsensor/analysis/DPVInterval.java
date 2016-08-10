@@ -43,7 +43,7 @@ public class DPVInterval extends Interval {
 	}
 	
 	public DateTime getEndTime() {
-		return this.startTime.plusMillis((int) this.toMillis());
+		return this.startTime.plus(this.toMillis());
 	}
 	
 	public DetectionPointVariable getDetectionPointVariable() {

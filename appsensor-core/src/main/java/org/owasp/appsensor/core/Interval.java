@@ -26,6 +26,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @Entity
 public class Interval implements Serializable {
 
+	/** Constant representing milliseconds unit of time */
+	public static final String MILLISECONDS = "milliseconds";
+	
 	/** Constant representing seconds unit of time */
 	public static final String SECONDS = "seconds";
 	
@@ -90,7 +93,9 @@ public class Interval implements Serializable {
 	public long toMillis() {
 		long millis = 0;
 		
-		if (SECONDS.equals(getUnit())) {
+		if (MILLISECONDS.equals(getUnit())) {
+			millis = getDuration();
+		} else if (SECONDS.equals(getUnit())) {
 			millis = 1000 * getDuration();
 		} else if (MINUTES.equals(getUnit())) {
 			millis = 1000 * 60 * getDuration();

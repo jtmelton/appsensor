@@ -41,6 +41,8 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	
 	private static DetectionPoint detectionPoint1 = new DetectionPoint();
 	
+	private static DetectionPoint detectionPoint2 = new DetectionPoint(); //rem
+	
 	private static Collection<String> detectionSystems1 = new ArrayList<String>();
 	
 	private static DetectionSystem detectionSystem1 = new DetectionSystem("localhostme");
@@ -57,7 +59,8 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	public static void doSetup() {
 		detectionPoint1.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
 		detectionPoint1.setLabel("IE1");
-		
+		detectionPoint2.setCategory(DetectionPoint.Category.INPUT_VALIDATION);//rem
+		detectionPoint2.setLabel("IE2"); //rem
 		detectionSystems1.add(detectionSystem1.getDetectionSystemId());
 	}
 	
@@ -70,6 +73,12 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(bob).
 				setDetectionPoint(detectionPoint1).
+				setDetectionSystemIds(detectionSystems1);
+		
+		//rem
+		SearchCriteria criteria2 = new SearchCriteria().
+				setUser(bob).
+				setDetectionPoint(detectionPoint2).
 				setDetectionSystemIds(detectionSystems1);
 		
 		Thread.sleep(sleepAmount);
@@ -120,11 +129,30 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 		assertEquals(2, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
 		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+
+		//rem
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint2, new DetectionSystem("localhostme")));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint2, new DetectionSystem("localhostme")));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint2, new DetectionSystem("localhostme")));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint2, new DetectionSystem("localhostme")));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint2, new DetectionSystem("localhostme")));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint2, new DetectionSystem("localhostme")));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint2, new DetectionSystem("localhostme")));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint2, new DetectionSystem("localhostme")));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint2, new DetectionSystem("localhostme")));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint2, new DetectionSystem("localhostme")));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint2, new DetectionSystem("localhostme")));
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint2, new DetectionSystem("localhostme")));
+		
 		
 		Thread.sleep(sleepAmount);
 		
 		assertEquals(7, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(2, appSensorServer.getAttackStore().findAttacks(criteria).size());
+		
+		//rem
+		assertEquals(12, appSensorServer.getEventStore().findEvents(criteria2).size());
+		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria2).size());
 	}
 	
 	private Collection<DetectionPoint> loadMockedDetectionPoints() {

@@ -44,6 +44,10 @@ public class InMemoryAttackStore extends AttackStore {
 		super.notifyListeners(attack);
 	}
 	
+	public void clearAll() {
+		attacks.clear();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

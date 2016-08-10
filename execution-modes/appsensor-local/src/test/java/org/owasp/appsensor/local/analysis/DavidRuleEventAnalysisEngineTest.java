@@ -5,10 +5,13 @@ import static org.junit.Assert.assertEquals;
 import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 import javax.print.attribute.standard.MediaSize.Engineering;
+import javax.sql.rowset.serial.SerialArray;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +19,6 @@ import org.owasp.appsensor.analysis.DavidAttackAnalysisEngine;
 import org.owasp.appsensor.analysis.DavidEventAnalysisEngine;
 import org.owasp.appsensor.analysis.DetectionPointVariable;
 import org.owasp.appsensor.analysis.Rule;
-import org.owasp.appsensor.analysis.RulesDetectionPoint;
 //import org.owasp.appsensor.analysis.Expression;
 import org.owasp.appsensor.core.AppSensorClient;
 import org.owasp.appsensor.core.AppSensorServer;
@@ -28,9 +30,11 @@ import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.Threshold;
 import org.owasp.appsensor.core.User;
+import org.owasp.appsensor.core.analysis.EventAnalysisEngine;
 import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
-import org.springframework.expression.spel.ExpressionState;
+import org.owasp.appsensor.storage.memory.InMemoryAttackStore;
+import org.owasp.appsensor.storage.memory.InMemoryEventStore;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -53,18 +57,28 @@ public class DavidRuleEventAnalysisEngineTest {
 	
 	private static DetectionPoint detectionPoint2 = new DetectionPoint();
 	
+	private static DetectionPoint detectionPoint3 = new DetectionPoint();
+
+	private static DetectionPoint detectionPoint5 = new DetectionPoint();
+	
 	private static Collection<String> detectionSystems1 = new ArrayList<String>();
 	
 	private static DetectionSystem detectionSystem1 = new DetectionSystem("localhostme");
 	
-	protected int sleepAmount = 1;
+	private static HashMap<String, SearchCriteria> criteria = new HashMap<String, SearchCriteria>();
+	
+	private static DavidEventAnalysisEngine myEngine = null;
+	
+	private static ArrayList<Rule> rules = null;
+	
+	protected int sleepAmount = 10;
 	
 	@Inject
 	AppSensorServer appSensorServer;
 	
 	@Inject
 	AppSensorClient appSensorClient;
-	
+		
 	@BeforeClass
 	public static void doSetup() {
 		detectionPoint1.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
@@ -73,130 +87,517 @@ public class DavidRuleEventAnalysisEngineTest {
 		detectionPoint2.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
 		detectionPoint2.setLabel("IE2");
 		
+		detectionPoint3.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
+		detectionPoint3.setLabel("IE3");
+		
+		detectionPoint5.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
+		detectionPoint5.setLabel("IE5");
+		
 		detectionSystems1.add(detectionSystem1.getDetectionSystemId());
-	}
-	
-	@Test
-	public void testOneDetectionPoint() throws Exception {
-		//instantiate server
-		ServerConfiguration updatedConfiguration = appSensorServer.getConfiguration();
-		updatedConfiguration.setDetectionPoints(loadMockedDetectionPoints());
-		appSensorServer.setConfiguration(updatedConfiguration);
 		
-		//DP1
-		Rule rule1 = generateRule1().get(0);
+		criteria.put("all", new SearchCriteria().setDetectionSystemIds(detectionSystems1));
 		
-		//prepare rule
-		((DavidEventAnalysisEngine)appSensorServer.getEventAnalysisEngine()).clearRules();
-		((DavidEventAnalysisEngine)appSensorServer.getEventAnalysisEngine()).addRule(rule1);
-
-		SearchCriteria criteria = new SearchCriteria().
+		criteria.put("rule", new SearchCriteria().setUser(new User("bobR")));
+		
+		criteria.put("dp1", new SearchCriteria().
 				setUser(bob).
 				setDetectionPoint(detectionPoint1).
-				setDetectionSystemIds(detectionSystems1);
+				setDetectionSystemIds(detectionSystems1));
 		
-		//generate events
-		eventAndAssert(sleepAmount, 0, null, 0, 0, criteria);
-		eventAndAssert(sleepAmount, 1, detectionPoint1, 1, 0, criteria);
-		eventAndAssert(sleepAmount, 1, detectionPoint1, 2, 0, criteria);
-		eventAndAssert(sleepAmount, 1, detectionPoint1, 3, 1, criteria);
-	}
-	
-	@Test
-	public void testTwoDetectionPoints() throws Exception {
-		//instantiate server
-		ServerConfiguration updatedConfiguration = appSensorServer.getConfiguration();
-		updatedConfiguration.setDetectionPoints(loadMockedDetectionPoints());
-		appSensorServer.setConfiguration(updatedConfiguration);
-		
-		//DP1 AND DP2
-		Rule rule2 = generateRule2().get(0);
-		
-		//prepare rule
-		((DavidEventAnalysisEngine)appSensorServer.getEventAnalysisEngine()).clearRules();
-		((DavidEventAnalysisEngine)appSensorServer.getEventAnalysisEngine()).addRule(rule2);
-
-		SearchCriteria criteria = new SearchCriteria().
-				setUser(bob).
-				setDetectionPoint(detectionPoint1).
-				setDetectionSystemIds(detectionSystems1);
-		
-		SearchCriteria criteria2 = new SearchCriteria().
+		criteria.put("dp2", new SearchCriteria().
 				setUser(bob).
 				setDetectionPoint(detectionPoint2).
-				setDetectionSystemIds(detectionSystems1);
+				setDetectionSystemIds(detectionSystems1));
+
+		criteria.put("dp3", new SearchCriteria().
+				setUser(bob).
+				setDetectionPoint(detectionPoint3).
+				setDetectionSystemIds(detectionSystems1));
 		
-		//generate events
-		eventAndAssert(sleepAmount, 0, null, 0, 0, criteria);
-		eventAndAssert(sleepAmount, 1, detectionPoint1, 1, 0, criteria);
-		eventAndAssert(sleepAmount, 1, detectionPoint1, 2, 0, criteria);
-		eventAndAssert(sleepAmount, 1, detectionPoint1, 3, 0, criteria);
-		eventAndAssert(sleepAmount, 1, detectionPoint2, 1, 0, criteria2);
-		eventAndAssert(sleepAmount, 11, detectionPoint2, 12, 1, criteria2);
+		criteria.put("dp5", new SearchCriteria().
+				setUser(bob).
+				setDetectionPoint(detectionPoint5).
+				setDetectionSystemIds(detectionSystems1));
+		
+		rules = generateRules();
 	}
+	
+	public void initialSetup() {
+		//instantiate server
+		ServerConfiguration updatedConfiguration = appSensorServer.getConfiguration();
+		updatedConfiguration.setDetectionPoints(loadMockedDetectionPoints());
+		appSensorServer.setConfiguration(updatedConfiguration);
 		
-	public void eventAndAssert(int sleepTime, int runNumEvents, DetectionPoint detectionPoint, int isNumEvents, int isNumAttacks, SearchCriteria criteria) throws Exception{
+		Collection<EventAnalysisEngine> engines = appSensorServer.getEventAnalysisEngines();
 		
-		if (detectionPoint != null) {
-			for (int i = 0; i < runNumEvents; i++) {
-				appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint, new DetectionSystem("localhostme")));
+		for (EventAnalysisEngine engine : engines) {
+			if (engine instanceof DavidEventAnalysisEngine){
+				myEngine = (DavidEventAnalysisEngine)engine;
 			}
 		}
-		
-		Thread.sleep(sleepTime);
-		
-		assertEquals(isNumEvents, appSensorServer.getEventStore().findEvents(criteria).size());
-		assertEquals(isNumAttacks, appSensorServer.getAttackStore().findAttacks(criteria).size());
 	}
 	
-	private ArrayList<Rule> generateRule1() {
+	@Before
+	public void initializeTest() {
+		if (myEngine == null) {
+			initialSetup();
+		}
+		
+		myEngine.clearRules();
+		
+		clearStores();
+	}
+	
+	@Test
+	public void test1_DP1() throws Exception {	
+		//Add rule
+		myEngine.addRule(rules.get(0));
+
+		//is empty
+		assertEventsAndAttacks(0, 0, criteria.get("all"));
+		
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(3, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		
+		generateEvents(sleepAmount, detectionPoint1, 1);
+		assertEventsAndAttacks(4, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+	}
+	
+	@Test
+	public void test2_DP1andDP2() throws Exception {
+		//Add rule
+		myEngine.addRule(rules.get(1));
+		
+		//is empty
+		assertEventsAndAttacks(0, 0, criteria.get("all"));
+		
+		//triggers attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(3, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(12, 1, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		
+		//check since last attack
+		generateEvents(sleepAmount, detectionPoint1, 1);
+		assertEventsAndAttacks(4, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		generateEvents(sleepAmount, detectionPoint2, 1);
+		assertEventsAndAttacks(13, 1, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		
+		//triggers attack in reverse
+		generateEvents(sleepAmount*11, detectionPoint2, 11);
+		assertEventsAndAttacks(24, 2, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		
+		generateEvents(sleepAmount*2, detectionPoint1, 2);
+		assertEventsAndAttacks(6, 2, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 2, criteria.get("rule"));
+	}
+	
+	@Test
+	public void test3_DP1orDP2() throws Exception {
+		//Add rule
+		myEngine.addRule(rules.get(2));
+		
+		//is empty
+		assertEventsAndAttacks(0, 0, criteria.get("all"));
+		
+		//triggers attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(3, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(12, 1, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 2, criteria.get("rule"));
+		
+		//check since last attack
+		generateEvents(sleepAmount, detectionPoint1, 1);
+		assertEventsAndAttacks(4, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 2, criteria.get("rule"));
+		
+		generateEvents(sleepAmount, detectionPoint2, 1);
+		assertEventsAndAttacks(13, 1, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 2, criteria.get("rule"));
+		
+		//triggers attack in reverse order
+		generateEvents(sleepAmount*11, detectionPoint2, 11);
+		assertEventsAndAttacks(24, 2, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 3, criteria.get("rule"));
+		
+		//won't trigger because attack already happened
+		generateEvents(sleepAmount*2, detectionPoint1, 2);
+		assertEventsAndAttacks(6, 2, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 3, criteria.get("rule"));
+		
+		//now it will trigger
+		generateEvents(sleepAmount*2, detectionPoint1, 1);
+		assertEventsAndAttacks(7, 2, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 4, criteria.get("rule"));
+	}
+	
+	@Test
+	public void test4_DP1andnotDP2() throws Exception {
+		//Add rule
+		myEngine.addRule(rules.get(3));
+		
+		//is empty
+		assertEventsAndAttacks(0, 0, criteria.get("all"));
+		
+		//DP2 and DP1 - no attack triggered
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(12, 1, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(3, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));
+		
+		clearStores();
+		
+		//DP1 and no DP2 - trigger attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(3, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		
+		//DP2 and DP1 - no attack triggered
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(12, 1, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(6, 2, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+	}
+	
+	@Test
+	public void test5_DP1orDP2andnotDP3() throws Exception {
+		//Add rule
+		myEngine.addRule(rules.get(4));
+		
+		//is empty
+		assertEventsAndAttacks(0, 0, criteria.get("all"));
+		
+		//DP1 - trigger attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(3, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		
+		//DP1 - trigger attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(6, 2, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 2, criteria.get("rule"));
+		
+		//DP2 AND NOT DP3 - trigger attack
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(12, 1, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 3, criteria.get("rule"));
+		
+		//DP3 AND DP2 - no attack
+		generateEvents(sleepAmount*13, detectionPoint3, 13);
+		assertEventsAndAttacks(13, 1, criteria.get("dp3"));
+		assertEventsAndAttacks(0, 3, criteria.get("rule"));
+		
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(24, 2, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 3, criteria.get("rule"));
+		
+		//DP1 - trigger attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(9, 3, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 4, criteria.get("rule"));
+	}
+
+	@Test
+	public void test6_DP1thenDP2() throws Exception {
+		//Add rule
+		myEngine.addRule(rules.get(5));
+
+		//is empty
+		assertEventsAndAttacks(0, 0, criteria.get("all"));
+		
+		//DP1 - no attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(3, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));
+		
+		//DP2 - trigger attack
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(12, 1, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));	
+
+		//DP2 - no attack
+		generateEvents(sleepAmount*11, detectionPoint2, 11);
+		assertEventsAndAttacks(23, 1, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));	
+		
+		generateEvents(sleepAmount*1, detectionPoint2, 1);
+		assertEventsAndAttacks(24, 2, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));	
+		
+		//DP1 - no attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(6, 2, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		
+		//DP2 - trigger attack
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(36, 3, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 2, criteria.get("rule"));	
+	}
+	
+	@Test
+	public void test7_DP1thenDP2thenDP1orDP2andnotDP3() throws Exception {
+		//Add rule
+		myEngine.addRule(rules.get(6));
+
+		//is empty
+		assertEventsAndAttacks(0, 0, criteria.get("all"));
+		
+		//DP1 - no attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(3, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));
+		
+		//DP2 - no attack
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(12, 1, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));
+		
+		//DP1 - trigger attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(6, 2, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		
+		//DP1 - no attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(9, 3, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		
+		clearStores();
+		
+		//DP2 - no attack
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(12, 1, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));	
+		
+		//DP1 - no attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(3, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));
+
+		//DP2 - no attack
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(24, 2, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));
+		
+		//DP3 - no attack
+		generateEvents(sleepAmount*13, detectionPoint3, 13);
+		assertEventsAndAttacks(13, 1, criteria.get("dp3"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));
+		
+		//DP2 - no attack
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(36, 3, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));
+		
+		//DP1 - trigger attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(6, 2, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		
+		//DP1 - no attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(9, 3, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));	
+		
+		//DP2 - no attack
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(48, 4, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+		
+		//DP2 - trigger attack
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(60, 5, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 2, criteria.get("rule"));
+	}
+	
+	/*
+	@Test
+	public void test8_DP1thenDP2thennotDP3thennotDP4thenDP5() throws Exception {
+		//Add rule
+		myEngine.addRule(rules.get(7));
+
+		//is empty
+		assertEventsAndAttacks(0, 0, criteria.get("all"));
+		
+		//DP1 - no attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3);
+		assertEventsAndAttacks(3, 1, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));
+		
+		//DP2 - no attack
+		generateEvents(sleepAmount*12, detectionPoint2, 12);
+		assertEventsAndAttacks(12, 1, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 0, criteria.get("rule"));	
+
+		//DP5 - attack
+		generateEvents(sleepAmount*15, detectionPoint5, 15);
+		assertEventsAndAttacks(15, 1, criteria.get("dp5"));
+		assertEventsAndAttacks(0, 1, criteria.get("rule"));
+	}
+	*/
+	
+	//assumes no rules will be triggered until last event
+	private void generateEvents (int time, DetectionPoint detectionPoint, int eventCount) throws Exception {
+		int attackCount = appSensorServer.getAttackStore().findAttacks(criteria.get("rule")).size();
+		
+		for (int i = 0; i < eventCount; i++) {
+			assertEquals(attackCount, appSensorServer.getAttackStore().findAttacks(criteria.get("rule")).size());
+			appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint, new DetectionSystem("localhostme")));
+			Thread.sleep(time/eventCount);
+		}
+	}
+	
+	private void assertEventsAndAttacks (int eventCount, int attackCount, SearchCriteria criteria) {
+		assertEquals(eventCount, appSensorServer.getEventStore().findEvents(criteria).size());
+		assertEquals(attackCount, appSensorServer.getAttackStore().findAttacks(criteria).size());
+	}
+	
+	private void clearStores() {
+		((InMemoryAttackStore) appSensorServer.getAttackStore()).clearAll();
+		((InMemoryEventStore) appSensorServer.getEventStore()).clearAll();
+	}
+	
+	private static ArrayList<Rule> generateRules() {
 		final ArrayList<Rule> configuredRules = new ArrayList<Rule>();
 		Interval minutes5 = new Interval(5, Interval.MINUTES);
-		
-		//detection point
-		DetectionPoint point1 = createDetectionPoint("IE1", 3, 5);
+		Interval minutes6 = new Interval(6, Interval.MINUTES);
+		Interval minutes10 = new Interval(10, Interval.MINUTES);
+		Interval minutes14 = new Interval(14, Interval.MINUTES);
+		Interval minutes15 = new Interval(15, Interval.MINUTES);
+		Interval minutes16 = new Interval(16, Interval.MINUTES);
 
-		//rule
-		DetectionPointVariable detectionPointVariable = new DetectionPointVariable(DetectionPointVariable.BOOLEAN_OPERATOR_AND, point1);
-		ArrayList<DetectionPointVariable> detectionPointVariables = new ArrayList<DetectionPointVariable>();
-		detectionPointVariables.add(detectionPointVariable);
-		
-		org.owasp.appsensor.analysis.Expression expression = new org.owasp.appsensor.analysis.Expression(minutes5, detectionPointVariables);
-		ArrayList<org.owasp.appsensor.analysis.Expression> expressions = new ArrayList<org.owasp.appsensor.analysis.Expression>();
-		expressions.add(expression);
-		
-		Rule rule = new Rule(minutes5, expressions);
-		configuredRules.add(rule);
-		
-		return configuredRules;
-	}
-	
-	private ArrayList<Rule> generateRule2() {
-		final ArrayList<Rule> configuredRules = new ArrayList<Rule>();
-		Interval minutes5 = new Interval(15, Interval.MINUTES);
-		
-		//detection point
+		//detection points
 		DetectionPoint point1 = createDetectionPoint("IE1", 3, 5);
 		DetectionPoint point2 = createDetectionPoint("IE2", 12, 5);
-
-		//rule: DP1 AND DP2
+		DetectionPoint point3 = createDetectionPoint("IE3", 13, 6);
+		DetectionPoint point4 = createDetectionPoint("IE4", 14, 7);
+		DetectionPoint point5 = createDetectionPoint("IE5", 15, 8);
+		
 		DetectionPointVariable detectionPointVariable1 = new DetectionPointVariable(DetectionPointVariable.BOOLEAN_OPERATOR_AND, point1);
 		DetectionPointVariable detectionPointVariable2 = new DetectionPointVariable(DetectionPointVariable.BOOLEAN_OPERATOR_AND, point2);
-		ArrayList<DetectionPointVariable> detectionPointVariables = new ArrayList<DetectionPointVariable>();
-		detectionPointVariables.add(detectionPointVariable1);
-		detectionPointVariables.add(detectionPointVariable2);
+		DetectionPointVariable detectionPointVariable3 = new DetectionPointVariable(DetectionPointVariable.BOOLEAN_OPERATOR_OR, point2);
+		DetectionPointVariable detectionPointVariable4 = new DetectionPointVariable(DetectionPointVariable.BOOLEAN_OPERATOR_AND_NOT, point2);
+		DetectionPointVariable detectionPointVariable5 = new DetectionPointVariable(DetectionPointVariable.BOOLEAN_OPERATOR_AND_NOT, point3);
+		DetectionPointVariable detectionPointVariable6 = new DetectionPointVariable(DetectionPointVariable.BOOLEAN_OPERATOR_AND_NOT, point4);
+		DetectionPointVariable detectionPointVariable7 = new DetectionPointVariable(DetectionPointVariable.BOOLEAN_OPERATOR_AND, point5);
 		
-		org.owasp.appsensor.analysis.Expression expression = new org.owasp.appsensor.analysis.Expression(minutes5, detectionPointVariables);
-		ArrayList<org.owasp.appsensor.analysis.Expression> expressions = new ArrayList<org.owasp.appsensor.analysis.Expression>();
-		expressions.add(expression);
+		//rule 1: DP1
+		ArrayList<DetectionPointVariable> detectionPointVariables1 = new ArrayList<DetectionPointVariable>();
+		detectionPointVariables1.add(detectionPointVariable1);
+
+		org.owasp.appsensor.analysis.Expression expression1 = new org.owasp.appsensor.analysis.Expression(minutes5, detectionPointVariables1);	
+		ArrayList<org.owasp.appsensor.analysis.Expression> expressions1 = new ArrayList<org.owasp.appsensor.analysis.Expression>();
+		expressions1.add(expression1);
 		
-		Rule rule = new Rule(minutes5, expressions);
-		configuredRules.add(rule);
+		configuredRules.add(new Rule("Rule 1", minutes5, expressions1));
+		
+		//rule 2: DP1 AND DP2	
+		ArrayList<DetectionPointVariable> detectionPointVariables2 = new ArrayList<DetectionPointVariable>();
+		detectionPointVariables2.add(detectionPointVariable1);
+		detectionPointVariables2.add(detectionPointVariable2);
+		
+		org.owasp.appsensor.analysis.Expression expression2 = new org.owasp.appsensor.analysis.Expression(minutes5, detectionPointVariables2);
+		ArrayList<org.owasp.appsensor.analysis.Expression> expressions2 = new ArrayList<org.owasp.appsensor.analysis.Expression>();
+		expressions2.add(expression2);
+
+		configuredRules.add(new Rule("Rule 2", minutes5, expressions2));
+		
+		//rule 3: DP1 OR DP2
+		ArrayList<DetectionPointVariable> detectionPointVariables3 = new ArrayList<DetectionPointVariable>();
+		detectionPointVariables3.add(detectionPointVariable1);
+		detectionPointVariables3.add(detectionPointVariable3);
+		
+		org.owasp.appsensor.analysis.Expression expression3 = new org.owasp.appsensor.analysis.Expression(minutes5, detectionPointVariables3);
+		ArrayList<org.owasp.appsensor.analysis.Expression> expressions3 = new ArrayList<org.owasp.appsensor.analysis.Expression>();
+		expressions3.add(expression3);
+		
+		configuredRules.add(new Rule("Rule 3", minutes5, expressions3));
+				
+		//rule 4: DP1 AND NOT DP2
+		ArrayList<DetectionPointVariable> detectionPointVariables4 = new ArrayList<DetectionPointVariable>();
+		detectionPointVariables4.add(detectionPointVariable1);
+		detectionPointVariables4.add(detectionPointVariable4);
+		
+		org.owasp.appsensor.analysis.Expression expression4 = new org.owasp.appsensor.analysis.Expression(minutes5, detectionPointVariables4);
+		ArrayList<org.owasp.appsensor.analysis.Expression> expressions4 = new ArrayList<org.owasp.appsensor.analysis.Expression>();
+		expressions4.add(expression4);
+		
+		configuredRules.add(new Rule("Rule 4", minutes5, expressions4));
+		
+		//rule5: DP1 OR DP2 AND NOT DP3
+		ArrayList<DetectionPointVariable> detectionPointVariables5 = new ArrayList<DetectionPointVariable>();
+		detectionPointVariables5.add(detectionPointVariable1);
+		detectionPointVariables5.add(detectionPointVariable3);
+		detectionPointVariables5.add(detectionPointVariable5);
+		
+		org.owasp.appsensor.analysis.Expression expression5 = new org.owasp.appsensor.analysis.Expression(minutes5, detectionPointVariables5);
+		ArrayList<org.owasp.appsensor.analysis.Expression> expressions5 = new ArrayList<org.owasp.appsensor.analysis.Expression>();
+		expressions5.add(expression5);
+		
+		configuredRules.add(new Rule("Rule 5", minutes6, expressions5));		
+		
+		//rule 6: DP1 THEN DP2	
+		ArrayList<DetectionPointVariable> detectionPointVariables6 = new ArrayList<DetectionPointVariable>();
+		detectionPointVariables6.add(detectionPointVariable2);
+		
+		org.owasp.appsensor.analysis.Expression expression6 = new org.owasp.appsensor.analysis.Expression(minutes5, detectionPointVariables6);
+		ArrayList<org.owasp.appsensor.analysis.Expression> expressions6 = new ArrayList<org.owasp.appsensor.analysis.Expression>();
+		expressions6.add(expression1);
+		expressions6.add(expression6);
+
+		configuredRules.add(new Rule("Rule 6", minutes10, expressions6));
+		
+		//rule 7: DP1 THEN DP2 THEN DP1 OR DP2 AND NOT DP3
+		ArrayList<org.owasp.appsensor.analysis.Expression> expressions7 = new ArrayList<org.owasp.appsensor.analysis.Expression>();
+		expressions7.add(expression1);
+		expressions7.add(expression6);
+		expressions7.add(expression5);
+
+		configuredRules.add(new Rule("Rule 7", minutes16, expressions7));
+		
+		//rule 8: DP1 THEN DP2 THEN NOT DP3 THEN NOT DP4 THEN DP5
+		//are all the expression times supposed to add up to the rule time?
+		//do you set a time for an only "AND NOT" expression? - NO!
+			//NO "AND NOT" expressions. For now.
+		ArrayList<DetectionPointVariable> detectionPointVariables7 = new ArrayList<DetectionPointVariable>();
+		ArrayList<DetectionPointVariable> detectionPointVariables8 = new ArrayList<DetectionPointVariable>();
+		ArrayList<DetectionPointVariable> detectionPointVariables9 = new ArrayList<DetectionPointVariable>();
+		detectionPointVariables7.add(detectionPointVariable5);
+		detectionPointVariables8.add(detectionPointVariable6);
+		detectionPointVariables9.add(detectionPointVariable7);
+		
+		org.owasp.appsensor.analysis.Expression expression7 = new org.owasp.appsensor.analysis.Expression(minutes14, detectionPointVariables7);
+		org.owasp.appsensor.analysis.Expression expression8 = new org.owasp.appsensor.analysis.Expression(minutes15, detectionPointVariables8);
+		org.owasp.appsensor.analysis.Expression expression9 = new org.owasp.appsensor.analysis.Expression(minutes14, detectionPointVariables9);
+
+		ArrayList<org.owasp.appsensor.analysis.Expression> expressions8 = new ArrayList<org.owasp.appsensor.analysis.Expression>();
+		expressions8.add(expression1);
+		expressions8.add(expression6);
+		expressions8.add(expression7);
+		expressions8.add(expression8);
+		expressions8.add(expression9);
+		
+		configuredRules.add(new Rule("Rule 8", minutes16, expressions8));
 		
 		return configuredRules;
 	}
 	
-	private Collection<DetectionPoint> loadMockedDetectionPoints() {
+	private static Collection<DetectionPoint> loadMockedDetectionPoints() {
 		final Collection<DetectionPoint> configuredDetectionPoints = new ArrayList<DetectionPoint>();
 
 		Interval minutes5 = new Interval(5, Interval.MINUTES);
@@ -313,7 +714,7 @@ public class DavidRuleEventAnalysisEngineTest {
 		point5Responses.add(disableComponentForAllUsers15);
 		
 		DetectionPoint point5 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE5", events15minutes8, point5Responses);
-		
+				
 		configuredDetectionPoints.add(point1);
 		configuredDetectionPoints.add(point2);
 		configuredDetectionPoints.add(point3);
@@ -323,28 +724,14 @@ public class DavidRuleEventAnalysisEngineTest {
 		return configuredDetectionPoints;
 	}
 	
-	private DetectionPoint createDetectionPoint(String label, int events, int minutes) {
+	private static DetectionPoint createDetectionPoint(String label, int events, int minutes) {
 		DetectionPoint point = null;
-		
-		Response log = new Response();
-		log.setAction("log");
-		
-		Response logout = new Response();
-		logout.setAction("logout");
-		
-		Response disableUser = new Response();
-		disableUser.setAction("disableUser");
-		
-		Collection<Response> point1Responses = new ArrayList<Response>();
-		point1Responses.add(log);
-		point1Responses.add(logout);
-		point1Responses.add(disableUser);
 		
 		Interval interval = new Interval(minutes, Interval.MINUTES);
 		
 		Threshold threshold = new Threshold(events, interval);
 		
-		point = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, label, threshold, point1Responses);
+		point = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, label, threshold, null);
 		
 		return point;
 	}

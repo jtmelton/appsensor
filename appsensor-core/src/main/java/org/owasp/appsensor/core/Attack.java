@@ -65,6 +65,8 @@ public class Attack implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL)
     private Resource resource;
 	
+	private String rule;
+	
 	/** Represent extra metadata, anything client wants to send */
 	@ElementCollection
 	private Collection<KeyValuePair> metadata = new ArrayList<>();
@@ -148,6 +150,15 @@ public class Attack implements Serializable {
 
 	public Attack setResource(Resource resource) {
 		this.resource = resource;
+		return this;
+	}
+	
+	public String getRule() {
+		return this.rule;
+	}
+	
+	public Attack setRule(String rule) {
+		this.rule = rule;
 		return this;
 	}
 	
