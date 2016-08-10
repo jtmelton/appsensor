@@ -42,16 +42,16 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 @Repository
 public abstract class AbstractElasticRepository {
 
-    @Value("${appsensor.elasticsearch.indexname}")
+    @Value("${appsensor.elasticsearch.indexname:appsensor}")
     private String indexName;
 
-    @Value("${appsensor.elasticsearch.clustername}")
+    @Value("${appsensor.elasticsearch.clustername:elasticsearch}")
     private String clustername;
 
-    @Value("${appsensor.elasticsearch.host}")
+    @Value("${appsensor.elasticsearch.host:localhost}")
     private String host;
 
-    @Value("${appsensor.elasticsearch.port}")
+    @Value("${appsensor.elasticsearch.port:9300}")
     private int port;
 
     private Client client;
