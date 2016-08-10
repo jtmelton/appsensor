@@ -21,15 +21,15 @@ import org.owasp.appsensor.core.*;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.storage.elasticsearch.mapping.ElasticSearchJsonMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.datetime.DateFormatter;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
@@ -43,7 +43,12 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 public abstract class AbstractElasticRepository {
 
     @Value("${appsensor.elasticsearch.indexname:appsensor}")
-    private String indexName;
+    private String configuredIndexName;
+
+    @Value("${appsensor.elasticsearch.rotatingindex:true}")
+    private boolean rotatingIndex;
+
+    private String actualIndexName;
 
     @Value("${appsensor.elasticsearch.clustername:elasticsearch}")
     private String clustername;
@@ -58,6 +63,7 @@ public abstract class AbstractElasticRepository {
 
     private ObjectMapper objectMapper;
 
+    private static final DateFormatter DATE_FORMATTER = new DateFormatter("yyyy.MM.dd");
 
     @PostConstruct
     private void initRepository() throws IOException {
@@ -69,25 +75,33 @@ public abstract class AbstractElasticRepository {
                 .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), port));
 
         objectMapper = new ElasticSearchJsonMapper();
+        updateIndex();
+    }
 
+
+    @Scheduled(cron = "0 0 0 * * *") //execute with every start of a new day
+    private void updateIndex() throws IOException {
+        actualIndexName = configuredIndexName;
+        if (rotatingIndex) {
+            actualIndexName += "-" + DATE_FORMATTER.print(new Date(), Locale.ENGLISH);
+        }
 
         XContentBuilder mapping = generateCommonElasticMappingForType(getElasticIndexType());
 
-        if (!getClient().admin().indices().exists(new IndicesExistsRequest(indexName)).actionGet().isExists()) {
-            getClient().admin().indices().create(new CreateIndexRequest(indexName)).actionGet();
+        if (!getClient().admin().indices().exists(new IndicesExistsRequest(actualIndexName)).actionGet().isExists()) {
+            getClient().admin().indices().create(new CreateIndexRequest(actualIndexName)).actionGet();
         }
 
 
         getClient().admin().indices()
-                .preparePutMapping(indexName)
+                .preparePutMapping(actualIndexName)
                 .setType(getElasticIndexType())
                 .setSource(mapping)
                 .execute().actionGet();
-
     }
 
     protected String getIndexName() {
-        return indexName;
+        return actualIndexName;
     }
 
     protected abstract String getElasticIndexType();
