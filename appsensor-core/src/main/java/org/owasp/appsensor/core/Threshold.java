@@ -1,7 +1,5 @@
 package org.owasp.appsensor.core;
 
-import java.io.Serializable;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,14 +24,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Entity
-public class Threshold implements Serializable {
+public class Threshold implements IAppsensorEntity {
 
 	private static final long serialVersionUID = -9033433180585877243L;
 
 	@Id
-	@Column
+	@Column(columnDefinition = "integer")
 	@GeneratedValue
-	private Integer id;
+	private String id;
 	
 	/** The count at which this threshold is triggered. */
 	@Column(name="t_count")
@@ -52,7 +50,17 @@ public class Threshold implements Serializable {
 		setCount(count);
 		setInterval(interval);
 	}
-	
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public int getCount() {
 		return count;
 	}

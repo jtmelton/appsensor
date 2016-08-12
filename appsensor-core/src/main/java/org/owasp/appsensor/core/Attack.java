@@ -1,6 +1,5 @@
 package org.owasp.appsensor.core;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -30,14 +29,14 @@ import org.owasp.appsensor.core.util.DateUtils;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Entity
-public class Attack implements Serializable {
+public class Attack implements IAppsensorEntity {
 
 	private static final long serialVersionUID = 7231666413877649836L;
 
 	@Id
-	@Column
+	@Column(columnDefinition = "integer")
 	@GeneratedValue
-	private Integer id;
+	private String id;
 	
 	/** User who triggered the attack, could be anonymous user */
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -98,11 +97,11 @@ public class Attack implements Serializable {
 		setResource(event.getResource());
 	}
 	
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -15,8 +15,6 @@ local.properties
 .classpath
 .project
 *.iml
-*.ipr
-*.iws
 
 # External tool builders
 .externalToolBuilders/

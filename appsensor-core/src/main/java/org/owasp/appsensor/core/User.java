@@ -1,6 +1,5 @@
 package org.owasp.appsensor.core;
 
-import java.io.Serializable;
 
 import javax.inject.Inject;
 import javax.persistence.Column;
@@ -34,14 +33,14 @@ import com.google.common.net.InetAddresses;
  */
 @Entity
 @XmlAccessorType(XmlAccessType.FIELD) 
-public class User implements Serializable {
+public class User implements IAppsensorEntity {
 
 	private static final long serialVersionUID = 5084152023446797592L;
 
 	@Id
-	@Column
+	@Column(columnDefinition = "integer")
 	@GeneratedValue
-	private Integer id;
+	private String id;
 	
 	private String username;
 	
@@ -62,7 +61,17 @@ public class User implements Serializable {
 		setIPAddress(ipAddress);
 		setUsername(username);
 	}
-	
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -71,7 +80,7 @@ public class User implements Serializable {
 		this.username = username;
 		
 		// if IP is used as username, setup IP address w/ geolocation
-		if (ipAddress != null && InetAddresses.isInetAddress(username)) {
+		if (locator != null && ipAddress != null && InetAddresses.isInetAddress(username)) {
 			this.ipAddress = locator.fromString(username);
 		}
 		
