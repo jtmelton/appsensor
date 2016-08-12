@@ -34,7 +34,7 @@ public class Resource implements IAppsensorEntity {
 
 	/**
 	 * The method used to request the resource. In terms of HTTP this would be GET/POST/PUT/etc.
-	 * In the case, in which the resources specifices an object this could be the invoked object method.
+	 * In the case, in which the resources specifies an object this could be the invoked object method.
 	 */
 	@Column
 	private String method;
