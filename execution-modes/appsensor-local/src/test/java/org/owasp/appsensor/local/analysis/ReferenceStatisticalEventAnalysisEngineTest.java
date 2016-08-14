@@ -3,23 +3,14 @@ package org.owasp.appsensor.local.analysis;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.inject.Inject;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.owasp.appsensor.core.AppSensorClient;
-import org.owasp.appsensor.core.AppSensorServer;
-import org.owasp.appsensor.core.Attack;
-import org.owasp.appsensor.core.DetectionPoint;
-import org.owasp.appsensor.core.DetectionSystem;
-import org.owasp.appsensor.core.Event;
-import org.owasp.appsensor.core.Interval;
-import org.owasp.appsensor.core.Response;
-import org.owasp.appsensor.core.Threshold;
-import org.owasp.appsensor.core.User;
+import org.owasp.appsensor.core.*;
 import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.springframework.test.context.ContextConfiguration;
@@ -37,14 +28,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations={"classpath:base-context.xml"})
 public class ReferenceStatisticalEventAnalysisEngineTest {
 
-	private static User bob = new User("bob");
-	
-	private static DetectionPoint detectionPoint1 = new DetectionPoint();
-	
-	private static Collection<String> detectionSystems1 = new ArrayList<String>();
-	
-	private static DetectionSystem detectionSystem1 = new DetectionSystem("localhostme");
-	
 	protected int sleepAmount = 1;
 	
 	@Inject
@@ -52,14 +35,9 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 	
 	@Inject
 	AppSensorClient appSensorClient;
-	
-	@BeforeClass
-	public static void doSetup() {
-		detectionPoint1.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
-		detectionPoint1.setLabel("IE1");
-		
-		detectionSystems1.add(detectionSystem1.getDetectionSystemId());
-	}
+
+    @Inject
+    IPAddress ipAddressLocator;
 	
 	@Test
 	public void testAttackCreation() throws Exception {
@@ -68,58 +46,60 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 		appSensorServer.setConfiguration(updatedConfiguration);
 
 		SearchCriteria criteria = new SearchCriteria().
-				setUser(bob).
-				setDetectionPoint(detectionPoint1).
-				setDetectionSystemIds(detectionSystems1);
+				setUser(generateUserBob()).
+				setDetectionPoint(generateDetectionPoint1()).
+				setDetectionSystemIds(
+                        Arrays.asList(generateDetectionSystemLocalhostMe().getDetectionSystemId())
+                );
 		
 		Thread.sleep(sleepAmount);
 		
 		assertEquals(0, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
 		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+		appSensorClient.getEventManager().addEvent(generateNewEvent());
 		
 		Thread.sleep(sleepAmount);
 		
 		assertEquals(1, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
-		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+
+        appSensorClient.getEventManager().addEvent(generateNewEvent());
 		
 		Thread.sleep(sleepAmount);
 		
 		assertEquals(2, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
-		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+
+        appSensorClient.getEventManager().addEvent(generateNewEvent());
 		
 		Thread.sleep(sleepAmount);
 		
 		assertEquals(3, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria).size());
-		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+
+        appSensorClient.getEventManager().addEvent(generateNewEvent());
 		
 		Thread.sleep(sleepAmount);
 		
 		assertEquals(4, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria).size());
-		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+
+        appSensorClient.getEventManager().addEvent(generateNewEvent());
 		
 		Thread.sleep(sleepAmount);
 		
 		assertEquals(5, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria).size());
-		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+
+        appSensorClient.getEventManager().addEvent(generateNewEvent());
 		
 		Thread.sleep(sleepAmount);
 		
 		assertEquals(6, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(2, appSensorServer.getAttackStore().findAttacks(criteria).size());
-		
-		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint1, new DetectionSystem("localhostme")));
+
+        appSensorClient.getEventManager().addEvent(generateNewEvent());
 		
 		Thread.sleep(sleepAmount);
 		
@@ -253,5 +233,41 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 
 		return configuredDetectionPoints;
 	}
+
+    private Event generateNewEvent() {
+        Event event = new Event(generateUserBob(), generateDetectionPoint1(), generateDetectionSystemLocalhostMe());
+
+        event.setResource(generateResource());
+
+        return event;
+    }
+
+    private Resource generateResource() {
+        Resource resource = new Resource();
+        resource.setLocation("/someResourceLocation");
+        resource.setMethod("GET");
+        return resource;
+    }
+
+    private User generateUserBob() {
+        User bob = new User("bob");
+        bob.setIPAddress(ipAddressLocator.fromString("8.8.8.8"));
+
+        return bob;
+    }
+
+    private DetectionPoint generateDetectionPoint1() {
+        DetectionPoint detectionPoint1 = new DetectionPoint();
+        detectionPoint1.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
+        detectionPoint1.setLabel("IE1");
+        return detectionPoint1;
+    }
+
+    private DetectionSystem generateDetectionSystemLocalhostMe() {
+        DetectionSystem detectionSystem = new DetectionSystem("localhostme");
+        detectionSystem.setIPAddress(ipAddressLocator.fromString("9.9.9.9"));
+
+        return detectionSystem;
+    }
 	
 }

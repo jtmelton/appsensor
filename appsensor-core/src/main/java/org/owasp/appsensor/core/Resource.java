@@ -32,6 +32,13 @@ public class Resource implements IAppsensorEntity {
 	@Column
 	private String location;
 
+	/**
+	 * The method used to request the resource. In terms of HTTP this would be GET/POST/PUT/etc.
+	 * In the case, in which the resources specifies an object this could be the invoked object method.
+	 */
+	@Column
+	private String method;
+
 	@Override
 	public String getId() {
 		return id;
@@ -49,5 +56,12 @@ public class Resource implements IAppsensorEntity {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
 }
