@@ -247,6 +247,7 @@ public abstract class AbstractElasticRepository {
         String id = getClient().prepareIndex(getIndexName(), getElasticIndexType())
                 .setSource(getObjectMapper().writeValueAsBytes(entity))
                 .setRefresh(true)
+                .setId(entity.getId())
                 .execute()
                 .actionGet().getId();
 
