@@ -9,6 +9,11 @@ import org.owasp.appsensor.core.geolocation.GeoLocation;
 
 import java.io.IOException;
 
+/**
+ * Jackson Serializer that deserializes GeoLocations serialized to JSON by {@link GeoLocationMapperSerializer}.
+ *
+ * @author Maik Jäkel(m.jaekel@xsite.de) http://www.xsite.de
+ */
 public class GeoLocationMapperDeSerializer extends StdDeserializer<GeoLocation> {
     public GeoLocationMapperDeSerializer() {
         super(GeoLocation.class);
