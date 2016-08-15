@@ -21,7 +21,7 @@ public class ElasticSearchJsonMapper extends ObjectMapper {
     public ElasticSearchJsonMapper() {
 
 
-        SimpleModule customSerializationModule = new SimpleModule("AppSensorElasticSearch", new Version(1, 0, 0, null));
+        SimpleModule customSerializationModule = new SimpleModule("AppSensorElasticSearch", new Version(1, 0, 0, null, "org.owasp.appsensor", "elasticsearch"));
 
         customSerializationModule.addSerializer(GeoLocation.class, new GeoLocationJacksonSerializer());
         customSerializationModule.addDeserializer(GeoLocation.class, new GeoLocationJacksonDeserializer());
