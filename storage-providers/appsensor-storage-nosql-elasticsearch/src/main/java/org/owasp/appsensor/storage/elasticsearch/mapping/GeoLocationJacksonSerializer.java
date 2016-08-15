@@ -13,8 +13,8 @@ import java.io.IOException;
  *
  * @author Maik Jäkel(m.jaekel@xsite.de) http://www.xsite.de
  */
-public class GeoLocationMapperSerializer extends StdSerializer<GeoLocation> {
-    public GeoLocationMapperSerializer() {
+public class GeoLocationJacksonSerializer extends StdSerializer<GeoLocation> {
+    public GeoLocationJacksonSerializer() {
         super(GeoLocation.class);
     }
 

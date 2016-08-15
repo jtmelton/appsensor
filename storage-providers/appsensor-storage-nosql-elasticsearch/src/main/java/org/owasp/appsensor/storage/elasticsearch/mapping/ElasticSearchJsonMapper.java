@@ -23,8 +23,8 @@ public class ElasticSearchJsonMapper extends ObjectMapper {
 
         SimpleModule customSerializationModule = new SimpleModule("AppSensorElasticSearch", new Version(1, 0, 0, null));
 
-        customSerializationModule.addSerializer(GeoLocation.class, new GeoLocationMapperSerializer());
-        customSerializationModule.addDeserializer(GeoLocation.class, new GeoLocationMapperDeSerializer());
+        customSerializationModule.addSerializer(GeoLocation.class, new GeoLocationJacksonSerializer());
+        customSerializationModule.addDeserializer(GeoLocation.class, new GeoLocationJacksonDeserializer());
 
         customSerializationModule.setMixInAnnotation(IAppsensorEntity.class, KeyValuePairMixin.class);
 
