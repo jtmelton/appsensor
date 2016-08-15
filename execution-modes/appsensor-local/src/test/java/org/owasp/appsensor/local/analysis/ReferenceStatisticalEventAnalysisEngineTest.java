@@ -239,6 +239,8 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 
         event.setResource(generateResource());
 
+		event.setMetadata(generateMetaData());
+
         return event;
     }
 
@@ -269,5 +271,12 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 
         return detectionSystem;
     }
+
+	private Collection<KeyValuePair> generateMetaData(){
+		Collection<KeyValuePair> metaDataCol =  new ArrayList<>();
+		metaDataCol.add(new KeyValuePair("meta", "data"));
+
+		return metaDataCol;
+	}
 	
 }
