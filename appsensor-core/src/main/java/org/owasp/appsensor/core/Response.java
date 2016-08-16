@@ -1,16 +1,9 @@
 package org.owasp.appsensor.core;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -59,6 +52,7 @@ public class Response implements IAppsensorEntity {
 	
 	/** Represent extra metadata, anything client wants to send */
 	@ElementCollection
+	@OneToMany(cascade = CascadeType.ALL)
 	private Collection<KeyValuePair> metadata = new ArrayList<>();
 	
 	private boolean active = false;
