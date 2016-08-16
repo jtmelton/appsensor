@@ -243,12 +243,15 @@ public abstract class AbstractElasticRepository {
 
     }
 
-    public void save(Object o) throws JsonProcessingException {
-        getClient().prepareIndex(getIndexName(), getElasticIndexType())
-                .setSource(getObjectMapper().writeValueAsBytes(o))
+    public void save(IAppsensorEntity entity) throws JsonProcessingException {
+        String id = getClient().prepareIndex(getIndexName(), getElasticIndexType())
+                .setSource(getObjectMapper().writeValueAsBytes(entity))
                 .setRefresh(true)
+                .setId(entity.getId())
                 .execute()
-                .actionGet();
+                .actionGet().getId();
+
+        entity.setId(id);
 
     }
 
