@@ -80,7 +80,7 @@ public class User implements IAppsensorEntity {
 		this.username = username;
 		
 		// if IP is used as username, setup IP address w/ geolocation
-		if (locator != null && ipAddress != null && InetAddresses.isInetAddress(username)) {
+		if (locator != null && ipAddress == null && InetAddresses.isInetAddress(username)) {
 			this.ipAddress = locator.fromString(username);
 		}
 		
