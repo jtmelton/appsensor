@@ -3,6 +3,7 @@
 .gradle
 bin/**
 target/**
+**/target/**
 tmp/**
 tmp/**/*
 *.tmp
