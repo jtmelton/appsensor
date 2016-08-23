@@ -116,6 +116,7 @@
 		<module>storage-providers/appsensor-storage-nosql-elasticsearch</module>
 		<module>storage-providers/appsensor-storage-nosql-mongodb</module>
 		<module>storage-providers/appsensor-storage-nosql-riak</module>
+		<module>storage-providers/appsensor-storage-influxdb</module>
 		<module>integrations/appsensor-integration-jmx</module>
 		<module>integrations/appsensor-integration-cef-syslog</module>
 		<module>integrations/appsensor-integration-spring-security</module>
