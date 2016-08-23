@@ -58,12 +58,6 @@ public class Utils {
 
     Collection<String> databases = influxDB.describeDatabases();
 
-    //todo: deleteme
-    if(databases.contains(DATABASE)) {
-      influxDB.deleteDatabase(DATABASE);
-    }
-    // end delete
-
     if(! databases.contains(DATABASE)) {
       influxDB.createDatabase(DATABASE);
     }
