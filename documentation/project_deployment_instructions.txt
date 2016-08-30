@@ -27,7 +27,7 @@ Each deploy:
 	- run 'mvn clean deploy -P release'
 		- need to deploy and activate release profile (-P release)
 		- this is needed to execute the gpg/javadoc/source plugins
-	- create documentation folder
+	- create documentation folder (for non-RC releases)
 		- create a v${version} folder (for 2.1.2, it would be 'v2.1.2')
 		- build the javadoc
 			- run 'mvn javadoc:aggregate'

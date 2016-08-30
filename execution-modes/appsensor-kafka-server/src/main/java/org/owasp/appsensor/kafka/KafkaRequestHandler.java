@@ -193,10 +193,10 @@ public class KafkaRequestHandler implements RequestHandler, KafkaConstants, Resp
 	}
 	
 	private void startKafkaListeners() {
-		logger.info("Starting RabbitMQ listeners for event/attack queues");
+		logger.info("Starting kafka listeners for event/attack topics");
 		new ListenerThread(APPSENSOR_ADD_EVENT_TOPIC).start();
 		new ListenerThread(APPSENSOR_ADD_ATTACK_TOPIC).start();
-		logger.info("Completed startup of RabbitMQ listeners for event/attack queues");
+		logger.info("Completed startup of kafka listeners for event/attack topics");
 	}
 
 	private boolean isInitializedProperly() {
@@ -314,7 +314,7 @@ public class KafkaRequestHandler implements RequestHandler, KafkaConstants, Resp
 	    	
 	    	logger.info("Starting EventManager kafka consumer .. ");
 	    	
-	    	logger.info("Connecting to zookepper: " + config.getConsumerZookeeperConnect());
+	    	logger.info("Connecting to zookeeper: " + config.getConsumerZookeeperConnect());
 	    	logger.info("Connecting with group id: " + config.getConsumerGroupId());
 	    	logger.info("Connecting with client id: " + config.getClientApplicationName());
 	    	logger.info("Connecting to topic: " + topic);
