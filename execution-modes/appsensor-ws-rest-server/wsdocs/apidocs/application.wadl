@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?enunciate-assumed-base-uri ./?>
+<wadl:application xmlns:wadl="http://wadl.dev.java.net/2009/02" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <wadl:doc xmlns:enunciate="http://enunciate.webcohesion.com/" enunciate:generatedBy="Enunciate-2.0"/>
+  
+  <wadl:grammars>
+  </wadl:grammars>
+
+  <wadl:resources base="./">
+
+    <wadl:resource path="api/v1.0/attacks">
+      <wadl:method name="POST">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:representation mediaType="application/json">
+          </wadl:representation>
+        </wadl:request>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/events">
+      <wadl:method name="POST">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:representation mediaType="application/json">
+          </wadl:representation>
+        </wadl:request>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/responses">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/attacks">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/events">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/responses">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/server-config">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/server-config-base64">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/attacks/count">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/attacks/count-by-label">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+          <wadl:param name="label" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/attacks/count-by-user">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+          <wadl:param name="username" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/events/count">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/events/count-by-label">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+          <wadl:param name="label" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/events/count-by-user">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+          <wadl:param name="username" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/responses/count">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/responses/count-by-label">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+          <wadl:param name="label" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+
+    <wadl:resource path="api/v1.0/reports/responses/count-by-user">
+      <wadl:method name="GET">
+        <wadl:doc><![CDATA[]]></wadl:doc>
+        <wadl:request>
+          <wadl:param name="earliest" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+          <wadl:param name="username" style="query">
+            <wadl:doc><![CDATA[]]></wadl:doc>
+          </wadl:param>
+        </wadl:request>
+        <wadl:response>
+          <wadl:representation mediaType="application/json"/>
+        </wadl:response>
+      </wadl:method>
+    </wadl:resource>
+  </wadl:resources>
+</wadl:application>
