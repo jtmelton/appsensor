@@ -1,0 +1,618 @@
+swagger: '2.0'
+info:
+  description: >-
+    <h1>appsensor-ws-rest-server</h1><p>The AppSensor project is an OWASP
+    project to create a knowledge base as well as 
+            practical implementations for intrusion detection within applications.</p>
+  license:
+    url: 'http://www.opensource.org/licenses/mit-license.html'
+    name: MIT License
+  version: 2.2.0
+  title: appsensor-ws-rest-server
+host: 'localhost:8085'
+basePath: 
+schemes: ["http"]
+tags:
+  - name: RestReportingEngine
+    description: "This is the restful endpoint that handles reporting requests on the server-side.\r\n\r\nThis simple RESTful implementation queries the appropriate *Store implementations\r\nfor matching entities."
+  - name: RestRequestHandler
+    description: This is the restful endpoint that handles requests on the server-side.
+definitions:
+  json_Attack:
+    type: object
+    title: Attack
+    properties:
+      id:
+        description: ''
+        type: number
+      metadata:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/json_KeyValuePair'
+      detectionSystem:
+        description: ''
+        $ref: '#/definitions/json_DetectionSystem'
+      user:
+        description: ''
+        $ref: '#/definitions/json_User'
+      detectionPoint:
+        description: ''
+        $ref: '#/definitions/json_DetectionPoint'
+      timestamp:
+        description: ''
+        type: string
+      resource:
+        description: ''
+        $ref: '#/definitions/json_Resource'
+    description: ''
+  json_DetectionPoint:
+    type: object
+    title: DetectionPoint
+    properties:
+      label:
+        description: ''
+        type: string
+      threshold:
+        description: ''
+        $ref: '#/definitions/json_Threshold'
+      category:
+        description: ''
+        type: string
+      responses:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/json_Response'
+    description: ''
+  json_DetectionSystem:
+    type: object
+    title: DetectionSystem
+    properties:
+      id:
+        description: ''
+        type: number
+      ipAddress:
+        description: ''
+        $ref: '#/definitions/json_IPAddress'
+      detectionSystemId:
+        description: ''
+        type: string
+    description: ''
+  json_Event:
+    type: object
+    title: Event
+    properties:
+      detectionPoint:
+        description: ''
+        $ref: '#/definitions/json_DetectionPoint'
+      metadata:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/json_KeyValuePair'
+      detectionSystem:
+        description: ''
+        $ref: '#/definitions/json_DetectionSystem'
+      id:
+        description: ''
+        type: number
+      resource:
+        description: ''
+        $ref: '#/definitions/json_Resource'
+      timestamp:
+        description: ''
+        type: string
+      user:
+        description: ''
+        $ref: '#/definitions/json_User'
+    description: ''
+  json_GeoLocation:
+    type: object
+    title: GeoLocation
+    properties:
+      latitude:
+        description: ''
+        type: number
+      longitude:
+        description: ''
+        type: number
+    description: ''
+  json_IPAddress:
+    type: object
+    title: IPAddress
+    properties:
+      id:
+        description: ''
+        type: number
+      geoLocation:
+        description: ''
+        $ref: '#/definitions/json_GeoLocation'
+      address:
+        description: ''
+        type: string
+    description: ''
+  json_Interval:
+    type: object
+    title: Interval
+    properties:
+      duration:
+        description: ''
+        type: number
+      unit:
+        description: ''
+        type: string
+    description: ''
+  json_KeyValuePair:
+    type: object
+    title: KeyValuePair
+    properties:
+      key:
+        description: ''
+        type: string
+      value:
+        description: ''
+        type: string
+    description: ''
+  json_Resource:
+    type: object
+    title: Resource
+    properties:
+      location:
+        description: ''
+        type: string
+    description: ''
+  json_Response:
+    type: object
+    title: Response
+    properties:
+      id:
+        description: ''
+        type: number
+      detectionSystem:
+        description: ''
+        $ref: '#/definitions/json_DetectionSystem'
+      timestamp:
+        description: ''
+        type: string
+      action:
+        description: ''
+        type: string
+      active:
+        description: ''
+        type: boolean
+      user:
+        description: ''
+        $ref: '#/definitions/json_User'
+      metadata:
+        description: ''
+        type: array
+        items:
+          $ref: '#/definitions/json_KeyValuePair'
+      interval:
+        description: ''
+        $ref: '#/definitions/json_Interval'
+    description: ''
+  json_Threshold:
+    type: object
+    title: Threshold
+    properties:
+      count:
+        description: ''
+        type: number
+      interval:
+        description: ''
+        $ref: '#/definitions/json_Interval'
+    description: ''
+  json_User:
+    type: object
+    title: User
+    properties:
+      id:
+        description: ''
+        type: number
+      ipAddress:
+        description: ''
+        $ref: '#/definitions/json_IPAddress'
+      username:
+        description: ''
+        type: string
+    description: ''
+paths:
+  /api/v1.0/reports/attacks:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_findAttacks_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: array
+            items:
+              $ref: '#/definitions/json_Attack'
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/events:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_findEvents_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: array
+            items:
+              $ref: '#/definitions/json_Event'
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/responses:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_findResponses_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: array
+            items:
+              $ref: '#/definitions/json_Response'
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/server-config:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_getServerConfigurationAsJson_GET
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: string
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/server-config-base64:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: >-
+        resource_RestReportingEngine_getBase64EncodedServerConfigurationFileContent_GET
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        '200':
+          schema:
+            description: ''
+            $ref: '#/definitions/json_KeyValuePair'
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/attacks/count:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_countAttacks_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: number
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/attacks/count-by-label:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_countAttacksByLabel_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+        - name: label
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: number
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/attacks/count-by-user:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_countAttacksByUser_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+        - name: username
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: number
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/events/count:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_countEvents_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: number
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/events/count-by-label:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_countEventsByLabel_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+        - name: label
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: number
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/events/count-by-user:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_countEventsByUser_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+        - name: username
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: number
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/responses/count:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_countResponses_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: number
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/responses/count-by-label:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_countResponsesByLabel_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+        - name: label
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: number
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/reports/responses/count-by-user:
+    get:
+      tags:
+        - RestReportingEngine
+      description: ''
+      operationId: resource_RestReportingEngine_countResponsesByUser_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+        - name: username
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: number
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/attacks:
+    post:
+      tags:
+        - RestRequestHandler
+      description: ''
+      operationId: resource_RestRequestHandler_addAttack_POST
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          schema:
+            description: ''
+            $ref: '#/definitions/json_Attack'
+          description: ''
+      responses:
+        '201':
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/events:
+    post:
+      tags:
+        - RestRequestHandler
+      description: ''
+      operationId: resource_RestRequestHandler_addEvent_POST
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          schema:
+            description: ''
+            $ref: '#/definitions/json_Event'
+          description: ''
+      responses:
+        '201':
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
+  /api/v1.0/responses:
+    get:
+      tags:
+        - RestRequestHandler
+      description: ''
+      operationId: resource_RestRequestHandler_getResponses_GET
+      produces:
+        - application/json
+      parameters:
+        - name: earliest
+          in: query
+          type: string
+          description: ''
+      responses:
+        '200':
+          schema:
+            description: ''
+            type: array
+            items:
+              $ref: '#/definitions/json_Response'
+          headers: {}
+          description: Success
+        default:
+          description: Unexpected error.
