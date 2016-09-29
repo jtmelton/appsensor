@@ -4,7 +4,7 @@ https://www.owasp.org/index.php/Projects/OWASP_AppSensor_Project
 http://appsensor.org/
 https://github.com/jtmelton/appsensor
 
-Changes in version 2.3 (2016/??/??)
+Changes in version 2.3 (2016/09/29)
 --------------------------------------
 
 * Added activemq as execution mode
@@ -54,7 +54,6 @@ Changes in version 2.3 (2016/??/??)
 * Improved query performance of JPA *Store implementations
 
 * Minor refactoring of ResponseStore implementation for code de-duplication
-
 
 Changes in version 2.2 (2015/09/18)
 --------------------------------------
