@@ -1,8 +1,6 @@
 package org.owasp.appsensor.analysis;
 
 import javax.persistence.Column;
-
-import org.hamcrest.SelfDescribing;
 import org.joda.time.DateTime;
 import org.owasp.appsensor.core.Interval;
 
