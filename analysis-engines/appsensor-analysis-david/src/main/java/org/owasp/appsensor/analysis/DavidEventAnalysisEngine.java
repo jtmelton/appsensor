@@ -75,109 +75,21 @@ public class DavidEventAnalysisEngine extends EventAnalysisEngine {
 		Collection<Rule> applicableRules = findApplicableRules(triggerEvent);
 
 		if (applicableRules.size() > 0) {
-
-			// find all events related to all applicable rules
-
-			// find all events matching this event for this user
-			// ASSUMPTION: this is in asc time order
-			//existingEvents.addAll(appSensorServer.getEventStore().findEvents(criteria)); //TODO
-
-			//set the end time for every rule
 			DateTime ruleEndTime = DateUtils.fromString(triggerEvent.getTimestamp());
 
 			for (Rule rule : applicableRules) {
-
-				ArrayList<Event> existingEvents = new ArrayList<Event>();
-				SearchCriteria criteria = new SearchCriteria().setUser(triggerEvent.getUser());
-
-				for (DetectionPoint detectionPoint : rule.getAllDetectionPoints()) {
-					criteria.setDetectionPoint(new DetectionPoint(detectionPoint.getCategory(), detectionPoint.getLabel())).
-					setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(triggerEvent.getDetectionSystem())).
-					setEarliest(findMostRecentAttackTime(triggerEvent, rule).plus(1).toString());
-
-					//existingEvents.addAll(appSensorServer.getEventStore().findEvents(criteria));
-					for (Event event : appSensorServer.getEventStore().findEvents(criteria)) {
-						if (existingEvents.contains(event) == false) {
-							existingEvents.add(event);
-						}
-					}
-				}
-
-				Collections.sort(existingEvents, new EventComparator());
-				Collections.reverse(existingEvents);
-
-				boolean isRuleTriggered = true;
-
 				DateTime ruleStartTime = ruleEndTime.minus(rule.getInterval().toMillis());
 				DateTime lastExpressionStartTime = ruleEndTime.minus(rule.getLastExpression().getInterval().toMillis());
+				ArrayList<Event> existingEvents = getApplicableEvents(triggerEvent, rule);
 
 				//STEP 1: check last expression
-				Expression lastExpression = rule.getLastExpression();
-				//Queue<DPVInterval> lastIntervalList = new LinkedList<DPVInterval>();
-				HashMap<DetectionPointVariable, DPVInterval> lastDpvIntervalMap = new HashMap<DetectionPointVariable, DPVInterval>();
+				lastExpressionStartTime = checkLastExpression(rule.getLastExpression(), existingEvents, lastExpressionStartTime, ruleEndTime);
 
-				boolean isExpressionTriggered = false;
-
-				lastDpvIntervalMap = (HashMap<DetectionPointVariable, DPVInterval>) createDetectionPointIntervalList(existingEvents, lastExpression.getDetectionPointVariables(), lastExpressionStartTime, ruleEndTime, true);
-
-				/*
-				for (DetectionPointVariable detectionPointVariable : lastExpression.getDetectionPointVariables()) {
-
-					//boolean isDetectionPointTriggered = false;
-					// todo: can we encapsulate this into a method
-					lastDpvIntervalMap.put(detectionPointVariable, null);
-					Queue<Event> eventQueue = new LinkedList<Event>();
-
-					for (Event event : existingEvents) {
-
-						//filter time
-						if ((DateUtils.fromString(event.getTimestamp()).isAfter(lastExpressionStartTime)) &&
-								(DateUtils.fromString(event.getTimestamp()).isBefore(ruleEndTime) || DateUtils.fromString(event.getTimestamp()).isEqual(ruleEndTime))) {
-
-							//todo: make sure this is the correct function
-							//if matches current detection point
-							if (event.getDetectionPoint().typeAndThresholdMatches(detectionPointVariable.getDetectionPoint())) {
-
-								eventQueue.add(event);
-
-								//check if queue is full
-								if (eventQueue.size() >= detectionPointVariable.getDetectionPoint().getThreshold().getCount()) {
-
-									//is event interval less that threshold interval
-									long queueIntervalInMillis = DateUtils.fromString(event.getTimestamp()).minus(
-											DateUtils.fromString(eventQueue.peek().getTimestamp()).getMillis()).getMillis();
-									//logger.debug("difference between " + DateUtils.fromString(event.getTimestamp()) + " and " + DateUtils.fromString(eventQueue.peek().getTimestamp()) + ": " + queueIntervalInMillis);
-									if ( queueIntervalInMillis <= detectionPointVariable.getDetectionPoint().getThreshold().getInterval().toMillis()) {
-										//lastIntervalList.add(new DPVInterval((int)(queueIntervalInMillis * 1000), "seconds", DateUtils.fromString(event.getTimestamp()), detectionPointVariable));
-										// this constantly overwrites the value if multiple dpvintervals are found, but because we only want the last this works out perfectly
-										lastDpvIntervalMap.put(detectionPointVariable, new DPVInterval((int)(queueIntervalInMillis), "milliseconds", DateUtils.fromString(event.getTimestamp()), detectionPointVariable));
-										//isDetectionPointTriggered = true;
-										break;
-									}
-									else {
-										//pop
-										eventQueue.poll();
-									}
-								}
-							}
-						}
-					}
-				}
-				*/
-				//evaluate last expression
-				DateTime expressionTriggeredTime = evaluateExpression(lastExpression, lastDpvIntervalMap)[0];
-				if (expressionTriggeredTime == null) {
-					isRuleTriggered = false;
+				if (lastExpressionStartTime == null) {
 					break;
 				}
 
-				lastExpressionStartTime = expressionTriggeredTime;
-
 				//STEP 2: Build intervalQueue
-				Collections.sort(existingEvents, new EventComparator());
-
-				Queue<DPVInterval> intervalList = new LinkedList<DPVInterval>();
-
 				//get a list of the detection point variables from each expression (remove duplicates)
 				ArrayList<DetectionPointVariable> dpvList = new ArrayList<DetectionPointVariable>();
 				for (Expression expression : rule.getExpressions().subList(0, rule.getExpressions().size() - 1)) {
@@ -190,147 +102,14 @@ public class DavidEventAnalysisEngine extends EventAnalysisEngine {
 					}
 				}
 
-				for (DetectionPointVariable detectionPointVariable : dpvList) {
-					Queue<Event> eventQueue = new LinkedList<Event>();
-
-					for (Event event : existingEvents) {
-
-						// filter events by time and detection point
-						if (DateUtils.fromString(event.getTimestamp()).isBefore(lastExpressionStartTime)) {
-							//todo: make sure this is the correct function
-							if (event.getDetectionPoint().typeAndThresholdMatches(detectionPointVariable.getDetectionPoint())) {
-
-								eventQueue.add(event);
-
-								//check if queue is full
-								if (eventQueue.size() >= detectionPointVariable.getDetectionPoint().getThreshold().getCount()) {
-
-									//is event interval less that threshold interval
-									long queueIntervalInMillis = DateUtils.fromString(event.getTimestamp()).minus(
-											DateUtils.fromString(eventQueue.peek().getTimestamp()).getMillis()).getMillis();
-									if ( queueIntervalInMillis <= detectionPointVariable.getDetectionPoint().getThreshold().getInterval().toMillis()) {
-										//todo: this approximation needs to be fixed, it will cause problems /hacked it
-										intervalList.add(new DPVInterval((int)(queueIntervalInMillis), "milliseconds", DateUtils.fromString(eventQueue.peek().getTimestamp()), detectionPointVariable));
-									}
-
-									//pop
-									eventQueue.poll();
-								}
-							}
-						}
-					}
-				}
+				Queue<DPVInterval> intervalList = (Queue<DPVInterval>)createDPVIList(existingEvents, dpvList, ruleStartTime, lastExpressionStartTime, false);
 
 				//STEP 3: check each expression
-				DateTime searchStartTime = ruleStartTime;
-
-				for (Expression expression : rule.getExpressions().subList(0, rule.getExpressions().size() - 1)) {
-					isExpressionTriggered = false;
-
-					if (intervalList.isEmpty()) {
-						isRuleTriggered = false;
-						break;
-					}
-
-					//filter out intervals from intervalQueue that occurred before the searchStartTime
-					DPVInterval peekInterval = intervalList.peek();
-
-					while (peekInterval != null && peekInterval.getStartTime().isBefore(searchStartTime)) {
-						intervalList.poll();
-						peekInterval = intervalList.peek();
-					}
-
-					//create a new interval queue that filters out intervals for unrelated detection points
-					ArrayList<DPVInterval> expressionIntervalList = new ArrayList<DPVInterval>();
-
-					for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
-
-						for (DPVInterval interval : intervalList) {
-
-							//todo: make sure this is the correct function
-							//if matches current detection point
-							if (interval.getDetectionPointVariable().getDetectionPoint().typeAndThresholdMatches(detectionPointVariable.getDetectionPoint())) {
-								expressionIntervalList.add(interval);
-							}
-						}
-					}
-
-					for (DPVInterval possibleStartInterval : expressionIntervalList) {
-						DateTime possibleExpressionStartTime = possibleStartInterval.getStartTime();
-						DateTime possibleExpressionEndTime = possibleExpressionStartTime.plus(expression.getInterval().toMillis());
-
-						if (possibleExpressionEndTime.isAfter(lastExpressionStartTime)) {
-							possibleExpressionEndTime = lastExpressionStartTime;
-						}
-
-						//int count = 0;
-						//boolean isPossibleExpressionTriggered = false;
-
-						//create hash map to track which detection point variables had a detection point triggered
-						HashMap<DetectionPointVariable, DPVInterval> dpvIntervalMap = new HashMap<DetectionPointVariable, DPVInterval>();
-
-						for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
-							dpvIntervalMap.put(detectionPointVariable, null);
-						}
-
-						for (DPVInterval dpvInterval : expressionIntervalList) {
-
-							if (dpvInterval.getEndTime().isBefore(possibleExpressionEndTime) ||
-									dpvInterval.getEndTime().isEqual(possibleExpressionEndTime)) {
-
-								if (dpvIntervalMap.get(dpvInterval.getDetectionPointVariable()) == null) {
-									dpvIntervalMap.put(dpvInterval.getDetectionPointVariable(), dpvInterval);
-									//count++;
-								}
-							}
-							else if (dpvInterval.getStartTime().isAfter(possibleExpressionEndTime)) {
-								//isPossibleExpressionTriggered = false;
-								break;
-							}
-							else {
-								//dpvInterval starts within the possible window, but finishes outside of it. Do nothing.
-							}
-
-							/*if (count == expression.getDetectionPointVariables().size()) {
-								//we have filled the map!
-								isPossibleExpressionTriggered = true;
-								break;
-							}*/
-						}
-
-						DateTime expressionEndTime = evaluateExpression(expression, dpvIntervalMap)[1];
-
-						if (expressionEndTime != null) {
-							isExpressionTriggered = true;
-							searchStartTime = expressionEndTime;
-
-							//find the latest time in dpv interval mapping
-							/*
-							for (DetectionPointVariable detectionPointVariable : dpvIntervalMap.keySet()) {
-
-								if (dpvIntervalMap.get(detectionPointVariable) != null && dpvIntervalMap.get(detectionPointVariable).getEndTime().isAfter(searchStartTime)) {
-									searchStartTime = dpvIntervalMap.get(detectionPointVariable).getEndTime();
-								}
-							}
-							*/
-
-							break;
-						}
-					}
-
-					if (isExpressionTriggered == false) {
-						isRuleTriggered = false;
-						break;
-					}
-				}
-
-				if (isRuleTriggered == true) {
+				if (checkAllExpressions(rule, intervalList, ruleStartTime, lastExpressionStartTime)) {
 					//generate attack
 					logger.debug("ATTACK!!!");
 					logger.info("Violation Observed for user <" + triggerEvent.getUser().getUsername() + "> on rule <" + rule.getName() + "> - storing attack");
 
-					//have determined this event triggers attack
-					//ensure appropriate detection point is being used (associated responses, etc.)
 					Attack attack = new Attack();
 					attack.setUser(new User(triggerEvent.getUser().getUsername() + "R"));
 					attack.setRule(rule.getName());
@@ -389,6 +168,124 @@ public class DavidEventAnalysisEngine extends EventAnalysisEngine {
 		return matches;
 	}
 
+	protected ArrayList<Event> getApplicableEvents(Event triggerEvent, Rule rule) {
+		ArrayList<Event> events = new ArrayList<Event>();
+
+		SearchCriteria criteria = new SearchCriteria().setUser(triggerEvent.getUser());
+
+		for (DetectionPoint detectionPoint : rule.getAllDetectionPoints()) {
+			criteria.setDetectionPoint(new DetectionPoint(detectionPoint.getCategory(), detectionPoint.getLabel())).
+			setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(triggerEvent.getDetectionSystem())).
+			setEarliest(findMostRecentAttackTime(triggerEvent, rule).plus(1).toString());
+
+			for (Event event : appSensorServer.getEventStore().findEvents(criteria)) {
+				if (events.contains(event) == false) {
+					events.add(event);
+				}
+			}
+		}
+
+		Collections.sort(events, new EventComparator());
+
+		return events;
+	}
+
+	protected DateTime checkLastExpression(Expression expression, ArrayList<Event> events, DateTime start, DateTime end) {
+		HashMap<DetectionPointVariable, DPVInterval> lastDpvIntervalMap = (HashMap<DetectionPointVariable, DPVInterval>) createDPVIList(events, expression.getDetectionPointVariables(), start, end, true);
+
+		//evaluate last expression
+		return evaluateExpression(expression, lastDpvIntervalMap)[0];
+	}
+
+	protected boolean checkAllExpressions(Rule rule, Queue<DPVInterval> intervalList, DateTime searchStartTime, DateTime lastExpressionStartTime) {
+		boolean isRuleTriggered = true;
+		boolean isExpressionTriggered = false;
+
+		for (Expression expression : rule.getExpressions().subList(0, rule.getExpressions().size() - 1)) {
+			isExpressionTriggered = false;
+
+			if (intervalList.isEmpty()) {
+				isRuleTriggered = false;
+				break;
+			}
+
+			//filter out intervals from intervalQueue that occurred before the searchStartTime
+			DPVInterval peekInterval = intervalList.peek();
+
+			while (peekInterval != null && peekInterval.getStartTime().isBefore(searchStartTime)) {
+				intervalList.poll();
+				peekInterval = intervalList.peek();
+			}
+
+			//create a new interval queue that filters out intervals for unrelated detection points
+			ArrayList<DPVInterval> expressionIntervalList = new ArrayList<DPVInterval>();
+
+			for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
+
+				for (DPVInterval interval : intervalList) {
+
+					//todo: make sure this is the correct function
+					//if matches current detection point
+					if (interval.getDetectionPointVariable().getDetectionPoint().typeAndThresholdMatches(detectionPointVariable.getDetectionPoint())) {
+						expressionIntervalList.add(interval);
+					}
+				}
+			}
+
+			for (DPVInterval possibleStartInterval : expressionIntervalList) {
+				DateTime possibleExpressionStartTime = possibleStartInterval.getStartTime();
+				DateTime possibleExpressionEndTime = possibleExpressionStartTime.plus(expression.getInterval().toMillis());
+
+				if (possibleExpressionEndTime.isAfter(lastExpressionStartTime)) {
+					possibleExpressionEndTime = lastExpressionStartTime;
+				}
+
+				//create hash map to track which detection point variables had a detection point triggered
+				HashMap<DetectionPointVariable, DPVInterval> dpvIntervalMap = new HashMap<DetectionPointVariable, DPVInterval>();
+
+				for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
+					dpvIntervalMap.put(detectionPointVariable, null);
+				}
+
+				for (DPVInterval dpvInterval : expressionIntervalList) {
+
+					if (dpvInterval.getEndTime().isBefore(possibleExpressionEndTime) ||
+							dpvInterval.getEndTime().isEqual(possibleExpressionEndTime)) {
+
+						if (dpvIntervalMap.get(dpvInterval.getDetectionPointVariable()) == null) {
+							dpvIntervalMap.put(dpvInterval.getDetectionPointVariable(), dpvInterval);
+							//count++;
+						}
+					}
+					else if (dpvInterval.getStartTime().isAfter(possibleExpressionEndTime)) {
+						//isPossibleExpressionTriggered = false;
+						break;
+					}
+					else {
+						//dpvInterval starts within the possible window, but finishes outside of it. Do nothing.
+					}
+
+				}
+
+				DateTime expressionEndTime = evaluateExpression(expression, dpvIntervalMap)[1];
+
+				if (expressionEndTime != null) {
+					isExpressionTriggered = true;
+					searchStartTime = expressionEndTime;
+
+					break;
+				}
+			}
+
+			if (isExpressionTriggered == false) {
+				isRuleTriggered = false;
+				break;
+			}
+		}
+
+		return isRuleTriggered;
+	}
+
 	public void addRule(Rule rule) {
 		if (rules == null) {
 			rules = new ArrayList<Rule>();
@@ -426,16 +323,15 @@ public class DavidEventAnalysisEngine extends EventAnalysisEngine {
 		}
 	}
 
-	// todo: rewrite this function, compare to both existing functions
-	///*
-	protected Object createDetectionPointIntervalList(ArrayList<Event> events, ArrayList<DetectionPointVariable> dpvs, DateTime start, DateTime end, boolean isLastExpression) {
-		Object dpiList = null;
+	// pretty hacky function to generate DPVI lists for all contexts
+	protected Object createDPVIList(ArrayList<Event> events, ArrayList<DetectionPointVariable> dpvs, DateTime start, DateTime end, boolean isLastExpression) {
+		Object dpiList;
 
 		if (isLastExpression) {
 			dpiList = new HashMap<DetectionPointVariable, DPVInterval>();
 		}
 		else {
-			dpiList = new ArrayList<DPVInterval>();
+			dpiList = new LinkedList<DPVInterval>();
 		}
 
 		for (DetectionPointVariable detectionPointVariable : dpvs) {
@@ -444,37 +340,36 @@ public class DavidEventAnalysisEngine extends EventAnalysisEngine {
 			}
 
 			Queue<Event> eventQueue = new LinkedList<Event>();
+
 			for (Event event : events) {
 
-				//filter time & detection point
-				//todo: checking if the end is equal is for last expression only
-				if ((DateUtils.fromString(event.getTimestamp()).isAfter(start)) &&
-						(DateUtils.fromString(event.getTimestamp()).isBefore(end) || DateUtils.fromString(event.getTimestamp()).isEqual(end))) {
-					//todo: make sure this is the correct function
+				// filter events by time and detection point
+				if ((!isLastExpression && DateUtils.fromString(event.getTimestamp()).isBefore(end)) ||
+						(isLastExpression && DateUtils.fromString(event.getTimestamp()).isAfter(start) && (DateUtils.fromString(event.getTimestamp()).isBefore(end) || DateUtils.fromString(event.getTimestamp()).isEqual(end)))) {					//todo: make sure this is the correct function
 					if (event.getDetectionPoint().typeAndThresholdMatches(detectionPointVariable.getDetectionPoint())) {
 
 						eventQueue.add(event);
 
 						//check if queue is full
 						if (eventQueue.size() >= detectionPointVariable.getDetectionPoint().getThreshold().getCount()) {
-							//is event interval less that threshold interval
-							long queueIntervalInMillis = DateUtils.fromString(event.getTimestamp()).minus(DateUtils.fromString(eventQueue.peek().getTimestamp()).getMillis()).getMillis();
 
+							//is event interval less that threshold interval
+							long queueIntervalInMillis = DateUtils.fromString(event.getTimestamp()).minus(
+									DateUtils.fromString(eventQueue.peek().getTimestamp()).getMillis()).getMillis();
 							if ( queueIntervalInMillis <= detectionPointVariable.getDetectionPoint().getThreshold().getInterval().toMillis()) {
-								DPVInterval dpvi =  new DPVInterval((int)(queueIntervalInMillis), "milliseconds", DateUtils.fromString(event.getTimestamp()), detectionPointVariable);
+								//todo: this approximation needs to be fixed, it will cause problems /hacked it
+								DPVInterval	dpvi = new DPVInterval((int)(queueIntervalInMillis), "milliseconds", DateUtils.fromString(eventQueue.peek().getTimestamp()), detectionPointVariable);
 
 								if (isLastExpression) {
 									((HashMap<DetectionPointVariable, DPVInterval>)dpiList).put(detectionPointVariable, dpvi);
 								}
 								else {
-									((ArrayList<DPVInterval>)dpiList).add(dpvi);
+									((LinkedList<DPVInterval>)dpiList).add(new DPVInterval((int)(queueIntervalInMillis), "milliseconds", DateUtils.fromString(eventQueue.peek().getTimestamp()), detectionPointVariable));
 								}
+							}
 
-								break;
-							}
-							else {
-								eventQueue.poll();
-							}
+							//pop
+							eventQueue.poll();
 						}
 					}
 				}
@@ -483,7 +378,6 @@ public class DavidEventAnalysisEngine extends EventAnalysisEngine {
 
 		return dpiList;
 	}
-	//*/
 
 	protected DateTime[] evaluateExpression(Expression expression, HashMap<DetectionPointVariable, DPVInterval> dpvIntervalMap) {
 		//discover or clauses
@@ -546,187 +440,4 @@ public class DavidEventAnalysisEngine extends EventAnalysisEngine {
 
 		return results;
 	}
-
-	/*
-	protected DateTime findExpressionStart(HashMap<DetectionPointVariable, DPVInterval> map, Expression expression) {
-		DateTime latest = null;
-		DateTime earliestInOr = null;
-
-		for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
-			if (detectionPointVariable.getBooleanOperator() == DetectionPointVariable.BOOLEAN_OPERATOR_OR ||
-					detectionPointVariable.getBooleanOperator() == DetectionPointVariable.BOOLEAN_OPERATOR_OR_NOT) {
-				if (latest == null || (earliestInOr != null && earliestInOr.isAfter(latest))) {
-					latest = earliestInOr;
-				}
-				earliestInOr = null;
-			}
-
-			if (map.get(detectionPointVariable) != null && (earliestInOr == null || map.get(detectionPointVariable).getStartTime().isBefore(earliestInOr))) {
-				earliestInOr = map.get(detectionPointVariable).getStartTime();
-			}
-		}
-
-		if (latest == null) {
-			latest = earliestInOr;
-		}
-
-		return latest;
-	}
-
-
-	protected boolean evaluateExpression(Expression expression, HashMap<DetectionPointVariable, DPVInterval> dpvIntervalMap) {
-		boolean result = true;
-
-		for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
-			Integer booleanOperator = detectionPointVariable.getBooleanOperator();
-
-			if((booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_AND && dpvIntervalMap.get(detectionPointVariable) == null) || (
-					booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_AND_NOT && dpvIntervalMap.get(detectionPointVariable) != null)) {
-				result = false;
-			}
-
-			else if (booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_OR ||
-					booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_OR_NOT) {
-
-				if (result == true) {
-					return result;
-				}
-				else {
-
-					if((booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_OR && dpvIntervalMap.get(detectionPointVariable) != null) || (
-							booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_OR_NOT && dpvIntervalMap.get(detectionPointVariable) == null)) {
-						result = true;
-					}
-				}
-			}
-		}
-
-		return result;
-	}
-
-	protected DateTime evaluateLastExpression(Expression expression, HashMap<DetectionPointVariable, DPVInterval> dpvIntervalMap) {
-		boolean result = true;
-		DateTime latestOrClauseStart = null;
-		DateTime earliestInOrClause = null;
-
-		evaluateExpression(expression, dpvIntervalMap);
-
-		for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
-			Integer booleanOperator = detectionPointVariable.getBooleanOperator();
-			DPVInterval interval = dpvIntervalMap.get(detectionPointVariable);
-
-			//and fail
-			if((booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_AND && interval == null) || (
-					booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_AND_NOT && interval != null)) {
-				result = false;
-			}
-			//or
-			else if (booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_OR ||
-					booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_OR_NOT) {
-
-				if (result == true) {
-					if (latestOrClauseStart == null || earliestInOrClause.isAfter(latestOrClauseStart)) {
-						latestOrClauseStart = earliestInOrClause;
-					}
-				}
-
-				earliestInOrClause = null;
-				if((booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_OR && interval != null) || (
-						booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_OR_NOT && interval == null)) {
-					result = true;
-					earliestInOrClause = interval.getStartTime();
-				}
-				else {
-					earliestInOrClause = null;
-				}
-
-			}
-			//and true
-			else {
-				if (interval != null) {
-					if (earliestInOrClause == null || (result == true && interval.getStartTime().isBefore(earliestInOrClause))) {
-						earliestInOrClause = interval.getStartTime();
-					}
-				}
-			}
-		}
-
-		if (result == true) {
-			if (latestOrClauseStart != null && earliestInOrClause != null && earliestInOrClause.isAfter(latestOrClauseStart)) {
-				latestOrClauseStart = earliestInOrClause;
-			}
-			else if (latestOrClauseStart == null) {
-				latestOrClauseStart = earliestInOrClause;
-			}
-		}
-
-		if (latestOrClauseStart != null) {
-			return latestOrClauseStart;
-		}
-		else {
-			return null;
-		}
-	}
-
-	protected DateTime evaluateOtherExpression(Expression expression, HashMap<DetectionPointVariable, DPVInterval> dpvIntervalMap) {
-		boolean result = true;
-		DateTime earliestOrClauseStart = null;
-		DateTime latestInOrClause = null;
-
-		for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
-			Integer booleanOperator = detectionPointVariable.getBooleanOperator();
-			DPVInterval interval = dpvIntervalMap.get(detectionPointVariable);
-
-			//and fail
-			if((booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_AND && interval == null) || (
-					booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_AND_NOT && interval != null)) {
-				result = false;
-			}
-			//or
-			else if (booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_OR ||
-					booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_OR_NOT) {
-
-				if (result == true) {
-					if (earliestOrClauseStart == null || latestInOrClause.isBefore(earliestOrClauseStart)) {
-						earliestOrClauseStart = latestInOrClause;
-					}
-				}
-
-				if((booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_OR && interval != null) || (
-						booleanOperator == DetectionPointVariable.BOOLEAN_OPERATOR_OR_NOT && interval == null)) {
-					result = true;
-					latestInOrClause = interval.getEndTime();
-				}
-				else {
-					latestInOrClause = null;
-				}
-
-			}
-			//and true
-			else {
-				if (interval != null) {
-					if (latestInOrClause == null || (result == true && interval.getEndTime().isAfter(latestInOrClause))) {
-						latestInOrClause = interval.getEndTime();
-					}
-				}
-			}
-		}
-
-		if (result == true) {
-			if (earliestOrClauseStart != null && latestInOrClause != null && latestInOrClause.isBefore(earliestOrClauseStart)) {
-				earliestOrClauseStart = latestInOrClause;
-			}
-			else if (earliestOrClauseStart == null) {
-				earliestOrClauseStart = latestInOrClause;
-			}
-		}
-
-		if (earliestOrClauseStart != null) {
-			return latestInOrClause;
-		}
-		else {
-			return null;
-		}
-	}
-	*/
 }
