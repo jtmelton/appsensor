@@ -20,7 +20,7 @@ import org.slf4j.Logger;
  */
 @Named
 @Loggable
-public class DavidResponseAnalysisEngine extends ResponseAnalysisEngine {
+public class AggregateResponseAnalysisEngine extends ResponseAnalysisEngine {
 
 	private Logger logger;
 	

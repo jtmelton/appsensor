@@ -2,25 +2,17 @@ package org.owasp.appsensor.local.analysis;
 
 import static org.junit.Assert.assertEquals;
 
-import java.beans.Expression;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
-import org.codehaus.jackson.*;
-
 import javax.inject.Inject;
-import javax.print.attribute.standard.MediaSize.Engineering;
-import javax.sql.rowset.serial.SerialArray;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.owasp.appsensor.analysis.DavidAttackAnalysisEngine;
-import org.owasp.appsensor.analysis.DavidEventAnalysisEngine;
+import org.owasp.appsensor.analysis.AggregateEventAnalysisEngine;
 import org.owasp.appsensor.analysis.DetectionPointVariable;
 import org.owasp.appsensor.analysis.Rule;
 //import org.owasp.appsensor.analysis.Expression;
@@ -41,10 +33,6 @@ import org.owasp.appsensor.storage.memory.InMemoryAttackStore;
 import org.owasp.appsensor.storage.memory.InMemoryEventStore;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 
 /**
  * Test basic {@link Event} analysis engine. Add a number of {@link Event}s matching
@@ -75,7 +63,7 @@ public class DavidRuleEventAnalysisEngineTest {
 
 	private static HashMap<String, SearchCriteria> criteria = new HashMap<String, SearchCriteria>();
 
-	private static DavidEventAnalysisEngine myEngine = null;
+	private static AggregateEventAnalysisEngine myEngine = null;
 
 	private static ArrayList<Rule> rules = null;
 
@@ -139,8 +127,8 @@ public class DavidRuleEventAnalysisEngineTest {
 		Collection<EventAnalysisEngine> engines = appSensorServer.getEventAnalysisEngines();
 
 		for (EventAnalysisEngine engine : engines) {
-			if (engine instanceof DavidEventAnalysisEngine){
-				myEngine = (DavidEventAnalysisEngine)engine;
+			if (engine instanceof AggregateEventAnalysisEngine){
+				myEngine = (AggregateEventAnalysisEngine)engine;
 			}
 		}
 	}
@@ -744,11 +732,10 @@ public class DavidRuleEventAnalysisEngineTest {
 		return point;
 	}
 
-
+/*
 	private static ArrayList<Rule> getRules(String filename) {
 		ArrayList<Rule> rules = null;
 
-		/* JSON test */
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			rules = (ArrayList<Rule>) Arrays.asList(mapper.readValue(new File("/home/david/Desktop/" + filename), Rule[].class));
@@ -770,7 +757,6 @@ public class DavidRuleEventAnalysisEngineTest {
 			System.out.println(e);
 		}
 	}
-	/*
 	private static Rule createRuleFromJson(String json) {
 		JSONObject jsonRule = new JSONObject(json);
 		Rule rule = new Rule();

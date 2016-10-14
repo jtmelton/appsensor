@@ -7,8 +7,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import org.joda.time.DateTime;
 import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.core.Attack;
@@ -29,7 +31,7 @@ import org.slf4j.Logger;
  */
 @Named
 @Loggable
-public class DavidEventAnalysisEngine extends EventAnalysisEngine {
+public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 
 	private Logger logger;
 
@@ -126,18 +128,8 @@ public class DavidEventAnalysisEngine extends EventAnalysisEngine {
 		return events;
 	}
 
+	// TODO: will be changed one hack gets fixed
 	// borrowed and tweaked from the Reference implementation
-	/**
-	 * Find most recent {@link Attack} matching the given {@link Event} {@link User}, {@link DetectionPoint}
-	 * matching the currently configured detection point (supporting multiple detection points per label),
-	 * detection system and find it's timestamp.
-	 *
-	 * The {@link Event} should only be counted if they've occurred after the most recent {@link Attack}.
-	 *
-	 * @param event {@link Event} to use to find matching {@link Attack}s
-	 * @param configuredDetectionPoint {@link DetectionPoint} to use to find matching {@link Attack}s
-	 * @return timestamp representing last matching {@link Attack}, or -1L if not found
-	 */
 	protected DateTime findMostRecentAttackTime(Event event, Rule rule) {
 		DateTime newest = DateUtils.epoch();
 
@@ -374,7 +366,6 @@ public class DavidEventAnalysisEngine extends EventAnalysisEngine {
 			}
 			clauses.get(numClauses).add(detectionPointVariable);
 		}
-
 
 		DateTime expEarliest = null;
 		DateTime expLatest = null;

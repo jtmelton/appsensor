@@ -31,7 +31,7 @@ import org.slf4j.Logger;
  */
 @Named
 @Loggable
-public class DavidAttackAnalysisEngine extends AttackAnalysisEngine {
+public class AggregateAttackAnalysisEngine extends AttackAnalysisEngine {
 
 	private Logger logger;
 
