@@ -7,6 +7,8 @@ import org.owasp.appsensor.core.Interval;
 
 public class Rule {
 
+	private
+
 	private Interval interval;
 
 	private ArrayList<Expression> expressions;
