@@ -6,6 +6,12 @@
 		xmlns:asconfig="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd" 
 		elementFormDefault="qualified" >
 
+	<xsd:simpleType name="guid">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}"/>
+		</xs:restriction>
+	</xsd:simpleType>
+
 	<xsd:complexType name="client-applications">
 		<xsd:sequence>
 			<xsd:element name="client-application" type="asconfig:client-application" minOccurs="1" maxOccurs="unbounded" />
@@ -83,6 +89,7 @@
 	</xsd:complexType>
 	
 	<xsd:complexType name="detection-point">
+		<xsd:attribute name="guid" type="asconfig:guid" use="optional/>
 		<xsd:sequence>
 			<xsd:element name="category" type="xsd:string" minOccurs="1" maxOccurs="1" />
 			<xsd:element name="id" type="xsd:string" minOccurs="1" maxOccurs="1" />
