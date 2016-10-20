@@ -18,10 +18,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- * The detection point represents the unique sensor concept in the code. 
- * 
+ * The detection point represents the unique sensor concept in the code.
+ *
  * A list of project detection points are maintained at https://www.owasp.org/index.php/AppSensor_DetectionPoints
- * 
+ *
  * @see java.io.Serializable
  * @see <a href="https://www.owasp.org/index.php/AppSensor_DetectionPoints">https://www.owasp.org/index.php/AppSensor_DetectionPoints</a>
  *
@@ -29,14 +29,17 @@ import org.codehaus.jackson.annotate.JsonProperty;
  */
 @Entity
 public class DetectionPoint implements IAppsensorEntity {
-	
+
 	private static final long serialVersionUID = -6294211676275622809L;
 
 	@Id
 	@Column(columnDefinition = "integer")
 	@GeneratedValue
 	private String id;
-	
+
+	@Column
+	private String guid;
+
 	public class Category {
 		public static final String REQUEST 				= "Request";
 		public static final String AUTHENTICATION 		= "Authentication";
@@ -51,54 +54,54 @@ public class DetectionPoint implements IAppsensorEntity {
 		public static final String SYSTEM_TREND 		= "System Trend";
 		public static final String REPUTATION 			= "Reputation";
 	}
-	
+
 	/**
 	 * Category identifier for the detection point. (ex. "Request", "AccessControl", "SessionManagement")
 	 */
 	@Column
 	private String category;
-	
+
 	/**
 	 * Identifier for the detection point. (ex. "IE1", "RE2")
 	 */
 	@Column
 	private String label;
-	
+
 	/**
-	 * {@link Threshold} for determining whether given detection point (associated {@link Event}) 
+	 * {@link Threshold} for determining whether given detection point (associated {@link Event})
 	 * should be considered an {@link Attack}.
 	 */
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JsonProperty("threshold")
 	private Threshold threshold;
-	
+
 	/**
 	 * Set of {@link Response}s associated with given detection point.
 	 */
 	@Transient
 	@JsonProperty("responses")
 	private Collection<Response> responses = new ArrayList<Response>();
-	
+
 	public DetectionPoint() {}
-	
+
 	public DetectionPoint(String category, String label) {
 		setCategory(category);
 		setLabel(label);
 	}
-	
+
 	public DetectionPoint(String category, String label, Threshold threshold) {
 		setCategory(category);
 		setLabel(label);
 		setThreshold(threshold);
 	}
-	
+
 	public DetectionPoint(String category, String label, Threshold threshold, Collection<Response> responses) {
 		setCategory(category);
 		setLabel(label);
 		setThreshold(threshold);
 		setResponses(responses);
 	}
-	
+
 	public String getCategory() {
 		return category;
 	}
@@ -107,7 +110,7 @@ public class DetectionPoint implements IAppsensorEntity {
 		this.category = category;
 		return this;
 	}
-	
+
 	public String getLabel() {
 		return label;
 	}
@@ -115,6 +118,14 @@ public class DetectionPoint implements IAppsensorEntity {
 	public DetectionPoint setLabel(String label) {
 		this.label = label;
 		return this;
+	}
+
+	public String getGuid() {
+		return guid;
+	}
+
+	public void setGuid(String guid) {
+		this.guid = guid;
 	}
 
 	@Override
@@ -160,34 +171,34 @@ public class DetectionPoint implements IAppsensorEntity {
 				append(responses).
 				toHashCode();
 	}
-	
+
 	public boolean typeMatches(DetectionPoint other) {
 		if (other == null) {
 			throw new IllegalArgumentException("other must be non-null");
 		}
-		
+
 		boolean matches = true;
-		
+
 		matches &= (category != null) ? category.equals(other.getCategory()) : true;
 		matches &= (label != null) ? label.equals(other.getLabel()) : true;
-		
+
 		return matches;
 	}
-	
+
 	public boolean typeAndThresholdMatches(DetectionPoint other) {
 		if (other == null) {
 			throw new IllegalArgumentException("other must be non-null");
 		}
-		
+
 		boolean matches = true;
-		
+
 		matches &= (category != null) ? category.equals(other.getCategory()) : true;
 		matches &= (label != null) ? label.equals(other.getLabel()) : true;
 		matches &= (threshold != null) ? threshold.equals(other.getThreshold()) : true;
-		
+
 		return matches;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -196,9 +207,9 @@ public class DetectionPoint implements IAppsensorEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		
+
 		DetectionPoint other = (DetectionPoint) obj;
-		
+
 		return new EqualsBuilder().
 				append(category, other.getCategory()).
 				append(label, other.getLabel()).
@@ -206,7 +217,7 @@ public class DetectionPoint implements IAppsensorEntity {
 				append(responses, other.getResponses()).
 				isEquals();
 	}
-	
+
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).
