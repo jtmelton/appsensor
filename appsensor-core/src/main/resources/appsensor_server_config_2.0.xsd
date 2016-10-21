@@ -6,6 +6,12 @@
 		xmlns:asconfig="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd" 
 		elementFormDefault="qualified" >
 
+	<xsd:simpleType name="guid">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
 	<xsd:complexType name="client-applications">
 		<xsd:sequence>
 			<xsd:element name="client-application" type="asconfig:client-application" minOccurs="1" maxOccurs="unbounded" />
@@ -89,6 +95,7 @@
 			<xsd:element name="threshold" type="asconfig:threshold" minOccurs="1" maxOccurs="1" />
 			<xsd:element name="responses" type="asconfig:responses" minOccurs="1" maxOccurs="1" />
 		</xsd:sequence>
+		<xsd:attribute name="guid" type="asconfig:guid" use="optional" />
 	</xsd:complexType>
 	
 	<xsd:complexType name="threshold">
