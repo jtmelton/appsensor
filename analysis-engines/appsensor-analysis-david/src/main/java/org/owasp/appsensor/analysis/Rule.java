@@ -1,13 +1,16 @@
 package org.owasp.appsensor.analysis;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
 
 public class Rule {
 
-	private
+	private String guid;
 
 	private Interval interval;
 
@@ -17,7 +20,8 @@ public class Rule {
 
 	public Rule () { }
 
-	public Rule (String name, Interval interval, ArrayList<Expression> expressions) {
+	public Rule (String name, String guid, Interval interval, ArrayList<Expression> expressions) {
+		setGuid(guid);
 		setName(name);
 		setInterval(interval);
 		setExpressions(expressions);
@@ -34,6 +38,15 @@ public class Rule {
 
 	public Rule setName(String name) {
 		this.name = name;
+		return this;
+	}
+
+	public String getGuid() {
+		return this.guid;
+	}
+
+	public Rule setGuid(String guid) {
+		this.guid = guid;
 		return this;
 	}
 
@@ -59,9 +72,9 @@ public class Rule {
 		return this.expressions.get(this.expressions.size() - 1);
 	}
 
-	public boolean checkLastExpressionForDetectionPoint (DetectionPoint detectionPoint) {
-		for (DetectionPointVariable detectionPointVariable : getLastExpression().getDetectionPointVariables()) {
-			if (detectionPointVariable.getDetectionPoint().typeMatches(detectionPoint)) {
+	public boolean checkLastExpressionForDetectionPoint (DetectionPoint triggerDetectionPoint) {
+		for (DetectionPoint detectionPoint : getLastExpression().getDetectionPoints()) {
+			if (detectionPoint.typeMatches(triggerDetectionPoint)) {
 				return true;
 			}
 		}
@@ -69,8 +82,8 @@ public class Rule {
 		return false;
 	}
 
-	public ArrayList<DetectionPoint> getAllDetectionPoints () {
-		ArrayList<DetectionPoint> detectionPoints = new ArrayList<DetectionPoint>();
+	public Collection<DetectionPoint> getAllDetectionPoints () {
+		Set<DetectionPoint> detectionPoints = new HashSet<DetectionPoint>();
 
 		for (Expression expression : this.expressions) {
 			detectionPoints.addAll(expression.getDetectionPoints());

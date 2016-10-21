@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -16,6 +16,8 @@ import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.Interval;
+import org.owasp.appsensor.core.Threshold;
 import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.analysis.EventAnalysisEngine;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
@@ -49,44 +51,136 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	 */
 	@Override
 	public void analyze(Event triggerEvent) {
-		// check if triggerEvent matches the detection point in the last expression of any Rules and returns all matches
-		Collection<Rule> applicableRules = getApplicableRules(triggerEvent);
+		Collection<Rule> appRules = getApplicableRules(triggerEvent);
 
-		if (applicableRules.size() > 0) {
-			DateTime ruleEndTime = DateUtils.fromString(triggerEvent.getTimestamp());
+		for (Rule rule : appRules) {
+			if (checkRule(triggerEvent, rule)) {
+				generateAttack(triggerEvent, rule);
+			}
+		}
+	}
 
-			for (Rule rule : applicableRules) {
-				DateTime ruleStartTime = ruleEndTime.minus(rule.getInterval().toMillis());
-				DateTime lastExpressionStartTime = ruleEndTime.minus(rule.getLastExpression().getInterval().toMillis());
-				ArrayList<Event> events = getApplicableEvents(triggerEvent, rule);
+	public boolean checkRule(Event event, Rule rule) {
+		Queue<TriggeredSensor> triggeredSensors = getTriggeredSensors(event, rule);
+		Queue<TriggeredSensor> windowSensors = new LinkedList<TriggeredSensor>();
+		Iterator<Expression> expressions = rule.getExpressions().iterator();
+		Expression currentExpression = expressions.next();
 
-				// checks whether the last expression of the rule was triggered, if not stop evaluating this rule
-				lastExpressionStartTime = checkLastExpression(rule.getLastExpression(), events, lastExpressionStartTime, ruleEndTime);
+		while (!triggeredSensors.isEmpty()) {
+			TriggeredSensor tail = triggeredSensors.poll();
+			windowSensors.add(tail);
+			trim(windowSensors, tail.getEndTime().minus(currentExpression.getWindow().getDuration()));
 
-				if (lastExpressionStartTime == null) {
-					break;
+			if (checkExpression(currentExpression, windowSensors)) {
+				if (expressions.hasNext()) {
+					currentExpression = expressions.next();
+					windowSensors = new LinkedList<TriggeredSensor>();
+					trim(triggeredSensors, tail.getEndTime());
 				}
-
-				// build a queue of dpv intervals in chronological order
-				Queue<DPVInterval> intervalQueue = buildIntervalQueue(events, rule.getExpressions(), ruleStartTime, lastExpressionStartTime);
-
-				// using the interval queue, check each expression. If they have all evaluate to true, then the rule has been triggered
-				if (checkAllExpressions(rule, intervalQueue, ruleStartTime, lastExpressionStartTime)) {
-					logger.info("Violation Observed for user <" + triggerEvent.getUser().getUsername() + "> on rule <" + rule.getName() + "> - storing attack");
-
-					Attack attack = new Attack();
-					// todo: hack to make attack from a rule. Add an "R" to the end of the user
-					attack.setUser(new User(triggerEvent.getUser().getUsername() + "R"));
-					attack.setRule(rule.getName());
-					attack.setTimestamp(triggerEvent.getTimestamp());
-					attack.setDetectionPoint(rule.getLastExpression().getDetectionPoints().get(0));
-					attack.setDetectionSystem(triggerEvent.getDetectionSystem());
-					attack.setResource(triggerEvent.getResource());
-
-					appSensorServer.getAttackStore().addAttack(attack);
+				else {
+					return true;
 				}
 			}
 		}
+
+		return false;
+	}
+
+	public boolean checkExpression(Expression expression, Queue<TriggeredSensor> windowSensors) {
+		for (Clause clause : expression.getClauses()) {
+			if (checkClause(clause, windowSensors)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean checkClause(Clause clause, Queue<TriggeredSensor> windowSensors) {
+		Collection<DetectionPoint> windowDetectionPoints = new ArrayList<DetectionPoint>();
+
+		for (TriggeredSensor triggeredSensor : windowSensors) {
+			windowDetectionPoints.add(triggeredSensor.getDetectionPoint());
+		}
+
+		for (DetectionPoint detectionPoint : clause.getDetectionPoints()) {
+			if (!windowDetectionPoints.contains(detectionPoint)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	// todo: is is it better return new queue?
+	public void trim(Queue<TriggeredSensor> triggeredSensors, DateTime time) {
+		while (triggeredSensors.peek().getStartTime().isBefore(time)) {
+			triggeredSensors.poll();
+		}
+	}
+
+	public LinkedList<TriggeredSensor> getTriggeredSensors(Event triggerEvent, Rule rule) {
+		LinkedList<TriggeredSensor> triggeredSensorQueue = new LinkedList<TriggeredSensor>();
+		Collection<Event> events = getApplicableEvents(triggerEvent, rule);
+		Collection<DetectionPoint> detectionPoints = rule.getAllDetectionPoints();
+
+		for (DetectionPoint detectionPoint : detectionPoints) {
+			Queue<Event> eventQueue = new LinkedList<Event>();
+
+			for (Event event : events) {
+				if (event.getDetectionPoint().typeAndThresholdMatches(detectionPoint)) {
+					eventQueue.add(event);
+
+					if (isThresholdViolated(eventQueue, detectionPoint.getThreshold(), event)) {
+						int queueDuration = (int)getQueueInterval(eventQueue, event).toMillis();
+						DateTime start = DateUtils.fromString(eventQueue.peek().getTimestamp());
+
+						TriggeredSensor triggeredSensor = new TriggeredSensor(queueDuration, "milliseconds", start, detectionPoint);
+						triggeredSensorQueue.add(triggeredSensor);
+					}
+
+					eventQueue.poll();
+				}
+			}
+		}
+
+		Collections.sort(triggeredSensorQueue, new TriggeredSensorComparator());
+
+		return triggeredSensorQueue;
+	}
+
+	public Interval getQueueInterval(Queue<Event> queue, Event tailEvent) {
+		DateTime endTime = DateUtils.fromString(tailEvent.getTimestamp());
+		DateTime startTime = DateUtils.fromString(queue.peek().getTimestamp());
+
+		return new Interval((int)endTime.minus(startTime.getMillis()).getMillis(), "milliseconds");
+	}
+
+	public boolean isThresholdViolated(Queue<Event> queue, Threshold threshold, Event tailEvent) {
+		if (queue.size() >= threshold.getCount()) {
+
+			Interval queueInterval = getQueueInterval(queue, tailEvent);
+
+			if (queueInterval.toMillis() <= threshold.getInterval().toMillis()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public void generateAttack(Event event, Rule rule) {
+		logger.info("Violation Observed for user <" + event.getUser().getUsername() + "> on rule <" + rule.getName() + "> - storing attack");
+
+		Attack attack = new Attack();
+		// todo: hack to make attack from a rule. Add an "R" to the end of the user
+		attack.setUser(new User(event.getUser().getUsername() + "R"));
+		attack.setRule(rule.getName());
+		attack.setTimestamp(event.getTimestamp());
+		attack.setDetectionPoint(event.getDetectionPoint());
+		attack.setDetectionSystem(event.getDetectionSystem());
+		attack.setResource(event.getResource());
+
+		appSensorServer.getAttackStore().addAttack(attack);
 	}
 
 	protected ArrayList<Rule> getApplicableRules(Event event) {
@@ -104,13 +198,11 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	protected ArrayList<Event> getApplicableEvents(Event triggerEvent, Rule rule) {
 		ArrayList<Event> events = new ArrayList<Event>();
 
-		// set user and earliest time for search
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(triggerEvent.getUser()).
 				setEarliest(findMostRecentAttackTime(triggerEvent, rule).plus(1).toString());
 
 		for (DetectionPoint detectionPoint : rule.getAllDetectionPoints()) {
-			// set the detection point and system IDS
 			criteria.
 				setDetectionPoint(new DetectionPoint(detectionPoint.getCategory(), detectionPoint.getLabel())).
 				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(triggerEvent.getDetectionSystem()));
@@ -122,7 +214,6 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 			}
 		}
 
-		// sorts events in chronological order
 		Collections.sort(events, new EventComparator());
 
 		return events;
@@ -149,269 +240,6 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 		}
 
 		return newest;
-	}
-
-	/* this function checks whether the last expression was triggered by mapping each of the detection points
-	 * in the last expression to the latest occurring time they were triggered (if at all) and then evaluating
-	 * the results
-	 */
-	protected DateTime checkLastExpression(Expression expression, ArrayList<Event> events, DateTime start, DateTime end) {
-		HashMap<DetectionPointVariable, DPVInterval> dpiMap = new HashMap<DetectionPointVariable, DPVInterval>();
-
-		// create map of detection point intervals
-		for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
-			dpiMap.put(detectionPointVariable, null);
-
-			Queue<Event> eventQueue = new LinkedList<Event>();
-
-			for (Event event : events) {
-
-				// filter events by time and detection point
-				DateTime eventTime = DateUtils.fromString(event.getTimestamp());
-				if (eventTime.isAfter(start) && (eventTime.isBefore(end) || eventTime.isEqual(end))) {
-					if (event.getDetectionPoint().typeAndThresholdMatches(detectionPointVariable.getDetectionPoint())) {
-
-						eventQueue.add(event);
-
-						// check if queue is full
-						if (eventQueue.size() >= detectionPointVariable.getDetectionPoint().getThreshold().getCount()) {
-
-							// is the queue interval is less than threshold interval
-							DateTime queueStartTime = DateUtils.fromString(eventQueue.peek().getTimestamp());
-							long queueIntervalInMillis = eventTime.minus(queueStartTime.getMillis()).getMillis();
-
-							if ( queueIntervalInMillis <= detectionPointVariable.getDetectionPoint().getThreshold().getInterval().toMillis()) {
-								DPVInterval	dpvi = new DPVInterval((int)queueIntervalInMillis, "milliseconds", queueStartTime, detectionPointVariable);
-								dpiMap.put(detectionPointVariable, dpvi);
-							}
-
-							eventQueue.poll();
-						}
-					}
-				}
-			}
-		}
-
-		// evaluate last expression
-		return evaluateExpression(expression, dpiMap)[0];
-	}
-
-	/*
-	 * this function builds a Queue<DPVInterval> of all events to be used later when evaluated the remaining expressions of the rule.
-	 */
-	protected Queue<DPVInterval> buildIntervalQueue(ArrayList<Event> events, ArrayList<Expression> expressions, DateTime start, DateTime end) {
-		// get a list of the detection point variables from each expression (remove duplicates)
-		Queue<DPVInterval> dpiQueue = new LinkedList<DPVInterval>();
-		ArrayList<DetectionPointVariable> dpvList = new ArrayList<DetectionPointVariable>();
-
-		for (Expression expression : expressions.subList(0, expressions.size() - 1)) {
-
-			for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
-
-				if (dpvList.contains(detectionPointVariable) == false) {
-					dpvList.add(detectionPointVariable);
-				}
-			}
-		}
-
-		for (DetectionPointVariable detectionPointVariable : dpvList) {
-			Queue<Event> eventQueue = new LinkedList<Event>();
-
-			for (Event event : events) {
-
-				// filter events by time and detection point
-				DateTime eventTime = DateUtils.fromString(event.getTimestamp());
-				if (eventTime.isBefore(end)) {
-						if (event.getDetectionPoint().typeAndThresholdMatches(detectionPointVariable.getDetectionPoint())) {
-
-						eventQueue.add(event);
-
-						// check if queue is full
-						if (eventQueue.size() >= detectionPointVariable.getDetectionPoint().getThreshold().getCount()) {
-
-							// is event interval less that threshold interval
-							DateTime queueStartTime = DateUtils.fromString(eventQueue.peek().getTimestamp());
-							long queueIntervalInMillis = eventTime.minus(queueStartTime.getMillis()).getMillis();
-
-							if ( queueIntervalInMillis <= detectionPointVariable.getDetectionPoint().getThreshold().getInterval().toMillis()) {
-								DPVInterval	dpvi = new DPVInterval((int)(queueIntervalInMillis), "milliseconds", queueStartTime, detectionPointVariable);
-								dpiQueue.add(dpvi);
-							}
-
-							eventQueue.poll();
-						}
-					}
-				}
-			}
-		}
-
-		return dpiQueue;
-	}
-
-	/*
-	 * this function checks each remaining rule to see whether that evaluate to true or not. It does so by starting with the first expression
-	 * and "sliding" the expression window through the possible start points and checking whether the expression was triggered within that window.
-	 */
-	protected boolean checkAllExpressions(Rule rule, Queue<DPVInterval> intervalList, DateTime searchStartTime, DateTime lastExpressionStartTime) {
-		boolean isRuleTriggered = true;
-		boolean isExpressionTriggered = false;
-
-		for (Expression expression : rule.getExpressions().subList(0, rule.getExpressions().size() - 1)) {
-			isExpressionTriggered = false;
-
-			if (intervalList.isEmpty()) {
-				isRuleTriggered = false;
-				break;
-			}
-
-			// filter out intervals from intervalQueue that occurred before the searchStartTime
-			DPVInterval peekInterval = intervalList.peek();
-
-			while (peekInterval != null && peekInterval.getStartTime().isBefore(searchStartTime)) {
-				intervalList.poll();
-				peekInterval = intervalList.peek();
-			}
-
-			// create a new interval queue that filters out intervals for unrelated detection points
-			// the new interval queue is also used as a copy for sliding the expression window
-			ArrayList<DPVInterval> expressionIntervalList = new ArrayList<DPVInterval>();
-
-			for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
-
-				for (DPVInterval interval : intervalList) {
-
-					// if matches current detection point
-					if (interval.getDetectionPointVariable().getDetectionPoint().typeAndThresholdMatches(detectionPointVariable.getDetectionPoint())) {
-						expressionIntervalList.add(interval);
-					}
-				}
-			}
-
-			// check each possible start time for the expression - i.e. slide the expression window
-			for (DPVInterval possibleStartInterval : expressionIntervalList) {
-				DateTime possibleExpressionStartTime = possibleStartInterval.getStartTime();
-				DateTime possibleExpressionEndTime = possibleExpressionStartTime.plus(expression.getInterval().toMillis());
-
-				if (possibleExpressionEndTime.isAfter(lastExpressionStartTime)) {
-					possibleExpressionEndTime = lastExpressionStartTime;
-				}
-
-				// create hash map to track which detection point variables had a detection point triggered
-				HashMap<DetectionPointVariable, DPVInterval> dpvIntervalMap = new HashMap<DetectionPointVariable, DPVInterval>();
-
-				for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
-					dpvIntervalMap.put(detectionPointVariable, null);
-				}
-
-				for (DPVInterval dpvInterval : expressionIntervalList) {
-
-					if (dpvInterval.getEndTime().isBefore(possibleExpressionEndTime) ||
-							dpvInterval.getEndTime().isEqual(possibleExpressionEndTime)) {
-
-						if (dpvIntervalMap.get(dpvInterval.getDetectionPointVariable()) == null) {
-							dpvIntervalMap.put(dpvInterval.getDetectionPointVariable(), dpvInterval);
-						}
-					}
-					else if (dpvInterval.getStartTime().isAfter(possibleExpressionEndTime)) {
-						// there are no more dpvIntervals that start within the expressions possible interval
-						break;
-					}
-					else {
-						// dpvInterval starts within the possible window, but finishes outside of it. Do nothing.
-					}
-
-				}
-
-				// check the expression at each step along the way. This will allow it to determine when exactly an
-				// expression was triggered. Has interesting implications for the "NOT" operator
-				DateTime expressionEndTime = evaluateExpression(expression, dpvIntervalMap)[1];
-
-				if (expressionEndTime != null) {
-					isExpressionTriggered = true;
-					searchStartTime = expressionEndTime;
-
-					break;
-				}
-			}
-
-			if (isExpressionTriggered == false) {
-				isRuleTriggered = false;
-				break;
-			}
-		}
-
-		return isRuleTriggered;
-	}
-
-	/*
-	 * this function takes a mapping of detection points to intervals to determine whether an expression has been triggered.
-	 * if the expression has been triggered then the function will return an array containing the start and end of the expression.
-	 * these are used to determine the start or end of the windows for other expressions.
-	 * if the expression has not been triggered then the funfciont will return null.
-	 */
-	protected DateTime[] evaluateExpression(Expression expression, HashMap<DetectionPointVariable, DPVInterval> dpvIntervalMap) {
-		/*
-		 * to correctly identify the start and end of an expression each "clause", variables divided by "OR" operators, must
-		 * be checked.
-		 */
-		ArrayList<ArrayList<DetectionPointVariable>> clauses = new ArrayList<ArrayList<DetectionPointVariable>>();
-		clauses.add(new ArrayList<DetectionPointVariable>());
-		int numClauses = 0;
-
-		for (DetectionPointVariable detectionPointVariable : expression.getDetectionPointVariables()) {
-			if (detectionPointVariable.getBooleanOperator() == DetectionPointVariable.BOOLEAN_OPERATOR_OR ||
-					detectionPointVariable.getBooleanOperator() == DetectionPointVariable.BOOLEAN_OPERATOR_OR_NOT) {
-				numClauses++;
-				clauses.add(new ArrayList<DetectionPointVariable>());
-			}
-			clauses.get(numClauses).add(detectionPointVariable);
-		}
-
-		DateTime expEarliest = null;
-		DateTime expLatest = null;
-
-		for (ArrayList<DetectionPointVariable> clause : clauses) {
-			boolean isClauseTrue = true;
-			DateTime clauseEarliest = null;
-			DateTime clauseLatest = null;
-
-			for (DetectionPointVariable dp : clause) {
-				DPVInterval interval = dpvIntervalMap.get(dp);
-
-				//if true
-				if (dp.getBooleanOperator() == DetectionPointVariable.BOOLEAN_OPERATOR_AND && interval != null ||
-						dp.getBooleanOperator() == DetectionPointVariable.BOOLEAN_OPERATOR_AND_NOT && interval == null ||
-						dp.getBooleanOperator() == DetectionPointVariable.BOOLEAN_OPERATOR_OR && interval != null ||
-						dp.getBooleanOperator() == DetectionPointVariable.BOOLEAN_OPERATOR_OR_NOT && interval == null) {
-
-					if (interval != null) {
-						if (clauseEarliest == null || interval.getStartTime().isBefore(clauseEarliest)) {
-							clauseEarliest = interval.getStartTime();
-						}
-						if (clauseLatest == null || interval.getEndTime().isAfter(clauseLatest)) {
-							clauseLatest = interval.getEndTime();
-						}
-					}
-				}
-				else {
-					isClauseTrue = false;
-				}
-			}
-
-			if (isClauseTrue) {
-				//set expEarliest, expLatest
-				if (expEarliest == null || clauseEarliest.isAfter(expEarliest)) {
-					expEarliest = clauseEarliest;
-				}
-				if (expLatest == null || clauseLatest.isBefore(expLatest)) {
-					expLatest = clauseLatest;
-				}
-			}
-		}
-
-		DateTime[] results = {expEarliest, expLatest};
-
-		return results;
 	}
 
 	public void addRule(Rule rule) {
@@ -450,63 +278,18 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 			}
 		}
 	}
-}
 
-
-	// pretty hacky function to generate DPVI lists for both contexts
-	/*
-	protected Object createDPVIList(ArrayList<Event> events, ArrayList<DetectionPointVariable> dpvs, DateTime start, DateTime end, boolean isLastExpression) {
-		Object dpiList;
-
-		if (isLastExpression) {
-			dpiList = new HashMap<DetectionPointVariable, DPVInterval>();
-		}
-		else {
-			dpiList = new LinkedList<DPVInterval>();
-		}
-
-		for (DetectionPointVariable detectionPointVariable : dpvs) {
-			if (isLastExpression) {
-				((HashMap<DetectionPointVariable, DPVInterval>)dpiList).put(detectionPointVariable, null);
+	protected class TriggeredSensorComparator implements Comparator<TriggeredSensor> {
+		public int compare(TriggeredSensor ts1, TriggeredSensor ts2) {
+			if (ts1.getStartTime().isBefore(ts2.getStartTime())) {
+				return -1;
 			}
-
-			Queue<Event> eventQueue = new LinkedList<Event>();
-
-			for (Event event : events) {
-
-				// filter events by time and detection point
-				if ((!isLastExpression && DateUtils.fromString(event.getTimestamp()).isBefore(end)) ||
-						(isLastExpression && DateUtils.fromString(event.getTimestamp()).isAfter(start) && (DateUtils.fromString(event.getTimestamp()).isBefore(end) || DateUtils.fromString(event.getTimestamp()).isEqual(end)))) {					//todo: make sure this is the correct function
-					if (event.getDetectionPoint().typeAndThresholdMatches(detectionPointVariable.getDetectionPoint())) {
-
-						eventQueue.add(event);
-
-						//check if queue is full
-						if (eventQueue.size() >= detectionPointVariable.getDetectionPoint().getThreshold().getCount()) {
-
-							//is event interval less that threshold interval
-							long queueIntervalInMillis = DateUtils.fromString(event.getTimestamp()).minus(
-									DateUtils.fromString(eventQueue.peek().getTimestamp()).getMillis()).getMillis();
-							if ( queueIntervalInMillis <= detectionPointVariable.getDetectionPoint().getThreshold().getInterval().toMillis()) {
-								//todo: this approximation needs to be fixed, it will cause problems /hacked it
-								DPVInterval	dpvi = new DPVInterval((int)(queueIntervalInMillis), "milliseconds", DateUtils.fromString(eventQueue.peek().getTimestamp()), detectionPointVariable);
-
-								if (isLastExpression) {
-									((HashMap<DetectionPointVariable, DPVInterval>)dpiList).put(detectionPointVariable, dpvi);
-								}
-								else {
-									((LinkedList<DPVInterval>)dpiList).add(new DPVInterval((int)(queueIntervalInMillis), "milliseconds", DateUtils.fromString(eventQueue.peek().getTimestamp()), detectionPointVariable));
-								}
-							}
-
-							//pop
-							eventQueue.poll();
-						}
-					}
-				}
+			else if (ts1.getStartTime().isAfter(ts2.getStartTime())) {
+				return 1;
+			}
+			else {
+				return 0;
 			}
 		}
-
-		return dpiList;
 	}
-	*/
+}
