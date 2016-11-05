@@ -18,12 +18,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.owasp.appsensor.core.util.DateUtils;
 
 /**
- * An attack can be added to the system in one of two ways: 
+ * An attack can be added to the system in one of two ways:
  * <ol>
  * 		<li>Analysis is performed by the event analysis engine and determines an attack has occurred</li>
  * 		<li>Analysis is performed by an external system (ie. WAF) and added to the system.</li>
  * </ol>
- * 
+ *
  * The key difference between an {@link Event} and an {@link Attack} is that an {@link Event}
  * is "suspicous" whereas an {@link Attack} has been determined to be "malicious" by some analysis.
  *
@@ -38,52 +38,54 @@ public class Attack implements Serializable {
 	@Column
 	@GeneratedValue
 	private Integer id;
-	
+
 	/** User who triggered the attack, could be anonymous user */
 	@ManyToOne(cascade = CascadeType.ALL)
 	private User user;
-	
+
 	/** Detection Point that was triggered */
 	@ManyToOne(cascade = CascadeType.ALL)
 	private DetectionPoint detectionPoint;
-	
+
 	/** When the attack occurred */
 	@Column
 	private String timestamp;
 
-	/** 
-	 * Identifier label for the system that detected the attack. 
-	 * This will be either the client application, or possibly an external 
+	/**
+	 * Identifier label for the system that detected the attack.
+	 * This will be either the client application, or possibly an external
 	 * detection system, such as syslog, a WAF, network IDS, etc.  */
 	@ManyToOne(cascade = CascadeType.ALL)
-	private DetectionSystem detectionSystem; 
-	
-	/** 
-	 * The resource being requested when the attack was triggered, which can be used 
-     * later to block requests to a given function. 
+	private DetectionSystem detectionSystem;
+
+	/**
+	 * The resource being requested when the attack was triggered, which can be used
+     * later to block requests to a given function.
      */
 	@ManyToOne(cascade = CascadeType.ALL)
     private Resource resource;
-	
+
+	/** Rule that was triggered */
+	@ManyToOne(cascade = CascadeType.ALL)
 	private String rule;
-	
+
 	/** Represent extra metadata, anything client wants to send */
 	@ElementCollection
 	private Collection<KeyValuePair> metadata = new ArrayList<>();
-	
+
     public Attack () { }
 
     public Attack (User user, DetectionPoint detectionPoint, DetectionSystem detectionSystem) {
 		this(user, detectionPoint, DateUtils.getCurrentTimestampAsString(), detectionSystem);
 	}
-	
+
 	public Attack (User user, DetectionPoint detectionPoint, String timestamp, DetectionSystem detectionSystem) {
 		setUser(user);
 		setDetectionPoint(detectionPoint);
 		setTimestamp(timestamp);
 		setDetectionSystem(detectionSystem);
 	}
-	
+
 	public Attack (User user, DetectionPoint detectionPoint, String timestamp, DetectionSystem detectionSystem, Resource resource) {
 		setUser(user);
 		setDetectionPoint(detectionPoint);
@@ -91,7 +93,7 @@ public class Attack implements Serializable {
 		setDetectionSystem(detectionSystem);
 		setResource(resource);
 	}
-	
+
 	public Attack (Event event) {
 		setUser(event.getUser());
 		setDetectionPoint(event.getDetectionPoint());
@@ -99,7 +101,7 @@ public class Attack implements Serializable {
 		setDetectionSystem(event.getDetectionSystem());
 		setResource(event.getResource());
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -116,7 +118,7 @@ public class Attack implements Serializable {
 		this.user = user;
 		return this;
 	}
-	
+
 	public DetectionPoint getDetectionPoint() {
 		return detectionPoint;
 	}
@@ -134,7 +136,7 @@ public class Attack implements Serializable {
 		this.timestamp = timestamp;
 		return this;
 	}
-	
+
 	public DetectionSystem getDetectionSystem() {
 		return detectionSystem;
 	}
@@ -152,16 +154,16 @@ public class Attack implements Serializable {
 		this.resource = resource;
 		return this;
 	}
-	
+
 	public String getRule() {
 		return this.rule;
 	}
-	
+
 	public Attack setRule(String rule) {
 		this.rule = rule;
 		return this;
 	}
-	
+
 	public Collection<KeyValuePair> getMetadata() {
 		return metadata;
 	}
@@ -169,7 +171,7 @@ public class Attack implements Serializable {
 	public void setMetadata(Collection<KeyValuePair> metadata) {
 		this.metadata = metadata;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).
@@ -190,9 +192,9 @@ public class Attack implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		
+
 		Attack other = (Attack) obj;
-		
+
 		return new EqualsBuilder().
 				append(user, other.getUser()).
 				append(detectionPoint, other.getDetectionPoint()).
@@ -202,7 +204,7 @@ public class Attack implements Serializable {
 				append(metadata, other.getMetadata()).
 				isEquals();
 	}
-	
+
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).

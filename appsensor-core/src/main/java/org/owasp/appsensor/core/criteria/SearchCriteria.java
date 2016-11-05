@@ -4,17 +4,20 @@ import java.util.Collection;
 
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.User;
+import org.owasp.appsensor.analysis.Rule;
 
 public class SearchCriteria {
-	
+
 	private User user;
-	
+
+	private Rule rule;
+
 	private DetectionPoint detectionPoint;
-	
+
 	private Collection<String> detectionSystemIds;
-	
+
 	private String earliest;
-	
+
 	public User getUser() {
 		return user;
 	}
@@ -51,7 +54,17 @@ public class SearchCriteria {
 
 	public SearchCriteria setEarliest(String earliest) {
 		this.earliest = earliest;
-		
+
+		return this;
+	}
+
+	public Rule getRule() {
+		return this.rule;
+	}
+
+	public SearchCriteria setRule(Rule rule) {
+		this.rule = rule;
+
 		return this;
 	}
 

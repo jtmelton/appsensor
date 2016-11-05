@@ -51,7 +51,11 @@
 	
 	
 	
-	
+	<xsd:complexType name="rules-detection-points">
+		<xsd:sequence>
+			<xsd:element name="rules-detection-point" type="asconfig:rules-detection-point" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
 	
 	<xsd:complexType name="detection-points">
 		<xsd:sequence>
@@ -80,6 +84,15 @@
 				<xsd:attribute name="unit" type="asconfig:time-unit" use="required" />
 			</xsd:extension>
 		</xsd:simpleContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="detection-point">
+		<xsd:sequence>
+			<xsd:element name="category" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="id" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="threshold" type="asconfig:threshold" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="responses" type="asconfig:responses" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
 	</xsd:complexType>
 	
 	<xsd:complexType name="detection-point">
@@ -148,6 +161,8 @@
 	    	<xsd:element name="correlation-config" type="asconfig:correlation-config" minOccurs="0" maxOccurs="1" />
 	    	
 	    	<xsd:element name="detection-points" type="asconfig:detection-points" minOccurs="1" maxOccurs="1" />
+	    	
+	    	<xsd:element name="rules-detection-points" type="asconfig:rules-detection-points" minOccurs="0" maxOccurs="1" />
 	    </xsd:sequence>
 	  </xsd:complexType>
 	</xsd:element>

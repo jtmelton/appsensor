@@ -4,10 +4,19 @@ import org.joda.time.DateTime;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
 
+/**
+ * A TriggeredSensor represents the interval of time between a series of events that
+ * trigger a RulesDetectionPoint. Where a detection point generates an attack, a
+ * RulesDetectionPoint generates a TriggeredSensor.
+ *
+ * @author David Scrobonia (davidscrobonia@gmail.com)
+ */
 public class TriggeredSensor extends Interval {
 
+	/** the start time of the interval */
 	private DateTime startTime;
 
+	/** the detection point that generated the TriggeredSensor */
 	private DetectionPoint detectionPoint;
 
 	public TriggeredSensor () { };

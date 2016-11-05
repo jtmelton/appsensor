@@ -8,27 +8,48 @@ import java.util.Set;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
 
+/**
+ * A Rule defines a logical aggregation of RulesDetectionPoints to determine if an
+ * attack is occurring. A Rule uses the boolean operators "AND" and "OR" as well
+ * as the temporal operator "THEN" in joining RulesDetectionPoints into a Rule.
+ *
+ * For example:
+ * 		A rule could be as simple as: "DP1 AND DP2"
+ * 		Where the Rule will generate an attack if both RulesDetectionPoint 1 and 2
+ * 		are violated within the Rule's window.
+ *
+ * 		More complex: "DP1 AND DP2 THEN DP3 OR DP4"
+ *
+ * 		Even more complex: "DP1 AND DP2 THEN DP3 OR DP4 THEN DP5 AND DP6 OR DP7"
+ *
+ * @author David Scrobonia (davidscrobonia@gmail.com)
+ */
 public class Rule {
 
-	private String guid;
+	/**
+	 * The window of time all Expressions must be triggered within
+	 * A Rule's window must be greater than the total of it's Expressions' windows.
+	 */
+	private Interval window;
 
-	private Interval interval;
-
+	/** The Expressions that build up a Rule
+	 * 	The order of the list corresponds to the temporal order of the expressions.
+	 */
 	private ArrayList<Expression> expressions;
 
+	/** The name of the Rule */
 	private String name;
 
 	public Rule () { }
 
-	public Rule (String name, String guid, Interval interval, ArrayList<Expression> expressions) {
-		setGuid(guid);
+	public Rule (String name, Interval window, ArrayList<Expression> expressions) {
 		setName(name);
-		setInterval(interval);
+		setWindow(window);
 		setExpressions(expressions);
 	}
 
-	public Rule (Interval interval, ArrayList<Expression> expressions) {
-		setInterval(interval);
+	public Rule (Interval window, ArrayList<Expression> expressions) {
+		setWindow(window);
 		setExpressions(expressions);
 	}
 
@@ -41,21 +62,12 @@ public class Rule {
 		return this;
 	}
 
-	public String getGuid() {
-		return this.guid;
+	public Interval getWindow() {
+		return this.window;
 	}
 
-	public Rule setGuid(String guid) {
-		this.guid = guid;
-		return this;
-	}
-
-	public Interval getInterval() {
-		return this.interval;
-	}
-
-	public Rule setInterval(Interval interval) {
-		this.interval = interval;
+	public Rule setWindow(Interval window) {
+		this.window = window;
 		return this;
 	}
 
