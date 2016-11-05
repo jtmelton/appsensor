@@ -3,9 +3,13 @@
 <enunciate label="full" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:noNamespaceSchemaLocation="http://enunciate.codehaus.org/schemas/enunciate-1.28.xsd">
   <modules>
-    <!-- <csharp disableCompile="false"/>
-    <gwt disabled="true"/>
-    <spring-app disabled="true"/>-->
-    <swagger dir="swagger"/>
+	<gwt-json-overlay disabled="true"/>
+	<java-json-client disabled="true"/> 
+	<php-json-client disabled="true"/>
+	<ruby-json-client disabled="true"/>	
+    <swagger docsSubdir="swagger"  host="localhost:8085" basePath="" >
+		<scheme>http</scheme>
+	</swagger>	
+	<docs docsDir="wsdocs" />		
   </modules>
 </enunciate>

@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.owasp.appsensor.core.AppSensorServer;
 import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.ClientApplication;
 import org.owasp.appsensor.core.DetectionSystem;
 import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.IPAddress;
@@ -62,7 +63,7 @@ public class RestRequestHandler implements RequestHandler {
 		accessControlUtils.checkAuthorization(Action.ADD_EVENT, requestContext);
 		
 		String clientApplicationName = getClientApplicationName();
-		IPAddress ipAddress = appSensorServer.getConfiguration().findClientApplication(getClientApplicationName()).getIpAddress();
+		IPAddress ipAddress = getDetectionSystemIpAddress(event.getDetectionSystem());
 		event.setDetectionSystem(new DetectionSystem(clientApplicationName, ipAddress)); 
 		
 		appSensorServer.getEventStore().addEvent(event);
@@ -79,7 +80,7 @@ public class RestRequestHandler implements RequestHandler {
 		accessControlUtils.checkAuthorization(Action.ADD_ATTACK, requestContext);
 		
 		String clientApplicationName = getClientApplicationName();
-		IPAddress ipAddress = appSensorServer.getConfiguration().findClientApplication(getClientApplicationName()).getIpAddress();
+		IPAddress ipAddress = getDetectionSystemIpAddress(attack.getDetectionSystem());
 		attack.setDetectionSystem(new DetectionSystem(clientApplicationName, ipAddress)); 
 		
 		appSensorServer.getAttackStore().addAttack(attack);
@@ -112,5 +113,20 @@ public class RestRequestHandler implements RequestHandler {
 		
 		return clientApplicationName;
 	}
-	
+
+    private IPAddress getDetectionSystemIpAddress(DetectionSystem detectionSystem) {
+        IPAddress ipAddress = null;
+
+        if (detectionSystem != null) {
+            ipAddress = detectionSystem.getIPAddress();
+        }
+
+        if (ipAddress == null) {
+            ClientApplication clientApplication = appSensorServer.getConfiguration().findClientApplication(getClientApplicationName());
+            if (clientApplication != null) {
+                ipAddress = clientApplication.getIpAddress();
+            }
+        }
+        return ipAddress;
+    }
 }

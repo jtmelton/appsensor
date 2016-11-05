@@ -1,6 +1,5 @@
 package org.owasp.appsensor.core.geolocation;
 
-import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +9,7 @@ import javax.persistence.Id;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.owasp.appsensor.core.IAppsensorEntity;
 
 /**
  * General object representing geo-location. 
@@ -19,14 +19,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Entity
-public class GeoLocation implements Serializable {
+public class GeoLocation implements IAppsensorEntity {
 
 	private static final long serialVersionUID = 7191033637677492054L;
 
 	@Id
-	@Column
+	@Column(columnDefinition = "integer")
 	@GeneratedValue
-	private Integer id;
+	private String id;
 	
 	private double latitude = 0.0;
 	private double longitude = 0.0;
@@ -40,6 +40,15 @@ public class GeoLocation implements Serializable {
 	
 	public double getLatitude() {
 		return latitude;
+	}
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public GeoLocation setLatitude(double latitude) {

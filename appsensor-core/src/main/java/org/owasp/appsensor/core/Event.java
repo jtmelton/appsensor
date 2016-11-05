@@ -1,16 +1,9 @@
 package org.owasp.appsensor.core;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -29,12 +22,12 @@ import org.owasp.appsensor.core.util.DateUtils;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Entity
-public class Event implements Serializable {
+public class Event implements IAppsensorEntity {
 	
 	@Id
-	@Column
+	@Column(columnDefinition = "integer")
 	@GeneratedValue
-	private Integer id;
+	private String id;
 	
 	private static final long serialVersionUID = -3235111340901139594L;
 
@@ -66,6 +59,7 @@ public class Event implements Serializable {
 	
 	/** Represent extra metadata, anything client wants to send */
 	@ElementCollection
+	@OneToMany(cascade = CascadeType.ALL)
 	private Collection<KeyValuePair> metadata = new ArrayList<>();
 	
     public Event () {}
@@ -81,11 +75,11 @@ public class Event implements Serializable {
 		setDetectionSystem(detectionSystem);
 	}
 	
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

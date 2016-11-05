@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appsensor-server-config xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd">
+	
+	<client-application-identification-header-name>X-Appsensor-Client-Application-Name2</client-application-identification-header-name>
+	
+	<geolocation enabled="true" databasePath="src/main/resources/GeoLite2-City.mmdb" />
+	
+	<client-applications>
+		<client-application>
+			<name>myclientapp</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+		</client-application>
+		<client-application>
+			<name>myclientgeoapp1</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+			<!-- ireland -->
+			<ip-address latitude="52.629678" longitude="-7.873585">10.10.10.5</ip-address>
+		</client-application>
+		<client-application>
+			<name>myclientgeoapp2</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+			<!-- brazil -->
+			<ip-address latitude="-7.471493" longitude="-47.248578">10.10.10.6</ip-address>
+		</client-application>
+		<client-application>
+			<name>myclientgeoapp3</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+			<!-- russia -->
+			<ip-address latitude="59.164625" longitude="123.96234">10.10.10.7</ip-address>
+		</client-application>
+		<client-application>
+			<name>myclientgeoapp4</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+			<!-- india -->
+			<ip-address latitude="12.875989" longitude="77.556100">10.10.10.8</ip-address>
+		</client-application>
+	</client-applications>
+
+	<correlation-config>
+		<correlated-client-set>
+			<client-application-name>A</client-application-name>
+			<client-application-name>B</client-application-name>
+			<client-application-name>C</client-application-name>
+		</correlated-client-set>
+		<correlated-client-set>
+			<client-application-name>X</client-application-name>
+			<client-application-name>Y</client-application-name>
+			<client-application-name>Z</client-application-name>
+		</correlated-client-set>
+	</correlation-config>
+
+	<detection-points>
+		<detection-point>
+			<category>Input Validation</category>
+			<id>IE1</id>
+			<threshold>
+				<count>5</count>
+				<interval unit="seconds">20</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+					<interval unit="minutes">10</interval>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Input Validation</category>
+			<id>IE1</id>
+			<threshold>
+				<count>30</count>
+				<interval unit="minutes">1</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>disable</action>
+					<interval unit="minutes">10</interval>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Input Validation</category>
+			<id>IE2</id>
+			<threshold>
+				<count>6</count>
+				<interval unit="seconds">30</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Request</category>
+			<id>RE3</id>
+			<threshold>
+				<count>7</count>
+				<interval unit="seconds">40</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">33</interval>
+				</response>
+			</responses>
+		</detection-point>
+		<detection-point>
+			<category>Authentication</category>
+			<id>AE4</id>
+			<threshold>
+				<count>8</count>
+				<interval unit="seconds">50</interval>
+			</threshold>
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				<response>
+					<action>logout</action>
+				</response>
+				<response>
+					<action>disableUser</action>
+				</response>
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">34</interval>
+				</response>
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">14</interval>
+				</response>
+			</responses>
+		</detection-point>
+	</detection-points>
+
+</appsensor-server-config>

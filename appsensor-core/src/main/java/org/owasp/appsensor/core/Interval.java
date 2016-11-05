@@ -1,6 +1,5 @@
 package org.owasp.appsensor.core;
 
-import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +23,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Entity
-public class Interval implements Serializable {
+public class Interval implements IAppsensorEntity {
 
 	/** Constant representing milliseconds unit of time */
 	public static final String MILLISECONDS = "milliseconds";
@@ -44,9 +43,9 @@ public class Interval implements Serializable {
 	private static final long serialVersionUID = 6660305744465650539L;
 
 	@Id
-	@Column
+	@Column(columnDefinition = "integer")
 	@GeneratedValue
-	private Integer id;
+	private String id;
 	
 	/** 
 	 * Duration portion of interval, ie. '3' if you wanted 
@@ -83,6 +82,16 @@ public class Interval implements Serializable {
 	
 	public String getUnit() {
 		return unit;
+	}
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public Interval setUnit(String unit) {
