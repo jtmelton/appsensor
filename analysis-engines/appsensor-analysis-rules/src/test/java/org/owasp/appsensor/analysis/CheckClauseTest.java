@@ -10,6 +10,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
+import org.owasp.appsensor.core.rule.Clause;
+import org.owasp.appsensor.core.rule.RulesDetectionPoint;
 
 public class CheckClauseTest {
 	static AggregateEventAnalysisEngine engine;
@@ -27,11 +29,12 @@ public class CheckClauseTest {
 	public void testExactMatchOneDetectionPoint() {
 		ArrayList<RulesDetectionPoint> points = new ArrayList<RulesDetectionPoint>();
 		points.add(point1);
-		Clause clause = new Clause (new Interval(5, Interval.MINUTES), points);
+		Clause clause = new Clause(points);
 
 		LinkedList<TriggeredSensor> sensors = new LinkedList<>();
 		sensors.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point1));
 
+		System.out.println("FAILING");
 		assertTrue(engine.checkClause(clause, sensors));
 	}
 
@@ -40,7 +43,7 @@ public class CheckClauseTest {
 		ArrayList<RulesDetectionPoint> points = new ArrayList<RulesDetectionPoint>();
 		points.add(point1);
 		points.add(point2);
-		Clause clause = new Clause (new Interval(5, Interval.MINUTES), points);
+		Clause clause = new Clause (points);
 
 		LinkedList<TriggeredSensor> sensors = new LinkedList<>();
 		sensors.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point1));
@@ -53,7 +56,7 @@ public class CheckClauseTest {
 	public void testExtraDetectionPoints() {
 		ArrayList<RulesDetectionPoint> points = new ArrayList<RulesDetectionPoint>();
 		points.add(point1);
-		Clause clause = new Clause (new Interval(5, Interval.MINUTES), points);
+		Clause clause = new Clause (points);
 
 		LinkedList<TriggeredSensor> sensors = new LinkedList<>();
 		sensors.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point1));
@@ -66,7 +69,7 @@ public class CheckClauseTest {
 	public void testNoDetectionPoints() {
 		ArrayList<RulesDetectionPoint> points = new ArrayList<RulesDetectionPoint>();
 		points.add(point1);
-		Clause clause = new Clause (new Interval(5, Interval.MINUTES), points);
+		Clause clause = new Clause (points);
 
 		LinkedList<TriggeredSensor> sensors = new LinkedList<>();
 
@@ -78,7 +81,7 @@ public class CheckClauseTest {
 		ArrayList<RulesDetectionPoint> points = new ArrayList<RulesDetectionPoint>();
 		points.add(point1);
 		points.add(point2);
-		Clause clause = new Clause (new Interval(5, Interval.MINUTES), points);
+		Clause clause = new Clause (points);
 
 		LinkedList<TriggeredSensor> sensors = new LinkedList<>();
 		sensors.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point1));

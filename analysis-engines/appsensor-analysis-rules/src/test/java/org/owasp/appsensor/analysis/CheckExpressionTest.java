@@ -11,6 +11,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
+import org.owasp.appsensor.core.rule.Clause;
+import org.owasp.appsensor.core.rule.Expression;
+import org.owasp.appsensor.core.rule.RulesDetectionPoint;
 
 public class CheckExpressionTest {
 	static AggregateEventAnalysisEngine engine;
@@ -80,6 +83,6 @@ public class CheckExpressionTest {
 		ArrayList<RulesDetectionPoint> points = new ArrayList<RulesDetectionPoint>();
 		points.add(point);
 
-		return new Clause (new Interval(5, Interval.MINUTES), points);
+		return new Clause (points);
 	}
 }

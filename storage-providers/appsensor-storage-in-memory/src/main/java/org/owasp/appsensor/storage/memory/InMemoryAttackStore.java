@@ -14,40 +14,44 @@ import org.slf4j.Logger;
 
 /**
  * This is a reference implementation of the {@link AttackStore}.
- * 
- * Implementations of the {@link AttackListener} interface can register with 
- * this class and be notified when new {@link Attack}s are added to the data store 
- * 
+ *
+ * Implementations of the {@link AttackListener} interface can register with
+ * this class and be notified when new {@link Attack}s are added to the data store
+ *
  * The implementation is trivial and simply stores the {@link Attack} in an in-memory collection.
- * 
+ *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  * @author Raphaël Taban
  */
 @Named
 @Loggable
 public class InMemoryAttackStore extends AttackStore {
-	
+
 	private Logger logger;
-	
+
 	/** maintain a collection of {@link Attack}s as an in-memory list */
 	private static Collection<Attack> attacks = new CopyOnWriteArrayList<Attack>();
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void addAttack(Attack attack) {
-		logger.warn("Security attack " + attack.getDetectionPoint().getLabel() + " triggered by user: " + attack.getUser().getUsername());
-	       
+		if (attack.getRule() == null) {
+			logger.warn("Security attack " + attack.getDetectionPoint().getLabel() + " triggered by user: " + attack.getUser().getUsername());
+		}
+		else {
+			logger.warn("Security attack " + attack.getRule().getName() + " triggered by user: " + attack.getUser().getUsername());
+		}
 		attacks.add(attack);
-		
+
 		super.notifyListeners(attack);
 	}
-	
+
 	public void clearAll() {
 		attacks.clear();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -55,5 +59,5 @@ public class InMemoryAttackStore extends AttackStore {
 	public Collection<Attack> findAttacks(SearchCriteria criteria) {
 		return findAttacks(criteria, attacks);
 	}
-	
+
 }

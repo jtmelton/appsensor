@@ -12,6 +12,7 @@ import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.AttackListener;
+import org.owasp.appsensor.core.rule.Rule;
 import org.owasp.appsensor.core.storage.AttackStoreListener;
 import org.owasp.appsensor.core.util.DateUtils;
 
@@ -120,12 +121,16 @@ public abstract class AttackStore {
 					detectionSystemIds.contains(attack.getDetectionSystem().getDetectionSystemId()) : true;
 
 			//check detection point match if detection point specified
-			boolean detectionPointMatch = (detectionPoint != null) ?
-					detectionPoint.typeAndThresholdMatches(attack.getDetectionPoint()) : true;
+			boolean detectionPointMatch = true;
+			if (detectionPoint != null) {
+				detectionPointMatch = (attack.getDetectionPoint() != null) ?
+						detectionPoint.typeAndThresholdMatches(attack.getDetectionPoint()) : false;
+			}
 
 			//check rule match if rule specified
 			boolean ruleMatch = (rule != null) ?
 					rule.equals(attack.getRule()) : true;
+
 
 			DateTime attackTimestamp = DateUtils.fromString(attack.getTimestamp());
 
@@ -133,7 +138,7 @@ public abstract class AttackStore {
 					(earliest.isBefore(attackTimestamp) || earliest.isEqual(attackTimestamp))
 					: true;
 
-			if (userMatch && detectionSystemMatch && (detectionPointMatch || ruleMatch) && earliestMatch) {
+			if (userMatch && detectionSystemMatch && detectionPointMatch && ruleMatch && earliestMatch) {
 				matches.add(attack);
 			}
 		}

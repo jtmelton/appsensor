@@ -8,6 +8,7 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.owasp.appsensor.core.rule.Rule;
 import org.owasp.appsensor.core.util.DateUtils;
 
 /**
@@ -61,7 +62,7 @@ public class Attack implements IAppsensorEntity {
 
 	/** Rule that was triggered */
 	@ManyToOne(cascade = CascadeType.ALL)
-	private String rule;
+	private Rule rule;
 
 	/** Represent extra metadata, anything client wants to send */
 	@ElementCollection
@@ -150,11 +151,11 @@ public class Attack implements IAppsensorEntity {
 		return this;
 	}
 
-	public String getRule() {
+	public Rule getRule() {
 		return this.rule;
 	}
 
-	public Attack setRule(String rule) {
+	public Attack setRule(Rule rule) {
 		this.rule = rule;
 		return this;
 	}
@@ -205,6 +206,7 @@ public class Attack implements IAppsensorEntity {
 		return new ToStringBuilder(this).
 			       append("user", user).
 			       append("detectionPoint", detectionPoint).
+			       append("rule", rule).
 			       append("timestamp", timestamp).
 			       append("detectionSystem", detectionSystem).
 			       append("resource", resource).

@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.owasp.appsensor.core.*;
@@ -28,7 +29,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations={"classpath:base-context.xml"})
 public class ReferenceStatisticalEventAnalysisEngineTest {
 
-
 	protected int sleepAmount = 1;
 
 	@Inject
@@ -40,6 +40,7 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
     @Inject
     IPAddress ipAddressLocator;
 
+    @Ignore
 	@Test
 	public void testAttackCreation() throws Exception {
 		ServerConfiguration updatedConfiguration = appSensorServer.getConfiguration();
@@ -52,12 +53,6 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 				setDetectionSystemIds(
                         Arrays.asList(generateDetectionSystemLocalhostMe().getDetectionSystemId())
                 );
-
-		//rem
-		SearchCriteria criteria2 = new SearchCriteria().
-				setUser(bob).
-				setDetectionPoint(detectionPoint2).
-				setDetectionSystemIds(detectionSystems1);
 
 		Thread.sleep(sleepAmount);
 
@@ -106,17 +101,12 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 		assertEquals(6, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(2, appSensorServer.getAttackStore().findAttacks(criteria).size());
 
-
         appSensorClient.getEventManager().addEvent(generateNewEvent());
 
 		Thread.sleep(sleepAmount);
 
 		assertEquals(7, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(2, appSensorServer.getAttackStore().findAttacks(criteria).size());
-
-		//rem
-		assertEquals(12, appSensorServer.getEventStore().findEvents(criteria2).size());
-		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria2).size());
 	}
 
 	private Collection<DetectionPoint> loadMockedDetectionPoints() {

@@ -1,4 +1,4 @@
-package org.owasp.appsensor.analysis;
+package org.owasp.appsensor.core.rule;
 
 import java.util.Collection;
 
@@ -18,25 +18,13 @@ import org.owasp.appsensor.core.Interval;
  */
 public class Clause {
 
-	/** The window of time all RulesDetectionPoints must be triggered within */
-	private Interval window;
-
 	/** The detection points being checked as variables in an Expression */
 	private Collection<RulesDetectionPoint> detectionPoints;
 
 	public Clause() { }
 
-	public Clause(Interval window, Collection<RulesDetectionPoint> detectionPoints) {
-		setWindow(window);
+	public Clause(Collection<RulesDetectionPoint> detectionPoints) {
 		setDetectionPoints(detectionPoints);
-	}
-
-	public Interval getWindow() {
-		return this.window;
-	}
-	public Clause setWindow(Interval window) {
-		this.window = window;
-		return this;
 	}
 
 	public Collection<RulesDetectionPoint> getDetectionPoints() {

@@ -1,4 +1,4 @@
-package org.owasp.appsensor.analysis;
+package org.owasp.appsensor.core.rule;
 
 import java.util.ArrayList;
 import java.util.Collection;

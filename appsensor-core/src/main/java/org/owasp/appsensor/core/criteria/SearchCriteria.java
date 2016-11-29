@@ -6,7 +6,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.User;
-import org.owasp.appsensor.analysis.Rule;
+import org.owasp.appsensor.core.rule.Rule;
 import org.owasp.appsensor.core.util.DateUtils;
 
 public class SearchCriteria {

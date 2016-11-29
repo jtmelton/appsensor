@@ -22,6 +22,10 @@ import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.analysis.EventAnalysisEngine;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.logging.Loggable;
+import org.owasp.appsensor.core.rule.Clause;
+import org.owasp.appsensor.core.rule.Expression;
+import org.owasp.appsensor.core.rule.Rule;
+import org.owasp.appsensor.core.rule.RulesDetectionPoint;
 import org.owasp.appsensor.core.storage.EventStore;
 import org.owasp.appsensor.core.util.DateUtils;
 import org.slf4j.Logger;
@@ -43,7 +47,7 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 
 	private Logger logger;
 
-	private ArrayList<Rule> rules;
+	//private ArrayList<Rule> rules;
 
 	@Inject
 	private AppSensorServer appSensorServer;
@@ -57,9 +61,9 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	 */
 	@Override
 	public void analyze(Event triggerEvent) {
-		Collection<Rule> appRules = getApplicableRules(triggerEvent);
+		Collection<Rule> rules = appSensorServer.getConfiguration().findRules(triggerEvent);
 
-		for (Rule rule : appRules) {
+		for (Rule rule : rules) {
 			if (checkRule(triggerEvent, rule)) {
 				generateAttack(triggerEvent, rule);
 			}
@@ -67,7 +71,7 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	}
 
 	/**
-	 * Evaluates a {@link Rule}'s boolean logic by compiling a list of all triggered sensors
+	 * Evaluates a {@link Rule}'s boolean logic by compiling a list of all {@link TriggeredSensor}
 	 * and then evaluating each {@link Expression} within the {@link Rule}. All {@link Expression}s
 	 * evaluate to true within the {@link Rule}'s window for the {@link Rule} to evaluate to true.
 	 * The process follows the "sliding window" pattern.
@@ -76,8 +80,8 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	 * @param rule the {@link Rule} being evaluated
 	 * @return the boolean evaluation of the {@link Rule}
 	 */
-	protected boolean checkRule(Event event, Rule rule) {
-		Queue<TriggeredSensor> triggeredSensors = getTriggeredSensors(event, rule);
+	protected boolean checkRule(Event triggerEvent, Rule rule) {
+		Queue<TriggeredSensor> triggeredSensors = getTriggeredSensors(triggerEvent, rule);
 		Queue<TriggeredSensor> windowSensors = new LinkedList<TriggeredSensor>();
 		Iterator<Expression> expressions = rule.getExpressions().iterator();
 		Expression currentExpression = expressions.next();
@@ -204,21 +208,6 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	}
 
 	/**
-	 * Determines the time between the {@link Event} at the head of the Queue and the
-	 * {@link Event} at the tail of the Queue.
-	 *
-	 * @param queue a queue of {@link Event}s
-	 * @param tailEvent the {@link Event} at the tail of the queue
-	 * @return the duration of the queue as an {@link Interval}
-	 */
-	public Interval getQueueInterval(Queue<Event> queue, Event tailEvent) {
-		DateTime endTime = DateUtils.fromString(tailEvent.getTimestamp());
-		DateTime startTime = DateUtils.fromString(queue.peek().getTimestamp());
-
-		return new Interval((int)endTime.minus(startTime.getMillis()).getMillis(), "milliseconds");
-	}
-
-	/**
 	 * Determines whether a queue of {@link Event}s crosses a {@link Threshold} in the correct
 	 * amount of time.
 	 *
@@ -241,6 +230,21 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	}
 
 	/**
+	 * Determines the time between the {@link Event} at the head of the queue and the
+	 * {@link Event} at the tail of the queue.
+	 *
+	 * @param queue a queue of {@link Event}s
+	 * @param tailEvent the {@link Event} at the tail of the queue
+	 * @return the duration of the queue as an {@link Interval}
+	 */
+	public Interval getQueueInterval(Queue<Event> queue, Event tailEvent) {
+		DateTime endTime = DateUtils.fromString(tailEvent.getTimestamp());
+		DateTime startTime = DateUtils.fromString(queue.peek().getTimestamp());
+
+		return new Interval((int)endTime.minus(startTime.getMillis()).getMillis(), "milliseconds");
+	}
+
+	/**
 	 * Generates an attack form the given {@link Rule} and triggered {@link Event}
 	 *
 	 * @param triggerEvent the {@link Event} that triggered the {@link Rule}
@@ -251,33 +255,12 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 
 		Attack attack = new Attack();
 		attack.setUser(new User(triggerEvent.getUser().getUsername()));
-		attack.setRule(rule.getName());
+		attack.setRule(rule);
 		attack.setTimestamp(triggerEvent.getTimestamp());
 		attack.setDetectionSystem(triggerEvent.getDetectionSystem());
 		attack.setResource(triggerEvent.getResource());
 
 		appSensorServer.getAttackStore().addAttack(attack);
-	}
-
-	/**
-	 * Finds all {@link Rule}s that could have been triggered by the {@link Event}. A
-	 * trigger {@link Event} must be the final {@link Event} so if the corresponding
-	 * {@link RulesDetectionPoint} is in the {@link Rule}'s final {@link Expression} it should
-	 * be evaluated.
-	 *
-	 * @param triggerEvent the {@link Event} that triggered the {@link Rule}
-	 * @return a list of {@link Rule}s applicable to triggerEvent
-	 */
-	protected ArrayList<Rule> getApplicableRules(Event triggerEvent) {
-		ArrayList<Rule> matches = new ArrayList<Rule>();
-
-		for (Rule rule : rules) {
-			if (rule.checkLastExpressionForDetectionPoint(triggerEvent.getDetectionPoint())) {
-				matches.add(rule);
-			}
-		}
-
-		return matches;
 	}
 
 	/**
@@ -292,38 +275,36 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(triggerEvent.getUser()).
-				setEarliest(findMostRecentAttackTime(triggerEvent, rule).plus(1).toString());
-
-		for (DetectionPoint detectionPoint : rule.getAllDetectionPoints()) {
-			criteria.
-				setDetectionPoint(new DetectionPoint(detectionPoint.getCategory(), detectionPoint.getLabel())).
+				setEarliest(findMostRecentAttackTime(triggerEvent, rule).plus(1).toString()).
+				setRule(rule).
 				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(triggerEvent.getDetectionSystem()));
 
-			for (Event event : appSensorServer.getEventStore().findEvents(criteria)) {
-				if (events.contains(event) == false) {
-					events.add(event);
-				}
-			}
-		}
+		events = (ArrayList<Event>)appSensorServer.getEventStore().findEvents(criteria);
 
 		Collections.sort(events, new EventComparator());
 
 		return events;
 	}
 
-	// TODO: will be removed one hack gets fixed
-	protected DateTime findMostRecentAttackTime(Event event, Rule rule) {
+	/**
+	 * Finds the most recent {@link Attack} from the {@link Rule} being evaluated.
+	 *
+	 * @param triggerEvent the {@link Event} that triggered the {@link Rule}
+	 * @param rule the {@link Rule} being evaluated
+	 * @return a {@link DateTime} of the most recent attack related to the {@link Rule}
+	 */
+	protected DateTime findMostRecentAttackTime(Event triggerEvent, Rule rule) {
 		DateTime newest = DateUtils.epoch();
 
-		// current hack around lack of support around rules adds "R" to the end of the user
 		SearchCriteria criteria = new SearchCriteria().
-				setUser(new User(event.getUser().getUsername() + "R")).
-				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(event.getDetectionSystem()));
+				setUser(new User(triggerEvent.getUser().getUsername())).
+				setRule(rule).
+				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(triggerEvent.getDetectionSystem()));
 
 		Collection<Attack> attacks = appSensorServer.getAttackStore().findAttacks(criteria);
 
 		for (Attack attack : attacks) {
-			if (attack.getRule() != null && attack.getRule().equals(rule.getName())) {
+			if (attack.getRule().equals(rule)) {
 				if (DateUtils.fromString(attack.getTimestamp()).isAfter(newest)) {
 					newest = DateUtils.fromString(attack.getTimestamp());
 				}
@@ -333,31 +314,7 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 		return newest;
 	}
 
-	public void addRule(Rule rule) {
-		if (rules == null) {
-			rules = new ArrayList<Rule>();
-		}
-		rules.add(rule);
-	}
-
-	public void removeRule(Rule rule) {
-		if (rules != null) {
-			rules.remove(rule);
-		}
-	}
-
-	public void clearRules() {
-		if (rules != null) {
-			rules.clear();
-		}
-	}
-
-	public ArrayList<Rule> getRules() {
-		return this.rules;
-	}
-
 	protected class EventComparator implements Comparator<Event> {
-
 		public int compare(Event e1, Event e2) {
 			if (DateUtils.fromString(e1.getTimestamp()).isBefore(DateUtils.fromString(e2.getTimestamp()))) {
 				return -1;

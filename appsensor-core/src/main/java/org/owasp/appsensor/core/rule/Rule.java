@@ -1,12 +1,14 @@
-package org.owasp.appsensor.analysis;
+package org.owasp.appsensor.core.rule;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
+import org.owasp.appsensor.core.Response;
 
 /**
  * A Rule defines a logical aggregation of RulesDetectionPoints to determine if an
@@ -27,20 +29,30 @@ import org.owasp.appsensor.core.Interval;
 public class Rule {
 
 	/**
-	 * The window of time all Expressions must be triggered within
+	 * The window of time all {@link Expression}s must be triggered within
 	 * A Rule's window must be greater than the total of it's Expressions' windows.
 	 */
 	private Interval window;
 
-	/** The Expressions that build up a Rule
+	/** The {@link Expression}s that build up a Rule
 	 * 	The order of the list corresponds to the temporal order of the expressions.
 	 */
 	private ArrayList<Expression> expressions;
+
+	/**
+	 * Set of {@link Response}s associated with given Rule.
+	 */
+	private Collection<Response> responses = new ArrayList<Response>();
 
 	/** The name of the Rule */
 	private String name;
 
 	public Rule () { }
+
+	public Rule (Interval window, ArrayList<Expression> expressions) {
+		setWindow(window);
+		setExpressions(expressions);
+	}
 
 	public Rule (String name, Interval window, ArrayList<Expression> expressions) {
 		setName(name);
@@ -48,9 +60,11 @@ public class Rule {
 		setExpressions(expressions);
 	}
 
-	public Rule (Interval window, ArrayList<Expression> expressions) {
+	public Rule (String name, Interval window, ArrayList<Expression> expressions, ArrayList<Response> responses) {
+		setName(name);
 		setWindow(window);
 		setExpressions(expressions);
+		setResponses(responses);
 	}
 
 	public String getName() {
@@ -80,6 +94,15 @@ public class Rule {
 		return this;
 	}
 
+	public Collection<Response> getResponses() {
+		return this.responses;
+	}
+
+	public Rule setResponses(Collection<Response> responses) {
+		this.responses = responses;
+		return this;
+	}
+
 	public Expression getLastExpression() {
 		return this.expressions.get(this.expressions.size() - 1);
 	}
@@ -102,5 +125,21 @@ public class Rule {
 		}
 
 		return detectionPoints;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+
+		Rule other = (Rule) obj;
+
+		return new EqualsBuilder().
+				append(name, other.getName()).
+				isEquals();
 	}
 }

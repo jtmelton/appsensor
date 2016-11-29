@@ -42,7 +42,7 @@
 		
 		<dependency>
 			<groupId>org.owasp.appsensor</groupId>
-			<artifactId>appsensor-analysis-david</artifactId>
+			<artifactId>appsensor-analysis-rules</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-  	<artifactId>appsensor-analysis-david</artifactId>
+  	<artifactId>appsensor-analysis-rules</artifactId>
 	<packaging>jar</packaging>
 
-	<name>appsensor-analysis-david</name>
+	<name>appsensor-analysis-rules</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -73,7 +73,7 @@
 	<parent>
 		<groupId>org.owasp.appsensor</groupId>
 	  	<artifactId>appsensor-parent</artifactId>
-		<version>2.2.0</version>
+		<version>2.3.0</version>
 	</parent>
 
 	<!-- See http://stackoverflow.com/questions/174560/sharing-test-code-in-maven -->

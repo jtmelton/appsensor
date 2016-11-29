@@ -11,6 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
+import org.owasp.appsensor.core.rule.RulesDetectionPoint;
 
 public class TrimTest {
 	static AggregateEventAnalysisEngine engine;
