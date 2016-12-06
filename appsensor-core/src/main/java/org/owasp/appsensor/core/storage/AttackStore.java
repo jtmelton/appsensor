@@ -160,6 +160,7 @@ public abstract class AttackStore {
 		DetectionPoint detectionPoint = criteria.getDetectionPoint();
 		Collection<String> detectionSystemIds = criteria.getDetectionSystemIds();
 		DateTime earliest = DateUtils.fromString(criteria.getEarliest());
+		Rule rule = criteria.getRule();
 
 		// check user match if user specified
 		boolean userMatch = (user != null) ? user.equals(attack.getUser()) : true;
@@ -172,9 +173,12 @@ public abstract class AttackStore {
 		boolean detectionPointMatch = (detectionPoint != null) ?
 				detectionPoint.typeAndThresholdMatches(attack.getDetectionPoint()) : true;
 
+		boolean ruleMatch = (rule != null) ?
+				rule.equals(attack.getRule()) : true;
+
 		boolean earliestMatch = (earliest != null) ? earliest.isBefore(DateUtils.fromString(attack.getTimestamp())): true;
 
-		if (userMatch && detectionSystemMatch && detectionPointMatch&& earliestMatch) {
+		if (userMatch && detectionSystemMatch && detectionPointMatch && ruleMatch && earliestMatch) {
 			match = true;
 		}
 

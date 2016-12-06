@@ -44,6 +44,11 @@ public class Rule {
 	 */
 	private Collection<Response> responses = new ArrayList<Response>();
 
+	/**
+	 * Unique identifier
+	 */
+	private String guid;
+
 	/** The name of the Rule */
 	private String name;
 
@@ -65,6 +70,14 @@ public class Rule {
 		setWindow(window);
 		setExpressions(expressions);
 		setResponses(responses);
+	}
+
+	public Rule (String name, Interval window, ArrayList<Expression> expressions, ArrayList<Response> responses, String guid) {
+		setName(name);
+		setWindow(window);
+		setExpressions(expressions);
+		setResponses(responses);
+		setGuid(guid);
 	}
 
 	public String getName() {
@@ -100,6 +113,15 @@ public class Rule {
 
 	public Rule setResponses(Collection<Response> responses) {
 		this.responses = responses;
+		return this;
+	}
+
+	public String getGuid() {
+		return this.guid;
+	}
+
+	public Rule setGuid(String guid) {
+		this.guid = guid;
 		return this;
 	}
 
@@ -139,7 +161,11 @@ public class Rule {
 		Rule other = (Rule) obj;
 
 		return new EqualsBuilder().
-				append(name, other.getName()).
+				append(this.name, other.getName()).
+				append(this.window, other.getWindow()).
+				append(this.responses, other.getResponses()).
+				append(this.expressions, other.getExpressions()).
+				append(this.guid, other.getWindow()).
 				isEquals();
 	}
 }
