@@ -417,7 +417,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			switch(event) {
 			case XMLStreamConstants.START_ELEMENT:
 				if ("config:rules-detection-point".equals(name)) {
-					clause.getDetectionPoints().add((RulesDetectionPoint)readDetectionPoint(xmlReader));
+					clause.getDetectionPoints().add((RulesDetectionPoint)readRulesDetectionPoint(xmlReader));
 				} else {
 					/** unexpected start element **/
 				}
@@ -435,6 +435,16 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			}
 		}
 		return clause;
+	}
+
+	private RulesDetectionPoint readRulesDetectionPoint(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
+		RulesDetectionPoint rulesDetectionPoint = new RulesDetectionPoint(readDetectionPoint(xmlReader));
+
+		if (rulesDetectionPoint.getGuid() == null || rulesDetectionPoint.getGuid() == "") {
+			throw new ConfigurationException("RulesDetectionPoint must have a guid: " + rulesDetectionPoint.toString());
+		}
+
+		return rulesDetectionPoint;
 	}
 
 	private HashMap<String,List<DetectionPoint>> readCustomDetectionPoints(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
