@@ -65,7 +65,7 @@
 	
 	<xsd:complexType name="expressions">
 		<xsd:sequence>
-			<xsd:element name="expression" type="asconfig:expression" minOccurs="1" maxOccurs="10" />
+			<xsd:element name="expression" type="asconfig:expression" minOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 	
@@ -78,7 +78,7 @@
 	
 	<xsd:complexType name="clauses">
 		<xsd:sequence>
-			<xsd:element name="clause" type="asconfig:clause" minOccurs="1" maxOccurs="10" />
+			<xsd:element name="clause" type="asconfig:clause" minOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 	
