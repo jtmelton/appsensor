@@ -202,7 +202,7 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 			}
 		}
 
-		Collections.sort(triggeredSensorQueue, new TriggeredSensorComparator());
+		Collections.sort(triggeredSensorQueue, TriggeredSensor.getStartTimeAscendingComparator());
 
 		return triggeredSensorQueue;
 	}
@@ -281,7 +281,7 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 
 		events = (ArrayList<Event>)appSensorServer.getEventStore().findEvents(criteria);
 
-		Collections.sort(events, new EventComparator());
+		Collections.sort(events, Event.getTimeAscendingComparator());
 
 		return events;
 	}
@@ -312,33 +312,5 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 		}
 
 		return newest;
-	}
-
-	protected class EventComparator implements Comparator<Event> {
-		public int compare(Event e1, Event e2) {
-			if (DateUtils.fromString(e1.getTimestamp()).isBefore(DateUtils.fromString(e2.getTimestamp()))) {
-				return -1;
-			}
-			else if (DateUtils.fromString(e1.getTimestamp()).isAfter(DateUtils.fromString(e2.getTimestamp()))) {
-				return 1;
-			}
-			else {
-				return 0;
-			}
-		}
-	}
-
-	protected class TriggeredSensorComparator implements Comparator<TriggeredSensor> {
-		public int compare(TriggeredSensor ts1, TriggeredSensor ts2) {
-			if (ts1.getStartTime().isBefore(ts2.getStartTime())) {
-				return -1;
-			}
-			else if (ts1.getStartTime().isAfter(ts2.getStartTime())) {
-				return 1;
-			}
-			else {
-				return 0;
-			}
-		}
 	}
 }

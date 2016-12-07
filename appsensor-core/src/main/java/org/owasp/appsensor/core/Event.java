@@ -2,6 +2,7 @@ package org.owasp.appsensor.core;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 
 import javax.persistence.*;
 
@@ -11,70 +12,70 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.owasp.appsensor.core.util.DateUtils;
 
 /**
- * Event is a specific instance that a sensor has detected that 
+ * Event is a specific instance that a sensor has detected that
  * represents a suspicious activity.
- * 
+ *
  * The key difference between an {@link Event} and an {@link Attack} is that an {@link Event}
  * is "suspicous" whereas an {@link Attack} has been determined to be "malicious" by some analysis.
- * 
+ *
  * @see java.io.Serializable
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 @Entity
 public class Event implements IAppsensorEntity {
-	
+
 	@Id
 	@Column(columnDefinition = "integer")
 	@GeneratedValue
 	private String id;
-	
+
 	private static final long serialVersionUID = -3235111340901139594L;
 
 	/** User who triggered the event, could be anonymous user */
 	@ManyToOne(cascade = CascadeType.ALL)
 	private User user;
-	
+
 	/** Detection Point that was triggered */
 	@ManyToOne(cascade = CascadeType.ALL)
 	private DetectionPoint detectionPoint;
-	
+
 	/** When the event occurred */
 	@Column
 	private String timestamp;
 
-	/** 
-	 * Identifier label for the system that detected the event. 
-	 * This will be either the client application, or possibly an external 
+	/**
+	 * Identifier label for the system that detected the event.
+	 * This will be either the client application, or possibly an external
 	 * detection system, such as syslog, a WAF, network IDS, etc.  */
 	@ManyToOne(cascade = CascadeType.ALL)
-	private DetectionSystem detectionSystem;  
-	
-	/** 
-	 * The resource being requested when the event was triggered, which can be used 
-     * later to block requests to a given function. 
+	private DetectionSystem detectionSystem;
+
+	/**
+	 * The resource being requested when the event was triggered, which can be used
+     * later to block requests to a given function.
      */
 	@ManyToOne(cascade = CascadeType.ALL)
     private Resource resource;
-	
+
 	/** Represent extra metadata, anything client wants to send */
 	@ElementCollection
 	@OneToMany(cascade = CascadeType.ALL)
 	private Collection<KeyValuePair> metadata = new ArrayList<>();
-	
+
     public Event () {}
-    
+
 	public Event (User user, DetectionPoint detectionPoint, DetectionSystem detectionSystem) {
 		this(user, detectionPoint, DateUtils.getCurrentTimestampAsString(), detectionSystem);
 	}
-	
+
 	public Event (User user, DetectionPoint detectionPoint, String timestamp, DetectionSystem detectionSystem) {
 		setUser(user);
 		setDetectionPoint(detectionPoint);
 		setTimestamp(timestamp);
 		setDetectionSystem(detectionSystem);
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -109,7 +110,7 @@ public class Event implements IAppsensorEntity {
 		this.timestamp = timestamp;
 		return this;
 	}
-	
+
 	public DetectionSystem getDetectionSystem() {
 		return detectionSystem;
 	}
@@ -127,13 +128,29 @@ public class Event implements IAppsensorEntity {
 		this.resource = resource;
 		return this;
 	}
-	
+
 	public Collection<KeyValuePair> getMetadata() {
 		return metadata;
 	}
 
 	public void setMetadata(Collection<KeyValuePair> metadata) {
 		this.metadata = metadata;
+	}
+
+	public static Comparator<Event> getTimeAscendingComparator() {
+		return new Comparator<Event>() {
+			public int compare(Event e1, Event e2) {
+				if (DateUtils.fromString(e1.getTimestamp()).isBefore(DateUtils.fromString(e2.getTimestamp()))) {
+					return -1;
+				}
+				else if (DateUtils.fromString(e1.getTimestamp()).isAfter(DateUtils.fromString(e2.getTimestamp()))) {
+					return 1;
+				}
+				else {
+					return 0;
+				}
+			}
+		};
 	}
 
 	@Override
@@ -147,7 +164,7 @@ public class Event implements IAppsensorEntity {
 				append(metadata).
 				toHashCode();
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -156,9 +173,9 @@ public class Event implements IAppsensorEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		
+
 		Event other = (Event) obj;
-		
+
 		return new EqualsBuilder().
 				append(user, other.getUser()).
 				append(detectionPoint, other.getDetectionPoint()).
@@ -168,7 +185,7 @@ public class Event implements IAppsensorEntity {
 				append(metadata, other.getMetadata()).
 				isEquals();
 	}
-	
+
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).

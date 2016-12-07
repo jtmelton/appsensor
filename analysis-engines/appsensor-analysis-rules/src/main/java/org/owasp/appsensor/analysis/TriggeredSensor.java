@@ -1,5 +1,7 @@
 package org.owasp.appsensor.analysis;
 
+import java.util.Comparator;
+
 import org.joda.time.DateTime;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
@@ -52,4 +54,19 @@ public class TriggeredSensor extends Interval {
 		this.detectionPoint = detectionPoint;
 	}
 
+	public static Comparator<TriggeredSensor> getStartTimeAscendingComparator() {
+		return new Comparator<TriggeredSensor>() {
+			public int compare(TriggeredSensor ts1, TriggeredSensor ts2) {
+				if (ts1.getStartTime().isBefore(ts2.getStartTime())) {
+					return -1;
+				}
+				else if (ts1.getStartTime().isAfter(ts2.getStartTime())) {
+					return 1;
+				}
+				else {
+					return 0;
+				}
+			}
+		};
+	}
 }
