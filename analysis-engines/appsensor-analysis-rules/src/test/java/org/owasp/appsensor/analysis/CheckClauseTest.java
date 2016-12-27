@@ -31,8 +31,8 @@ public class CheckClauseTest {
 		points.add(point1);
 		Clause clause = new Clause(points);
 
-		LinkedList<TriggeredSensor> sensors = new LinkedList<>();
-		sensors.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point1));
+		LinkedList<Notification> sensors = new LinkedList<>();
+		sensors.add(new Notification(2, Interval.MINUTES, new DateTime(10), point1));
 
 		System.out.println("FAILING");
 		assertTrue(engine.checkClause(clause, sensors));
@@ -45,9 +45,9 @@ public class CheckClauseTest {
 		points.add(point2);
 		Clause clause = new Clause (points);
 
-		LinkedList<TriggeredSensor> sensors = new LinkedList<>();
-		sensors.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point1));
-		sensors.add(new TriggeredSensor(3, Interval.MINUTES, new DateTime(10), point2));
+		LinkedList<Notification> sensors = new LinkedList<>();
+		sensors.add(new Notification(2, Interval.MINUTES, new DateTime(10), point1));
+		sensors.add(new Notification(3, Interval.MINUTES, new DateTime(10), point2));
 
 		assertTrue(engine.checkClause(clause, sensors));
 	}
@@ -58,9 +58,9 @@ public class CheckClauseTest {
 		points.add(point1);
 		Clause clause = new Clause (points);
 
-		LinkedList<TriggeredSensor> sensors = new LinkedList<>();
-		sensors.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point1));
-		sensors.add(new TriggeredSensor(3, Interval.MINUTES, new DateTime(10), point2));
+		LinkedList<Notification> sensors = new LinkedList<>();
+		sensors.add(new Notification(2, Interval.MINUTES, new DateTime(10), point1));
+		sensors.add(new Notification(3, Interval.MINUTES, new DateTime(10), point2));
 
 		assertTrue(engine.checkClause(clause, sensors));
 	}
@@ -71,7 +71,7 @@ public class CheckClauseTest {
 		points.add(point1);
 		Clause clause = new Clause (points);
 
-		LinkedList<TriggeredSensor> sensors = new LinkedList<>();
+		LinkedList<Notification> sensors = new LinkedList<>();
 
 		assertFalse(engine.checkClause(clause, sensors));
 	}
@@ -83,8 +83,8 @@ public class CheckClauseTest {
 		points.add(point2);
 		Clause clause = new Clause (points);
 
-		LinkedList<TriggeredSensor> sensors = new LinkedList<>();
-		sensors.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point1));
+		LinkedList<Notification> sensors = new LinkedList<>();
+		sensors.add(new Notification(2, Interval.MINUTES, new DateTime(10), point1));
 
 		assertFalse(engine.checkClause(clause, sensors));
 	}

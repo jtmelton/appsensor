@@ -13,7 +13,6 @@ import org.junit.runners.Suite;
 	   CheckExpressionTest.class,
 	   CheckRuleTest.class,
 	   GetQueueIntervalTest.class,
-	   GetTriggeredSensorsTest.class,
 	   TrimTest.class
 	})
 

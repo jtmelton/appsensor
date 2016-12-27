@@ -21,4 +21,8 @@ public class CheckRuleTest {
 		engine = new AggregateEventAnalysisEngine();
 	}
 
+	@Test
+	public void test() {
+
+	}
 }

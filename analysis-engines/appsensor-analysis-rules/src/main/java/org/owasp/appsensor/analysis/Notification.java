@@ -7,28 +7,28 @@ import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
 
 /**
- * A TriggeredSensor represents the interval of time between a series of events that
+ * A Notification represents the interval of time between a series of events that
  * trigger a RulesDetectionPoint. Where a detection point generates an attack, a
- * RulesDetectionPoint generates a TriggeredSensor.
+ * RulesDetectionPoint generates a Notification.
  *
  * @author David Scrobonia (davidscrobonia@gmail.com)
  */
-public class TriggeredSensor extends Interval {
+public class Notification extends Interval {
 
 	/** the start time of the interval */
 	private DateTime startTime;
 
-	/** the detection point that generated the TriggeredSensor */
+	/** the detection point that generated the Notification */
 	private DetectionPoint detectionPoint;
 
-	public TriggeredSensor () { };
+	public Notification () { };
 
-	public TriggeredSensor (int duration, String unit) {
+	public Notification (int duration, String unit) {
 		super(duration, unit);
 		startTime = null;
 	}
 
-	public TriggeredSensor (int duration, String unit, DateTime startTime, DetectionPoint detectionPoint) {
+	public Notification (int duration, String unit, DateTime startTime, DetectionPoint detectionPoint) {
 		super(duration, unit);
 		setStartTime(startTime);
 		setDetectionPoint(detectionPoint);
@@ -54,9 +54,9 @@ public class TriggeredSensor extends Interval {
 		this.detectionPoint = detectionPoint;
 	}
 
-	public static Comparator<TriggeredSensor> getStartTimeAscendingComparator() {
-		return new Comparator<TriggeredSensor>() {
-			public int compare(TriggeredSensor ts1, TriggeredSensor ts2) {
+	public static Comparator<Notification> getStartTimeAscendingComparator() {
+		return new Comparator<Notification>() {
+			public int compare(Notification ts1, Notification ts2) {
 				if (ts1.getStartTime().isBefore(ts2.getStartTime())) {
 					return -1;
 				}

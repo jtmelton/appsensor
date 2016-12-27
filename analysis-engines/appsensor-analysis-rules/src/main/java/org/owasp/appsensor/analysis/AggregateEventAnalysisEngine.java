@@ -71,7 +71,7 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	}
 
 	/**
-	 * Evaluates a {@link Rule}'s boolean logic by compiling a list of all {@link TriggeredSensor}
+	 * Evaluates a {@link Rule}'s boolean logic by compiling a list of all {@link Notification}
 	 * and then evaluating each {@link Expression} within the {@link Rule}. All {@link Expression}s
 	 * evaluate to true within the {@link Rule}'s window for the {@link Rule} to evaluate to true.
 	 * The process follows the "sliding window" pattern.
@@ -81,21 +81,21 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	 * @return the boolean evaluation of the {@link Rule}
 	 */
 	protected boolean checkRule(Event triggerEvent, Rule rule) {
-		Queue<TriggeredSensor> triggeredSensors = getTriggeredSensors(triggerEvent, rule);
-		Queue<TriggeredSensor> windowSensors = new LinkedList<TriggeredSensor>();
+		Queue<Notification> notifications = getNotifications(triggerEvent, rule);
+		Queue<Notification> windowSensors = new LinkedList<Notification>();
 		Iterator<Expression> expressions = rule.getExpressions().iterator();
 		Expression currentExpression = expressions.next();
 
-		while (!triggeredSensors.isEmpty()) {
-			TriggeredSensor tail = triggeredSensors.poll();
+		while (!notifications.isEmpty()) {
+			Notification tail = notifications.poll();
 			windowSensors.add(tail);
 			trim(windowSensors, tail.getEndTime().minus(currentExpression.getWindow().toMillis()));
 
 			if (checkExpression(currentExpression, windowSensors)) {
 				if (expressions.hasNext()) {
 					currentExpression = expressions.next();
-					windowSensors = new LinkedList<TriggeredSensor>();
-					trim(triggeredSensors, tail.getEndTime());
+					windowSensors = new LinkedList<Notification>();
+					trim(notifications, tail.getEndTime());
 				}
 				else {
 					return true;
@@ -113,10 +113,10 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	 * Equivalent to checking "OR" logic between {@link Clause}s.
 	 *
 	 * @param expression the {@link Expression} being evaluated
-	 * @param windowSensors the {@link TriggeredSensor}s in the current "sliding window"
+	 * @param windowSensors the {@link Notification}s in the current "sliding window"
 	 * @return the boolean evaluation of the {@link Expression}
 	 */
-	protected boolean checkExpression(Expression expression, Queue<TriggeredSensor> windowSensors) {
+	protected boolean checkExpression(Expression expression, Queue<Notification> windowSensors) {
 		for (Clause clause : expression.getClauses()) {
 			if (checkClause(clause, windowSensors)) {
 				return true;
@@ -132,14 +132,14 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	 * Equivalent to checking "AND" logic between {@link RuleDetectionPoint}s
 	 *
 	 * @param clause the {@link Clause} being evaluated
-	 * @param windowSensors the {@link TriggeredSensor}s in the current "sliding window"
+	 * @param windowSensors the {@link Notification}s in the current "sliding window"
 	 * @return the boolean evaluation of the {@link Clause}
 	 */
-	protected boolean checkClause(Clause clause, Queue<TriggeredSensor> windowSensors) {
+	protected boolean checkClause(Clause clause, Queue<Notification> windowSensors) {
 		Collection<DetectionPoint> windowDetectionPoints = new ArrayList<DetectionPoint>();
 
-		for (TriggeredSensor triggeredSensor : windowSensors) {
-			windowDetectionPoints.add(triggeredSensor.getDetectionPoint());
+		for (Notification notification : windowSensors) {
+			windowDetectionPoints.add(notification.getDetectionPoint());
 		}
 
 		for (DetectionPoint detectionPoint : clause.getDetectionPoints()) {
@@ -154,29 +154,29 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	// todo: is is it better return new queue?
 	// toso: should i sort before just to be safe or assume its sorted?
 	/**
-	 * Pops {@link TriggeredSensor}s out of the queue until the start time of the queue's head
+	 * Pops {@link Notification}s out of the queue until the start time of the queue's head
 	 * is after the parameter time.
 	 *
-	 * @param triggeredSensors the queue of {@link TriggeredSensor}s being trimmed
-	 * @param time the time that all {@link TriggeredSensor}s in the queue must be after
+	 * @param notifications the queue of {@link Notification}s being trimmed
+	 * @param time the time that all {@link Notification}s in the queue must be after
 	 */
-	protected void trim(Queue<TriggeredSensor> triggeredSensors, DateTime time) {
-		while (!triggeredSensors.isEmpty() && !triggeredSensors.peek().getStartTime().isAfter(time)) {
-			triggeredSensors.poll();
+	protected void trim(Queue<Notification> notifications, DateTime time) {
+		while (!notifications.isEmpty() && !notifications.peek().getStartTime().isAfter(time)) {
+			notifications.poll();
 		}
 	}
 
 	/**
-	 * Builds a queue of all {@link TriggeredSensors} from the events relating to the
-	 * current {@link Rule}. The {@link TriggeredSensors} are ordered in the Queue by
+	 * Builds a queue of all {@link Notifications} from the events relating to the
+	 * current {@link Rule}. The {@link Notifications} are ordered in the Queue by
 	 * start time.
 	 *
 	 * @param triggerEvent the {@link Event} that triggered analysis
 	 * @param rule the {@link Rule} being evaluated
 	 * @return a queue of {@link TriggerEvents}
 	 */
-	protected LinkedList<TriggeredSensor> getTriggeredSensors(Event triggerEvent, Rule rule) {
-		LinkedList<TriggeredSensor> triggeredSensorQueue = new LinkedList<TriggeredSensor>();
+	protected LinkedList<Notification> getNotifications(Event triggerEvent, Rule rule) {
+		LinkedList<Notification> notificationQueue = new LinkedList<Notification>();
 		Collection<Event> events = getApplicableEvents(triggerEvent, rule);
 		Collection<DetectionPoint> detectionPoints = rule.getAllDetectionPoints();
 
@@ -191,8 +191,8 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 						int queueDuration = (int)getQueueInterval(eventQueue, event).toMillis();
 						DateTime start = DateUtils.fromString(eventQueue.peek().getTimestamp());
 
-						TriggeredSensor triggeredSensor = new TriggeredSensor(queueDuration, "milliseconds", start, detectionPoint);
-						triggeredSensorQueue.add(triggeredSensor);
+						Notification notification = new Notification(queueDuration, "milliseconds", start, detectionPoint);
+						notificationQueue.add(notification);
 					}
 
 					if (eventQueue.size() >= detectionPoint.getThreshold().getCount()) {
@@ -202,9 +202,9 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 			}
 		}
 
-		Collections.sort(triggeredSensorQueue, TriggeredSensor.getStartTimeAscendingComparator());
+		Collections.sort(notificationQueue, Notification.getStartTimeAscendingComparator());
 
-		return triggeredSensorQueue;
+		return notificationQueue;
 	}
 
 	/**

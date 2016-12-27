@@ -35,8 +35,8 @@ public class CheckExpressionTest {
 		clauses.add(clause1);
 		Expression expression = new Expression(new Interval(), clauses);
 
-		LinkedList<TriggeredSensor> sensors = new LinkedList<TriggeredSensor>();
-		sensors.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point1));
+		LinkedList<Notification> sensors = new LinkedList<Notification>();
+		sensors.add(new Notification(2, Interval.MINUTES, new DateTime(10), point1));
 
 		assertTrue(engine.checkExpression(expression, sensors));
 	}
@@ -48,9 +48,9 @@ public class CheckExpressionTest {
 		clauses.add(clause2);
 		Expression expression = new Expression(new Interval(), clauses);
 
-		LinkedList<TriggeredSensor> sensors = new LinkedList<TriggeredSensor>();
-		sensors.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point1));
-		sensors.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point2));
+		LinkedList<Notification> sensors = new LinkedList<Notification>();
+		sensors.add(new Notification(2, Interval.MINUTES, new DateTime(10), point1));
+		sensors.add(new Notification(2, Interval.MINUTES, new DateTime(10), point2));
 
 		assertTrue(engine.checkExpression(expression, sensors));
 	}
@@ -62,8 +62,8 @@ public class CheckExpressionTest {
 		clauses.add(clause2);
 		Expression expression = new Expression(new Interval(), clauses);
 
-		LinkedList<TriggeredSensor> sensors = new LinkedList<TriggeredSensor>();
-		sensors.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point2));
+		LinkedList<Notification> sensors = new LinkedList<Notification>();
+		sensors.add(new Notification(2, Interval.MINUTES, new DateTime(10), point2));
 
 		assertTrue(engine.checkExpression(expression, sensors));
 	}
@@ -74,7 +74,7 @@ public class CheckExpressionTest {
 		clauses.add(clause1);
 		Expression expression = new Expression(new Interval(), clauses);
 
-		LinkedList<TriggeredSensor> sensors = new LinkedList<TriggeredSensor>();
+		LinkedList<Notification> sensors = new LinkedList<Notification>();
 
 		assertFalse(engine.checkExpression(expression, sensors));
 	}

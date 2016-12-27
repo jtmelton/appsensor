@@ -16,7 +16,7 @@ import org.owasp.appsensor.core.rule.RulesDetectionPoint;
 public class TrimTest {
 	static AggregateEventAnalysisEngine engine;
 	static RulesDetectionPoint point1;
-	static Queue<TriggeredSensor> queue;
+	static Queue<Notification> queue;
 
 	@BeforeClass
 	public static void setUpOnce() {
@@ -38,7 +38,7 @@ public class TrimTest {
 
 		assertEquals(lengthBefore - 1, queue.size());
 
-		for (TriggeredSensor ts : queue) {
+		for (Notification ts : queue) {
 			DateTime dt = ts.getStartTime();
 			assertTrue(dt.isAfter(trimTime));
 		}
@@ -53,7 +53,7 @@ public class TrimTest {
 
 		assertEquals(lengthBefore, queue.size());
 
-		for (TriggeredSensor ts : queue) {
+		for (Notification ts : queue) {
 			DateTime dt = ts.getStartTime();
 			assertTrue(dt.isAfter(trimTime));
 		}
@@ -67,20 +67,20 @@ public class TrimTest {
 
 		assertEquals(0, queue.size());
 
-		for (TriggeredSensor ts : queue) {
+		for (Notification ts : queue) {
 			DateTime dt = ts.getStartTime();
 			assertTrue(dt.isAfter(trimTime));
 		}
 	}
 
-	private static Queue<TriggeredSensor> buildQueue() {
-		Queue<TriggeredSensor> queue = new LinkedList<TriggeredSensor>();
+	private static Queue<Notification> buildQueue() {
+		Queue<Notification> queue = new LinkedList<Notification>();
 
-		queue.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(10), point1));
-		queue.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(11), point1));
-		queue.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(12), point1));
-		queue.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(13), point1));
-		queue.add(new TriggeredSensor(2, Interval.MINUTES, new DateTime(14), point1));
+		queue.add(new Notification(2, Interval.MINUTES, new DateTime(10), point1));
+		queue.add(new Notification(2, Interval.MINUTES, new DateTime(11), point1));
+		queue.add(new Notification(2, Interval.MINUTES, new DateTime(12), point1));
+		queue.add(new Notification(2, Interval.MINUTES, new DateTime(13), point1));
+		queue.add(new Notification(2, Interval.MINUTES, new DateTime(14), point1));
 
 		return queue;
 	}
