@@ -28,7 +28,7 @@ import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.rule.Clause;
 import org.owasp.appsensor.core.rule.Rule;
-import org.owasp.appsensor.core.rule.RulesDetectionPoint;
+import org.owasp.appsensor.core.rule.MonitorPoint;
 import org.owasp.appsensor.storage.memory.InMemoryAttackStore;
 import org.owasp.appsensor.storage.memory.InMemoryEventStore;
 import org.springframework.test.context.ContextConfiguration;
@@ -489,19 +489,19 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		Interval minutes16 = new Interval(16, Interval.MINUTES);
 
 		// detection points
-		RulesDetectionPoint point1 = new RulesDetectionPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1", new Threshold(3, minutes5)));
-		RulesDetectionPoint point2 = new RulesDetectionPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE2", new Threshold(12, minutes5)));
-		RulesDetectionPoint point3 = new RulesDetectionPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE3", new Threshold(13, minutes6)));
+		MonitorPoint point1 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1", new Threshold(3, minutes5)));
+		MonitorPoint point2 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE2", new Threshold(12, minutes5)));
+		MonitorPoint point3 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE3", new Threshold(13, minutes6)));
 
 		// clauses
-		ArrayList<RulesDetectionPoint> points1 = new ArrayList<RulesDetectionPoint>();
+		ArrayList<MonitorPoint> points1 = new ArrayList<MonitorPoint>();
 		points1.add(point1);
-		ArrayList<RulesDetectionPoint> points1and2 = new ArrayList<RulesDetectionPoint>();
+		ArrayList<MonitorPoint> points1and2 = new ArrayList<MonitorPoint>();
 		points1and2.add(point1);
 		points1and2.add(point2);
-		ArrayList<RulesDetectionPoint> points2 = new ArrayList<RulesDetectionPoint>();
+		ArrayList<MonitorPoint> points2 = new ArrayList<MonitorPoint>();
 		points2.add(point2);
-		ArrayList<RulesDetectionPoint> points2and3 = new ArrayList<RulesDetectionPoint>();
+		ArrayList<MonitorPoint> points2and3 = new ArrayList<MonitorPoint>();
 		points2and3.add(point2);
 		points2and3.add(point3);
 

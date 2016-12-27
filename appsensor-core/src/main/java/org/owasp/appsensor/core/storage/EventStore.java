@@ -13,7 +13,7 @@ import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.EventListener;
 import org.owasp.appsensor.core.rule.Rule;
-import org.owasp.appsensor.core.rule.RulesDetectionPoint;
+import org.owasp.appsensor.core.rule.MonitorPoint;
 import org.owasp.appsensor.core.storage.EventStoreListener;
 import org.owasp.appsensor.core.util.DateUtils;
 
@@ -146,7 +146,7 @@ public abstract class EventStore {
 		// check rule match if rule specified
 		// todo: is create a new rules detection point really the most efficient way? rewrite equals method? create new contains-like method?
 		boolean ruleMatch = (rule != null) ?
-				rule.getAllDetectionPoints().contains(new RulesDetectionPoint(event.getDetectionPoint())) : true;
+				rule.getAllDetectionPoints().contains(new MonitorPoint(event.getDetectionPoint())) : true;
 
 		DateTime eventTimestamp = DateUtils.fromString(event.getTimestamp());
 

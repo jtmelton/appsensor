@@ -25,7 +25,7 @@ import org.owasp.appsensor.core.logging.Loggable;
 import org.owasp.appsensor.core.rule.Clause;
 import org.owasp.appsensor.core.rule.Expression;
 import org.owasp.appsensor.core.rule.Rule;
-import org.owasp.appsensor.core.rule.RulesDetectionPoint;
+import org.owasp.appsensor.core.rule.MonitorPoint;
 import org.owasp.appsensor.core.storage.EventStore;
 import org.owasp.appsensor.core.util.DateUtils;
 import org.slf4j.Logger;
@@ -126,7 +126,7 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	}
 
 	/**
-	 * Evaluates a {@link Clause}'s boolean logic by checking if each {@link RulesDetectionPoint}
+	 * Evaluates a {@link Clause}'s boolean logic by checking if each {@link MonitorPoint}
 	 * within the {@link Clause} is in the current "sliding window".
 	 *
 	 * Equivalent to checking "AND" logic between {@link RuleDetectionPoint}s

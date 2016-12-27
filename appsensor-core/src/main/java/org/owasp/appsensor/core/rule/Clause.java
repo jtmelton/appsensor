@@ -6,7 +6,7 @@ import org.owasp.appsensor.core.Interval;
 
 /**
  * A Clause represents the terms in an Expression separated by an "OR" operator.
- * Each RulesDetectionPoint in the detectionPoints field are the variables in joined
+ * Each MonitorPoint in the detectionPoints field are the variables in joined
  * by "AND" operators.
  *
  * For example:
@@ -19,19 +19,19 @@ import org.owasp.appsensor.core.Interval;
 public class Clause {
 
 	/** The detection points being checked as variables in an Expression */
-	private Collection<RulesDetectionPoint> detectionPoints;
+	private Collection<MonitorPoint> detectionPoints;
 
 	public Clause() { }
 
-	public Clause(Collection<RulesDetectionPoint> detectionPoints) {
+	public Clause(Collection<MonitorPoint> detectionPoints) {
 		setDetectionPoints(detectionPoints);
 	}
 
-	public Collection<RulesDetectionPoint> getDetectionPoints() {
+	public Collection<MonitorPoint> getDetectionPoints() {
 		return this.detectionPoints;
 	}
 
-	public Clause setDetectionPoints(Collection<RulesDetectionPoint> detectionPoints) {
+	public Clause setDetectionPoints(Collection<MonitorPoint> detectionPoints) {
 		this.detectionPoints = detectionPoints;
 		return this;
 	}

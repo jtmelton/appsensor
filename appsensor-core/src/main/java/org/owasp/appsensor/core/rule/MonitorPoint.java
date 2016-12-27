@@ -4,15 +4,15 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.owasp.appsensor.core.DetectionPoint;
 
 /**
- * A RulesDetectionPoint is a DetectionPoint that does not generate attacks,
+ * A MonitorPoint is a DetectionPoint that does not generate attacks,
  * but is rather a component of a Rule which generates attacks.
  *
  * @author David Scrobonia (davidscrobonia@gmail.com)
  */
-public class RulesDetectionPoint extends DetectionPoint {
-	public RulesDetectionPoint () { }
+public class MonitorPoint extends DetectionPoint {
+	public MonitorPoint () { }
 
-	public RulesDetectionPoint(DetectionPoint detectionPoint) {
+	public MonitorPoint(DetectionPoint detectionPoint) {
 		super(detectionPoint.getCategory(),
 				detectionPoint.getLabel(),
 				detectionPoint.getThreshold(),
@@ -20,7 +20,7 @@ public class RulesDetectionPoint extends DetectionPoint {
 				detectionPoint.getGuid());
 	}
 
-	public RulesDetectionPoint(DetectionPoint detectionPoint, String guid) {
+	public MonitorPoint(DetectionPoint detectionPoint, String guid) {
 		super(detectionPoint.getCategory(),
 				detectionPoint.getLabel(),
 				detectionPoint.getThreshold(),

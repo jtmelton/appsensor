@@ -8,8 +8,8 @@ import org.owasp.appsensor.core.Interval;
 
 /**
  * A Notification represents the interval of time between a series of events that
- * trigger a RulesDetectionPoint. Where a detection point generates an attack, a
- * RulesDetectionPoint generates a Notification.
+ * trigger a MonitorPoint. Where a detection point generates an attack, a
+ * MonitorPoint generates a Notification.
  *
  * @author David Scrobonia (davidscrobonia@gmail.com)
  */

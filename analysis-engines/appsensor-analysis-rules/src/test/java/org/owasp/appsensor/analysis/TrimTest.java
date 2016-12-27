@@ -11,17 +11,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
-import org.owasp.appsensor.core.rule.RulesDetectionPoint;
+import org.owasp.appsensor.core.rule.MonitorPoint;
 
 public class TrimTest {
 	static AggregateEventAnalysisEngine engine;
-	static RulesDetectionPoint point1;
+	static MonitorPoint point1;
 	static Queue<Notification> queue;
 
 	@BeforeClass
 	public static void setUpOnce() {
 		engine = new AggregateEventAnalysisEngine();
-		point1 = new RulesDetectionPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1"), "1");
+		point1 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1"), "1");
 	}
 
 	@Before

@@ -22,7 +22,7 @@ import org.owasp.appsensor.core.Event;
 import org.owasp.appsensor.core.correlation.CorrelationSet;
 import org.owasp.appsensor.core.rule.Expression;
 import org.owasp.appsensor.core.rule.Rule;
-import org.owasp.appsensor.core.rule.RulesDetectionPoint;
+import org.owasp.appsensor.core.rule.MonitorPoint;
 
 /**
  * Represents the configuration for server-side components. Additionally,
@@ -261,7 +261,7 @@ public abstract class ServerConfiguration {
 	/**
 	 * Finds all {@link Rule}s that could have been triggered by the {@link Event}. A
 	 * trigger {@link Event} must be the final {@link Event} so if the corresponding
-	 * {@link RulesDetectionPoint} is in the {@link Rule}'s final {@link Expression} it should
+	 * {@link MonitorPoint} is in the {@link Rule}'s final {@link Expression} it should
 	 * be evaluated.
 	 *
 	 * @param triggerEvent the {@link Event} that triggered the {@link Rule}

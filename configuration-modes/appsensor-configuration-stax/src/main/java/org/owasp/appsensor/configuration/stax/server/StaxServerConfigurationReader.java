@@ -34,7 +34,7 @@ import org.owasp.appsensor.core.geolocation.GeoLocation;
 import org.owasp.appsensor.core.rule.Clause;
 import org.owasp.appsensor.core.rule.Expression;
 import org.owasp.appsensor.core.rule.Rule;
-import org.owasp.appsensor.core.rule.RulesDetectionPoint;
+import org.owasp.appsensor.core.rule.MonitorPoint;
 import org.owasp.appsensor.core.util.XmlUtils;
 import org.xml.sax.SAXException;
 
@@ -417,7 +417,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			switch(event) {
 			case XMLStreamConstants.START_ELEMENT:
 				if ("config:rules-detection-point".equals(name)) {
-					clause.getDetectionPoints().add((RulesDetectionPoint)readRulesDetectionPoint(xmlReader));
+					clause.getDetectionPoints().add((MonitorPoint)readMonitorPoint(xmlReader));
 				} else {
 					/** unexpected start element **/
 				}
@@ -437,14 +437,14 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 		return clause;
 	}
 
-	private RulesDetectionPoint readRulesDetectionPoint(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
-		RulesDetectionPoint rulesDetectionPoint = new RulesDetectionPoint(readDetectionPoint(xmlReader));
+	private MonitorPoint readMonitorPoint(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
+		MonitorPoint monitorPoint = new MonitorPoint(readDetectionPoint(xmlReader));
 
-		if (rulesDetectionPoint.getGuid() == null || rulesDetectionPoint.getGuid() == "") {
-			throw new ConfigurationException("RulesDetectionPoint must have a guid: " + rulesDetectionPoint.toString());
+		if (monitorPoint.getGuid() == null || monitorPoint.getGuid() == "") {
+			throw new ConfigurationException("MonitorPoint must have a guid: " + monitorPoint.toString());
 		}
 
-		return rulesDetectionPoint;
+		return monitorPoint;
 	}
 
 	private HashMap<String,List<DetectionPoint>> readCustomDetectionPoints(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
@@ -588,7 +588,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			long expressionWindow = expression.getWindow().toMillis();
 
 			for (Clause clause : expression.getClauses()) {
-				for (RulesDetectionPoint point : clause.getDetectionPoints()) {
+				for (MonitorPoint point : clause.getDetectionPoints()) {
 					if (expressionWindow < point.getThreshold().getInterval().toMillis()) {
 						return false;
 					}

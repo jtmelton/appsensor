@@ -17,7 +17,7 @@ import org.owasp.appsensor.core.Response;
  *
  * For example:
  * 		A rule could be as simple as: "DP1 AND DP2"
- * 		Where the Rule will generate an attack if both RulesDetectionPoint 1 and 2
+ * 		Where the Rule will generate an attack if both MonitorPoint 1 and 2
  * 		are violated within the Rule's window.
  *
  * 		More complex: "DP1 AND DP2 THEN DP3 OR DP4"

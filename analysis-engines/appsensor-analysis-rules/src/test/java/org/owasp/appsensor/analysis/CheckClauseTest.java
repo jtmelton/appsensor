@@ -11,23 +11,23 @@ import org.junit.Test;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.rule.Clause;
-import org.owasp.appsensor.core.rule.RulesDetectionPoint;
+import org.owasp.appsensor.core.rule.MonitorPoint;
 
 public class CheckClauseTest {
 	static AggregateEventAnalysisEngine engine;
-	static RulesDetectionPoint point1, point2, point3;
+	static MonitorPoint point1, point2, point3;
 
 	@BeforeClass
 	public static void setUp() {
 		engine = new AggregateEventAnalysisEngine();
-		point1 = new RulesDetectionPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1"), "1");
-		point2 = new RulesDetectionPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE2"), "2");
-		point3 = new RulesDetectionPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE3"), "3");
+		point1 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1"), "1");
+		point2 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE2"), "2");
+		point3 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE3"), "3");
 	}
 
 	@Test
 	public void testExactMatchOneDetectionPoint() {
-		ArrayList<RulesDetectionPoint> points = new ArrayList<RulesDetectionPoint>();
+		ArrayList<MonitorPoint> points = new ArrayList<MonitorPoint>();
 		points.add(point1);
 		Clause clause = new Clause(points);
 
@@ -40,7 +40,7 @@ public class CheckClauseTest {
 
 	@Test
 	public void testExactMatchTwoDetectionPoints() {
-		ArrayList<RulesDetectionPoint> points = new ArrayList<RulesDetectionPoint>();
+		ArrayList<MonitorPoint> points = new ArrayList<MonitorPoint>();
 		points.add(point1);
 		points.add(point2);
 		Clause clause = new Clause (points);
@@ -54,7 +54,7 @@ public class CheckClauseTest {
 
 	@Test
 	public void testExtraDetectionPoints() {
-		ArrayList<RulesDetectionPoint> points = new ArrayList<RulesDetectionPoint>();
+		ArrayList<MonitorPoint> points = new ArrayList<MonitorPoint>();
 		points.add(point1);
 		Clause clause = new Clause (points);
 
@@ -67,7 +67,7 @@ public class CheckClauseTest {
 
 	@Test
 	public void testNoDetectionPoints() {
-		ArrayList<RulesDetectionPoint> points = new ArrayList<RulesDetectionPoint>();
+		ArrayList<MonitorPoint> points = new ArrayList<MonitorPoint>();
 		points.add(point1);
 		Clause clause = new Clause (points);
 
@@ -78,7 +78,7 @@ public class CheckClauseTest {
 
 	@Test
 	public void testMissingDetectionPoint() {
-		ArrayList<RulesDetectionPoint> points = new ArrayList<RulesDetectionPoint>();
+		ArrayList<MonitorPoint> points = new ArrayList<MonitorPoint>();
 		points.add(point1);
 		points.add(point2);
 		Clause clause = new Clause (points);

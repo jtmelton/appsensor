@@ -13,18 +13,18 @@ import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.rule.Clause;
 import org.owasp.appsensor.core.rule.Expression;
-import org.owasp.appsensor.core.rule.RulesDetectionPoint;
+import org.owasp.appsensor.core.rule.MonitorPoint;
 
 public class CheckExpressionTest {
 	static AggregateEventAnalysisEngine engine;
 	static Clause clause1, clause2;
-	static RulesDetectionPoint point1, point2;
+	static MonitorPoint point1, point2;
 
 	@BeforeClass
 	public static void setUp() {
 		engine = new AggregateEventAnalysisEngine();
-		point1 = new RulesDetectionPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1"), "1");
-		point2 = new RulesDetectionPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE2"), "2");
+		point1 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1"), "1");
+		point2 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE2"), "2");
 		clause1 = buildClause(point1);
 		clause2 = buildClause(point2);
 	}
@@ -79,8 +79,8 @@ public class CheckExpressionTest {
 		assertFalse(engine.checkExpression(expression, sensors));
 	}
 
-	private static Clause buildClause(RulesDetectionPoint point) {
-		ArrayList<RulesDetectionPoint> points = new ArrayList<RulesDetectionPoint>();
+	private static Clause buildClause(MonitorPoint point) {
+		ArrayList<MonitorPoint> points = new ArrayList<MonitorPoint>();
 		points.add(point);
 
 		return new Clause (points);
