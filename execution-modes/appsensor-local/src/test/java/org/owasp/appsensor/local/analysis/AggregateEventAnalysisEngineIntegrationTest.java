@@ -182,13 +182,20 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		//is empty
 		assertEventsAndAttacks(0, 0, criteria.get("all"));
 
+		// 3 events and triggered attack
 		generateEvents(sleepAmount*3, detectionPoint1, 3, "rule1");
 		assertEventsAndAttacks(3, 1, criteria.get("dp1"));
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria.get("rule1")).size());
 
+		// 1 event and no new attack
 		generateEvents(sleepAmount, detectionPoint1, 1, "rule1");
 		assertEventsAndAttacks(4, 1, criteria.get("dp1"));
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria.get("rule1")).size());
+
+		// 2 events and 2 total attack
+		generateEvents(sleepAmount*2, detectionPoint1, 2, "rule1");
+		assertEventsAndAttacks(6, 2, criteria.get("dp1"));
+		assertEquals(2, appSensorServer.getAttackStore().findAttacks(criteria.get("rule1")).size());
 	}
 
 	@Test
@@ -223,6 +230,20 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		generateEvents(sleepAmount*2, detectionPoint1, 2, "rule2");
 		assertEventsAndAttacks(6, 2, criteria.get("dp1"));
 		assertEventsAndAttacks(0, 2, criteria.get("rule2"));
+
+		// trigger dp1 two times, no new attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3, "rule2");
+		assertEventsAndAttacks(9, 3, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 2, criteria.get("rule2"));
+
+		generateEvents(sleepAmount*3, detectionPoint1, 3, "rule2");
+		assertEventsAndAttacks(12, 4, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 2, criteria.get("rule2"));
+
+		// trigger dp2, attack
+		generateEvents(sleepAmount*12, detectionPoint2, 12, "rule2");
+		assertEventsAndAttacks(36, 3, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 3, criteria.get("rule2"));
 	}
 
 	@Test
@@ -262,7 +283,7 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		assertEventsAndAttacks(0, 3, criteria.get("rule3"));
 
 		//now it will trigger
-		generateEvents(sleepAmount*2, detectionPoint1, 1, "rule3");
+		generateEvents(sleepAmount, detectionPoint1, 1, "rule3");
 		assertEventsAndAttacks(7, 2, criteria.get("dp1"));
 		assertEventsAndAttacks(0, 4, criteria.get("rule3"));
 	}
@@ -298,6 +319,26 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		generateEvents(sleepAmount*3, detectionPoint1, 3, "rule4");
 		assertEventsAndAttacks(9, 3, criteria.get("dp1"));
 		assertEventsAndAttacks(0, 4, criteria.get("rule4"));
+
+		//DP3 no new attack
+		generateEvents(sleepAmount*13, detectionPoint3, 13, "rule4");
+		assertEventsAndAttacks(26, 2, criteria.get("dp3"));
+		assertEventsAndAttacks(0, 4, criteria.get("rule4"));
+
+		//DP1 - trigger attack
+		generateEvents(sleepAmount*3, detectionPoint1, 3, "rule4");
+		assertEventsAndAttacks(12, 4, criteria.get("dp1"));
+		assertEventsAndAttacks(0, 5, criteria.get("rule4"));
+
+		//DP2 - no new attack
+		generateEvents(sleepAmount*12, detectionPoint2, 12, "rule4");
+		assertEventsAndAttacks(24, 2, criteria.get("dp2"));
+		assertEventsAndAttacks(0, 5, criteria.get("rule4"));
+
+		//DP3 trigger attack
+		generateEvents(sleepAmount*13, detectionPoint3, 13, "rule4");
+		assertEventsAndAttacks(39, 3, criteria.get("dp3"));
+		assertEventsAndAttacks(0, 6, criteria.get("rule4"));
 	}
 
 	@Test
@@ -381,11 +422,6 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		//DP2 - no attack
 		generateEvents(sleepAmount*12, detectionPoint2, 12, "rule6");
 		assertEventsAndAttacks(24, 2, criteria.get("dp2"));
-		assertEventsAndAttacks(0, 0, criteria.get("rule6"));
-
-		//DP3 - no attack
-		generateEvents(sleepAmount*13, detectionPoint3, 13, "rule6");
-		assertEventsAndAttacks(13, 1, criteria.get("dp3"));
 		assertEventsAndAttacks(0, 0, criteria.get("rule6"));
 
 		//DP2 - attack
