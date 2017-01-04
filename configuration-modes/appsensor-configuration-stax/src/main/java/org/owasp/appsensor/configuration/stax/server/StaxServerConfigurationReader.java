@@ -35,22 +35,23 @@ import org.owasp.appsensor.core.util.XmlUtils;
 import org.xml.sax.SAXException;
 
 /**
- * This implementation parses the {@link ServerConfiguration} objects 
+ * This implementation parses the {@link ServerConfiguration} objects
  * from the specified XML file via the StAX API.
- * 
+ *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  */
 public class StaxServerConfigurationReader implements ServerConfigurationReader {
-	
+
 	private static final String XSD_NAMESPACE = "https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd";
-	
+
 	private Map<String, String> namespaces = new HashMap<String, String>();
-	
+	private Collection<String> guids = new ArrayList<String>();
+
 	public StaxServerConfigurationReader() {
 		/** initialize namespaces **/
 		namespaces.put(XSD_NAMESPACE, "config");
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -58,10 +59,10 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 	public ServerConfiguration read() throws ConfigurationException {
 		String defaultXmlLocation = "/appsensor-server-config.xml";
 		String defaultXsdLocation = "/appsensor_server_config_2.0.xsd";
-		
+
 		return read(defaultXmlLocation, defaultXsdLocation);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -70,10 +71,10 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 		ServerConfiguration configuration = null;
 		InputStream xmlInputStream = null;
 		XMLStreamReader xmlReader = null;
-		
+
 		try {
 			XMLInputFactory xmlFactory = XMLInputFactory.newInstance();
-			
+
 			xmlFactory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.FALSE);
 			xmlFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
 			xmlFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.TRUE);
@@ -84,39 +85,39 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 					return new ByteArrayInputStream(new byte[0]);
 				}
 			});
-			
+
 			XmlUtils.validateXMLSchema(xsd, xml);
-			
+
 			xmlInputStream = getClass().getResourceAsStream(xml);
-			
+
 			//try loading from classpath first - fallback to disk
 			if (xmlInputStream == null) {
 				File xmlFile = new File(xml);
 				xmlInputStream = new FileInputStream(xmlFile);
 			}
-			
+
 			xmlReader = xmlFactory.createXMLStreamReader(xmlInputStream);
-			
+
 			configuration = readServerConfiguration(xmlReader);
-			
+
 			if (configuration != null) {
 				URL xmlUrl = getClass().getResource(xml);
 				if (xmlUrl != null) {
 					File configurationFile = new File(xmlUrl.getFile());
-					
+
 					if (configurationFile != null && configurationFile.exists()) {
 						configuration.setConfigurationFile(configurationFile);
 					}
 				} else {
 					//try a disk-based backup
 					File configurationFile = new File(xml);
-					
+
 					if (configurationFile != null && configurationFile.exists()) {
 						configuration.setConfigurationFile(configurationFile);
 					}
 				}
 			}
-			
+
 		} catch(XMLStreamException | IOException | SAXException e) {
 			throw new ConfigurationException(e.getMessage(), e);
 		} finally {
@@ -127,7 +128,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 					/** give up **/
 				}
 			}
-			
+
 			if(xmlInputStream != null) {
 				try {
 					xmlInputStream.close();
@@ -136,19 +137,19 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 				}
 			}
 		}
-		
+
 		return configuration;
 	}
-	
-	private ServerConfiguration readServerConfiguration(XMLStreamReader xmlReader) throws XMLStreamException {
+
+	private ServerConfiguration readServerConfiguration(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
 		ServerConfiguration configuration = new StaxServerConfiguration(false);
 		boolean finished = false;
-		
+
 		while(!finished && xmlReader.hasNext()) {
 			int event = xmlReader.next();
 			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
 
-			switch(event) {		
+			switch(event) {
 				case XMLStreamConstants.START_ELEMENT:
 					if("config:appsensor-server-config".equals(name)) {
 						//
@@ -162,10 +163,10 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 						configuration.setServerSocketTimeout(Integer.parseInt(xmlReader.getElementText().trim()));
 					} else if("config:geolocation".equals(name)) {
 						boolean useGeolocation = "true".equalsIgnoreCase(xmlReader.getAttributeValue(null, "enabled").trim()) ? true : false;
-						
+
 						String databasePath = xmlReader.getAttributeValue(null, "databasePath");
 						databasePath = databasePath != null ? databasePath.trim() : databasePath;
-						
+
 						configuration.setGeolocateIpAddresses(useGeolocation);
 						configuration.setGeolocationDatabasePath(databasePath);
 					} else if("config:client-applications".equals(name)) {
@@ -192,20 +193,20 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 					break;
 			}
 		}
-		
+
 		return configuration;
 	}
-	
+
 	private Collection<ClientApplication> readClientApplications(XMLStreamReader xmlReader) throws XMLStreamException {
 		Collection<ClientApplication> clientApplications = new ArrayList<>();
 		boolean finished = false;
-		
+
 		ClientApplication clientApplication = null;
-		
+
 		while(!finished && xmlReader.hasNext()) {
 			int event = xmlReader.next();
 			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
-			
+
 			switch(event) {
 				case XMLStreamConstants.START_ELEMENT:
 					if("config:client-application".equals(name)) {
@@ -239,20 +240,20 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 					break;
 			}
 		}
-		
+
 		return clientApplications;
 	}
-	
+
 	private Collection<CorrelationSet> readCorrelationSets(XMLStreamReader xmlReader) throws XMLStreamException {
 		Collection<CorrelationSet> correlationSets = new ArrayList<>();
 		boolean finished = false;
-		
+
 		CorrelationSet correlationSet = null;
-		
+
 		while(!finished && xmlReader.hasNext()) {
 			int event = xmlReader.next();
 			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
-			
+
 			switch(event) {
 				case XMLStreamConstants.START_ELEMENT:
 					if("config:correlated-client-set".equals(name)) {
@@ -277,18 +278,20 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 					break;
 			}
 		}
-		
+
 		return correlationSets;
 	}
-	
-	private DetectionPoint readDetectionPoint(XMLStreamReader xmlReader) throws XMLStreamException {
+
+	private DetectionPoint readDetectionPoint(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
 		DetectionPoint detectionPoint = new DetectionPoint();
 		boolean finished = false;
-		
+
+		detectionPoint.setGuid(readGuid(xmlReader));
+
 		while(!finished && xmlReader.hasNext()) {
 			int event = xmlReader.next();
 			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
-			
+
 			switch(event) {
 				case XMLStreamConstants.START_ELEMENT:
 					if("config:category".equals(name)) {
@@ -315,29 +318,29 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 					break;
 			}
 		}
-		
+
 		return detectionPoint;
 	}
-	
-	private HashMap<String,List<DetectionPoint>> readCustomDetectionPoints(XMLStreamReader xmlReader) throws XMLStreamException {
+
+	private HashMap<String,List<DetectionPoint>> readCustomDetectionPoints(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
 		DetectionPoint detectionPoint = new DetectionPoint();
 		HashMap<String,List<DetectionPoint>> customPoints = new HashMap<String,List<DetectionPoint>>();
 		String clientName = "";
 		boolean finished = false;
-		
+
 		while(!finished && xmlReader.hasNext()) {
 			int event = xmlReader.next();
 			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
 			List<DetectionPoint> customList = new ArrayList<DetectionPoint>();
-			
-			
+
+
 			switch(event) {
 				case XMLStreamConstants.START_ELEMENT:
 				if("config:client-name".equals(name)) {
 						clientName = xmlReader.getElementText().trim();
 					}else if("config:detection-point".equals(name)) {
 						customList.add(readDetectionPoint(xmlReader));
-						
+
 					}else {
 						/** unexpected start element **/
 					}
@@ -345,11 +348,11 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 				case XMLStreamConstants.END_ELEMENT:
 					if("config:clients".equals(name)) {
 						finished = true;
-					}else if("config:client".equals(name)) {	
+					}else if("config:client".equals(name)) {
 						customPoints.put(clientName,customList);
 						customList = new ArrayList<DetectionPoint>();
 					}else {
-					
+
 						/** unexpected end element **/
 					}
 					break;
@@ -357,21 +360,21 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 					/** unused xml element - nothing to do **/
 					break;
 			}
-			
+
 			//clientName = "";
 		}
-		
+
 		return customPoints;
 	}
-	
+
 	private Threshold readThreshold(XMLStreamReader xmlReader) throws XMLStreamException {
 		Threshold threshold = new Threshold();
 		boolean finished = false;
-		
+
 		while(!finished && xmlReader.hasNext()) {
 			int event = xmlReader.next();
 			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
-			
+
 			switch(event) {
 				case XMLStreamConstants.START_ELEMENT:
 					if("config:count".equals(name)) {
@@ -397,18 +400,18 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 					break;
 			}
 		}
-		
+
 		return threshold;
 	}
-	
+
 	private Response readResponse(XMLStreamReader xmlReader) throws XMLStreamException {
 		Response response = new Response();
 		boolean finished = false;
-		
+
 		while(!finished && xmlReader.hasNext()) {
 			int event = xmlReader.next();
 			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
-			
+
 			switch(event) {
 				case XMLStreamConstants.START_ELEMENT:
 					if("config:action".equals(name)) {
@@ -434,10 +437,25 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 					break;
 			}
 		}
-		
+
 		return response;
 	}
-	
+
+	private String readGuid(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
+		String guid = xmlReader.getAttributeValue(null, "guid");
+		guid = guid != null ? guid.trim() : guid;
+
+		if (guid != null) {
+			if(guids.contains(guid)) {
+				throw new ConfigurationException("Repeated GUID discovered in Detection Point: " + guid);
+			}
+			guids.add(guid);
+		}
+
+
+		return guid;
+	}
+
 }
 
 
