@@ -1,6 +1,6 @@
 Rules Based Analysis Engines
 =========
-![Component Status: Beta](https://img.shields.io/badge/left-right-f39f37.svg)
+![Component Status: Beta](https://img.shields.io/badge/component%20status-beta-yellow.svg)
 
 What is it?
 ------------
