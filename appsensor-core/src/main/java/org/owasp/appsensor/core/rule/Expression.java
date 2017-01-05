@@ -3,6 +3,8 @@ package org.owasp.appsensor.core.rule;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
 
@@ -29,9 +31,11 @@ public class Expression {
 	/** The Clauses that build up the Expression. **/
 	private Collection<Clause> clauses;
 
-	public Expression () { }
+	public Expression () {
+		clauses = new ArrayList<Clause>();
+	}
 
-	public Expression (Interval window, ArrayList<Clause> clauses) {
+	public Expression (Interval window, Collection<Clause> clauses) {
 		setWindow(window);
 		setClauses(clauses);
 	}
@@ -49,7 +53,7 @@ public class Expression {
 		return this.clauses;
 	}
 
-	public Expression setClauses(ArrayList<Clause> clauses){
+	public Expression setClauses(Collection<Clause> clauses){
 		this.clauses = clauses;
 		return this;
 	}
@@ -64,5 +68,30 @@ public class Expression {
 		}
 
 		return detectionPoints;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+
+		Expression other = (Expression) obj;
+
+		return new EqualsBuilder().
+				append(this.window, other.getWindow()).
+				append(this.clauses, other.getClauses()).
+				isEquals();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).
+				   append("window", window).
+			       append("clauses", clauses).
+			       toString();
 	}
 }

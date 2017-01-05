@@ -332,6 +332,8 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 		Rule rule = new Rule();
 		boolean finished = false;
 
+		rule.setGuid(readGuid(xmlReader));
+
 		while(!finished && xmlReader.hasNext()) {
 			int event = xmlReader.next();
 			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
@@ -347,6 +349,8 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 					rule.setWindow(interval);
 				} else if("config:expression".equals(name)) {
 					rule.getExpressions().add(readExpression(xmlReader));
+				} else if("config:name".equals(name)) {
+					rule.setName(xmlReader.getElementText().trim());
 				} else {
 					/** unexpected start element **/
 				}
@@ -354,8 +358,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			case XMLStreamConstants.END_ELEMENT:
 				if("config:rule".equals(name)) {
 					if (!validateWindows(rule)) {
-						// todo: change to name or id
-						throw new ConfigurationException("Incompatible windows set in rule:" + rule.toString());
+						throw new ConfigurationException("Incompatible windows set in rule: " + rule.toString());
 					}
 					finished = true;
 				} else {
@@ -380,7 +383,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 
 			switch(event) {
 			case XMLStreamConstants.START_ELEMENT:
-				if ("config.interval".equals(name)) {
+				if ("config:interval".equals(name)) {
 					Interval interval = new Interval();
 					interval.setUnit(xmlReader.getAttributeValue(null, "unit").trim());
 					interval.setDuration(Integer.parseInt(xmlReader.getElementText().trim()));
@@ -416,7 +419,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 
 			switch(event) {
 			case XMLStreamConstants.START_ELEMENT:
-				if ("config:rules-detection-point".equals(name)) {
+				if ("config:monitor-point".equals(name)) {
 					clause.getDetectionPoints().add((MonitorPoint)readMonitorPoint(xmlReader));
 				} else {
 					/** unexpected start element **/
@@ -438,10 +441,40 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 	}
 
 	private MonitorPoint readMonitorPoint(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
-		MonitorPoint monitorPoint = new MonitorPoint(readDetectionPoint(xmlReader));
+		MonitorPoint monitorPoint = new MonitorPoint();
+		boolean finished = false;
 
-		if (monitorPoint.getGuid() == null || monitorPoint.getGuid() == "") {
-			throw new ConfigurationException("MonitorPoint must have a guid: " + monitorPoint.toString());
+		monitorPoint.setGuid(readGuid(xmlReader));
+
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+
+			switch(event) {
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:category".equals(name)) {
+						monitorPoint.setCategory(xmlReader.getElementText().trim());
+					} else if("config:id".equals(name)) {
+						monitorPoint.setLabel(xmlReader.getElementText().trim());
+					} else if("config:threshold".equals(name)) {
+						monitorPoint.setThreshold(readThreshold(xmlReader));
+					} else if("config:response".equals(name)) {
+						monitorPoint.getResponses().add(readResponse(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:monitor-point".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
 		}
 
 		return monitorPoint;

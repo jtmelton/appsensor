@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.Response;
@@ -52,7 +53,10 @@ public class Rule {
 	/** The name of the Rule */
 	private String name;
 
-	public Rule () { }
+	public Rule () {
+		expressions = new ArrayList<Expression>();
+		responses = new ArrayList<Response>();
+	}
 
 	public Rule (Interval window, ArrayList<Expression> expressions) {
 		setWindow(window);
@@ -150,6 +154,17 @@ public class Rule {
 	}
 
 	@Override
+	public String toString() {
+		return new ToStringBuilder(this).
+				   append("window", window).
+			       append("expressions", expressions).
+			       append("responses", responses).
+			       append("guid", guid).
+			       append("name", name).
+			       toString();
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -165,7 +180,7 @@ public class Rule {
 				append(this.window, other.getWindow()).
 				append(this.responses, other.getResponses()).
 				append(this.expressions, other.getExpressions()).
-				append(this.guid, other.getWindow()).
+				append(this.guid, other.getGuid()).
 				isEquals();
 	}
 }

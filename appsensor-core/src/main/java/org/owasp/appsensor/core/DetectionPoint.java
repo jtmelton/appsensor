@@ -234,6 +234,7 @@ public class DetectionPoint implements IAppsensorEntity {
 			       append("label", label).
 			       append("threshold", threshold).
 			       append("responses", responses).
+			       append("guid", guid).
 			       toString();
 	}
 

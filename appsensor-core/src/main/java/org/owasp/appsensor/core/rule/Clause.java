@@ -1,7 +1,10 @@
 package org.owasp.appsensor.core.rule;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.owasp.appsensor.core.Interval;
 
 /**
@@ -21,7 +24,9 @@ public class Clause {
 	/** The detection points being checked as variables in an Expression */
 	private Collection<MonitorPoint> detectionPoints;
 
-	public Clause() { }
+	public Clause() {
+		detectionPoints = new ArrayList<MonitorPoint>();
+	}
 
 	public Clause(Collection<MonitorPoint> detectionPoints) {
 		setDetectionPoints(detectionPoints);
@@ -34,5 +39,28 @@ public class Clause {
 	public Clause setDetectionPoints(Collection<MonitorPoint> detectionPoints) {
 		this.detectionPoints = detectionPoints;
 		return this;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+
+		Clause other = (Clause) obj;
+
+		return new EqualsBuilder().
+				append(this.detectionPoints, other.getDetectionPoints()).
+				isEquals();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).
+				   append("detectionPoints", detectionPoints).
+			       toString();
 	}
 }
