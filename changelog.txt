@@ -4,6 +4,14 @@ https://www.owasp.org/index.php/Projects/OWASP_AppSensor_Project
 http://appsensor.org/
 https://github.com/jtmelton/appsensor
 
+Changes in version 2.3.1 (2017/01/05)
+--------------------------------------
+
+* Added basic docker-compose starter for getting started example 
+
+* Fixed customer issue where logback.xml needed to be moved from src/ to test/ (https://github.com/jtmelton/appsensor/issues/63)
+
+
 Changes in version 2.3 (2016/09/29)
 --------------------------------------
 
