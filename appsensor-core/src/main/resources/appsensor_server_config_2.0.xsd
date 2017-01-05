@@ -63,7 +63,7 @@
 	<xsd:complexType name="rule">
 		<xsd:sequence>
 			<xsd:element name="name" type="xsd:string" minOccurs="0" maxOccurs="1" />
-			<xsd:element name="interval" type="asconfig:interval" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="window" type="asconfig:interval" minOccurs="1" maxOccurs="1" />
 			<xsd:element name="expressions" type="asconfig:expressions" minOccurs="1" maxOccurs="1" />
 			<xsd:element name="responses" type="asconfig:responses" minOccurs="1" maxOccurs="1" />
 		</xsd:sequence>
@@ -78,7 +78,7 @@
 	
 	<xsd:complexType name="expression">
 		<xsd:sequence>
-			<xsd:element name="interval" type="asconfig:interval" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="window" type="asconfig:interval" minOccurs="1" maxOccurs="1" />
 			<xsd:element name="clauses" type="asconfig:clauses" minOccurs="1" maxOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>

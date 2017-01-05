@@ -18,10 +18,10 @@
 	<rules>
 		<rule guid="00000000-0000-0000-0000-000000000000">
 			<name>Rule 1</name>
-			<interval unit="minutes">5</interval>
+			<window unit="minutes">5</window>
 			<expressions>
 				<expression>
-					<interval unit="minutes">2</interval>
+					<window unit="minutes">2</window>
 					<clauses>
 						<clause>
 							<monitor-points>
@@ -60,7 +60,7 @@
 				</expression>
 				
 				<expression>
-					<interval unit="minutes">3</interval>
+					<window unit="minutes">3</window>
 					<clauses>
 						<clause>
 							<monitor-points>
@@ -105,10 +105,10 @@
 		
 		<rule guid="00000000-0000-0000-0000-000000000005">
 			<name>Rule 2</name>
-			<interval unit="minutes">5</interval>
+			<window unit="minutes">5</window>
 			<expressions>				
 				<expression>
-					<interval unit="minutes">3</interval>
+					<window unit="minutes">3</window>
 					<clauses>
 						<clause>
 							<monitor-points>

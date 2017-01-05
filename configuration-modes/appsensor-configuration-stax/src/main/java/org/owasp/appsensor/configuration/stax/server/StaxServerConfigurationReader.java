@@ -342,7 +342,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			case XMLStreamConstants.START_ELEMENT:
 				if("config:response".equals(name)) {
 					rule.getResponses().add(readResponse(xmlReader));
-				} else if("config:interval".equals(name)) {
+				} else if("config:window".equals(name)) {
 					Interval interval = new Interval();
 					interval.setUnit(xmlReader.getAttributeValue(null, "unit").trim());
 					interval.setDuration(Integer.parseInt(xmlReader.getElementText().trim()));
@@ -383,7 +383,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 
 			switch(event) {
 			case XMLStreamConstants.START_ELEMENT:
-				if ("config:interval".equals(name)) {
+				if ("config:window".equals(name)) {
 					Interval interval = new Interval();
 					interval.setUnit(xmlReader.getAttributeValue(null, "unit").trim());
 					interval.setDuration(Integer.parseInt(xmlReader.getElementText().trim()));
