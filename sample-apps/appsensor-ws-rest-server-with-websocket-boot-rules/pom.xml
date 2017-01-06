@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.owasp.appsensor</groupId>
+	<artifactId>appsensor-ws-rest-server-with-websocket-boot-rules</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>appsensor-ws-rest-server-with-websocket-boot-rules</name>
+	<description>Spring Boot executable jar of appsensor rest server using the rules analysis engine</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.2.6.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<appsensor.version>2.3.0</appsensor.version>
+		<docker.image.prefix>appsensor</docker.image.prefix>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-ws-rest-server</artifactId>
+			<version>${appsensor.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.glassfish.jersey.containers</groupId>
+					<artifactId>jersey-container-grizzly2-http</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.jersey.core</groupId>
+					<artifactId>jersey-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.jersey.media</groupId>
+            		<artifactId>jersey-media-moxy</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.jersey.media</groupId>
+            		<artifactId>jersey-media-json-jackson</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.jersey.test-framework.providers</groupId>
+		    		<artifactId>jersey-test-framework-provider-inmemory</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.jersey.ext</groupId>
+		    		<artifactId>jersey-spring3</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.jersey.bundles.repackaged</groupId>
+		  			<artifactId>jersey-guava</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-storage-in-memory</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-analysis-reference</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-analysis-rules</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-reporting-simple-logging</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-access-control-reference</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+		
+		<!--
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-integration-cef-syslog</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+		-->
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-reporting-websocket</artifactId>
+			<version>${appsensor.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.owasp.appsensor</groupId>
+					<artifactId>appsensor-local</artifactId>
+				</exclusion>
+				<!-- <exclusion>
+					<groupId>com.google.code.gson</groupId>
+					<artifactId>gson</artifactId>
+				</exclusion>-->
+				<exclusion>
+					<groupId>javax</groupId>
+					<artifactId>javaee-web-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.websocket</groupId>
+					<artifactId>javax.websocket-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.tyrus</groupId>
+					<artifactId>tyrus-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.tyrus</groupId>
+					<artifactId>tyrus-client</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-configuration-stax</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.owasp.appsensor</groupId>
+			<artifactId>appsensor-geolocation-geoip2</artifactId>
+			<version>${appsensor.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jersey</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+                			<requiresUnpack>
+                    				<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-storage-in-memory</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-ws-rest-server</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-core</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-storage-in-memory</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-analysis-reference</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-analysis-rules</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-reporting-simple-logging</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-access-control-reference</artifactId>
+						</dependency>
+						<!--
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-integration-cef-syslog</artifactId>
+						</dependency>
+						-->
+		
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-reporting-websocket</artifactId>
+							<exclusions>
+								<exclusion>
+									<groupId>org.owasp.appsensor</groupId>
+									<artifactId>appsensor-local</artifactId>
+								</exclusion>
+								<!-- <exclusion>
+									<groupId>com.google.code.gson</groupId>
+									<artifactId>gson</artifactId>
+								</exclusion>-->
+								<exclusion>
+									<groupId>javax</groupId>
+									<artifactId>javaee-web-api</artifactId>
+								</exclusion>
+								<exclusion>
+									<groupId>javax.websocket</groupId>
+									<artifactId>javax.websocket-api</artifactId>
+								</exclusion>
+								<exclusion>
+									<groupId>org.glassfish.tyrus</groupId>
+									<artifactId>tyrus-server</artifactId>
+								</exclusion>
+								<exclusion>
+									<groupId>org.glassfish.tyrus</groupId>
+									<artifactId>tyrus-client</artifactId>
+								</exclusion>
+							</exclusions>		
+						</dependency>
+		
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-configuration-stax</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-configuration-stax</artifactId>
+						</dependency>
+						<!--
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-integration-cef-syslog</artifactId>
+						</dependency>
+					-->
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-reporting-websocket</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.owasp.appsensor</groupId>
+							<artifactId>appsensor-geolocation-geoip2</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.springframework.boot</groupId>
+							<artifactId>spring-boot-starter-jersey</artifactId>
+						</dependency>
+						<dependency>
+							<groupId>org.springframework.boot</groupId>
+							<artifactId>spring-boot-starter-websocket</artifactId>
+						</dependency>
+						
+						<dependency>
+							<groupId>org.springframework.boot</groupId>
+							<artifactId>spring-boot-starter-test</artifactId>
+							<scope>test</scope>
+						</dependency>
+					</requiresUnpack>
+				</configuration>
+			</plugin>
+			<plugin>
+            			<groupId>com.spotify</groupId>
+            			<artifactId>docker-maven-plugin</artifactId>
+            			<version>0.2.3</version>
+            			<configuration>
+                			<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                			<dockerDirectory>.</dockerDirectory>
+                			<resources>
+                    				<resource>
+                        				<targetPath>/</targetPath>
+                        				<directory>${project.build.directory}</directory>
+                        				<include>${project.build.finalName}.jar</include>
+                    				</resource>
+                			</resources>
+            			</configuration>
+        		</plugin>
+		</plugins>
+	</build>
+
+</project>

@@ -153,6 +153,15 @@ public class Rule {
 		return detectionPoints;
 	}
 
+	public boolean typeAndThresholdContainsDetectionPoint(DetectionPoint detectionPoint) {
+		for (DetectionPoint myPoint : getAllDetectionPoints()) {
+			if (detectionPoint.typeAndThresholdMatches(myPoint)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).

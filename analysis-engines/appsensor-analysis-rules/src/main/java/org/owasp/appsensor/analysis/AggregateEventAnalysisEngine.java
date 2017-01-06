@@ -251,7 +251,7 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	 * @param rule the {@link Rule} being evaluated
 	 */
 	public void generateAttack(Event triggerEvent, Rule rule) {
-		logger.debug("Attack generated on rule: " + rule.getName() + ", by event: " + triggerEvent.toString());
+		logger.info("Attack generated on rule: " + rule.getGuid() + ", by user: " + triggerEvent.getUser().getUsername());
 
 		Attack attack = new Attack();
 		attack.setUser(new User(triggerEvent.getUser().getUsername()));

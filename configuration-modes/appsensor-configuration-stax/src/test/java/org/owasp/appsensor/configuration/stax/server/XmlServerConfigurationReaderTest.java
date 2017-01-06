@@ -206,6 +206,24 @@ public class XmlServerConfigurationReaderTest {
 	}
 
 	@Test
+	public void testStandardRulesLoadWithDetectionPoints() throws Exception{
+		ServerConfigurationReader reader = new StaxServerConfigurationReader();
+		ServerConfiguration configuration = reader.read("/appsensor-server-rules-standard-config-with-detection-points.xml", "/appsensor_server_config_2.0.xsd");
+
+		Iterator<Rule> rules = configuration.getRules().iterator();
+		Rule configuredRule = rules.next();
+
+		// assert exists
+		assertEquals("X-Appsensor-Client-Application-Standard-Rules-With-Detection-Points", configuration.getClientApplicationIdentificationHeaderName());
+
+		// check if it has rule
+		assertEquals(configuredRule.getGuid(), "00000000-0000-0000-0000-000000000000");
+
+		// check if it has detection point
+		assertEquals(configuration.getDetectionPoints().iterator().next().getLabel(), "IE1");
+	}
+
+	@Test
 	public void testInvalidRulesLoadExpressionsLongerThanRules() throws Exception{
 		try {
 			ServerConfigurationReader reader = new StaxServerConfigurationReader();

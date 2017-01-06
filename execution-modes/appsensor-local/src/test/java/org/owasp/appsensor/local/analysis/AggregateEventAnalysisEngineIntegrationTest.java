@@ -77,7 +77,7 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 	public static void doSetup() {
 		detectionPoint1.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
 		detectionPoint1.setLabel("IE1");
-		detectionPoint1.setThreshold(new Threshold(3, new Interval(5, Interval.MINUTES)));
+		//detectionPoint1.setThreshold(new Threshold(3, new Interval(5, Interval.MINUTES)));
 
 		detectionPoint2.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
 		detectionPoint2.setLabel("IE2");
@@ -490,6 +490,7 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 
 		// detection points
 		MonitorPoint point1 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1", new Threshold(3, minutes5)));
+		point1.setGuid("00000000-0000-0000-0000-000000000000");
 		MonitorPoint point2 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE2", new Threshold(12, minutes5)));
 		MonitorPoint point3 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE3", new Threshold(13, minutes6)));
 
@@ -522,7 +523,7 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		ArrayList<org.owasp.appsensor.core.rule.Expression> expressions1 = new ArrayList<org.owasp.appsensor.core.rule.Expression>();
 		expressions1.add(expression1);
 
-		configuredRules.add(new Rule("Rule 1", minutes5, expressions1, responses));
+		configuredRules.add(new Rule("Rule 1", minutes16, expressions1, responses, "00000000-0000-0000-0000-000000000011"));
 
 		//rule 2: DP1 AND DP2
 		ArrayList<Clause> clauses1and2 = new ArrayList<Clause>();

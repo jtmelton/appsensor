@@ -144,9 +144,8 @@ public abstract class EventStore {
 				detectionPoint.typeAndThresholdMatches(event.getDetectionPoint()) : true;
 
 		// check rule match if rule specified
-		// todo: is create a new rules detection point really the most efficient way? rewrite equals method? create new contains-like method?
 		boolean ruleMatch = (rule != null) ?
-				rule.getAllDetectionPoints().contains(new MonitorPoint(event.getDetectionPoint())) : true;
+				rule.typeAndThresholdContainsDetectionPoint(event.getDetectionPoint()) : true;
 
 		DateTime eventTimestamp = DateUtils.fromString(event.getTimestamp());
 
