@@ -9,9 +9,9 @@ This component is in early beta. Please do not introduce into a production envir
 What is it?
 ------------
 The rules based analysis engine is an alternative component to the reference analysis engine. The reference implementation generates an attack when enough events have occured in a short enough period of time to trigger the threshold of a Detection Point.
-[image]
+![Reference Implementation Sensor Diagram](images/sensor-diagram_failed-login)
 The rules based implemention, on the other hands, combines multiple Detection Points with logical operators. For example, you could make a Rule that generates an Attack when both Detection Point 1 AND Detection Point 2 are triggered. The rules implementation supports boolean operators AND and OR, as well as a temporal operator THEN. This allows for complex combinations such as Detection Point 1 AND Detection Point 2 OR Detection Point 3 Then Detection Point 4.
-[image]
+![Rule Implementation Sensor Diagram](images/sensor-diagram_failed-loginANDforgot-passwordTHENreset-password)
 
 Why use it?
 ------------
@@ -44,13 +44,16 @@ A Clause will evaluate to true and be triggered only if each of its Monitor Poin
 How do I use it?
 ------------
 1) Include the appsensor-analysis-rules dependency in your pom.xml file just as you would the appsensor-analysis-reference dependecy.
-	<dependency>
-		<groupId>org.owasp.appsensor</groupId>
-		<artifactId>appsensor-analysis-rules</artifactId>
-		<version>${appsensor.version}</version>
-	</dependency>
+```xml
+<dependency>
+	<groupId>org.owasp.appsensor</groupId>
+	<artifactId>appsensor-analysis-rules</artifactId>
+	<version>${appsensor.version}</version>
+</dependency>
+```
 
-2) Add your rules definition to the appsensor-server-config.xml file. An example of defining rules can be found at [link to sample XML in test/resources] and the definitions can be found at [XSD].
+2) Add your rules definition to the appsensor-server-config.xml file. An example of defining rules can be found [here](https://github.com/dscrobonia/appsensor/blob/feature-rules-engine-removing-not/configuration-modes/appsensor-configuration-stax/src/test/resources/appsensor-server-rules-standard-multiple-config.xml) and the definitions can be found at [here](https://github.com/dscrobonia/appsensor/blob/feature-rules-engine-removing-not/appsensor-core/src/main/resources/appsensor_server_config_2.0.xsd).
+```xml
 <rules>	
 <rule guid="00000000-0000-0000-0000-000000000005">
 	<name>Rule 2</name>
@@ -76,8 +79,9 @@ How do I use it?
 	</expressions>
 </rule>
 </rules>
+```
 
-3) Run it! 
+3) Run it! You can see a sample REST configuration with Rules implemented [here](
 
 FAQ's
 ------------
