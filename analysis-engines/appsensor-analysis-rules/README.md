@@ -34,12 +34,12 @@ An Expression is made up of one or more Clauses. A Clause is a a group of monito
 i.e. in our example "dp1 and dp2" and "dp3" would be clauses of the first expression, while the only clause in the second expression would be "dp4"
 An Expression will evaluate to true and be triggered only if each of it's Clauses evalutes to true and has been triggered within its window of time.
 
-A Clauses is made up of one or more Monitor Points. A Monitor Point represents a specific sensor and is separated within a Clause by the ADD operator.
+![Rule Structure](images/rule-structure.png)
+
+A Clauses is made up of one or more Monitor Points. A Monitor Point represents a specific sensor and is separated within a Clause by the AND operator.
 A Monitor Point is essentially the same thing as a Detection Point, except that they cannot trigger Attacks on their own. Where a configured Detection Point stands alone and will generate an Attack when their Threshold is crossed, a configured Monitor Point can only be a part of a Rule and does not generate an attack when it's Threshold is crossed. Rather only when the proper configuration of Monitor Points in a Rule definition are triggered will the Rule then generate an Attack.
 i.e. each sensor in our example represents a Monitor Point.
 A Clause will evaluate to true and be triggered only if each of its Monitor Points is triggered.
-
-[Rule Structure](images/rule-structure.png)
 
 How do I use it?
 ------------
