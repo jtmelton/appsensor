@@ -4,7 +4,7 @@ Rules Based Analysis Engines
 
 **Disclaimer**
 
-This component is in early beta. Please do not introduce into a production environment without thorough testing. That being said, early beta also means we need testers! Please try it out and share your experience with us.
+This component is in beta. Please do not introduce into a production environment without thorough testing. That being said,  we need testers! Please try it out and share your experience with us.
 
 What is it?
 ------------
@@ -12,7 +12,7 @@ The rules based analysis engine is an alternative component to the reference ana
 
 ![Reference Implementation Sensor Diagram](images/sensor-diagram_failed-login.png)
 
-The rules based implemention, on the other hands, combines multiple Detection Points with logical operators. For example, you could make a Rule that generates an Attack when both Detection Point 1 AND Detection Point 2 are triggered. The rules implementation supports boolean operators AND and OR, as well as a temporal operator THEN. This allows for complex combinations such as Detection Point 1 AND Detection Point 2 OR Detection Point 3 Then Detection Point 4.
+The rules based implemention, however, combines multiple Detection Points with logical operators. For example, you could make a Rule that generates an Attack when both Detection Point 1 AND Detection Point 2 are triggered. The rules implementation supports boolean operators AND and OR, as well as a temporal operator THEN. This allows for complex combinations such as Detection Point 1 AND Detection Point 2 OR Detection Point 3 Then Detection Point 4.
 
 ![Rule Implementation Sensor Diagram](images/sensor-diagram_failed-loginANDforgot-passwordTHENreset-password.png)
 
@@ -20,13 +20,13 @@ Why use it?
 ------------
 There were several goals for the rules engine.
 
-First, to provide greater flexibility. Configurations can be more expressive, creative, and customized for a web applications needs.
+First, to provide greater flexibility. Configurations can now be more expressive, creative, and customized for a specific web application's needs.
 
-Secondly, and more importantly, to improve accuracy. Aggregating multiple Detection Point improves confidence in detecting malicious activity, reducing false positives. It can also be leveraged to lower the thresholds of Detection Points, while maintaining confidence in detection, reducing false negatives.
+Secondly, to improve accuracy. Combining input from multiple Detection Points provides a higher degree of confidence in determining whether activity is definitely malicious, which reduces false positives. The advantage of combining multiple Detection Points can also be used to lower the detection thresholds, without increasing false positives. This allows the rules engine to aggregate multiple "suspicious" activities into a single "malicious" detection.
 
 How does it work?
 ------------
-A Rule is made up of one or more Expressions. An Expression is a group of monitor points and operators seperated by chronilogical order using THEN operators.
+A Rule is made up of one or more Expressions. An Expression is a group of Monitor Points and operators seperated by chronological order using THEN operators.
 i.e. in our example "dp1 and dp2 or dp3" is one expression while "dp4" is another expression.
 A Rule will generate an Attack only if each of it's Expressions evaluates to true and has been triggered within its window of time.
 
@@ -43,7 +43,7 @@ A Clause will evaluate to true and be triggered only if each of its Monitor Poin
 
 How do I use it?
 ------------
-1) Include the appsensor-analysis-rules dependency in your pom.xml file just as you would the appsensor-analysis-reference dependecy.
+1) Include the appsensor-analysis-rules dependency in your pom.xml file like you would the appsensor-analysis-reference dependecy.
 ```xml
 <dependency>
 	<groupId>org.owasp.appsensor</groupId>
@@ -52,7 +52,7 @@ How do I use it?
 </dependency>
 ```
 
-2) Add your rules definition to the appsensor-server-config.xml file. An example of defining rules can be found [here](https://github.com/dscrobonia/appsensor/blob/feature-rules-engine-removing-not/configuration-modes/appsensor-configuration-stax/src/test/resources/appsensor-server-rules-standard-multiple-config.xml) and the definitions can be found at [here](https://github.com/dscrobonia/appsensor/blob/feature-rules-engine-removing-not/appsensor-core/src/main/resources/appsensor_server_config_2.0.xsd).
+2) Add any rule definitions to the appsensor-server-config.xml file. An example of configured rules can be found [here](https://github.com/dscrobonia/appsensor/blob/feature-rules-engine-removing-not/configuration-modes/appsensor-configuration-stax/src/test/resources/appsensor-server-rules-standard-multiple-config.xml) and the XSD definitions can be found at [here](https://github.com/dscrobonia/appsensor/blob/feature-rules-engine-removing-not/appsensor-core/src/main/resources/appsensor_server_config_2.0.xsd).
 ```xml
 <rules>	
 <rule guid="00000000-0000-0000-0000-000000000005">
@@ -85,14 +85,14 @@ How do I use it?
 
 FAQ's
 ------------
-I want both the traditional singe-Detection Point model from the reference engine AND rules as well. Can I use both engines in tandem?
-> Yes! By including both engines in your pom.xml, and configureing both in your server config you can leverage both systems.
+I want to use both the traditional Detection Point model from the reference engine AND the rules model. Can I use both engines in the same configuration?
+> Yes! By including both engines in your pom.xml, and configureing both inappsensor-server-config.xml you can leverage both systems.
 
-Do I need to redefine Monitor Points in my appsensor-server-config.xml file if I've already defined matching Detection Points?
-> Yes. The Monitor Point server configurations are separate from the Detection Point server Confirations
+Do I need to redefine Monitor Points in my appsensor-server-config.xml file if I've already defined them as Detection Points for the reference engine?
+> Yes. The Monitor Point server configurations are separate from the Detection Point server configurations.
 
-Do I need to create separate sensors to generate different events for the Monitor Points, as opposed to Detection Points?
->No, as long as an Event generated by your sensor matches the id and category of the Monitor Point, it will work the same.
+Do I need to create separate sensors in my web application to generate different events for the Monitor Points, as opposed to Detection Points?
+> No, as long as an Event generated by your sensor matches the id and category of the Monitor Point, it will be able to trigger it.
 
 I want to change the order of my logic. How can I write rules such as "sensor 1 and (sensor2 or sensor3)" without the parenthetical precedence operator?
->Distribute it into "sensor 1 and sensor 2 or sensor 1 and sensor 3". We hope to soon build a helper tool that will generate the proper XML configuration from a more natural form like in the question. But for now there is only one level of precedence.
+> Distribute it into "sensor 1 and sensor 2 or sensor 1 and sensor 3". We hope build a helper tool that will generate the proper XML configuration from a more natural form like in the question. But for now there is only one level of precedence.
