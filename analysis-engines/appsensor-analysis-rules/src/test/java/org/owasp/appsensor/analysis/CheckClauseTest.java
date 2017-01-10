@@ -12,6 +12,7 @@ import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.rule.Clause;
 import org.owasp.appsensor.core.rule.MonitorPoint;
+import org.owasp.appsensor.core.rule.Notification;
 
 public class CheckClauseTest {
 	static AggregateEventAnalysisEngine engine;

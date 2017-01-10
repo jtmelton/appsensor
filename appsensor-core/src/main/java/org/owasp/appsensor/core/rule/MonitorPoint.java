@@ -8,8 +8,10 @@ import org.owasp.appsensor.core.DetectionPoint;
  *
  * @author David Scrobonia (davidscrobonia@gmail.com)
  */
-@SuppressWarnings("serial")
 public class MonitorPoint extends DetectionPoint {
+
+	private static final long serialVersionUID = 5586677962843958797L;
+
 	public MonitorPoint () { }
 
 	public MonitorPoint(DetectionPoint detectionPoint) {

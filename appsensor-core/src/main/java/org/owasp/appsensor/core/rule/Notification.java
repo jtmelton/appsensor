@@ -1,4 +1,4 @@
-package org.owasp.appsensor.analysis;
+package org.owasp.appsensor.core.rule;
 
 import java.util.Comparator;
 
@@ -14,8 +14,9 @@ import org.owasp.appsensor.core.Interval;
  *
  * @author David Scrobonia (davidscrobonia@gmail.com)
  */
-@SuppressWarnings("serial")
 public class Notification extends Interval {
+
+	private static final long serialVersionUID = -9023168715366748941L;
 
 	/** the start time of the interval */
 	private DateTime startTime;

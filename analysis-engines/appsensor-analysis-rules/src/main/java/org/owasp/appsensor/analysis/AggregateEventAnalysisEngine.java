@@ -24,6 +24,7 @@ import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.logging.Loggable;
 import org.owasp.appsensor.core.rule.Clause;
 import org.owasp.appsensor.core.rule.Expression;
+import org.owasp.appsensor.core.rule.Notification;
 import org.owasp.appsensor.core.rule.Rule;
 import org.owasp.appsensor.core.rule.MonitorPoint;
 import org.owasp.appsensor.core.storage.EventStore;
