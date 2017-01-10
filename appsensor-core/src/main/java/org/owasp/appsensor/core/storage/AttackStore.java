@@ -1,11 +1,5 @@
 package org.owasp.appsensor.core.storage;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import javax.inject.Inject;
-
 import org.joda.time.DateTime;
 import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.DetectionPoint;
@@ -15,6 +9,11 @@ import org.owasp.appsensor.core.listener.AttackListener;
 import org.owasp.appsensor.core.rule.Rule;
 import org.owasp.appsensor.core.storage.AttackStoreListener;
 import org.owasp.appsensor.core.util.DateUtils;
+
+import javax.inject.Inject;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * A store is an observable object.

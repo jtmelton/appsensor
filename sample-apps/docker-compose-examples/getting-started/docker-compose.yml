@@ -1,0 +1,42 @@
+version: '2'
+
+services: 
+  db:
+    image: mysql:latest
+    container_name: db
+    ports: 
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+    volumes:
+      - ./data:/docker-entrypoint-initdb.d
+  appsensor-ui: 
+    build: ../../../appsensor-ui/
+    container_name: appsensor-ui
+    environment: 
+      - APPSENSOR_REST_REPORTING_ENGINE_URL=http://rest-server:8085
+      - APPSENSOR_CLIENT_APPLICATION_ID_HEADER_NAME=X-Appsensor-Client-Application-Name2
+      - APPSENSOR_CLIENT_APPLICATION_ID_HEADER_VALUE=myclientapp
+      - APPSENSOR_WEB_SOCKET_HOST_URL=ws://rest-server:8085/dashboard
+      - spring.datasource.url=jdbc:mysql://db/appsensor
+      - spring.datasource.username=root
+#      - spring.datasource.username=appsensor_user
+      - spring.datasource.password=pass
+#      - spring.datasource.password=appsensor_pass
+    ports:
+      - "8084:8084"
+    links:
+      - db
+      - rest-server
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 30s java -Djava.security.egd=file:/dev/./urandom -jar app.jar
+#    depends_on:
+#      - "rest-server"
+  rest-server:
+    build: ../../appsensor-ws-rest-server-with-websocket-boot/
+    container_name: rest-server
+    environment:
+      - APPSENSOR_WEB_SOCKET_HOST_URL=ws://rest-server:8085/dashboard
+    ports: 
+      - "8085:8085"    
+    depends_on:
+      - "db"

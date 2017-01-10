@@ -1,0 +1,928 @@
+{
+  "swagger": "2.0",
+  "info" : {
+    "description" : "<h1>appsensor-ws-rest-server<\/h1><p>The AppSensor project is an OWASP project to create a knowledge base as well as \n        practical implementations for intrusion detection within applications.<\/p>",
+    "license" : {
+      "url" : "http://www.opensource.org/licenses/mit-license.html",
+      "name" : "MIT License"
+    },
+    "version" : "2.3.1-SNAPSHOT",
+    "title" : "appsensor-ws-rest-server"
+  },
+  "host" : "localhost:8085",
+  "basePath" : "",
+  "schemes" : ["http"],
+  "tags" : [
+    {
+      "name" : "RestReportingEngine",
+      "description" : "This is the restful endpoint that handles reporting requests on the server-side.\n\nThis simple RESTful implementation queries the appropriate *Store implementations\nfor matching entities."
+    }
+    ,
+    {
+      "name" : "RestRequestHandler",
+      "description" : "This is the restful endpoint that handles requests on the server-side."
+    }
+  ],
+  "definitions" : {
+    "json_attack" : {
+      "type" : "object",
+      "title" : "Attack",
+          "properties" : {
+            "detectionPoint" : {
+"description" : "",
+"$ref" : "#/definitions/json_detectionpoint"
+            },
+            "detectionSystem" : {
+"description" : "",
+"$ref" : "#/definitions/json_detectionsystem"
+            },
+            "id" : {
+"description" : "",
+"type" : "string"
+            },
+            "metadata" : {
+"description" : "",
+"type" : "array",
+"items" : {
+  "$ref" : "#/definitions/json_keyvaluepair"
+}
+            },
+            "resource" : {
+"description" : "",
+"$ref" : "#/definitions/json_resource"
+            },
+            "timestamp" : {
+"description" : "",
+"type" : "string"
+            },
+            "user" : {
+"description" : "",
+"$ref" : "#/definitions/json_user"
+            }
+          },
+      "description" : ""
+    }
+    ,
+    "json_detectionpoint" : {
+      "type" : "object",
+      "title" : "DetectionPoint",
+          "properties" : {
+            "category" : {
+"description" : "",
+"type" : "string"
+            },
+            "guid" : {
+"description" : "",
+"type" : "string"
+            },
+            "id" : {
+"description" : "",
+"type" : "string"
+            },
+            "label" : {
+"description" : "",
+"type" : "string"
+            },
+            "responses" : {
+"description" : "",
+"type" : "array",
+"items" : {
+  "$ref" : "#/definitions/json_response"
+}
+            },
+            "responses" : {
+"description" : "",
+"type" : "array",
+"items" : {
+  "$ref" : "#/definitions/json_response"
+}
+            },
+            "threshold" : {
+"description" : "",
+"$ref" : "#/definitions/json_threshold"
+            },
+            "threshold" : {
+"description" : "",
+"$ref" : "#/definitions/json_threshold"
+            }
+          },
+      "description" : ""
+    }
+    ,
+    "json_detectionsystem" : {
+      "type" : "object",
+      "title" : "DetectionSystem",
+          "properties" : {
+            "detectionSystemId" : {
+"description" : "",
+"type" : "string"
+            },
+            "id" : {
+"description" : "",
+"type" : "string"
+            },
+            "ipAddress" : {
+"description" : "",
+"$ref" : "#/definitions/json_ipaddress"
+            },
+            "ipAddress" : {
+"description" : "",
+"$ref" : "#/definitions/json_ipaddress"
+            }
+          },
+      "description" : ""
+    }
+    ,
+    "json_event" : {
+      "type" : "object",
+      "title" : "Event",
+          "properties" : {
+            "detectionPoint" : {
+"description" : "",
+"$ref" : "#/definitions/json_detectionpoint"
+            },
+            "detectionSystem" : {
+"description" : "",
+"$ref" : "#/definitions/json_detectionsystem"
+            },
+            "id" : {
+"description" : "",
+"type" : "string"
+            },
+            "metadata" : {
+"description" : "",
+"type" : "array",
+"items" : {
+  "$ref" : "#/definitions/json_keyvaluepair"
+}
+            },
+            "resource" : {
+"description" : "",
+"$ref" : "#/definitions/json_resource"
+            },
+            "timestamp" : {
+"description" : "",
+"type" : "string"
+            },
+            "user" : {
+"description" : "",
+"$ref" : "#/definitions/json_user"
+            }
+          },
+      "description" : ""
+    }
+    ,
+    "json_geolocation" : {
+      "type" : "object",
+      "title" : "GeoLocation",
+          "properties" : {
+            "id" : {
+"description" : "",
+"type" : "string"
+            },
+            "latitude" : {
+"description" : "",
+"type" : "number"
+            },
+            "longitude" : {
+"description" : "",
+"type" : "number"
+            }
+          },
+      "description" : ""
+    }
+    ,
+    "json_ipaddress" : {
+      "type" : "object",
+      "title" : "IPAddress",
+          "properties" : {
+            "address" : {
+"description" : "",
+"type" : "string"
+            },
+            "geoLocation" : {
+"description" : "",
+"$ref" : "#/definitions/json_geolocation"
+            },
+            "geoLocation" : {
+"description" : "",
+"$ref" : "#/definitions/json_geolocation"
+            },
+            "id" : {
+"description" : "",
+"type" : "string"
+            }
+          },
+      "description" : ""
+    }
+    ,
+    "json_interval" : {
+      "type" : "object",
+      "title" : "Interval",
+          "properties" : {
+            "duration" : {
+"description" : "",
+"type" : "number"
+            },
+            "id" : {
+"description" : "",
+"type" : "string"
+            },
+            "unit" : {
+"description" : "",
+"type" : "string"
+            }
+          },
+      "description" : ""
+    }
+    ,
+    "json_keyvaluepair" : {
+      "type" : "object",
+      "title" : "KeyValuePair",
+          "properties" : {
+            "id" : {
+"description" : "",
+"type" : "string"
+            },
+            "key" : {
+"description" : "",
+"type" : "string"
+            },
+            "value" : {
+"description" : "",
+"type" : "string"
+            }
+          },
+      "description" : ""
+    }
+    ,
+    "json_resource" : {
+      "type" : "object",
+      "title" : "Resource",
+          "properties" : {
+            "id" : {
+"description" : "",
+"type" : "string"
+            },
+            "location" : {
+"description" : "",
+"type" : "string"
+            },
+            "method" : {
+"description" : "",
+"type" : "string"
+            }
+          },
+      "description" : ""
+    }
+    ,
+    "json_response" : {
+      "type" : "object",
+      "title" : "Response",
+          "properties" : {
+            "action" : {
+"description" : "",
+"type" : "string"
+            },
+            "active" : {
+"description" : "",
+"type" : "boolean"
+            },
+            "detectionSystem" : {
+"description" : "",
+"$ref" : "#/definitions/json_detectionsystem"
+            },
+            "id" : {
+"description" : "",
+"type" : "string"
+            },
+            "interval" : {
+"description" : "",
+"$ref" : "#/definitions/json_interval"
+            },
+            "metadata" : {
+"description" : "",
+"type" : "array",
+"items" : {
+  "$ref" : "#/definitions/json_keyvaluepair"
+}
+            },
+            "timestamp" : {
+"description" : "",
+"type" : "string"
+            },
+            "user" : {
+"description" : "",
+"$ref" : "#/definitions/json_user"
+            }
+          },
+      "description" : ""
+    }
+    ,
+    "json_threshold" : {
+      "type" : "object",
+      "title" : "Threshold",
+          "properties" : {
+            "count" : {
+"description" : "",
+"type" : "number"
+            },
+            "id" : {
+"description" : "",
+"type" : "string"
+            },
+            "interval" : {
+"description" : "",
+"$ref" : "#/definitions/json_interval"
+            }
+          },
+      "description" : ""
+    }
+    ,
+    "json_user" : {
+      "type" : "object",
+      "title" : "User",
+          "properties" : {
+            "id" : {
+"description" : "",
+"type" : "string"
+            },
+            "ipAddress" : {
+"description" : "",
+"$ref" : "#/definitions/json_ipaddress"
+            },
+            "ipAddress" : {
+"description" : "",
+"$ref" : "#/definitions/json_ipaddress"
+            },
+            "username" : {
+"description" : "",
+"type" : "string"
+            }
+          },
+      "description" : ""
+    }
+  },
+  "paths": {
+    "/api/v1.0/reports/attacks/count-by-user" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_countAttacksByUser_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          },
+          {
+            "name" : "username",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "number"
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/server-config-base64" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_getBase64EncodedServerConfigurationFileContent_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"$ref" : "#/definitions/json_keyvaluepair"
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/responses/count-by-user" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_countResponsesByUser_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          },
+          {
+            "name" : "username",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "number"
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/responses/count-by-label" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_countResponsesByLabel_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          },
+          {
+            "name" : "label",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "number"
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/attacks/count-by-label" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_countAttacksByLabel_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          },
+          {
+            "name" : "label",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "number"
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/attacks/count" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_countAttacks_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "number"
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/attacks" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_findAttacks_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "array",
+"items" : {
+  "$ref" : "#/definitions/json_attack"
+}
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/events/count" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_countEvents_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "number"
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/responses/count" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_countResponses_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "number"
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/events/count-by-label" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_countEventsByLabel_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          },
+          {
+            "name" : "label",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "number"
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/events/count-by-user" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_countEventsByUser_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          },
+          {
+            "name" : "username",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "number"
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/server-config" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_getServerConfigurationAsJson_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "string"
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/events" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_findEvents_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "array",
+"items" : {
+  "$ref" : "#/definitions/json_event"
+}
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/reports/responses" : {
+      "get" : {
+        "tags" : [ "RestReportingEngine" ],
+        "description" : "",
+        "operationId" : "resource_RestReportingEngine_findResponses_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "array",
+"items" : {
+  "$ref" : "#/definitions/json_response"
+}
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/attacks" : {
+      "post" : {
+        "tags" : [ "RestRequestHandler" ],
+        "description" : "",
+        "operationId" : "resource_RestRequestHandler_addAttack_POST",
+        "consumes" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "body",
+            "in" : "body",
+            "schema" : {
+"description" : "",
+"$ref" : "#/definitions/json_attack"
+            },
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "201" : {
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/responses" : {
+      "get" : {
+        "tags" : [ "RestRequestHandler" ],
+        "description" : "",
+        "operationId" : "resource_RestRequestHandler_getResponses_GET",
+        "produces" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "earliest",
+            "in" : "query",
+            "type" : "string",
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "schema" : {
+"description" : "",
+"type" : "array",
+"items" : {
+  "$ref" : "#/definitions/json_response"
+}
+            },
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+    ,
+    "/api/v1.0/events" : {
+      "post" : {
+        "tags" : [ "RestRequestHandler" ],
+        "description" : "",
+        "operationId" : "resource_RestRequestHandler_addEvent_POST",
+        "consumes" : [ "application/json" ],
+        "parameters" : [
+          {
+            "name" : "body",
+            "in" : "body",
+            "schema" : {
+"description" : "",
+"$ref" : "#/definitions/json_event"
+            },
+            "description" : ""
+          }
+        ],
+        "responses" : {
+          "201" : {
+            "headers" : {
+            },
+            "description" : "Success"
+          },
+          "default" : {
+            "description" : "Unexpected error."
+          }
+        }
+      }
+    }
+  }
+}

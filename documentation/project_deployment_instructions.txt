@@ -17,6 +17,7 @@ Each deploy:
 - for a snapshot deployment: 
 	- ensure all versions end in '-SNAPSHOT' (run 'mvn versions:set -DnewVersion=1.2.3-SNAPSHOT -DgenerateBackupPoms=false')
 	- also run this step separately for appsensor-ui since it's on a different release cycle
+	- need to run 'mvn -N install' (installs parent pom locally to run remainder of cases)
 	- run 'mvn clean deploy'
 	
 - for a release deployment: 
@@ -31,10 +32,9 @@ Each deploy:
 		- create a v${version} folder (for 2.1.2, it would be 'v2.1.2')
 		- build the javadoc
 			- run 'mvn javadoc:aggregate'
-			- copy the 'target/site/api' folder to the 'appsensor-dot-org/docs/${version}/javadoc'
+			- copy the 'target/site/apidocs' folder to the 'appsensor-dot-org/docs/${version}/javadoc'
+			- copy the results from the 'wsdocs/apidocs' dir over to 'appsensor-dot-org/docs/${version}/api' folder
 			- add a link to the 'api.html' page for the new javadoc folder
-		- build the swagger ui (when the rest api changes)
-			- copy the results from the 'execution-modes/appsensor-ws-rest-server/target/site/apidocs' dir over to 'appsensor-dot-org/docs/${version}/api' folder
 	- commit code
 	- tag the github repo with the appropriate tag (gpg signed) (run "git tag -u 'jtmelton@gmail.com' -s v1.2.3 -m 'appsensor release version 1.2.3'")
 	- push tags (run 'git push origin --tags')
