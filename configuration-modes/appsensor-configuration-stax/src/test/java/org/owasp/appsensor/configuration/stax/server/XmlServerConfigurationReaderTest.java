@@ -13,7 +13,6 @@ import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.Threshold;
-import org.owasp.appsensor.core.accesscontrol.Action;
 import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.core.configuration.server.ServerConfigurationReader;
 import org.owasp.appsensor.core.exceptions.ConfigurationException;
@@ -49,13 +48,13 @@ public class XmlServerConfigurationReaderTest {
 
 		// assert all rule components are as expected
 		// monitor points
-		ArrayList<MonitorPoint> monitorPoints = new ArrayList<MonitorPoint>();
+		ArrayList<DetectionPoint> monitorPoints = new ArrayList<DetectionPoint>();
 		monitorPoints.add(new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1", new Threshold(5, new Interval(1, Interval.MINUTES))), "00000000-0000-0000-0000-000000000001"));
 		monitorPoints.add(new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1", new Threshold(3, new Interval(1, Interval.MINUTES))), "00000000-0000-0000-0000-000000000002"));
 		monitorPoints.add(new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE2", new Threshold(5, new Interval(1, Interval.MINUTES))), "00000000-0000-0000-0000-000000000003"));
 		monitorPoints.add(new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE3", new Threshold(10, new Interval(3, Interval.MINUTES))), "00000000-0000-0000-0000-000000000004"));
 
-		for (MonitorPoint point : monitorPoints) {
+		for (DetectionPoint point : monitorPoints) {
 			assertTrue("Failed on MonitorPoint: " + point.toString(), configuration.getRules().iterator().next().getAllDetectionPoints().contains(point));
 		}
 
@@ -91,9 +90,7 @@ public class XmlServerConfigurationReaderTest {
 		responses.add(new Response().setAction("disableComponentForSpecificUser").setInterval(new Interval(30, Interval.MINUTES)));
 		responses.add(new Response().setAction("disableComponentForAllUsers").setInterval(new Interval(30, Interval.MINUTES)));
 
-		Rule rule = new Rule(new Interval(5, Interval.MINUTES), expressions);
-		rule.setResponses(responses);
-		rule.setGuid("00000000-0000-0000-0000-000000000000");
+		Rule rule = new Rule("00000000-0000-0000-0000-000000000000", new Interval(5, Interval.MINUTES), expressions, responses);
 
 		assertTrue("Failed on Rule: " + rule.toString(), configuration.getRules().iterator().next().equals(rule));
 	}
@@ -111,13 +108,13 @@ public class XmlServerConfigurationReaderTest {
 
 		// check rule 1
 		// monitor points
-		ArrayList<MonitorPoint> monitorPoints = new ArrayList<MonitorPoint>();
+		ArrayList<DetectionPoint> monitorPoints = new ArrayList<DetectionPoint>();
 		monitorPoints.add(new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1", new Threshold(5, new Interval(1, Interval.MINUTES))), "00000000-0000-0000-0000-000000000001"));
 		monitorPoints.add(new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1", new Threshold(3, new Interval(1, Interval.MINUTES))), "00000000-0000-0000-0000-000000000002"));
 		monitorPoints.add(new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE2", new Threshold(5, new Interval(1, Interval.MINUTES))), "00000000-0000-0000-0000-000000000003"));
 		monitorPoints.add(new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE3", new Threshold(10, new Interval(3, Interval.MINUTES))), "00000000-0000-0000-0000-000000000004"));
 
-		for (MonitorPoint point : monitorPoints) {
+		for (DetectionPoint point : monitorPoints) {
 			assertTrue("Failed on MonitorPoint: " + point.toString(), configuredRule.getAllDetectionPoints().contains(point));
 		}
 
@@ -153,7 +150,7 @@ public class XmlServerConfigurationReaderTest {
 		responses.add(new Response().setAction("disableComponentForSpecificUser").setInterval(new Interval(30, Interval.MINUTES)));
 		responses.add(new Response().setAction("disableComponentForAllUsers").setInterval(new Interval(30, Interval.MINUTES)));
 
-		Rule rule = new Rule(new Interval(5, Interval.MINUTES), expressions);
+		Rule rule = new Rule(null, new Interval(5, Interval.MINUTES), expressions);
 		rule.setResponses(responses);
 		rule.setGuid("00000000-0000-0000-0000-000000000000");
 		rule.setName("Rule 1");
@@ -165,10 +162,10 @@ public class XmlServerConfigurationReaderTest {
 		configuredRule = rules.next();
 
 		// monitor points
-		monitorPoints = new ArrayList<MonitorPoint>();
+		monitorPoints = new ArrayList<DetectionPoint>();
 		monitorPoints.add(new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE3", new Threshold(10, new Interval(3, Interval.MINUTES))), "00000000-0000-0000-0000-000000000006"));
 
-		for (MonitorPoint point : monitorPoints) {
+		for (DetectionPoint point : monitorPoints) {
 			assertTrue("Failed on MonitorPoint: " + point.toString(), configuredRule.getAllDetectionPoints().contains(point));
 		}
 
@@ -197,7 +194,7 @@ public class XmlServerConfigurationReaderTest {
 		responses = new ArrayList<Response>();
 		responses.add(new Response().setAction("log"));
 
-		rule = new Rule(new Interval(5, Interval.MINUTES), expressions);
+		rule = new Rule(null, new Interval(5, Interval.MINUTES), expressions);
 		rule.setResponses(responses);
 		rule.setGuid("00000000-0000-0000-0000-000000000005");
 		rule.setName("Rule 2");
@@ -227,7 +224,7 @@ public class XmlServerConfigurationReaderTest {
 	public void testInvalidRulesLoadExpressionsLongerThanRules() throws Exception{
 		try {
 			ServerConfigurationReader reader = new StaxServerConfigurationReader();
-			ServerConfiguration configuration = reader.read("/appsensor-server-rules-invalid-expression-window-config.xml", "/appsensor_server_config_2.0.xsd");
+			reader.read("/appsensor-server-rules-invalid-expression-window-config.xml", "/appsensor_server_config_2.0.xsd");
 		}
 		catch (ConfigurationException exception){
 			assertTrue(exception.toString().startsWith("org.owasp.appsensor.core.exceptions.ConfigurationException: Incompatible windows set in rule: "));
@@ -240,7 +237,7 @@ public class XmlServerConfigurationReaderTest {
 	public void testInvalidRulesLoadDetectionPointsLongerThanExpression() throws Exception{
 		try {
 			ServerConfigurationReader reader = new StaxServerConfigurationReader();
-			ServerConfiguration configuration = reader.read("/appsensor-server-rules-invalid-mp-window-config.xml", "/appsensor_server_config_2.0.xsd");
+			reader.read("/appsensor-server-rules-invalid-mp-window-config.xml", "/appsensor_server_config_2.0.xsd");
 		}
 		catch (ConfigurationException exception){
 			assertTrue(exception.toString().startsWith("org.owasp.appsensor.core.exceptions.ConfigurationException: Incompatible windows set in rule: "));
@@ -253,7 +250,7 @@ public class XmlServerConfigurationReaderTest {
 	public void testInvalidRulesLoadDuplicateGuids() {
 		try {
 			ServerConfigurationReader reader = new StaxServerConfigurationReader();
-			ServerConfiguration configuration = reader.read("/appsensor-server-rules-duplicate-mp-guids-config.xml", "/appsensor_server_config_2.0.xsd");
+			reader.read("/appsensor-server-rules-duplicate-mp-guids-config.xml", "/appsensor_server_config_2.0.xsd");
 		}
 		catch (ConfigurationException exception){
 			assertTrue(exception.toString().startsWith("org.owasp.appsensor.core.exceptions.ConfigurationException: Repeated GUID discovered in Detection Point: "));

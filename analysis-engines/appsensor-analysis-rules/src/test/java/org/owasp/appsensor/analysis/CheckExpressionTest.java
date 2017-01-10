@@ -1,12 +1,12 @@
 package org.owasp.appsensor.analysis;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.joda.time.DateTime;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.owasp.appsensor.core.DetectionPoint;
@@ -80,7 +80,7 @@ public class CheckExpressionTest {
 	}
 
 	private static Clause buildClause(MonitorPoint point) {
-		ArrayList<MonitorPoint> points = new ArrayList<MonitorPoint>();
+		ArrayList<DetectionPoint> points = new ArrayList<DetectionPoint>();
 		points.add(point);
 
 		return new Clause (points);

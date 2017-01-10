@@ -27,7 +27,7 @@ public class CheckClauseTest {
 
 	@Test
 	public void testExactMatchOneDetectionPoint() {
-		ArrayList<MonitorPoint> points = new ArrayList<MonitorPoint>();
+		ArrayList<DetectionPoint> points = new ArrayList<DetectionPoint>();
 		points.add(point1);
 		Clause clause = new Clause(points);
 
@@ -40,7 +40,7 @@ public class CheckClauseTest {
 
 	@Test
 	public void testExactMatchTwoDetectionPoints() {
-		ArrayList<MonitorPoint> points = new ArrayList<MonitorPoint>();
+		ArrayList<DetectionPoint> points = new ArrayList<DetectionPoint>();
 		points.add(point1);
 		points.add(point2);
 		Clause clause = new Clause (points);
@@ -54,7 +54,7 @@ public class CheckClauseTest {
 
 	@Test
 	public void testExtraDetectionPoints() {
-		ArrayList<MonitorPoint> points = new ArrayList<MonitorPoint>();
+		ArrayList<DetectionPoint> points = new ArrayList<DetectionPoint>();
 		points.add(point1);
 		Clause clause = new Clause (points);
 
@@ -67,7 +67,7 @@ public class CheckClauseTest {
 
 	@Test
 	public void testNoDetectionPoints() {
-		ArrayList<MonitorPoint> points = new ArrayList<MonitorPoint>();
+		ArrayList<DetectionPoint> points = new ArrayList<DetectionPoint>();
 		points.add(point1);
 		Clause clause = new Clause (points);
 
@@ -78,7 +78,7 @@ public class CheckClauseTest {
 
 	@Test
 	public void testMissingDetectionPoint() {
-		ArrayList<MonitorPoint> points = new ArrayList<MonitorPoint>();
+		ArrayList<DetectionPoint> points = new ArrayList<DetectionPoint>();
 		points.add(point1);
 		points.add(point2);
 		Clause clause = new Clause (points);

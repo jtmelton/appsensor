@@ -10,7 +10,6 @@ import javax.inject.Inject;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.owasp.appsensor.analysis.AggregateEventAnalysisEngine;
@@ -495,14 +494,14 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		MonitorPoint point3 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE3", new Threshold(13, minutes6)));
 
 		// clauses
-		ArrayList<MonitorPoint> points1 = new ArrayList<MonitorPoint>();
+		ArrayList<DetectionPoint> points1 = new ArrayList<DetectionPoint>();
 		points1.add(point1);
-		ArrayList<MonitorPoint> points1and2 = new ArrayList<MonitorPoint>();
+		ArrayList<DetectionPoint> points1and2 = new ArrayList<DetectionPoint>();
 		points1and2.add(point1);
 		points1and2.add(point2);
-		ArrayList<MonitorPoint> points2 = new ArrayList<MonitorPoint>();
+		ArrayList<DetectionPoint> points2 = new ArrayList<DetectionPoint>();
 		points2.add(point2);
-		ArrayList<MonitorPoint> points2and3 = new ArrayList<MonitorPoint>();
+		ArrayList<DetectionPoint> points2and3 = new ArrayList<DetectionPoint>();
 		points2and3.add(point2);
 		points2and3.add(point3);
 
@@ -523,7 +522,7 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		ArrayList<org.owasp.appsensor.core.rule.Expression> expressions1 = new ArrayList<org.owasp.appsensor.core.rule.Expression>();
 		expressions1.add(expression1);
 
-		configuredRules.add(new Rule("Rule 1", minutes16, expressions1, responses, "00000000-0000-0000-0000-000000000011"));
+		configuredRules.add(new Rule("00000000-0000-0000-0000-000000000011", minutes16, expressions1, responses, "Rule 1"));
 
 		//rule 2: DP1 AND DP2
 		ArrayList<Clause> clauses1and2 = new ArrayList<Clause>();

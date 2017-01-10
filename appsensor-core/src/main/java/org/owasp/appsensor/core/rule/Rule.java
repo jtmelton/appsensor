@@ -12,26 +12,34 @@ import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.Response;
 
 /**
- * A Rule defines a logical aggregation of RulesDetectionPoints to determine if an
- * attack is occurring. A Rule uses the boolean operators "AND" and "OR" as well
- * as the temporal operator "THEN" in joining RulesDetectionPoints into a Rule.
+ * A Rule defines a logical aggregation of {@link MonitorPoint}s to determine if an
+ * {@link Attack} is occurring. A Rule uses the boolean operators "AND" and "OR" as well
+ * as the temporal operator "THEN" in joining {@link MonitorPoint}s into a Rule.
  *
  * For example:
- * 		A rule could be as simple as: "DP1 AND DP2"
+ * 		A rule could be as simple as: "MP1 AND MP2"
  * 		Where the Rule will generate an attack if both MonitorPoint 1 and 2
  * 		are violated within the Rule's window.
  *
- * 		More complex: "DP1 AND DP2 THEN DP3 OR DP4"
+ * 		More complex: "MP1 AND MP2 THEN MP3 OR MP4"
  *
- * 		Even more complex: "DP1 AND DP2 THEN DP3 OR DP4 THEN DP5 AND DP6 OR DP7"
+ * 		Even more complex: "MP1 AND MP2 THEN MP3 OR MP4 THEN MP5 AND MP6 OR MP7"
  *
  * @author David Scrobonia (davidscrobonia@gmail.com)
  */
 public class Rule {
 
 	/**
-	 * The window of time all {@link Expression}s must be triggered within
-	 * A Rule's window must be greater than the total of it's Expressions' windows.
+	 * Unique identifier
+	 */
+	private String guid;
+
+	/** An optional human-friendly name for the Rule */
+	private String name;
+
+	/**
+	 * The window is the time all {@link Expression}s must be triggered within.
+	 * A Rule's window must be greater than or equal to the total of it's Expressions' windows.
 	 */
 	private Interval window;
 
@@ -45,43 +53,30 @@ public class Rule {
 	 */
 	private Collection<Response> responses = new ArrayList<Response>();
 
-	/**
-	 * Unique identifier
-	 */
-	private String guid;
-
-	/** The name of the Rule */
-	private String name;
-
 	public Rule () {
 		expressions = new ArrayList<Expression>();
 		responses = new ArrayList<Response>();
 	}
 
-	public Rule (Interval window, ArrayList<Expression> expressions) {
-		setWindow(window);
-		setExpressions(expressions);
-	}
-
-	public Rule (String name, Interval window, ArrayList<Expression> expressions) {
-		setName(name);
-		setWindow(window);
-		setExpressions(expressions);
-	}
-
-	public Rule (String name, Interval window, ArrayList<Expression> expressions, ArrayList<Response> responses) {
-		setName(name);
-		setWindow(window);
-		setExpressions(expressions);
-		setResponses(responses);
-	}
-
-	public Rule (String name, Interval window, ArrayList<Expression> expressions, ArrayList<Response> responses, String guid) {
-		setName(name);
-		setWindow(window);
-		setExpressions(expressions);
-		setResponses(responses);
+	public Rule (String guid, Interval window, ArrayList<Expression> expressions) {
 		setGuid(guid);
+		setWindow(window);
+		setExpressions(expressions);
+	}
+
+	public Rule (String guid, Interval window, ArrayList<Expression> expressions, ArrayList<Response> responses) {
+		setGuid(guid);
+		setWindow(window);
+		setExpressions(expressions);
+		setResponses(responses);
+	}
+
+	public Rule (String guid, Interval window, ArrayList<Expression> expressions, ArrayList<Response> responses, String name) {
+		setGuid(guid);
+		setWindow(window);
+		setExpressions(expressions);
+		setResponses(responses);
+		setName(name);
 	}
 
 	public String getName() {
@@ -129,10 +124,13 @@ public class Rule {
 		return this;
 	}
 
+	/* returns the last expression in expressions */
 	public Expression getLastExpression() {
 		return this.expressions.get(this.expressions.size() - 1);
 	}
 
+	/* checks whether the last expression contains a DetectionPoint
+	 * matching the type of triggerDetectionPoint */
 	public boolean checkLastExpressionForDetectionPoint (DetectionPoint triggerDetectionPoint) {
 		for (DetectionPoint detectionPoint : getLastExpression().getDetectionPoints()) {
 			if (detectionPoint.typeMatches(triggerDetectionPoint)) {
@@ -143,6 +141,7 @@ public class Rule {
 		return false;
 	}
 
+	/* returns all DetectionPoints contained within the Rule as a set*/
 	public Collection<DetectionPoint> getAllDetectionPoints () {
 		Set<DetectionPoint> detectionPoints = new HashSet<DetectionPoint>();
 
@@ -153,6 +152,8 @@ public class Rule {
 		return detectionPoints;
 	}
 
+	/* checks whether the Rule contains a detection point of the same type and threshold
+	 * as the detectionPoint parameter */
 	public boolean typeAndThresholdContainsDetectionPoint(DetectionPoint detectionPoint) {
 		for (DetectionPoint myPoint : getAllDetectionPoints()) {
 			if (detectionPoint.typeAndThresholdMatches(myPoint)) {
@@ -160,17 +161,6 @@ public class Rule {
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this).
-				   append("window", window).
-			       append("expressions", expressions).
-			       append("responses", responses).
-			       append("guid", guid).
-			       append("name", name).
-			       toString();
 	}
 
 	@Override
@@ -191,5 +181,16 @@ public class Rule {
 				append(this.expressions, other.getExpressions()).
 				append(this.guid, other.getGuid()).
 				isEquals();
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).
+				   append("window", window).
+			       append("expressions", expressions).
+			       append("responses", responses).
+			       append("guid", guid).
+			       append("name", name).
+			       toString();
 	}
 }

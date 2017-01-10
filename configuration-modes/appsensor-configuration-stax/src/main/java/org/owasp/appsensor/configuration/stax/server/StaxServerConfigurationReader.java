@@ -420,7 +420,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			switch(event) {
 			case XMLStreamConstants.START_ELEMENT:
 				if ("config:monitor-point".equals(name)) {
-					clause.getDetectionPoints().add((MonitorPoint)readMonitorPoint(xmlReader));
+					clause.getMonitorPoints().add((MonitorPoint)readMonitorPoint(xmlReader));
 				} else {
 					/** unexpected start element **/
 				}
@@ -614,6 +614,10 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 		return guid;
 	}
 
+	/*
+	 * Ensures that the windows of the Rule, Expressions, and MonitorPoints don't conflict
+	 * with each other.
+	 */
 	private boolean validateWindows(Rule rule) {
 		int sumOfExpressionWindows = 0;
 
@@ -621,7 +625,9 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			long expressionWindow = expression.getWindow().toMillis();
 
 			for (Clause clause : expression.getClauses()) {
-				for (MonitorPoint point : clause.getDetectionPoints()) {
+				for (DetectionPoint point : clause.getMonitorPoints()) {
+					/* check whether the window of a MonitorPoint
+					 * is greater than its parent Expression */
 					if (expressionWindow < point.getThreshold().getInterval().toMillis()) {
 						return false;
 					}
@@ -630,6 +636,7 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 			sumOfExpressionWindows += expressionWindow;
 		}
 
+		/* checks whether the sum of expression windows is greater than the rule window */
 		return rule.getWindow().toMillis() >= sumOfExpressionWindows;
 	}
 }

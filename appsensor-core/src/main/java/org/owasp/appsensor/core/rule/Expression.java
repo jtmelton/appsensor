@@ -9,17 +9,17 @@ import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
 
 /**
- * An Expression is a logical boolean expression where the variables are RulesDetectionPoints.
- * Each Expression in a Rule is separated by the "THEN" operator.
+ * An Expression is a logical boolean expression where the variables are {@link MonitorPoint}s.
+ * Each Expression in a {@link Rule} is separated by the "THEN" operator.
  *
- * An Expression contains a set of Clauses. Only one Clause needs to evaluate to true
+ * An Expression contains a set of {@link Clause}s. Only one {@link Clause} needs to evaluate to true
  * for an Expression to evaluate to true.
  *
  * For example:
- * 		In the Rule: "DP1 AND DP2 THEN DP3 OR DP4"
+ * 		In the Rule: "MP1 AND MP2 THEN MP3 OR mP4"
  *
- * 		"DP1 AND DP2" would be the first Expression with a single Clause
- * 		and "DP3 OR DP4" would a second Expression with two Clauses.
+ * 		"MP1 AND MP2" would be the first Expression with a single Clause
+ * 		and "MP3 OR MP4" would a second Expression with two Clauses.
  *
  * @author David Scrobonia (davidscrobonia@gmail.com)
  */
@@ -62,7 +62,7 @@ public class Expression {
 		ArrayList<DetectionPoint> detectionPoints = new ArrayList<DetectionPoint>();
 
 		for (Clause clause : clauses) {
-			for (DetectionPoint detectionPoint : clause.getDetectionPoints()) {
+			for (DetectionPoint detectionPoint : clause.getMonitorPoints()) {
 				detectionPoints.add(detectionPoint);
 			}
 		}

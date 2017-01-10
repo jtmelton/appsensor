@@ -5,39 +5,39 @@ import java.util.Collection;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.owasp.appsensor.core.Interval;
+import org.owasp.appsensor.core.DetectionPoint;
 
 /**
- * A Clause represents the terms in an Expression separated by an "OR" operator.
- * Each MonitorPoint in the detectionPoints field are the variables in joined
+ * A Clause represents the terms in an {@link Expression} separated by an "OR" operator.
+ * Each {@link MonitorPoint} in the monitorPoints field are the variables joined
  * by "AND" operators.
  *
  * For example:
- * 		In the expression: "DP1 AND DP2 OR DP3 AND DP4"
+ * 		In the expression: "MP1 AND MP2 OR MP3 AND MP4"
  *
- * 		"DP1 AND DP2" would be a single clause and "DP3 AND DP4" would be another.
+ * 		"MP1 AND MP2" would be a single clause and "MP3 AND MP4" would be another.
  *
  * @author David Scrobonia (davidscrobonia@gmail.com)
  */
 public class Clause {
 
-	/** The detection points being checked as variables in an Expression */
-	private Collection<MonitorPoint> detectionPoints;
+	/** The monitor points being checked as variables in an Expression */
+	private Collection<DetectionPoint> monitorPoints;
 
 	public Clause() {
-		detectionPoints = new ArrayList<MonitorPoint>();
+		monitorPoints = new ArrayList<DetectionPoint>();
 	}
 
-	public Clause(Collection<MonitorPoint> detectionPoints) {
-		setDetectionPoints(detectionPoints);
+	public Clause(Collection<DetectionPoint> monitorPoints) {
+		setMonitorPoints(monitorPoints);
 	}
 
-	public Collection<MonitorPoint> getDetectionPoints() {
-		return this.detectionPoints;
+	public Collection<DetectionPoint> getMonitorPoints() {
+		return this.monitorPoints;
 	}
 
-	public Clause setDetectionPoints(Collection<MonitorPoint> detectionPoints) {
-		this.detectionPoints = detectionPoints;
+	public Clause setMonitorPoints(Collection<DetectionPoint> monitorPoints) {
+		this.monitorPoints = monitorPoints;
 		return this;
 	}
 
@@ -53,14 +53,14 @@ public class Clause {
 		Clause other = (Clause) obj;
 
 		return new EqualsBuilder().
-				append(this.detectionPoints, other.getDetectionPoints()).
+				append(this.monitorPoints, other.getMonitorPoints()).
 				isEquals();
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).
-				   append("detectionPoints", detectionPoints).
+				   append("detectionPoints", monitorPoints).
 			       toString();
 	}
 }

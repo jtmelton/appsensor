@@ -109,7 +109,7 @@
 		</xsd:sequence>
 		<xsd:attribute name="guid" type="asconfig:guid" use="required" />
 	</xsd:complexType>
-	
+
 	
 	
 	<xsd:complexType name="detection-points">

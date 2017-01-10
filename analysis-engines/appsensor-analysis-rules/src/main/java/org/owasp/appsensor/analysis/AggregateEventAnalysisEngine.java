@@ -3,7 +3,7 @@ package org.owasp.appsensor.analysis;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -36,7 +36,7 @@ import org.slf4j.Logger;
  * It is notified with implementations of the {@link Event} class.
  *
  * The implementation analyzes whether defined {@link Rule}s should generate an
- * {@link Attack} by determining whether the {@link Rule}'s boolean logic evaluates
+ * {@link Attack} by determining whether the {@link Rule}'s logic evaluates
  * to true.
  *
  * @author David Scrobonia (davidscrobonia@gmail.com)
@@ -47,15 +47,12 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 
 	private Logger logger;
 
-	//private ArrayList<Rule> rules;
-
 	@Inject
 	private AppSensorServer appSensorServer;
 
 	/**
 	 * This method determines whether an {@link Event} that has been added to the system
-	 * has triggered a {@link Rule}. If so, an {@link Attack} is
-	 * created and added to the system.
+	 * has triggered a {@link Rule}. If so, an {@link Attack} is generated.
 	 *
 	 * @param event the {@link Event} that was added to the {@link EventStore}
 	 */
@@ -71,10 +68,10 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	}
 
 	/**
-	 * Evaluates a {@link Rule}'s boolean logic by compiling a list of all {@link Notification}
+	 * Evaluates a {@link Rule}'s logic by compiling a list of all {@link Notification}s
 	 * and then evaluating each {@link Expression} within the {@link Rule}. All {@link Expression}s
-	 * evaluate to true within the {@link Rule}'s window for the {@link Rule} to evaluate to true.
-	 * The process follows the "sliding window" pattern.
+	 * must evaluate to true within the {@link Rule}'s window for the {@link Rule} to evaluate to
+	 * true. The process follows the "sliding window" pattern.
 	 *
 	 * @param event the {@link Event} that triggered analysis
 	 * @param rule the {@link Rule} being evaluated
@@ -82,19 +79,20 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	 */
 	protected boolean checkRule(Event triggerEvent, Rule rule) {
 		Queue<Notification> notifications = getNotifications(triggerEvent, rule);
-		Queue<Notification> windowSensors = new LinkedList<Notification>();
+		Queue<Notification> windowedNotifications = new LinkedList<Notification>();
 		Iterator<Expression> expressions = rule.getExpressions().iterator();
 		Expression currentExpression = expressions.next();
+		Notification tail = null;
 
 		while (!notifications.isEmpty()) {
-			Notification tail = notifications.poll();
-			windowSensors.add(tail);
-			trim(windowSensors, tail.getEndTime().minus(currentExpression.getWindow().toMillis()));
+			tail = notifications.poll();
+			windowedNotifications.add(tail);
+			trim(windowedNotifications, tail.getEndTime().minus(currentExpression.getWindow().toMillis()));
 
-			if (checkExpression(currentExpression, windowSensors)) {
+			if (checkExpression(currentExpression, windowedNotifications)) {
 				if (expressions.hasNext()) {
 					currentExpression = expressions.next();
-					windowSensors = new LinkedList<Notification>();
+					windowedNotifications = new LinkedList<Notification>();
 					trim(notifications, tail.getEndTime());
 				}
 				else {
@@ -107,42 +105,43 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	}
 
 	/**
-	 * Evaluates an {@link Expression}'s boolean logic by evaluating all {@link Clause}s. Any
+	 * Evaluates an {@link Expression}'s logic by evaluating all {@link Clause}s. Any
 	 * {@link Clause} must evaluate to true for the {@link Expression} to evaluate to true.
 	 *
 	 * Equivalent to checking "OR" logic between {@link Clause}s.
 	 *
 	 * @param expression the {@link Expression} being evaluated
-	 * @param windowSensors the {@link Notification}s in the current "sliding window"
+	 * @param notifications the {@link Notification}s in the current "sliding window"
 	 * @return the boolean evaluation of the {@link Expression}
 	 */
-	protected boolean checkExpression(Expression expression, Queue<Notification> windowSensors) {
+	protected boolean checkExpression(Expression expression, Queue<Notification> notifications) {
 		for (Clause clause : expression.getClauses()) {
-			if (checkClause(clause, windowSensors)) {
+			if (checkClause(clause, notifications)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
 	/**
-	 * Evaluates a {@link Clause}'s boolean logic by checking if each {@link MonitorPoint}
+	 * Evaluates a {@link Clause}'s logic by checking if each {@link MonitorPoint}
 	 * within the {@link Clause} is in the current "sliding window".
 	 *
-	 * Equivalent to checking "AND" logic between {@link RuleDetectionPoint}s
+	 * Equivalent to checking "AND" logic between {@link RuleDetectionPoint}s.
 	 *
 	 * @param clause the {@link Clause} being evaluated
-	 * @param windowSensors the {@link Notification}s in the current "sliding window"
+	 * @param notifications the {@link Notification}s in the current "sliding window"
 	 * @return the boolean evaluation of the {@link Clause}
 	 */
-	protected boolean checkClause(Clause clause, Queue<Notification> windowSensors) {
-		Collection<DetectionPoint> windowDetectionPoints = new ArrayList<DetectionPoint>();
+	protected boolean checkClause(Clause clause, Queue<Notification> notifications) {
+		Collection<DetectionPoint> windowDetectionPoints = new HashSet<DetectionPoint>();
 
-		for (Notification notification : windowSensors) {
-			windowDetectionPoints.add(notification.getDetectionPoint());
+		for (Notification notification : notifications) {
+			windowDetectionPoints.add(notification.getMonitorPoint());
 		}
 
-		for (DetectionPoint detectionPoint : clause.getDetectionPoints()) {
+		for (DetectionPoint detectionPoint : clause.getMonitorPoints()) {
 			if (!windowDetectionPoints.contains(detectionPoint)) {
 				return false;
 			}
@@ -151,11 +150,10 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 		return true;
 	}
 
-	// todo: is is it better return new queue?
-	// toso: should i sort before just to be safe or assume its sorted?
 	/**
 	 * Pops {@link Notification}s out of the queue until the start time of the queue's head
-	 * is after the parameter time.
+	 * is after the parameter time. The queue of notifications MUST be sorted in ascending
+	 * order by start time.
 	 *
 	 * @param notifications the queue of {@link Notification}s being trimmed
 	 * @param time the time that all {@link Notification}s in the queue must be after
@@ -167,8 +165,8 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	}
 
 	/**
-	 * Builds a queue of all {@link Notifications} from the events relating to the
-	 * current {@link Rule}. The {@link Notifications} are ordered in the Queue by
+	 * Builds a queue of all {@link Notification}s from the events relating to the
+	 * current {@link Rule}. The {@link Notification}s are ordered in the Queue by
 	 * start time.
 	 *
 	 * @param triggerEvent the {@link Event} that triggered analysis
@@ -217,9 +215,10 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	 * @return boolean evaluation of the {@link Threshold}
 	 */
 	public boolean isThresholdViolated(Queue<Event> queue, Event tailEvent, Threshold threshold) {
-		if (queue.size() >= threshold.getCount()) {
+		Interval queueInterval = null;
 
-			Interval queueInterval = getQueueInterval(queue, tailEvent);
+		if (queue.size() >= threshold.getCount()) {
+			queueInterval = getQueueInterval(queue, tailEvent);
 
 			if (queueInterval.toMillis() <= threshold.getInterval().toMillis()) {
 				return true;
@@ -245,7 +244,7 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	}
 
 	/**
-	 * Generates an attack form the given {@link Rule} and triggered {@link Event}
+	 * Generates an attack from the given {@link Rule} and triggered {@link Event}
 	 *
 	 * @param triggerEvent the {@link Event} that triggered the {@link Rule}
 	 * @param rule the {@link Rule} being evaluated
@@ -253,22 +252,22 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	public void generateAttack(Event triggerEvent, Rule rule) {
 		logger.info("Attack generated on rule: " + rule.getGuid() + ", by user: " + triggerEvent.getUser().getUsername());
 
-		Attack attack = new Attack();
-		attack.setUser(new User(triggerEvent.getUser().getUsername()));
-		attack.setRule(rule);
-		attack.setTimestamp(triggerEvent.getTimestamp());
-		attack.setDetectionSystem(triggerEvent.getDetectionSystem());
-		attack.setResource(triggerEvent.getResource());
+		Attack attack = new Attack().
+			setUser(new User(triggerEvent.getUser().getUsername())).
+			setRule(rule).
+			setTimestamp(triggerEvent.getTimestamp()).
+			setDetectionSystem(triggerEvent.getDetectionSystem()).
+			setResource(triggerEvent.getResource());
 
 		appSensorServer.getAttackStore().addAttack(attack);
 	}
 
 	/**
-	 * Finds all {@link Event}s that related to the {@link Rule} being evaluated.
+	 * Finds all {@link Event}s related to the {@link Rule} being evaluated.
 	 *
 	 * @param triggerEvent the {@link Event} that triggered the {@link Rule}
 	 * @param rule the {@link Rule} being evaluated
-	 * @return a list of {@link Event}s applicable to {@link Rule}
+	 * @return a list of {@link Event}s applicable to the {@link Rule}
 	 */
 	protected ArrayList<Event> getApplicableEvents(Event triggerEvent, Rule rule) {
 		ArrayList<Event> events = new ArrayList<Event>();

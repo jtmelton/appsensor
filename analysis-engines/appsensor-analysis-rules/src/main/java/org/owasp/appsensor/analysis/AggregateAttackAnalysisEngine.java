@@ -19,7 +19,7 @@ import org.owasp.appsensor.core.storage.ResponseStore;
 import org.slf4j.Logger;
 
 /**
- * This is the reference {@link Attack} analysis engine,
+ * This is the rule based {@link Attack} analysis engine,
  * and is an implementation of the Observer pattern.
  *
  * It is notified with implementations of the {@link Attack} class.
@@ -28,6 +28,7 @@ import org.slf4j.Logger;
  * It then creates a {@link Response} and adds it to the {@link ResponseStore}.
  *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
+ * @author David Scrobonia (davidscrobonia@gmail.com)
  */
 @Named
 @Loggable
@@ -104,12 +105,12 @@ public class AggregateAttackAnalysisEngine extends AttackAnalysisEngine {
 			throw new IllegalArgumentException("No appropriate response was configured for this rule: " + triggeringRule.getName());
 		}
 
-		Response response = new Response();
-		response.setUser(attack.getUser());
-		response.setTimestamp(attack.getTimestamp());
-		response.setAction(responseAction);
-		response.setInterval(interval);
-		response.setDetectionSystem(attack.getDetectionSystem());
+		Response response = new Response().
+				setUser(attack.getUser()).
+				setTimestamp(attack.getTimestamp()).
+				setAction(responseAction).
+				setInterval(interval).
+				setDetectionSystem(attack.getDetectionSystem());
 
 		return response;
 	}

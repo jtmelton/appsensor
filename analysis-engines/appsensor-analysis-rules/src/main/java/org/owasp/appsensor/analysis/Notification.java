@@ -7,19 +7,21 @@ import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Interval;
 
 /**
- * A Notification represents the interval of time between a series of events that
- * trigger a MonitorPoint. Where a detection point generates an attack, a
- * MonitorPoint generates a Notification.
+ * A Notification represents the {@link Interval} of time between a series
+ * of {@link Event}s that trigger a {@link MonitorPoint}. Where a
+ * {@link DetectionPoint} generates an {@link Attack}, a {@link MonitorPoint}
+ * generates a Notification.
  *
  * @author David Scrobonia (davidscrobonia@gmail.com)
  */
+@SuppressWarnings("serial")
 public class Notification extends Interval {
 
 	/** the start time of the interval */
 	private DateTime startTime;
 
-	/** the detection point that generated the Notification */
-	private DetectionPoint detectionPoint;
+	/** the MonitorPoint that generated the Notification */
+	private DetectionPoint monitorPoint;
 
 	public Notification () { };
 
@@ -28,10 +30,10 @@ public class Notification extends Interval {
 		startTime = null;
 	}
 
-	public Notification (int duration, String unit, DateTime startTime, DetectionPoint detectionPoint) {
+	public Notification (int duration, String unit, DateTime startTime, DetectionPoint monitorPoint) {
 		super(duration, unit);
 		setStartTime(startTime);
-		setDetectionPoint(detectionPoint);
+		setMonitorPoint(monitorPoint);
 	}
 
 	public DateTime getStartTime() {
@@ -46,21 +48,21 @@ public class Notification extends Interval {
 		return this.startTime.plus(this.toMillis());
 	}
 
-	public DetectionPoint getDetectionPoint() {
-		return this.detectionPoint;
+	public DetectionPoint getMonitorPoint() {
+		return this.monitorPoint;
 	}
 
-	public void setDetectionPoint(DetectionPoint detectionPoint) {
-		this.detectionPoint = detectionPoint;
+	public void setMonitorPoint(DetectionPoint monitorPoint) {
+		this.monitorPoint = monitorPoint;
 	}
 
 	public static Comparator<Notification> getStartTimeAscendingComparator() {
 		return new Comparator<Notification>() {
-			public int compare(Notification ts1, Notification ts2) {
-				if (ts1.getStartTime().isBefore(ts2.getStartTime())) {
+			public int compare(Notification n1, Notification n2) {
+				if (n1.getStartTime().isBefore(n2.getStartTime())) {
 					return -1;
 				}
-				else if (ts1.getStartTime().isAfter(ts2.getStartTime())) {
+				else if (n1.getStartTime().isAfter(n2.getStartTime())) {
 					return 1;
 				}
 				else {

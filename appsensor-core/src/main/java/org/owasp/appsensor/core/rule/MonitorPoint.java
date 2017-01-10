@@ -1,7 +1,5 @@
 package org.owasp.appsensor.core.rule;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.owasp.appsensor.core.DetectionPoint;
 
 /**
@@ -10,6 +8,7 @@ import org.owasp.appsensor.core.DetectionPoint;
  *
  * @author David Scrobonia (davidscrobonia@gmail.com)
  */
+@SuppressWarnings("serial")
 public class MonitorPoint extends DetectionPoint {
 	public MonitorPoint () { }
 
