@@ -92,6 +92,7 @@
 			<version>${appsensor.version}</version>
 		</dependency>
 		
+		<!-- todo: cef integration not yet supported to run with rules engine -->
 		<!--
 		<dependency>
 			<groupId>org.owasp.appsensor</groupId>
