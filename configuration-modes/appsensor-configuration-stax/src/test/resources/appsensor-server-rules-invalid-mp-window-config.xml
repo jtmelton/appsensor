@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appsensor-server-config xmlns="https://www.owasp.org/index.php/OWASP_AppSensor_Project/xsd/appsensor_server_config_2.0.xsd">
+	
+	<client-application-identification-header-name>X-Appsensor-Client-Application-Invalid-MonitorPoint-Window-Rules</client-application-identification-header-name>
+	
+	<client-applications>
+		<client-application>
+			<name>myclientapp</name>
+			<roles>
+				<role>ADD_EVENT</role>
+				<role>ADD_ATTACK</role>
+				<role>GET_RESPONSES</role>
+				<role>EXECUTE_REPORT</role>	
+			</roles>
+		</client-application>
+	</client-applications>
+		
+	<rules>
+		<rule guid="00000000-0000-0000-0000-000000000000">
+			<window unit="minutes">5</window>
+			<expressions>
+				<expression>
+					<window unit="minutes">2</window>
+					<clauses>
+						<clause>
+							<monitor-points>
+								<monitor-point guid="00000000-0000-0000-0000-000000000001">
+									<category>Input Validation</category>
+									<id>IE1</id>
+									<threshold>
+										<count>5</count>
+										<interval unit="minutes">1</interval>
+									</threshold>
+								</monitor-point>
+								
+								<monitor-point guid="00000000-0000-0000-0000-000000000002">
+									<category>Input Validation</category>
+									<id>IE1</id>
+									<threshold>
+										<count>3</count>
+										<interval unit="minutes">1</interval>
+									</threshold>
+								</monitor-point>
+							</monitor-points>
+						</clause>
+						<clause>
+							<monitor-points>
+								<monitor-point guid="00000000-0000-0000-0000-000000000003">
+									<category>Input Validation</category>
+									<id>IE2</id>
+									<threshold>
+										<count>5</count>
+										<interval unit="minutes">10</interval>
+									</threshold>
+								</monitor-point>
+							</monitor-points>
+						</clause>
+					</clauses>
+				</expression>
+				
+				<expression>
+					<window unit="minutes">3</window>
+					<clauses>
+						<clause>
+							<monitor-points>
+								<monitor-point guid="00000000-0000-0000-0000-000000000004">
+									<category>Input Validation</category>
+									<id>IE3</id>
+									<threshold>
+										<count>10</count>
+										<interval unit="minutes">3</interval>
+									</threshold>
+								</monitor-point>
+							</monitor-points>
+						</clause>
+					</clauses>
+				</expression>
+			</expressions>
+			
+			<responses>
+				<response>
+					<action>log</action>
+				</response>
+				
+				<response>
+					<action>logout</action>
+				</response>
+				
+				<response>
+					<action>disableUser</action>
+				</response>
+				
+				<response>
+					<action>disableComponentForSpecificUser</action>
+					<interval unit="minutes">30</interval>
+				</response>
+				
+				<response>
+					<action>disableComponentForAllUsers</action>
+					<interval unit="minutes">30</interval>
+				</response>
+			</responses>
+		</rule>
+		
+	</rules>
+</appsensor-server-config>

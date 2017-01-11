@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.owasp.appsensor.core.*;
@@ -17,10 +18,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * Test basic {@link Event} analysis engine. Add a number of {@link Event}s matching 
- * the known set of criteria and ensure the {@link Attack}s are triggered at 
+ * Test basic {@link Event} analysis engine. Add a number of {@link Event}s matching
+ * the known set of criteria and ensure the {@link Attack}s are triggered at
  * the appropriate points.
- * 
+ *
  * @author John Melton (jtmelton@gmail.com) http://www.jtmelton.com/
  * @author Raphaël Taban
  */
@@ -29,16 +30,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class ReferenceStatisticalEventAnalysisEngineTest {
 
 	protected int sleepAmount = 1;
-	
+
 	@Inject
 	AppSensorServer appSensorServer;
-	
+
 	@Inject
 	AppSensorClient appSensorClient;
 
     @Inject
     IPAddress ipAddressLocator;
-	
+
+    @Ignore
 	@Test
 	public void testAttackCreation() throws Exception {
 		ServerConfiguration updatedConfiguration = appSensorServer.getConfiguration();
@@ -51,62 +53,62 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 				setDetectionSystemIds(
                         Arrays.asList(generateDetectionSystemLocalhostMe().getDetectionSystemId())
                 );
-		
+
 		Thread.sleep(sleepAmount);
-		
+
 		assertEquals(0, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
-		
+
 		appSensorClient.getEventManager().addEvent(generateNewEvent());
-		
+
 		Thread.sleep(sleepAmount);
-		
+
 		assertEquals(1, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
 
         appSensorClient.getEventManager().addEvent(generateNewEvent());
-		
+
 		Thread.sleep(sleepAmount);
-		
+
 		assertEquals(2, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(0, appSensorServer.getAttackStore().findAttacks(criteria).size());
 
         appSensorClient.getEventManager().addEvent(generateNewEvent());
-		
+
 		Thread.sleep(sleepAmount);
-		
+
 		assertEquals(3, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria).size());
 
         appSensorClient.getEventManager().addEvent(generateNewEvent());
-		
+
 		Thread.sleep(sleepAmount);
-		
+
 		assertEquals(4, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria).size());
 
         appSensorClient.getEventManager().addEvent(generateNewEvent());
-		
+
 		Thread.sleep(sleepAmount);
-		
+
 		assertEquals(5, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(1, appSensorServer.getAttackStore().findAttacks(criteria).size());
 
         appSensorClient.getEventManager().addEvent(generateNewEvent());
-		
+
 		Thread.sleep(sleepAmount);
-		
+
 		assertEquals(6, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(2, appSensorServer.getAttackStore().findAttacks(criteria).size());
 
         appSensorClient.getEventManager().addEvent(generateNewEvent());
-		
+
 		Thread.sleep(sleepAmount);
-		
+
 		assertEquals(7, appSensorServer.getEventStore().findEvents(criteria).size());
 		assertEquals(2, appSensorServer.getAttackStore().findAttacks(criteria).size());
 	}
-	
+
 	private Collection<DetectionPoint> loadMockedDetectionPoints() {
 		final Collection<DetectionPoint> configuredDetectionPoints = new ArrayList<DetectionPoint>();
 
@@ -124,107 +126,107 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 		Interval minutes33 = new Interval(33, Interval.MINUTES);
 		Interval minutes34 = new Interval(34, Interval.MINUTES);
 		Interval minutes35 = new Interval(35, Interval.MINUTES);
-		
+
 		Threshold events3minutes5 = new Threshold(3, minutes5);
 		Threshold events12minutes5 = new Threshold(12, minutes5);
 		Threshold events13minutes6 = new Threshold(13, minutes6);
 		Threshold events14minutes7 = new Threshold(14, minutes7);
 		Threshold events15minutes8 = new Threshold(15, minutes8);
-		
+
 		Response log = new Response();
 		log.setAction("log");
-		
+
 		Response logout = new Response();
 		logout.setAction("logout");
-		
+
 		Response disableUser = new Response();
 		disableUser.setAction("disableUser");
-		
+
 		Response disableComponentForSpecificUser31 = new Response();
 		disableComponentForSpecificUser31.setAction("disableComponentForSpecificUser");
 		disableComponentForSpecificUser31.setInterval(minutes31);
-		
+
 		Response disableComponentForSpecificUser32 = new Response();
 		disableComponentForSpecificUser32.setAction("disableComponentForSpecificUser");
 		disableComponentForSpecificUser32.setInterval(minutes32);
-		
+
 		Response disableComponentForSpecificUser33 = new Response();
 		disableComponentForSpecificUser33.setAction("disableComponentForSpecificUser");
 		disableComponentForSpecificUser33.setInterval(minutes33);
-		
+
 		Response disableComponentForSpecificUser34 = new Response();
 		disableComponentForSpecificUser34.setAction("disableComponentForSpecificUser");
 		disableComponentForSpecificUser34.setInterval(minutes34);
-		
+
 		Response disableComponentForSpecificUser35 = new Response();
 		disableComponentForSpecificUser35.setAction("disableComponentForSpecificUser");
 		disableComponentForSpecificUser35.setInterval(minutes35);
-		
+
 		Response disableComponentForAllUsers11 = new Response();
 		disableComponentForAllUsers11.setAction("disableComponentForAllUsers");
 		disableComponentForAllUsers11.setInterval(minutes11);
-		
+
 		Response disableComponentForAllUsers12 = new Response();
 		disableComponentForAllUsers12.setAction("disableComponentForAllUsers");
 		disableComponentForAllUsers12.setInterval(minutes12);
-		
+
 		Response disableComponentForAllUsers13 = new Response();
 		disableComponentForAllUsers13.setAction("disableComponentForAllUsers");
 		disableComponentForAllUsers13.setInterval(minutes13);
-		
+
 		Response disableComponentForAllUsers14 = new Response();
 		disableComponentForAllUsers14.setAction("disableComponentForAllUsers");
 		disableComponentForAllUsers14.setInterval(minutes14);
-		
+
 		Response disableComponentForAllUsers15 = new Response();
 		disableComponentForAllUsers15.setAction("disableComponentForAllUsers");
 		disableComponentForAllUsers15.setInterval(minutes15);
-		
+
 		Collection<Response> point1Responses = new ArrayList<Response>();
 		point1Responses.add(log);
 		point1Responses.add(logout);
 		point1Responses.add(disableUser);
 		point1Responses.add(disableComponentForSpecificUser31);
 		point1Responses.add(disableComponentForAllUsers11);
-		
+
 		DetectionPoint point1 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE1", events3minutes5, point1Responses);
-		
+
 		Collection<Response> point2Responses = new ArrayList<Response>();
 		point2Responses.add(log);
 		point2Responses.add(logout);
 		point2Responses.add(disableUser);
 		point2Responses.add(disableComponentForSpecificUser32);
 		point2Responses.add(disableComponentForAllUsers12);
-		
+
 		DetectionPoint point2 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE2", events12minutes5, point2Responses);
-		
+
 		Collection<Response> point3Responses = new ArrayList<Response>();
 		point3Responses.add(log);
 		point3Responses.add(logout);
 		point3Responses.add(disableUser);
 		point3Responses.add(disableComponentForSpecificUser33);
 		point3Responses.add(disableComponentForAllUsers13);
-		
+
 		DetectionPoint point3 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE3", events13minutes6, point3Responses);
-		
+
 		Collection<Response> point4Responses = new ArrayList<Response>();
 		point4Responses.add(log);
 		point4Responses.add(logout);
 		point4Responses.add(disableUser);
 		point4Responses.add(disableComponentForSpecificUser34);
 		point4Responses.add(disableComponentForAllUsers14);
-		
+
 		DetectionPoint point4 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE4", events14minutes7, point4Responses);
-		
+
 		Collection<Response> point5Responses = new ArrayList<Response>();
 		point5Responses.add(log);
 		point5Responses.add(logout);
 		point5Responses.add(disableUser);
 		point5Responses.add(disableComponentForSpecificUser35);
 		point5Responses.add(disableComponentForAllUsers15);
-		
+
 		DetectionPoint point5 = new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE5", events15minutes8, point5Responses);
-		
+
 		configuredDetectionPoints.add(point1);
 		configuredDetectionPoints.add(point2);
 		configuredDetectionPoints.add(point3);
@@ -278,5 +280,5 @@ public class ReferenceStatisticalEventAnalysisEngineTest {
 
 		return metaDataCol;
 	}
-	
+
 }

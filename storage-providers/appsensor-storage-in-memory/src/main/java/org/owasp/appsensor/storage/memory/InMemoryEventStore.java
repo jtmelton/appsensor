@@ -44,6 +44,10 @@ public class InMemoryEventStore extends EventStore {
 		super.notifyListeners(event);
 	}
 	
+	public void clearAll() {
+		events.clear();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

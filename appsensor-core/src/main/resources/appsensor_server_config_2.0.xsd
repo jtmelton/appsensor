@@ -54,14 +54,67 @@
 	</xsd:complexType>
 	
 	
+	<xsd:complexType name="rules">
+		<xsd:sequence>
+			<xsd:element name="rule" type="asconfig:rule" minOccurs="1" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	
+	<xsd:complexType name="rule">
+		<xsd:sequence>
+			<xsd:element name="name" type="xsd:string" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="window" type="asconfig:interval" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="expressions" type="asconfig:expressions" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="responses" type="asconfig:responses" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute name="guid" type="asconfig:guid" use="required" />
+	</xsd:complexType>
 	
+	<xsd:complexType name="expressions">
+		<xsd:sequence>
+			<xsd:element name="expression" type="asconfig:expression" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
 	
+	<xsd:complexType name="expression">
+		<xsd:sequence>
+			<xsd:element name="window" type="asconfig:interval" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="clauses" type="asconfig:clauses" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="clauses">
+		<xsd:sequence>
+			<xsd:element name="clause" type="asconfig:clause" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="clause">
+		<xsd:sequence>
+			<xsd:element name="monitor-points" type="asconfig:monitor-points" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="monitor-points">
+		<xsd:sequence>
+			<xsd:element name="monitor-point" type="asconfig:monitor-point" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="monitor-point">
+		<xsd:sequence>
+			<xsd:element name="category" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="id" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="threshold" type="asconfig:threshold" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+		<xsd:attribute name="guid" type="asconfig:guid" use="required" />
+	</xsd:complexType>
+
 	
 	
 	<xsd:complexType name="detection-points">
 		<xsd:sequence>
-		<xsd:element name="clients" type="asconfig:clients" minOccurs="0" maxOccurs="1" />
+			<xsd:element name="clients" type="asconfig:clients" minOccurs="0" maxOccurs="1" />
 			<xsd:element name="detection-point" type="asconfig:detection-point" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
 	</xsd:complexType>
@@ -154,7 +207,9 @@
 	    	
 	    	<xsd:element name="correlation-config" type="asconfig:correlation-config" minOccurs="0" maxOccurs="1" />
 	    	
-	    	<xsd:element name="detection-points" type="asconfig:detection-points" minOccurs="1" maxOccurs="1" />
+	    	<xsd:element name="detection-points" type="asconfig:detection-points" minOccurs="0" maxOccurs="1" />
+	    	
+	    	<xsd:element name="rules" type="asconfig:rules" minOccurs="0" maxOccurs="1" />
 	    </xsd:sequence>
 	  </xsd:complexType>
 	</xsd:element>

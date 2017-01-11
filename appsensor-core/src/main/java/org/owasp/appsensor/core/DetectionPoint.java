@@ -102,6 +102,14 @@ public class DetectionPoint implements IAppsensorEntity {
 		setResponses(responses);
 	}
 
+	public DetectionPoint(String category, String label, Threshold threshold, Collection<Response> responses, String guid) {
+		setCategory(category);
+		setLabel(label);
+		setThreshold(threshold);
+		setResponses(responses);
+		setGuid(guid);
+	}
+
 	public String getCategory() {
 		return category;
 	}
@@ -215,6 +223,7 @@ public class DetectionPoint implements IAppsensorEntity {
 				append(label, other.getLabel()).
 				append(threshold, other.getThreshold()).
 				append(responses, other.getResponses()).
+				append(guid, other.getGuid()).
 				isEquals();
 	}
 
@@ -225,6 +234,7 @@ public class DetectionPoint implements IAppsensorEntity {
 			       append("label", label).
 			       append("threshold", threshold).
 			       append("responses", responses).
+			       append("guid", guid).
 			       toString();
 	}
 

@@ -31,6 +31,10 @@ import org.owasp.appsensor.core.configuration.server.ServerConfigurationReader;
 import org.owasp.appsensor.core.correlation.CorrelationSet;
 import org.owasp.appsensor.core.exceptions.ConfigurationException;
 import org.owasp.appsensor.core.geolocation.GeoLocation;
+import org.owasp.appsensor.core.rule.Clause;
+import org.owasp.appsensor.core.rule.Expression;
+import org.owasp.appsensor.core.rule.Rule;
+import org.owasp.appsensor.core.rule.MonitorPoint;
 import org.owasp.appsensor.core.util.XmlUtils;
 import org.xml.sax.SAXException;
 
@@ -177,6 +181,8 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 						configuration.getDetectionPoints().add(readDetectionPoint(xmlReader));
 					} else if("config:clients".equals(name)) {
 						configuration.getCustomDetectionPoints().putAll(readCustomDetectionPoints(xmlReader));
+					} else if("config:rule".equals(name)) {
+						configuration.getRules().add(readRule(xmlReader));
 					} else {
 						/** unexpected start element **/
 					}
@@ -322,6 +328,158 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 		return detectionPoint;
 	}
 
+	private Rule readRule(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
+		Rule rule = new Rule();
+		boolean finished = false;
+
+		rule.setGuid(readGuid(xmlReader));
+
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+
+			switch(event) {
+			case XMLStreamConstants.START_ELEMENT:
+				if("config:response".equals(name)) {
+					rule.getResponses().add(readResponse(xmlReader));
+				} else if("config:window".equals(name)) {
+					Interval interval = new Interval();
+					interval.setUnit(xmlReader.getAttributeValue(null, "unit").trim());
+					interval.setDuration(Integer.parseInt(xmlReader.getElementText().trim()));
+					rule.setWindow(interval);
+				} else if("config:expression".equals(name)) {
+					rule.getExpressions().add(readExpression(xmlReader));
+				} else if("config:name".equals(name)) {
+					rule.setName(xmlReader.getElementText().trim());
+				} else {
+					/** unexpected start element **/
+				}
+				break;
+			case XMLStreamConstants.END_ELEMENT:
+				if("config:rule".equals(name)) {
+					if (!validateWindows(rule)) {
+						throw new ConfigurationException("Incompatible windows set in rule: " + rule.toString());
+					}
+					finished = true;
+				} else {
+					/** unexpected end element **/
+				}
+				break;
+			default:
+				/** unused xml element - nothing to do **/
+				break;
+			}
+		}
+		return rule;
+	}
+
+	private Expression readExpression(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
+		Expression expression = new Expression();
+		boolean finished = false;
+
+		while (!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+
+			switch(event) {
+			case XMLStreamConstants.START_ELEMENT:
+				if ("config:window".equals(name)) {
+					Interval interval = new Interval();
+					interval.setUnit(xmlReader.getAttributeValue(null, "unit").trim());
+					interval.setDuration(Integer.parseInt(xmlReader.getElementText().trim()));
+					expression.setWindow(interval);
+				} else if ("config:clause".equals(name)) {
+					expression.getClauses().add(readClause(xmlReader));
+				} else {
+					/** unexpected start element **/
+				}
+				break;
+			case XMLStreamConstants.END_ELEMENT:
+				if("config:expression".equals(name)) {
+					finished = true;
+				} else {
+					/** unexpected end element **/
+				}
+				break;
+			default:
+				/** unused xml element - nothing to do **/
+				break;
+			}
+		}
+		return expression;
+	}
+
+	private Clause readClause(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
+		Clause clause = new Clause();
+		boolean finished = false;
+
+		while (!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+
+			switch(event) {
+			case XMLStreamConstants.START_ELEMENT:
+				if ("config:monitor-point".equals(name)) {
+					clause.getMonitorPoints().add((MonitorPoint)readMonitorPoint(xmlReader));
+				} else {
+					/** unexpected start element **/
+				}
+				break;
+			case XMLStreamConstants.END_ELEMENT:
+				if("config:clause".equals(name)) {
+					finished = true;
+				} else {
+					/** unexpected end element **/
+				}
+				break;
+			default:
+				/** unused xml element - nothing to do **/
+				break;
+			}
+		}
+		return clause;
+	}
+
+	private MonitorPoint readMonitorPoint(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
+		MonitorPoint monitorPoint = new MonitorPoint();
+		boolean finished = false;
+
+		monitorPoint.setGuid(readGuid(xmlReader));
+
+		while(!finished && xmlReader.hasNext()) {
+			int event = xmlReader.next();
+			String name = XmlUtils.getElementQualifiedName(xmlReader, namespaces);
+
+			switch(event) {
+				case XMLStreamConstants.START_ELEMENT:
+					if("config:category".equals(name)) {
+						monitorPoint.setCategory(xmlReader.getElementText().trim());
+					} else if("config:id".equals(name)) {
+						monitorPoint.setLabel(xmlReader.getElementText().trim());
+					} else if("config:threshold".equals(name)) {
+						monitorPoint.setThreshold(readThreshold(xmlReader));
+					} else if("config:response".equals(name)) {
+						monitorPoint.getResponses().add(readResponse(xmlReader));
+					} else {
+						/** unexpected start element **/
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if("config:monitor-point".equals(name)) {
+						finished = true;
+					} else {
+						/** unexpected end element **/
+					}
+					break;
+				default:
+					/** unused xml element - nothing to do **/
+					break;
+			}
+		}
+
+		return monitorPoint;
+	}
+
 	private HashMap<String,List<DetectionPoint>> readCustomDetectionPoints(XMLStreamReader xmlReader) throws XMLStreamException, ConfigurationException {
 		DetectionPoint detectionPoint = new DetectionPoint();
 		HashMap<String,List<DetectionPoint>> customPoints = new HashMap<String,List<DetectionPoint>>();
@@ -456,6 +614,31 @@ public class StaxServerConfigurationReader implements ServerConfigurationReader 
 		return guid;
 	}
 
+	/*
+	 * Ensures that the windows of the Rule, Expressions, and MonitorPoints don't conflict
+	 * with each other.
+	 */
+	private boolean validateWindows(Rule rule) {
+		int sumOfExpressionWindows = 0;
+
+		for (Expression expression : rule.getExpressions()) {
+			long expressionWindow = expression.getWindow().toMillis();
+
+			for (Clause clause : expression.getClauses()) {
+				for (DetectionPoint point : clause.getMonitorPoints()) {
+					/* check whether the window of a MonitorPoint
+					 * is greater than its parent Expression */
+					if (expressionWindow < point.getThreshold().getInterval().toMillis()) {
+						return false;
+					}
+				}
+			}
+			sumOfExpressionWindows += expressionWindow;
+		}
+
+		/* checks whether the sum of expression windows is greater than the rule window */
+		return rule.getWindow().toMillis() >= sumOfExpressionWindows;
+	}
 }
 
 
