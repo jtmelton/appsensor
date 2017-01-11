@@ -74,7 +74,7 @@ An example of getting one of the dependencies is shown below:
 <dependency>
 	<groupId>org.owasp.appsensor</groupId>
 	<artifactId>appsensor-core</artifactId>
-	<version>2.2.0</version>
+	<version>2.3.1</version>
 </dependency>
 ```
 
