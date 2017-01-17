@@ -5,9 +5,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.*;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.IAppsensorEntity;
 import org.owasp.appsensor.core.Interval;
 import org.owasp.appsensor.core.Response;
 
@@ -27,30 +30,43 @@ import org.owasp.appsensor.core.Response;
  *
  * @author David Scrobonia (davidscrobonia@gmail.com)
  */
-public class Rule {
+@Entity
+public class Rule implements IAppsensorEntity {
+
+	private static final long serialVersionUID = 4314918375146512865L;
+
+	@Id
+	@Column(columnDefinition = "integer")
+	@GeneratedValue
+	private String id;
 
 	/**
 	 * Unique identifier
 	 */
+	@Column
 	private String guid;
 
 	/** An optional human-friendly name for the Rule */
+	@Column
 	private String name;
 
 	/**
 	 * The window is the time all {@link Expression}s must be triggered within.
 	 * A Rule's window must be greater than or equal to the total of it's Expressions' windows.
 	 */
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Interval window;
 
 	/** The {@link Expression}s that build up a Rule
 	 * 	The order of the list corresponds to the temporal order of the expressions.
 	 */
+	@Transient
 	private ArrayList<Expression> expressions;
 
 	/**
 	 * Set of {@link Response}s associated with given Rule.
 	 */
+	@Transient
 	private Collection<Response> responses = new ArrayList<Response>();
 
 	public Rule () {
@@ -77,6 +93,23 @@ public class Rule {
 		setExpressions(expressions);
 		setResponses(responses);
 		setName(name);
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getGuid() {
+		return this.guid;
+	}
+
+	public Rule setGuid(String guid) {
+		this.guid = guid;
+		return this;
 	}
 
 	public String getName() {
@@ -112,15 +145,6 @@ public class Rule {
 
 	public Rule setResponses(Collection<Response> responses) {
 		this.responses = responses;
-		return this;
-	}
-
-	public String getGuid() {
-		return this.guid;
-	}
-
-	public Rule setGuid(String guid) {
-		this.guid = guid;
 		return this;
 	}
 
