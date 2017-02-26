@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,8 +27,10 @@ import org.owasp.appsensor.core.analysis.EventAnalysisEngine;
 import org.owasp.appsensor.core.configuration.server.ServerConfiguration;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.rule.Clause;
+import org.owasp.appsensor.core.rule.Expression;
 import org.owasp.appsensor.core.rule.Rule;
 import org.owasp.appsensor.core.rule.MonitorPoint;
+import org.owasp.appsensor.core.util.DateUtils;
 import org.owasp.appsensor.storage.memory.InMemoryAttackStore;
 import org.owasp.appsensor.storage.memory.InMemoryEventStore;
 import org.springframework.test.context.ContextConfiguration;
@@ -51,6 +54,8 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 	private static DetectionPoint detectionPoint2 = new DetectionPoint();
 
 	private static DetectionPoint detectionPoint3 = new DetectionPoint();
+
+	private static DetectionPoint detectionPoint4 = new DetectionPoint();
 
 	private static DetectionPoint detectionPoint5 = new DetectionPoint();
 
@@ -85,6 +90,9 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		detectionPoint3.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
 		detectionPoint3.setLabel("IE3");
 		detectionPoint3.setThreshold(new Threshold(13, new Interval(6, Interval.MINUTES)));
+
+		detectionPoint4.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
+		detectionPoint4.setLabel("IE4");
 
 
 		detectionPoint5.setCategory(DetectionPoint.Category.INPUT_VALIDATION);
@@ -449,6 +457,65 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		assertEventsAndAttacks(0, 2, criteria.get("rule6"));
 	}
 
+	// test the scheduling bug
+	@Test
+	public void test7_DP1andDP4orDP1andDP3thenDP1() throws Exception {
+		DateTime time = DateUtils.epoch().plusHours(100);
+		SearchCriteria ruleCriteria = new SearchCriteria().
+			setUser(bob).
+			setRule(rules.get(6)).
+			setDetectionSystemIds(detectionSystems1);
+
+		setRule(appSensorServer, rules.get(6));
+
+		addEvent(detectionPoint1, time);
+		addEvent(detectionPoint1, time.plusMinutes(1));
+		addEvent(detectionPoint1, time.plusMinutes(2));
+		addEvent(detectionPoint4, time.plusMinutes(3));
+		addEvent(detectionPoint4, time.plusMinutes(4));
+		addEvent(detectionPoint4, time.plusMinutes(5));
+		addEvent(detectionPoint4, time.plusMinutes(6));
+		addEvent(detectionPoint1, time.plusMinutes(8));
+		addEvent(detectionPoint1, time.plusMinutes(9));
+		addEvent(detectionPoint1, time.plusMinutes(10));
+
+		assertEquals(1, appSensorServer.getAttackStore().findAttacks(ruleCriteria).size());
+
+		time = time.plusHours(1);
+
+		addEvent(detectionPoint1, time);
+		addEvent(detectionPoint1, time.plusMinutes(2));
+		addEvent(detectionPoint4, time.plusMinutes(2));
+		addEvent(detectionPoint1, time.plusMinutes(3));
+		addEvent(detectionPoint4, time.plusMinutes(3));
+		addEvent(detectionPoint3, time.plusMinutes(3));
+		addEvent(detectionPoint3, time.plusMinutes(3).plusSeconds(30));
+		addEvent(detectionPoint4, time.plusMinutes(4));
+		addEvent(detectionPoint3, time.plusMinutes(4));
+		addEvent(detectionPoint3, time.plusMinutes(4).plusSeconds(30));
+		addEvent(detectionPoint3, time.plusMinutes(5));
+		addEvent(detectionPoint3, time.plusMinutes(5).plusSeconds(30));
+		addEvent(detectionPoint3, time.plusMinutes(6));
+		addEvent(detectionPoint3, time.plusMinutes(6).plusSeconds(30));
+		addEvent(detectionPoint3, time.plusMinutes(7));
+		addEvent(detectionPoint3, time.plusMinutes(7).plusSeconds(30));
+		addEvent(detectionPoint3, time.plusMinutes(8));
+		addEvent(detectionPoint3, time.plusMinutes(8).plusSeconds(30));
+		addEvent(detectionPoint3, time.plusMinutes(9));
+		addEvent(detectionPoint4, time.plusMinutes(11));
+		addEvent(detectionPoint1, time.plusMinutes(13));
+		addEvent(detectionPoint1, time.plusMinutes(14));
+		addEvent(detectionPoint1, time.plusMinutes(15));
+
+		assertEquals(2, appSensorServer.getAttackStore().findAttacks(ruleCriteria).size());
+	}
+
+	// this method doesn't actually wait, it just adds events with a predetermined time
+	// does not check anything
+	private void addEvent(DetectionPoint detectionPoint, DateTime time) {
+		appSensorClient.getEventManager().addEvent(new Event(bob, detectionPoint, time.toString(), new DetectionSystem("localhostme")));
+	}
+
 	//assumes no rules will be triggered until last event
 	private void generateEvents (int time, DetectionPoint detectionPoint, int eventCount, String ruleName) throws Exception {
 		int attackCount = appSensorServer.getAttackStore().findAttacks(criteria.get(ruleName)).size();
@@ -485,6 +552,7 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		// intervals
 		Interval minutes5 = new Interval(5, Interval.MINUTES);
 		Interval minutes6 = new Interval(6, Interval.MINUTES);
+		Interval minutes10 = new Interval(10, Interval.MINUTES);
 		Interval minutes16 = new Interval(16, Interval.MINUTES);
 
 		// detection points
@@ -492,6 +560,7 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		point1.setGuid("00000000-0000-0000-0000-000000000000");
 		MonitorPoint point2 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE2", new Threshold(12, minutes5)));
 		MonitorPoint point3 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE3", new Threshold(13, minutes6)));
+		MonitorPoint point4 = new MonitorPoint(new DetectionPoint(DetectionPoint.Category.INPUT_VALIDATION, "IE4", new Threshold(4, minutes10)));
 
 		// clauses
 		ArrayList<DetectionPoint> points1 = new ArrayList<DetectionPoint>();
@@ -504,11 +573,19 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		ArrayList<DetectionPoint> points2and3 = new ArrayList<DetectionPoint>();
 		points2and3.add(point2);
 		points2and3.add(point3);
+		ArrayList<DetectionPoint> points1and3 = new ArrayList<DetectionPoint>();
+		points1and3.add(point1);
+		points1and3.add(point3);
+		ArrayList<DetectionPoint> points1and4 = new ArrayList<DetectionPoint>();
+		points1and4.add(point1);
+		points1and4.add(point4);
 
 		Clause clause1 = new Clause(points1);
 		Clause clause1and2 = new Clause(points1and2);
 		Clause clause2 = new Clause(points2);
 		Clause clause2and3 = new Clause(points2and3);
+		Clause clause1and3 = new Clause(points1and3);
+		Clause clause1and4 = new Clause(points1and4);
 
 		// responses
 		ArrayList<Response> responses = generateResponses();
@@ -577,7 +654,19 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		expressions1then2then1or2.add(expression2);
 		expressions1then2then1or2.add(expression1or2);
 
-		configuredRules.add(new Rule("Rule 7", minutes16, expressions1then2then1or2, responses));
+		configuredRules.add(new Rule("Rule 6", minutes16, expressions1then2then1or2, responses));
+
+		//rule 7: DP1 AND DP4 OR DP1 AND DP3 THEN DP1
+		ArrayList<Clause> clauses1and4or1and3 = new ArrayList<Clause>();
+		clauses1and4or1and3.add(clause1and4);
+		clauses1and4or1and3.add(clause1and3);
+
+		Expression expression1and4or1and3 = new Expression(minutes10, clauses1and4or1and3);
+		ArrayList<Expression> expressions1and4or1and3then1 = new ArrayList<Expression>();
+		expressions1and4or1and3then1.add(expression1and4or1and3);
+		expressions1and4or1and3then1.add(expression1);
+
+		configuredRules.add(new Rule("Rule 7", minutes16, expressions1and4or1and3then1, responses));
 
 		return configuredRules;
 	}
