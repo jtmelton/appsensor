@@ -29,7 +29,7 @@ Each deploy:
 		- need to deploy and activate release profile (-P release)
 		- this is needed to execute the gpg/javadoc/source plugins
 	- create documentation folder (for non-RC releases)
-		- create a v${version} folder (for 2.1.2, it would be 'v2.1.2')
+		- create a v${version} folder (for 2.1.2, it would be 'v2.1.2') in appsensor-dot-org/docs
 		- build the javadoc
 			- run 'mvn javadoc:aggregate'
 			- copy the 'target/site/apidocs' folder to the 'appsensor-dot-org/docs/${version}/javadoc'
