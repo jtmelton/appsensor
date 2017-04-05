@@ -12,7 +12,7 @@ Changes in version 2.4 (???)
 Changes in version 2.3.2 (2017/04/05)
 --------------------------------------
 
-* Added basic docker-compose starter for getting started example
+* Resolved spring security integration issue found by customer
   (https://github.com/jtmelton/appsensor/issues/74)
 
 Changes in version 2.3.1 (2017/01/05)
