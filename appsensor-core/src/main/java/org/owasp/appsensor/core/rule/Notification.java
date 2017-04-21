@@ -72,4 +72,20 @@ public class Notification extends Interval {
 			}
 		};
 	}
+
+	public static Comparator<Notification> getEndTimeAscendingComparator() {
+		return new Comparator<Notification>() {
+			public int compare(Notification n1, Notification n2) {
+				if (n1.getEndTime().isBefore(n2.getEndTime())) {
+					return -1;
+				}
+				else if (n1.getEndTime().isAfter(n2.getEndTime())) {
+					return 1;
+				}
+				else {
+					return 0;
+				}
+			}
+		};
+	}
 }
