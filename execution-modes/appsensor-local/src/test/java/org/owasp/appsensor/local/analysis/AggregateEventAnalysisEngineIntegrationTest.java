@@ -510,6 +510,40 @@ public class AggregateEventAnalysisEngineIntegrationTest {
 		assertEquals(2, appSensorServer.getAttackStore().findAttacks(ruleCriteria).size());
 	}
 
+	// test the earliest attack bug
+		@Test
+		public void test8_DP1() throws Exception {
+			DateTime time = DateUtils.epoch().plusHours(100);
+			SearchCriteria ruleCriteria = new SearchCriteria().
+				setUser(bob).
+				setRule(rules.get(0)).
+				setDetectionSystemIds(detectionSystems1);
+
+			setRule(appSensorServer, rules.get(0));
+
+			addEvent(detectionPoint1, time);
+			addEvent(detectionPoint1, time.plusMinutes(1));
+			addEvent(detectionPoint1, time.plusMinutes(2));
+
+			assertEquals(1, appSensorServer.getAttackStore().findAttacks(ruleCriteria).size());
+
+			addEvent(detectionPoint1, time.plusMinutes(3));
+			addEvent(detectionPoint1, time.plusMinutes(4));
+
+			assertEquals(1, appSensorServer.getAttackStore().findAttacks(ruleCriteria).size());
+
+			time = time.plusHours(1);
+
+			addEvent(detectionPoint1, time);
+
+			assertEquals(1, appSensorServer.getAttackStore().findAttacks(ruleCriteria).size());
+
+			addEvent(detectionPoint1, time.plusMinutes(1));
+			addEvent(detectionPoint1, time.plusMinutes(2));
+
+			assertEquals(2, appSensorServer.getAttackStore().findAttacks(ruleCriteria).size());
+		}
+
 	// this method doesn't actually wait, it just adds events with a predetermined time
 	// does not check anything
 	private void addEvent(DetectionPoint detectionPoint, DateTime time) {
