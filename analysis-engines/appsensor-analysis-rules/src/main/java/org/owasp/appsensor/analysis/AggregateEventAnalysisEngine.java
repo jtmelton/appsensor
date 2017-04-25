@@ -274,9 +274,13 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 	protected ArrayList<Event> getApplicableEvents(Event triggerEvent, Rule rule) {
 		ArrayList<Event> events = new ArrayList<Event>();
 
+		DateTime ruleStartTime = DateUtils.fromString(triggerEvent.getTimestamp()).minus(rule.getWindow().toMillis());
+		DateTime lastAttackTime = findMostRecentAttackTime(triggerEvent, rule);
+		DateTime earliest = ruleStartTime.isAfter(lastAttackTime) ? ruleStartTime : lastAttackTime;
+
 		SearchCriteria criteria = new SearchCriteria().
 				setUser(triggerEvent.getUser()).
-				setEarliest(findMostRecentAttackTime(triggerEvent, rule).plus(1).toString()).
+				setEarliest(earliest.plus(1).toString()).
 				setRule(rule).
 				setDetectionSystemIds(appSensorServer.getConfiguration().getRelatedDetectionSystems(triggerEvent.getDetectionSystem()));
 
