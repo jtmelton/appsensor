@@ -309,7 +309,7 @@ public class AggregateEventAnalysisEngine extends EventAnalysisEngine {
 		Collection<Attack> attacks = appSensorServer.getAttackStore().findAttacks(criteria);
 
 		for (Attack attack : attacks) {
-			if (attack.getRule().equals(rule)) {
+			if (attack.getRule().guidMatches(rule)) {
 				if (DateUtils.fromString(attack.getTimestamp()).isAfter(newest)) {
 					newest = DateUtils.fromString(attack.getTimestamp());
 				}

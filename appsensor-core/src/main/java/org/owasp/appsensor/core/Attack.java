@@ -168,6 +168,18 @@ public class Attack implements IAppsensorEntity {
 		this.metadata = metadata;
 	}
 
+	public String getName() {
+		String name = "";
+
+		if (this.rule == null) {
+			name = this.detectionPoint.getLabel();
+		} else {
+			name = this.rule.getName() == null ? this.rule.getGuid() : this.rule.getName();
+		}
+
+		return name;
+	}
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).

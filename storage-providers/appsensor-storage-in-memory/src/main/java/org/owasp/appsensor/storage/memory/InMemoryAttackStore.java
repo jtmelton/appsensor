@@ -37,12 +37,9 @@ public class InMemoryAttackStore extends AttackStore {
 	 */
 	@Override
 	public void addAttack(Attack attack) {
-		if (attack.getRule() == null) {
-			logger.warn("Security attack " + attack.getDetectionPoint().getLabel() + " triggered by user: " + attack.getUser().getUsername());
-		}
-		else {
-			logger.warn("Security attack " + attack.getRule().getName() + " triggered by user: " + attack.getUser().getUsername());
-		}
+
+		logger.warn("Security attack " + attack.getName() + " triggered by user: " + attack.getUser().getUsername());
+
 		attacks.add(attack);
 
 		super.notifyListeners(attack);
