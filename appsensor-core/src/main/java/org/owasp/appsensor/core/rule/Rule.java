@@ -6,9 +6,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.IAppsensorEntity;
 import org.owasp.appsensor.core.Interval;
@@ -55,18 +57,21 @@ public class Rule implements IAppsensorEntity {
 	 * A Rule's window must be greater than or equal to the total of it's Expressions' windows.
 	 */
 	@ManyToOne(cascade = CascadeType.ALL)
+	@JsonProperty("window")
 	private Interval window;
 
 	/** The {@link Expression}s that build up a Rule
 	 * 	The order of the list corresponds to the temporal order of the expressions.
 	 */
 	@Transient
+	@JsonProperty("expressions")
 	private ArrayList<Expression> expressions;
 
 	/**
 	 * Set of {@link Response}s associated with given Rule.
 	 */
 	@Transient
+	@JsonProperty("responses")
 	private Collection<Response> responses = new ArrayList<Response>();
 
 	public Rule () {
@@ -121,28 +126,37 @@ public class Rule implements IAppsensorEntity {
 		return this;
 	}
 
+	@XmlTransient
+	@JsonProperty("window")
 	public Interval getWindow() {
 		return this.window;
 	}
 
+	@JsonProperty("window")
 	public Rule setWindow(Interval window) {
 		this.window = window;
 		return this;
 	}
 
+	@XmlTransient
+	@JsonProperty("expressions")
 	public ArrayList<Expression> getExpressions() {
 		return this.expressions;
 	}
 
+	@JsonProperty("expressions")
 	public Rule setExpressions(ArrayList<Expression> expression) {
 		this.expressions = expression;
 		return this;
 	}
 
+	@XmlTransient
+	@JsonProperty("responses")
 	public Collection<Response> getResponses() {
 		return this.responses;
 	}
 
+	@JsonProperty("responses")
 	public Rule setResponses(Collection<Response> responses) {
 		this.responses = responses;
 		return this;
@@ -185,6 +199,19 @@ public class Rule implements IAppsensorEntity {
 			}
 		}
 		return false;
+	}
+
+	/* checks whether other rule has same guid, i.e. is the same rule */
+	public boolean guidMatches(Rule other) {
+		if (other == null) {
+			throw new IllegalArgumentException("other must be non-null");
+		}
+
+		boolean matches = true;
+
+		matches &= (guid != null) ? guid.equals(other.getGuid()) : true;
+
+		return matches;
 	}
 
 	@Override
