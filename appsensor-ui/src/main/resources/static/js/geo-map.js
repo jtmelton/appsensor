@@ -203,9 +203,9 @@ var map = new Datamap({
 	},
 	arcConfig: {
   		strokeColor: '#6E6E6E',
-  		strokeWidth: 5,
-  		arcSharpness: 3,
-  		animationSpeed: 10000
+  		strokeWidth: 1,
+  		arcSharpness: 1,
+  		animationSpeed: 400
 	}
 });
 
@@ -230,8 +230,8 @@ function queueDeletion(dataArray, timeout) {
 function add(element, dataArray, bubbleArray) {
 	dataArray.push(element);
 	bubbleArray.push(element);
-	queueDeletion(dataArray, 20000);
-	queueDeletion(bubbleArray, 10000);
+	queueDeletion(dataArray, 800);
+	queueDeletion(bubbleArray, 2000);
 	addActivityMessage(element);
 }
 
@@ -284,10 +284,10 @@ function displayData() {
 		
 		window.setTimeout(function() {
 			map.bubbles(bubblejoined, {popupTemplate: popoverView});
-		}, 10000);
+		}, 0);
 		
-		displayData();
-	    }, 1750);
+    displayData();
+    }, 0);
 }
 
 var eventCounter = 0;
