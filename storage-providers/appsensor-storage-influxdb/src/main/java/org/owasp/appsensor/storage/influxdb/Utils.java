@@ -9,6 +9,7 @@ import org.influxdb.dto.QueryResult;
 import org.joda.time.DateTime;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.User;
+import org.owasp.appsensor.core.rule.Rule;
 import org.owasp.appsensor.core.util.DateUtils;
 import org.springframework.core.env.Environment;
 
@@ -40,6 +41,10 @@ public class Utils {
   public static final String THRESHOLD_COUNT = "thresholdCount";
   public static final String THRESHOLD_INTERVAL_DURATION = "thresholdIntervalDuration";
   public static final String THRESHOLD_INTERVAL_UNIT = "thresholdIntervalUnit";
+  public static final String RULE_GUID = "ruleGuid";
+  public static final String RULE_NAME = "ruleName";
+  public static final String RULE_WINDOW_DURATION = "ruleWindowDuration";
+  public static final String RULE_WINDOW_UNIT = "ruleWindowUnit";
   public static final String RESPONSE_ACTION = "responseAction";
   public static final String RESPONSE_INTERVAL_DURATION = "responseIntervalDuration";
   public static final String RESPONSE_INTERVAL_UNIT = "responseIntervalUnit";
@@ -51,7 +56,7 @@ public class Utils {
   public static final String INFLUXDB_PASSWORD = "APPSENSOR_INFLUXDB_PASSWORD";
 
   // query mode, whether or not to look for detection point related search criteria
-  public enum QueryMode {IGNORE_DETECTION_POINT, CONSIDER_DETECTION_POINT}
+  public enum QueryMode {IGNORE_DETECTION_POINT_OR_RULE, CONSIDER_DETECTION_POINT_OR_RULE}
 
   public synchronized static void createDatabaseIfNotExists(InfluxDB influxDB) {
     Preconditions.checkNotNull(influxDB, "InfluxDB reference must not be null");
@@ -78,6 +83,7 @@ public class Utils {
   public static String constructInfluxQL(String measurement,
                                          User user,
                                          DetectionPoint detectionPoint,
+                                         Rule rule,
                                          Collection<String> detectionSystemIds,
                                          DateTime earliest,
                                          QueryMode queryMode) {
@@ -93,29 +99,13 @@ public class Utils {
       clauses.add(Utils.DETECTION_SYSTEM + " = '" + detectionSystemIds.iterator().next() + "'");
     }
 
-    if(QueryMode.CONSIDER_DETECTION_POINT == queryMode) {
+    if(QueryMode.CONSIDER_DETECTION_POINT_OR_RULE == queryMode) {
       if (detectionPoint != null) {
-        if (detectionPoint.getCategory() != null) {
-          clauses.add(Utils.CATEGORY + " = '" + detectionPoint.getCategory() + "'");
-        }
+        clauses.add(constructDetectionPointSqlString(detectionPoint));
+      }
 
-        if (detectionPoint.getLabel() != null) {
-          clauses.add(Utils.LABEL + " = '" + detectionPoint.getLabel() + "'");
-        }
-
-        if (detectionPoint.getThreshold() != null) {
-          clauses.add(Utils.THRESHOLD_COUNT + " = '" + detectionPoint.getThreshold().getCount() + "'");
-
-          if (detectionPoint.getThreshold().getInterval() != null) {
-            clauses.add(
-                Utils.THRESHOLD_INTERVAL_DURATION + " = '" + detectionPoint.getThreshold().getInterval().getDuration() + "'");
-
-            if (detectionPoint.getThreshold().getInterval().getUnit() != null) {
-              clauses
-                  .add(Utils.THRESHOLD_INTERVAL_UNIT + " = '" + detectionPoint.getThreshold().getInterval().getUnit() + "'");
-            }
-          }
-        }
+      if (rule != null) {
+	     clauses.addAll(constructRuleSqlClauses(rule));
       }
     }
 
@@ -137,6 +127,64 @@ public class Utils {
     return sql;
   }
 
+  protected static String constructDetectionPointSqlString(DetectionPoint detectionPoint) {
+    List<String> clauses = new ArrayList<>();
+    String sql = "";
+
+    if (detectionPoint.getCategory() != null) {
+      clauses.add(Utils.CATEGORY + " = '" + detectionPoint.getCategory() + "'");
+    }
+
+    if (detectionPoint.getLabel() != null) {
+      clauses.add(Utils.LABEL + " = '" + detectionPoint.getLabel() + "'");
+    }
+
+    if (detectionPoint.getThreshold() != null) {
+      clauses.add(Utils.THRESHOLD_COUNT + " = '" + detectionPoint.getThreshold().getCount() + "'");
+
+      if (detectionPoint.getThreshold().getInterval() != null) {
+        clauses.add(
+            Utils.THRESHOLD_INTERVAL_DURATION + " = '" + detectionPoint.getThreshold().getInterval().getDuration() + "'");
+
+        if (detectionPoint.getThreshold().getInterval().getUnit() != null) {
+          clauses
+              .add(Utils.THRESHOLD_INTERVAL_UNIT + " = '" + detectionPoint.getThreshold().getInterval().getUnit() + "'");
+        }
+      }
+    }
+
+    int i = 0;
+    for(String clause : clauses) {
+      sql += (i == 0) ? "" : " AND ";
+      sql += clause;
+
+      i++;
+    }
+
+    return sql;
+  }
+
+  protected static List<String> constructRuleSqlClauses(Rule rule) {
+	List<String> clauses = new ArrayList<>();
+
+    if (rule.getGuid() != null) {
+      clauses.add(Utils.RULE_GUID + " = '" + rule.getGuid() + "'");
+    }
+
+    if (rule.getName() != null) {
+      clauses.add(Utils.RULE_NAME + " = '" + rule.getName() + "'");
+    }
+
+    if (rule.getWindow() != null) {
+      clauses.add(Utils.RULE_WINDOW_DURATION + " = '" + rule.getWindow().getDuration() + "'");
+
+      if (rule.getWindow().getUnit() != null) {
+        clauses.add(Utils.RULE_WINDOW_UNIT + " = '" + rule.getWindow().getUnit() + "'");
+      }
+    }
+
+    return clauses;
+  }
 
   public static boolean isInitializedProperly(Environment environment) {
     boolean initializedProperly = StringUtils.isNotBlank(environment.getProperty(INFLUXDB_CONNECTION_STRING)) &&

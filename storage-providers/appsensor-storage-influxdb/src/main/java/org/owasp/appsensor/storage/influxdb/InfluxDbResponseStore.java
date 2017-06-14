@@ -18,6 +18,7 @@ import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.logging.Loggable;
+import org.owasp.appsensor.core.rule.Rule;
 import org.owasp.appsensor.core.storage.ResponseStore;
 import org.owasp.appsensor.core.util.DateUtils;
 import org.slf4j.Logger;
@@ -96,10 +97,11 @@ public class InfluxDbResponseStore extends ResponseStore {
 
     User user = criteria.getUser();
     DetectionPoint detectionPoint = criteria.getDetectionPoint();
+    Rule rule = criteria.getRule();
     Collection<String> detectionSystemIds = criteria.getDetectionSystemIds();
     DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 
-    String influxQL = Utils.constructInfluxQL(Utils.RESPONSES, user, detectionPoint, detectionSystemIds, earliest, Utils.QueryMode.IGNORE_DETECTION_POINT);
+    String influxQL = Utils.constructInfluxQL(Utils.RESPONSES, user, detectionPoint, rule, detectionSystemIds, earliest, Utils.QueryMode.IGNORE_DETECTION_POINT_OR_RULE);
 
     Query query = new Query(influxQL, Utils.DATABASE);
 
@@ -157,4 +159,3 @@ public class InfluxDbResponseStore extends ResponseStore {
   }
 
 }
-
