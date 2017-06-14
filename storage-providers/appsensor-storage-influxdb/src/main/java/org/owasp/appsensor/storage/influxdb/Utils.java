@@ -1,23 +1,19 @@
 package org.owasp.appsensor.storage.influxdb;
 
-import com.google.common.base.Preconditions;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.QueryResult;
 import org.joda.time.DateTime;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.rule.Rule;
-import org.owasp.appsensor.core.util.DateUtils;
 import org.springframework.core.env.Environment;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
+import com.google.common.base.Preconditions;
 
 /**
  * Created by john.melton on 3/11/16.

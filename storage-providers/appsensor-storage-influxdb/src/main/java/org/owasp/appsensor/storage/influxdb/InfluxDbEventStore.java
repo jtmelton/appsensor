@@ -1,10 +1,14 @@
 package org.owasp.appsensor.storage.influxdb;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Utf8;
-import com.google.gson.Gson;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.StringUtils;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Point;
@@ -13,7 +17,6 @@ import org.influxdb.dto.QueryResult;
 import org.joda.time.DateTime;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.Event;
-import org.owasp.appsensor.core.Threshold;
 import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.listener.EventListener;
@@ -24,14 +27,8 @@ import org.owasp.appsensor.core.util.DateUtils;
 import org.slf4j.Logger;
 import org.springframework.core.env.Environment;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 
 /**
  * This is an influxdb implementation of the {@link EventStore}.
