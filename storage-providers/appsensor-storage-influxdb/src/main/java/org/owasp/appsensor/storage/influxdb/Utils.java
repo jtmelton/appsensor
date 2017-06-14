@@ -34,7 +34,7 @@ public class Utils {
   // fields / tags
   public static final String LABEL = "label";
   public static final String USERNAME = "username";
-  public static final String TIMESTAMP = "timestamp";
+  public static final String TIMESTAMP = "time";
   public static final String DETECTION_SYSTEM = "detectionSystem";
   public static final String CATEGORY = "category";
   public static final String THRESHOLD_COUNT = "thresholdCount";
