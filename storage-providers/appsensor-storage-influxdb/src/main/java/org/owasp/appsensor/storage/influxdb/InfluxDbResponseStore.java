@@ -101,7 +101,7 @@ public class InfluxDbResponseStore extends ResponseStore {
     Collection<String> detectionSystemIds = criteria.getDetectionSystemIds();
     DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 
-    String influxQL = Utils.constructInfluxQL(Utils.RESPONSES, user, detectionPoint, rule, detectionSystemIds, earliest, Utils.QueryMode.IGNORE_DETECTION_POINT_OR_RULE);
+    String influxQL = Utils.constructInfluxQL(Utils.RESPONSES, user, detectionPoint, rule, detectionSystemIds, earliest, Utils.QueryMode.CONSIDER_THRESHOLDS);
 
     Query query = new Query(influxQL, Utils.DATABASE);
 

@@ -74,9 +74,6 @@ public class InfluxDbEventStore extends EventStore {
         .tag(Utils.DETECTION_SYSTEM, event.getDetectionSystem().getDetectionSystemId())
         .tag(Utils.CATEGORY, event.getDetectionPoint().getCategory())
         .tag(Utils.LABEL, event.getDetectionPoint().getLabel())
-        .tag(Utils.THRESHOLD_COUNT, String.valueOf(event.getDetectionPoint().getThreshold().getCount()))
-		.tag(Utils.THRESHOLD_INTERVAL_DURATION, String.valueOf( event.getDetectionPoint().getThreshold().getInterval().getDuration() ) )
-		.tag(Utils.THRESHOLD_INTERVAL_UNIT, event.getDetectionPoint().getThreshold().getInterval().getUnit())
         .field(Utils.JSON_CONTENT, gson.toJson(event))
         .build();
 
@@ -106,7 +103,7 @@ public class InfluxDbEventStore extends EventStore {
       detectionPoint, null,
       detectionSystemIds,
       earliest,
-      Utils.QueryMode.CONSIDER_DETECTION_POINT_OR_RULE);
+      Utils.QueryMode.IGNORE_THRESHOLDS);
 
     if (rule != null) {
       influxQL += " AND (";
@@ -116,7 +113,7 @@ public class InfluxDbEventStore extends EventStore {
         influxQL += (i == 0) ? "" : " OR ";
 
         influxQL += "(";
-        influxQL += Utils.constructDetectionPointSqlString(point);
+        influxQL += Utils.constructDetectionPointSqlString(point, Utils.QueryMode.IGNORE_THRESHOLDS);
         influxQL += ")";
 
         i++;

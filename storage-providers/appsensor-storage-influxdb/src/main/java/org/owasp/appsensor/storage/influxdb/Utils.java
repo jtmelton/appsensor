@@ -56,7 +56,7 @@ public class Utils {
   public static final String INFLUXDB_PASSWORD = "APPSENSOR_INFLUXDB_PASSWORD";
 
   // query mode, whether or not to look for detection point related search criteria
-  public enum QueryMode {IGNORE_DETECTION_POINT_OR_RULE, CONSIDER_DETECTION_POINT_OR_RULE}
+  public enum QueryMode {IGNORE_THRESHOLDS, CONSIDER_THRESHOLDS}
 
   public synchronized static void createDatabaseIfNotExists(InfluxDB influxDB) {
     Preconditions.checkNotNull(influxDB, "InfluxDB reference must not be null");
@@ -99,14 +99,12 @@ public class Utils {
       clauses.add(Utils.DETECTION_SYSTEM + " = '" + detectionSystemIds.iterator().next() + "'");
     }
 
-    if(QueryMode.CONSIDER_DETECTION_POINT_OR_RULE == queryMode) {
-      if (detectionPoint != null) {
-        clauses.add(constructDetectionPointSqlString(detectionPoint));
-      }
+	if (detectionPoint != null) {
+		clauses.add(constructDetectionPointSqlString(detectionPoint, queryMode));
+	}
 
-      if (rule != null) {
-	     clauses.addAll(constructRuleSqlClauses(rule));
-      }
+    if (rule != null) {
+    	clauses.addAll(constructRuleSqlClauses(rule));
     }
 
     if(earliest != null) {
@@ -127,7 +125,7 @@ public class Utils {
     return sql;
   }
 
-  protected static String constructDetectionPointSqlString(DetectionPoint detectionPoint) {
+  protected static String constructDetectionPointSqlString(DetectionPoint detectionPoint, QueryMode mode) {
     List<String> clauses = new ArrayList<>();
     String sql = "";
 
@@ -139,18 +137,20 @@ public class Utils {
       clauses.add(Utils.LABEL + " = '" + detectionPoint.getLabel() + "'");
     }
 
-    if (detectionPoint.getThreshold() != null) {
-      clauses.add(Utils.THRESHOLD_COUNT + " = '" + detectionPoint.getThreshold().getCount() + "'");
+    if (QueryMode.CONSIDER_THRESHOLDS == mode) {
+	    if (detectionPoint.getThreshold() != null) {
+	      clauses.add(Utils.THRESHOLD_COUNT + " = '" + detectionPoint.getThreshold().getCount() + "'");
 
-      if (detectionPoint.getThreshold().getInterval() != null) {
-        clauses.add(
-            Utils.THRESHOLD_INTERVAL_DURATION + " = '" + detectionPoint.getThreshold().getInterval().getDuration() + "'");
+	      if (detectionPoint.getThreshold().getInterval() != null) {
+	        clauses.add(
+	            Utils.THRESHOLD_INTERVAL_DURATION + " = '" + detectionPoint.getThreshold().getInterval().getDuration() + "'");
 
-        if (detectionPoint.getThreshold().getInterval().getUnit() != null) {
-          clauses
-              .add(Utils.THRESHOLD_INTERVAL_UNIT + " = '" + detectionPoint.getThreshold().getInterval().getUnit() + "'");
-        }
-      }
+	        if (detectionPoint.getThreshold().getInterval().getUnit() != null) {
+	          clauses
+	              .add(Utils.THRESHOLD_INTERVAL_UNIT + " = '" + detectionPoint.getThreshold().getInterval().getUnit() + "'");
+	        }
+	      }
+	    }
     }
 
     int i = 0;

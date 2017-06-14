@@ -98,7 +98,7 @@ public class InfluxDbAttackStore extends AttackStore {
     Collection<String> detectionSystemIds = criteria.getDetectionSystemIds();
     DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 
-    String influxQL = Utils.constructInfluxQL(Utils.ATTACKS, user, detectionPoint, rule, detectionSystemIds, earliest, Utils.QueryMode.CONSIDER_DETECTION_POINT_OR_RULE);
+    String influxQL = Utils.constructInfluxQL(Utils.ATTACKS, user, detectionPoint, rule, detectionSystemIds, earliest, Utils.QueryMode.CONSIDER_THRESHOLDS);
     Query query = new Query(influxQL, Utils.DATABASE);
 
     QueryResult results = influxDB.query(query);
