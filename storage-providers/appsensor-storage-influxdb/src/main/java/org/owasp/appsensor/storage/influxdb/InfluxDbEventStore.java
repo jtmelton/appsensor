@@ -1,28 +1,5 @@
 package org.owasp.appsensor.storage.influxdb;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Utf8;
-import com.google.gson.Gson;
-
-import org.apache.commons.lang3.StringUtils;
-import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
-import org.influxdb.dto.Point;
-import org.influxdb.dto.Query;
-import org.influxdb.dto.QueryResult;
-import org.joda.time.DateTime;
-import org.owasp.appsensor.core.DetectionPoint;
-import org.owasp.appsensor.core.Event;
-import org.owasp.appsensor.core.Threshold;
-import org.owasp.appsensor.core.User;
-import org.owasp.appsensor.core.criteria.SearchCriteria;
-import org.owasp.appsensor.core.listener.EventListener;
-import org.owasp.appsensor.core.logging.Loggable;
-import org.owasp.appsensor.core.storage.EventStore;
-import org.owasp.appsensor.core.util.DateUtils;
-import org.slf4j.Logger;
-import org.springframework.core.env.Environment;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,6 +8,27 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Point;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import org.joda.time.DateTime;
+import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.Event;
+import org.owasp.appsensor.core.User;
+import org.owasp.appsensor.core.criteria.SearchCriteria;
+import org.owasp.appsensor.core.listener.EventListener;
+import org.owasp.appsensor.core.logging.Loggable;
+import org.owasp.appsensor.core.rule.Rule;
+import org.owasp.appsensor.core.storage.EventStore;
+import org.owasp.appsensor.core.util.DateUtils;
+import org.slf4j.Logger;
+import org.springframework.core.env.Environment;
+
+import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 
 /**
  * This is an influxdb implementation of the {@link EventStore}.
@@ -94,10 +92,32 @@ public class InfluxDbEventStore extends EventStore {
 
     User user = criteria.getUser();
     DetectionPoint detectionPoint = criteria.getDetectionPoint();
+    Rule rule = criteria.getRule();
     Collection<String> detectionSystemIds = criteria.getDetectionSystemIds();
     DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 
-    String influxQL = Utils.constructInfluxQL(Utils.EVENTS, user, detectionPoint, detectionSystemIds, earliest, Utils.QueryMode.CONSIDER_DETECTION_POINT);
+    String influxQL = Utils.constructInfluxQL(Utils.EVENTS, user,
+      detectionPoint, null,
+      detectionSystemIds,
+      earliest,
+      Utils.QueryMode.IGNORE_THRESHOLDS);
+
+    if (rule != null) {
+      influxQL += " AND (";
+
+      int i = 0;
+      for (DetectionPoint point : rule.getAllDetectionPoints()) {
+        influxQL += (i == 0) ? "" : " OR ";
+
+        influxQL += "(";
+        influxQL += Utils.constructDetectionPointSqlString(point, Utils.QueryMode.IGNORE_THRESHOLDS);
+        influxQL += ")";
+
+        i++;
+      }
+
+      influxQL += ")";
+    }
 
     Query query = new Query(influxQL, Utils.DATABASE);
 

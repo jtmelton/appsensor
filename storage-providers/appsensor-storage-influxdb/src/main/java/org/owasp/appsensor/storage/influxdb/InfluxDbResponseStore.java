@@ -1,7 +1,13 @@
 package org.owasp.appsensor.storage.influxdb;
 
-import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
@@ -9,35 +15,19 @@ import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.joda.time.DateTime;
-import org.owasp.appsensor.core.Attack;
 import org.owasp.appsensor.core.DetectionPoint;
-import org.owasp.appsensor.core.DetectionSystem;
-import org.owasp.appsensor.core.Interval;
-import org.owasp.appsensor.core.KeyValuePair;
 import org.owasp.appsensor.core.Response;
 import org.owasp.appsensor.core.User;
 import org.owasp.appsensor.core.criteria.SearchCriteria;
 import org.owasp.appsensor.core.logging.Loggable;
+import org.owasp.appsensor.core.rule.Rule;
 import org.owasp.appsensor.core.storage.ResponseStore;
 import org.owasp.appsensor.core.util.DateUtils;
 import org.slf4j.Logger;
 import org.springframework.core.env.Environment;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 
 /**
  * Created by john.melton on 3/10/16.
@@ -96,10 +86,11 @@ public class InfluxDbResponseStore extends ResponseStore {
 
     User user = criteria.getUser();
     DetectionPoint detectionPoint = criteria.getDetectionPoint();
+    Rule rule = criteria.getRule();
     Collection<String> detectionSystemIds = criteria.getDetectionSystemIds();
     DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 
-    String influxQL = Utils.constructInfluxQL(Utils.RESPONSES, user, detectionPoint, detectionSystemIds, earliest, Utils.QueryMode.IGNORE_DETECTION_POINT);
+    String influxQL = Utils.constructInfluxQL(Utils.RESPONSES, user, detectionPoint, rule, detectionSystemIds, earliest, Utils.QueryMode.CONSIDER_THRESHOLDS);
 
     Query query = new Query(influxQL, Utils.DATABASE);
 
@@ -157,4 +148,3 @@ public class InfluxDbResponseStore extends ResponseStore {
   }
 
 }
-

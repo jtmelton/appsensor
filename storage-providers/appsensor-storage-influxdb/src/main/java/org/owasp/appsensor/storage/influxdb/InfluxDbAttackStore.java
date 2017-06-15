@@ -1,34 +1,34 @@
 package org.owasp.appsensor.storage.influxdb;
 
-import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
-
-import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
-import org.influxdb.dto.Point;
-import org.influxdb.dto.Query;
-import org.influxdb.dto.QueryResult;
-import org.joda.time.DateTime;
-import org.owasp.appsensor.core.Attack;
-import org.owasp.appsensor.core.DetectionPoint;
-import org.owasp.appsensor.core.Event;
-import org.owasp.appsensor.core.User;
-import org.owasp.appsensor.core.criteria.SearchCriteria;
-import org.owasp.appsensor.core.logging.Loggable;
-import org.owasp.appsensor.core.storage.AttackStore;
-import org.owasp.appsensor.core.util.DateUtils;
-import org.slf4j.Logger;
-import org.springframework.core.env.Environment;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Point;
+import org.influxdb.dto.Point.Builder;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
+import org.joda.time.DateTime;
+import org.owasp.appsensor.core.Attack;
+import org.owasp.appsensor.core.DetectionPoint;
+import org.owasp.appsensor.core.User;
+import org.owasp.appsensor.core.criteria.SearchCriteria;
+import org.owasp.appsensor.core.logging.Loggable;
+import org.owasp.appsensor.core.rule.Rule;
+import org.owasp.appsensor.core.storage.AttackStore;
+import org.owasp.appsensor.core.util.DateUtils;
+import org.slf4j.Logger;
+import org.springframework.core.env.Environment;
+
+import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 
 /**
  * Created by john.melton on 3/10/16.
@@ -53,24 +53,36 @@ public class InfluxDbAttackStore extends AttackStore {
    */
   @Override
   public void addAttack(Attack attack) {
-    logger.warn("Security attack " + attack.getDetectionPoint().getLabel() + " triggered by user: " + attack.getUser().getUsername());
+    logger.warn("Security attack " + attack.getName() + " triggered by user: " + attack.getUser().getUsername());
 
-    Point point = Point.measurement(Utils.ATTACKS)
+    Builder builder = Point.measurement(Utils.ATTACKS)
         .time(DateUtils.fromString(attack.getTimestamp()).getMillis(), TimeUnit.MILLISECONDS)
-        .field(Utils.LABEL, attack.getDetectionPoint().getLabel())
         .tag(Utils.USERNAME, attack.getUser().getUsername())
         .tag(Utils.TIMESTAMP, attack.getTimestamp())
         .tag(Utils.DETECTION_SYSTEM, attack.getDetectionSystem().getDetectionSystemId())
-        .tag(Utils.CATEGORY, attack.getDetectionPoint().getCategory())
-        .tag(Utils.LABEL, attack.getDetectionPoint().getLabel())
-        .tag(Utils.THRESHOLD_COUNT, String.valueOf(attack.getDetectionPoint().getThreshold().getCount()))
-        .tag(Utils.THRESHOLD_INTERVAL_DURATION, String.valueOf( attack.getDetectionPoint().getThreshold().getInterval().getDuration() ) )
-        .tag(Utils.THRESHOLD_INTERVAL_UNIT, attack.getDetectionPoint().getThreshold().getInterval().getUnit())
-        .field(Utils.JSON_CONTENT, gson.toJson(attack))
-        .build();
+        .field(Utils.JSON_CONTENT, gson.toJson(attack));
+
+    if (attack.getDetectionPoint() != null) {
+	    builder
+		    .field(Utils.LABEL, attack.getDetectionPoint().getLabel())
+		    .tag(Utils.CATEGORY, attack.getDetectionPoint().getCategory())
+		    .tag(Utils.LABEL, attack.getDetectionPoint().getLabel())
+		    .tag(Utils.THRESHOLD_COUNT, String.valueOf(attack.getDetectionPoint().getThreshold().getCount()))
+		    .tag(Utils.THRESHOLD_INTERVAL_DURATION, String.valueOf( attack.getDetectionPoint().getThreshold().getInterval().getDuration() ) )
+		    .tag(Utils.THRESHOLD_INTERVAL_UNIT, attack.getDetectionPoint().getThreshold().getInterval().getUnit());
+    }
+
+    if (attack.getRule() != null) {
+    	builder
+    		.tag(Utils.RULE_GUID, attack.getRule().getGuid())
+    		.tag(Utils.RULE_NAME, attack.getRule().getName())
+    		.tag(Utils.RULE_WINDOW_DURATION, String.valueOf( attack.getRule().getWindow().getDuration()))
+    		.tag(Utils.RULE_WINDOW_UNIT, attack.getRule().getWindow().getUnit());
+    }
+
+    Point point = builder.build();
 
     influxDB.write(Utils.DATABASE, "default", point);
-
     super.notifyListeners(attack);
   }
 
@@ -82,11 +94,11 @@ public class InfluxDbAttackStore extends AttackStore {
 
     User user = criteria.getUser();
     DetectionPoint detectionPoint = criteria.getDetectionPoint();
+    Rule rule = criteria.getRule();
     Collection<String> detectionSystemIds = criteria.getDetectionSystemIds();
     DateTime earliest = DateUtils.fromString(criteria.getEarliest());
 
-    String influxQL = Utils.constructInfluxQL(Utils.ATTACKS, user, detectionPoint, detectionSystemIds, earliest, Utils.QueryMode.CONSIDER_DETECTION_POINT);
-
+    String influxQL = Utils.constructInfluxQL(Utils.ATTACKS, user, detectionPoint, rule, detectionSystemIds, earliest, Utils.QueryMode.CONSIDER_THRESHOLDS);
     Query query = new Query(influxQL, Utils.DATABASE);
 
     QueryResult results = influxDB.query(query);
