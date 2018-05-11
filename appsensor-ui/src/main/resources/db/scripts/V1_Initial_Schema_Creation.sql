@@ -27,7 +27,7 @@ create table `groups` (
 create table `group_authorities` (
 	group_id bigint UNSIGNED not null,
 	authority_id bigint UNSIGNED not null,
-	constraint fk_group_authorities_group foreign key(group_id) references groups(id),
+	constraint fk_group_authorities_group foreign key(group_id) references `groups`(id),
 	constraint fk_group_authorities_authority foreign key(authority_id) references authorities(id)
 );
 
@@ -42,7 +42,7 @@ create table `group_users` (
 	username varchar(50) not null,
 	group_id bigint UNSIGNED not null,
 	constraint fk_group_users_user foreign key(username) references users(username),
-	constraint fk_group_users_group foreign key(group_id) references groups(id)
+	constraint fk_group_users_group foreign key(group_id) references `groups`(id)
 );
 
 create table `user_client_applications` (
@@ -92,12 +92,12 @@ INSERT INTO `users` (username,password,enabled)
 	VALUES ('useradmin','$2a$08$Hz6jVRLMAQUizeJJ7L3UVezVK2JfI1ZpAqDDi4pxI0pNSHHaQkTsi', true);
 INSERT INTO `users` (username,password,enabled)
 	VALUES ('uberuser','$2a$08$BbqN0KJ2yelUmQzGrK4/B.JkksjEahG.SWrmcqMTWdJJOdmTHJo.G', true);
-INSERT INTO `group_users` (username, group_id) VALUES ('analyst', (select id from groups where group_name = 'ANALYST'));
-INSERT INTO `group_users` (username, group_id) VALUES ('sysadmin', (select id from groups where group_name = 'SYSTEM_ADMINISTRATOR'));
-INSERT INTO `group_users` (username, group_id) VALUES ('useradmin', (select id from groups where group_name = 'USER_ADMINISTRATOR'));
-INSERT INTO `group_users` (username, group_id) VALUES ('uberuser', (select id from groups where group_name = 'ANALYST'));
-INSERT INTO `group_users` (username, group_id) VALUES ('uberuser', (select id from groups where group_name = 'SYSTEM_ADMINISTRATOR'));
-INSERT INTO `group_users` (username, group_id) VALUES ('uberuser', (select id from groups where group_name = 'USER_ADMINISTRATOR'));
+INSERT INTO `group_users` (username, group_id) VALUES ('analyst', (select id from `groups` where group_name = 'ANALYST'));
+INSERT INTO `group_users` (username, group_id) VALUES ('sysadmin', (select id from `groups` where group_name = 'SYSTEM_ADMINISTRATOR'));
+INSERT INTO `group_users` (username, group_id) VALUES ('useradmin', (select id from `groups` where group_name = 'USER_ADMINISTRATOR'));
+INSERT INTO `group_users` (username, group_id) VALUES ('uberuser', (select id from `groups` where group_name = 'ANALYST'));
+INSERT INTO `group_users` (username, group_id) VALUES ('uberuser', (select id from `groups` where group_name = 'SYSTEM_ADMINISTRATOR'));
+INSERT INTO `group_users` (username, group_id) VALUES ('uberuser', (select id from `groups` where group_name = 'USER_ADMINISTRATOR'));
 ---- analyst gets most apps (not #4)
 INSERT INTO `user_client_applications` (username, client_application_name) VALUES ('analyst', 'myclientapp');
 INSERT INTO `user_client_applications` (username, client_application_name) VALUES ('analyst', 'myclientgeoapp1');
