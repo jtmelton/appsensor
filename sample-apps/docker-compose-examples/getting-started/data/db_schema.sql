@@ -5,13 +5,13 @@ CREATE USER 'appsensor_user'@'%' IDENTIFIED BY 'appsensor_pass';
 GRANT ALL ON appsensor.* TO 'appsensor_user'@'%';
 FLUSH PRIVILEGES;
 
-create table users(
+create table `users` (
 	username varchar(50) not null primary key,
 	password varchar(100) not null,
 	enabled boolean not null
 );
 
-create table authorities (
+create table `authorities` (
 	id bigint UNSIGNED NOT NULL AUTO_INCREMENT primary key,
 	authority varchar(50) not null
 );
@@ -21,31 +21,31 @@ create table `groups` (
 	group_name varchar(50) not null
 );
 
-create table group_authorities (
+create table `group_authorities` (
 	group_id bigint UNSIGNED not null,
 	authority_id bigint UNSIGNED not null,
 	constraint fk_group_authorities_group foreign key(group_id) references `groups`(id),
-	constraint fk_group_authorities_authority foreign key(authority_id) references authorities(id)
+	constraint fk_group_authorities_authority foreign key(authority_id) references `authorities`(id)
 );
 
-create table user_authorities (
+create table `user_authorities` (
 	username varchar(50) not null,
 	authority_id bigint UNSIGNED not null,
-	constraint fk_user_authorities_user foreign key(username) references users(username),
-	constraint fk_user_authorities_authority foreign key(authority_id) references authorities(id)
+	constraint fk_user_authorities_user foreign key(username) references `users`(username),
+	constraint fk_user_authorities_authority foreign key(authority_id) references `authorities`(id)
 );
 
-create table group_users (
+create table `group_users` (
 	username varchar(50) not null,
 	group_id bigint UNSIGNED not null,
-	constraint fk_group_users_user foreign key(username) references users(username),
+	constraint fk_group_users_user foreign key(username) references `users`(username),
 	constraint fk_group_users_group foreign key(group_id) references `groups`(id)
 );
 
-create table user_client_applications (
+create table `user_client_applications` (
 	username varchar(50) not null,
 	client_application_name varchar(150) not null,
-	constraint fk_user_client_applications_user foreign key(username) references users(username)
+	constraint fk_user_client_applications_user foreign key(username) references `users`(username)
 );
 
 INSERT INTO authorities (authority) VALUES ('USER_ADMINISTRATION');
