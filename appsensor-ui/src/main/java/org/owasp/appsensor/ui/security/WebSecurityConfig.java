@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			"select g.id, g.group_name, a.authority "
 			+ "from users u, "
 				+ "authorities a, "
-				+ "groups g, "
+				+ "`groups` g, "
 				+ "group_authorities ga, "
 				+ "group_users gu "
 			+ "where u.username = gu.username "
