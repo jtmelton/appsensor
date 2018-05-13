@@ -66,17 +66,17 @@ INSERT INTO `groups` (group_name) VALUES ('SYSTEM_ADMINISTRATOR');
 
 -- ********************  GROUP AUTHORITY MATCHING **********************
 INSERT INTO `group_authorities` (group_id, authority_id) VALUES (
-	(select id from groups where group_name = 'ANALYST'), 
-	(select id from authorities where authority = 'VIEW_DATA'));
+	(select id from `groups` where group_name = 'ANALYST'), 
+	(select id from `authorities` where authority = 'VIEW_DATA'));
 INSERT INTO `group_authorities` (group_id, authority_id) VALUES (
-	(select id from groups where group_name = 'ANALYST'), 
-	(select id from authorities where authority = 'VIEW_CONFIGURATION'));
+	(select id from `groups` where group_name = 'ANALYST'), 
+	(select id from `authorities` where authority = 'VIEW_CONFIGURATION'));
 INSERT INTO `group_authorities` (group_id, authority_id) VALUES (
-	(select id from groups where group_name = 'SYSTEM_ADMINISTRATOR'), 
-	(select id from authorities where authority = 'EDIT_CONFIGURATION'));
+	(select id from `groups` where group_name = 'SYSTEM_ADMINISTRATOR'), 
+	(select id from `authorities` where authority = 'EDIT_CONFIGURATION'));
 INSERT INTO `group_authorities` (group_id, authority_id) VALUES (
-	(select id from groups where group_name = 'USER_ADMINISTRATOR'), 
-	(select id from authorities where authority = 'USER_ADMINISTRATION'));
+	(select id from `groups` where group_name = 'USER_ADMINISTRATOR'), 
+	(select id from `authorities` where authority = 'USER_ADMINISTRATION'));
 
 -- ***** Do NOT use this section in PROD	
 -- used calculator here: https://www.dailycred.com/article/bcrypt-calculator
