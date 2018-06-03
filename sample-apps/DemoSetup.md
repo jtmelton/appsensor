@@ -32,7 +32,7 @@ These instructions will help you get setup to run a demo similar to what was don
 
 3. **Install MySQL**
 
-  - follow OS-specific install process (this demo assumes localhost)
+  - follow OS-specific install process (this demo assumes localhost, [Problems have been noted](https://github.com/jtmelton/appsensor/issues/87) with MySQL 8.x but MySQL 5.7.x should work fine)  
   
 4. **Load Data into MySQL**
 
