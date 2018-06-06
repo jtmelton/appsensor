@@ -1,7 +1,7 @@
 FROM anapsix/alpine-java
 
 VOLUME /tmp
-ADD target/appsensor-ui-2.3.0.jar app.jar
+ADD target/appsensor-ui-2.3.2.jar app.jar
 
 ENV DOCKERIZE_VERSION="0.2.0"
 ENV DOCKERIZE_URL="https://github.com/jwilder/dockerize/releases/download/v$DOCKERIZE_VERSION"
