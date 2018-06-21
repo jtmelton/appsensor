@@ -9,6 +9,13 @@ Changes in version 2.4 (???)
 
 * Added rules analysis engine
 
+
+Changes in version 2.3.3 (2018/06/21)
+--------------------------------------
+
+* Resolved timestamp encoding issue found by customer
+  (https://github.com/jtmelton/appsensor/issues/91)
+
 Changes in version 2.3.2 (2017/04/05)
 --------------------------------------
 
