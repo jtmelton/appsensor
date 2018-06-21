@@ -92,7 +92,7 @@ var DetectionPointDetail = React.createClass({
 		  	var detectionPointLabel = this.props.detectionPointLabel;
 		  
 		    $.ajax({
-		      url: apiBaseUrl + '/api/detection-points/' + detectionPointLabel + '/all?earliest=' + timestamp + '&limit=10&slices=10',
+		      url: apiBaseUrl + '/api/detection-points/' + detectionPointLabel + '/all?earliest=' + encodeURIComponent(timestamp) + '&limit=10&slices=10',
 		      success: function(data) {
 		    	this.setState({data: data});
 		        

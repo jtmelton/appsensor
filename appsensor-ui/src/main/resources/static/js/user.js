@@ -92,7 +92,7 @@ var UserDetail = React.createClass({
 		  	var username = this.props.username;
 		  
 		    $.ajax({
-		      url: apiBaseUrl + '/api/users/' + username + '/all?earliest=' + timestamp + '&limit=10&slices=10',
+		      url: apiBaseUrl + '/api/users/' + username + '/all?earliest=' + encodeURIComponent(timestamp) + '&limit=10&slices=10',
 		      success: function(data) {
 		    	this.setState({data: data});
 		        
