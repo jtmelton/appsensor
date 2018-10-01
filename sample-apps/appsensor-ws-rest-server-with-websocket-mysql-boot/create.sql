@@ -7,7 +7,7 @@ create table event_metadata (event_id integer not null, metadata_id integer not 
 create table geo_location (id integer not null auto_increment, latitude double precision not null, longitude double precision not null, primary key (id))
 create table `interval` (id integer not null auto_increment, duration integer, unit varchar(255), primary key (id))
 create table ipaddress (id integer not null auto_increment, address varchar(255), geo_location tinyblob, primary key (id))
-create table key_value_pair (id integer not null auto_increment, key varchar(255), value varchar(255), primary key (id))
+create table key_value_pair (id integer not null auto_increment, `key` varchar(255), value varchar(255), primary key (id))
 create table resource (id integer not null auto_increment, location varchar(255), primary key (id))
 create table response (id integer not null auto_increment, action varchar(255), active bit not null, timestamp varchar(255), detection_system_id integer, interval_id integer, user_id integer, primary key (id))
 create table response_metadata (response_id integer not null, metadata_id integer not null)
