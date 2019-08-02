@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.owasp.appsensor.core.DetectionPoint;
 import org.owasp.appsensor.core.IAppsensorEntity;
 import org.owasp.appsensor.core.Interval;

@@ -1,7 +1,8 @@
 package org.owasp.appsensor.core;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.net.InetAddresses;
 import java.net.InetAddress;
-
 import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,16 +10,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.owasp.appsensor.core.geolocation.GeoLocation;
 import org.owasp.appsensor.core.geolocation.GeoLocator;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.google.common.net.InetAddresses;
 
 /**
  * The IP Address for the user, optionally provided by the client application. 

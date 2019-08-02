@@ -10,7 +10,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<thrift.version>0.9.1</thrift.version>
-		<guava.version>18.0</guava.version>
+<!--		<guava.version>28.0-jre</guava.version>-->
 		<dozer.version>5.5.1</dozer.version>
 	</properties>
 
@@ -27,11 +27,11 @@
 		  	<version>${thrift.version}</version>
 		</dependency>
 		
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.google.guava</groupId>-->
+<!--			<artifactId>guava</artifactId>-->
+<!--			<version>${guava.version}</version>-->
+<!--		</dependency>-->
 		
 		<dependency>
 			<groupId>net.sf.dozer</groupId>
