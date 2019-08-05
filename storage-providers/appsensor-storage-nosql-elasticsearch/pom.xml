@@ -13,29 +13,6 @@
         <jackson.version>2.6.6</jackson.version>
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>1.2.9</version>
-                <configuration>
-                    <skipProvidedScope>true</skipProvidedScope>
-                    <skipRuntimeScope>true</skipRuntimeScope>
-                    <failBuildOnCVSS>1</failBuildOnCVSS>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>aggregate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
     <dependencies>
 
         <dependency>
