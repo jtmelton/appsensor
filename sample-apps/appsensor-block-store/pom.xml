@@ -27,7 +27,7 @@
         <reflections.version>0.9.10</reflections.version>
         <quartz.version>2.2.1</quartz.version>
         <smiley.proxy.version>1.7</smiley.proxy.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
 	<docker.image.prefix>appsensor</docker.image.prefix>
     </properties>
 
