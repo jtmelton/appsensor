@@ -10,7 +10,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<commons.lang.version>3.9</commons.lang.version>
-		<guava.version>28.0-jre</guava.version>
+		<guava.version>29.0-jre</guava.version>
 		<joda.time.version>2.10.3</joda.time.version>
 		<javax.inject.version>1</javax.inject.version>
 		<slf4j.version>1.7.26</slf4j.version>
