@@ -26,7 +26,7 @@
         <dropwizard.jobs.version>1.0.1</dropwizard.jobs.version>
         <reflections.version>0.9.10</reflections.version>
         <quartz.version>2.2.1</quartz.version>
-        <httpclient.version>4.5</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <junit.version>4.12</junit.version>
     </properties>
 
