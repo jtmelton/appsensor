@@ -15,7 +15,7 @@
 		<javax.inject.version>1</javax.inject.version>
 		<slf4j.version>1.7.26</slf4j.version>
  		<logback.version>1.2.3</logback.version>
- 		<spring.version>4.0.3.RELEASE</spring.version>
+ 		<spring.version>5.2.22.RELEASE</spring.version>
  		<hibernate.jpa.version>4.3.5.Final</hibernate.jpa.version>
  		<jackson.version>2.9.9</jackson.version>
 	</properties>
