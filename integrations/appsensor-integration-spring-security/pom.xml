@@ -10,7 +10,7 @@
 	<properties>
 		<gson.version>2.2.4</gson.version>
 		<spring.version>4.0.3.RELEASE</spring.version>
-		<spring.security.version>4.0.0.RELEASE</spring.security.version>
+		<spring.security.version>5.5.7</spring.security.version>
 		<servlet.version>3.0.1</servlet.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
