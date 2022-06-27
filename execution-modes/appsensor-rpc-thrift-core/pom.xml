@@ -9,7 +9,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<thrift.version>0.9.1</thrift.version>
+		<thrift.version>0.14.0</thrift.version>
 <!--		<guava.version>28.0-jre</guava.version>-->
 		<dozer.version>5.5.1</dozer.version>
 	</properties>
