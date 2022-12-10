@@ -9,7 +9,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>4.0.3.RELEASE</spring.version>
+		<spring.version>6.0.0</spring.version>
 		<jaxwsrt.version>2.2.8</jaxwsrt.version>
 		<jaxwsspring.version>1.9</jaxwsspring.version>
 	</properties>
